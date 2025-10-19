@@ -1,3 +1,11 @@
+---
+name: feature request
+about: 새로운 기능을 추가합니다.
+title: "[feature]: "
+labels: feature
+assignees: ""
+---
+
 ## 어떤 기능인가요?
 
 ---
