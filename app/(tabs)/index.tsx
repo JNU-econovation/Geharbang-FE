@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
 import {
   ScrollView,
@@ -29,19 +30,17 @@ export default function HomeScreen() {
               <Text className="text-lg font-semibold text-gray-900 mb-4">
                 주요 기능
               </Text>
-              <View
-                className="flex-row"
-                style={{ flexWrap: 'wrap', gap: 16 }}
-              >
+              <View className="flex-row" style={{ flexWrap: 'wrap', gap: 16 }}>
                 <TouchableOpacity
                   className="bg-white border border-gray-200 rounded-xl p-4 items-center active:opacity-70"
                   style={{ width: '47%' }}
+                  onPress={() => router.push('/login')}
                 >
                   <View className="w-12 h-12 bg-sky-500/10 rounded-full items-center justify-center mb-3">
                     <Ionicons name="map" size={20} color="#0EA5E9" />
                   </View>
                   <Text className="text-sm font-medium text-gray-900 text-center">
-                    지역별 검색
+                    로그인
                   </Text>
                   <Text className="text-xs text-gray-600 mt-1 text-center">
                     원하는 지역 찾기
@@ -51,12 +50,13 @@ export default function HomeScreen() {
                 <TouchableOpacity
                   className="bg-white border border-gray-200 rounded-xl p-4 items-center active:opacity-70"
                   style={{ width: '47%' }}
+                  onPress={() => router.push('/create-crew')}
                 >
                   <View className="w-12 h-12 bg-amber-500/10 rounded-full items-center justify-center mb-3">
                     <Ionicons name="star" size={20} color="#F59E0B" />
                   </View>
                   <Text className="text-sm font-medium text-gray-900 text-center">
-                    리뷰 확인
+                    크루만들기
                   </Text>
                   <Text className="text-xs text-gray-600 mt-1 text-center">
                     실제 후기 보기

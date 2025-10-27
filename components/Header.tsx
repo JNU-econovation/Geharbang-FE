@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 export default function Header() {
   return (
-    <View className="bg-white px-4 pb-4 shadow-sm border-b border-gray-100">
+    <View className="bg-white px-4 pb-4 pt-2 shadow-sm border-b border-gray-100">
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center" style={{ gap: 12 }}>
           <View className="w-12 h-12 bg-sky-500 rounded-full items-center justify-center shadow-lg">
