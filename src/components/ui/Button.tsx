@@ -2,8 +2,8 @@ import { ReactNode } from "react";
 import { Text, View } from "react-native";
 
 interface ButtonProps {
-  width: string;
-  height: string;
+  width: number;
+  height: number;
   bgColor: string;
   content: string;
   textColor: string;
@@ -22,15 +22,17 @@ export default function Button({
 }: ButtonProps) {
   return (
     <View
-      className={`w-${width} h-${height} rounded-xl flex-row items-center justify-center  `}
+      className={`rounded-xl flex-row items-center justify-center  `}
       style={{
+        width: width,
+        height: height,
         backgroundColor: bgColor,
         borderWidth: border ? 1 : 0,
         borderColor: border || "transparant",
       }}
     >
       {icon && icon}
-      <Text className={`text-base pl-2`} style={{ color: textColor }}>
+      <Text className='text-base pl-2' style={{ color: textColor }}>
         {content}
       </Text>
     </View>
