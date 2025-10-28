@@ -1,5 +1,6 @@
+import TextSize from "@/src/components/ui/TextSize";
 import { ReactNode } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 interface ButtonProps {
   width: number;
@@ -22,7 +23,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <View
-      className={`rounded-xl flex-row items-center justify-center  `}
+      className={`rounded-xl flex-row items-center justify-center`}
       style={{
         width: width,
         height: height,
@@ -31,10 +32,8 @@ export default function Button({
         borderColor: border || "transparant",
       }}
     >
-      {icon && icon}
-      <Text className='text-base pl-2' style={{ color: textColor }}>
-        {content}
-      </Text>
+      {icon && <View className='pr-2'> {icon} </View>}
+      <TextSize size={16} color={textColor} content={content} />
     </View>
   );
 }
