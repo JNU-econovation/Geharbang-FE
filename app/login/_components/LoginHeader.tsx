@@ -1,15 +1,15 @@
 import { router } from "expo-router";
 import { View } from "react-native";
 
-import Icon from "@/public/svgs/icon.svg";
+import Icon from "@/public/svgs/Login/icon.svg";
 import Flex from "@/src/components/layout/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import TextSize from "@/src/components/ui/TextSize";
 
 export default function LoginHeader() {
   return (
-    <View className='w-full h-3/5 bg-[#0EA5E9]'>
-      <View className='pb-10'>
+    <View className='w-full bg-[#0EA5E9]'>
+      <View className='pb-16'>
         <View className='px-4 pt-3'>
           <BackArrow
             onPress={() => router.back()}
@@ -19,7 +19,7 @@ export default function LoginHeader() {
           />
         </View>
 
-        <Flex items='center' justify='start'>
+        <Flex items='center' justify='center'>
           <Icon width={700} height={200} />
 
           <View className='-mt-5'>
