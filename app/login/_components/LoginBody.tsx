@@ -6,7 +6,7 @@ import TextSize from "@/src/components/ui/TextSize";
 
 import Google from "@/public/svgs/Login/google.svg";
 import Kakao from "@/public/svgs/Login/kakao.svg";
-import Star from "@/public/svgs/Login/star.svg";
+import PersonalInfo from "./PersonalInfo";
 
 export default function LoginBody() {
   return (
@@ -28,7 +28,7 @@ export default function LoginBody() {
           height={56}
           bgColor='#FFFFFF'
           textColor='#1F1F1F'
-          content='Sign in with Google'
+          content='Googel 로그인'
           border='#D1D5DB'
           icon={<Google width={18} height={18} />}
         />
@@ -45,28 +45,7 @@ export default function LoginBody() {
         />
       </View>
 
-      <View className='pt-6'>
-        <View className='flex-row'>
-          <View className='border rounded-sm w-4 h-4' />
-          <View className='pr-1' />
-
-          <Star width={6} height={6} />
-          <View className='pr-1' />
-
-          <View className='border-b border-[#0EA5E9]'>
-            <TextSize size={14} color='#0EA5E9' content='서비스 이용약관' />
-          </View>
-
-          <TextSize size={14} color='#4B5563' content='과' />
-          <View className='pl-1' />
-
-          <View className='border-b border-[#0EA5E9]'>
-            <TextSize size={14} color='#0EA5E9' content='개인정보처리방침' />
-          </View>
-
-          <TextSize size={14} color='#4B5563' content='에 동의합니다.' />
-        </View>
-      </View>
+      <PersonalInfo />
     </Flex>
   );
 }
