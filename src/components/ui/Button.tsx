@@ -14,7 +14,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <View
-      className={`rounded-xl flex-row items-center justify-center gap-2`}
+      className={`rounded-xl flex-row items-center justify-center`}
       style={{
         width: width,
         height: height,
@@ -24,6 +24,7 @@ export default function Button({
       }}
     >
       {icon && <Text> {icon} </Text>}
+      <View style={{ width: 3 }} />
       <TextSize size={16} color={textColor} content={content} />
     </View>
   );
