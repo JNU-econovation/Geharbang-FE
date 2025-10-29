@@ -20,7 +20,7 @@ export default function Button({
         height: height,
         backgroundColor: bgColor,
         borderWidth: border ? 1 : 0,
-        borderColor: border || "transparant",
+        borderColor: border || "transparent",
       }}
     >
       {icon && <Text> {icon} </Text>}
