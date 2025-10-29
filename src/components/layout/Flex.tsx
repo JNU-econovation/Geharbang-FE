@@ -1,14 +1,14 @@
-import { ReactNode } from "react";
 import { View } from "react-native";
 
-interface FlexProps {
-  children: ReactNode;
-  items: string;
-  justify: string;
-}
+import { FlexProps } from "@/src/types/ui/Flex";
 
-export default function Flex({ children, items, justify }: FlexProps) {
+export default function Flex({ children, items, justify, flexDir }: FlexProps) {
   return (
-    <View className={`items-${items} justify-${justify} `}>{children}</View>
+    <View
+      className={`items-${items} justify-${justify}`}
+      style={{ ...(flexDir && { flexDirection: flexDir }) }}
+    >
+      {children}
+    </View>
   );
 }

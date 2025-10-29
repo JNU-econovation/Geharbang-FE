@@ -1,12 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 
-interface BackArrowProps {
-  onPress: () => void;
-  name: "arrow-back";
-  size: number;
-  color: string;
-}
+import { BackArrowProps } from "@/src/types/ui/BackArrow";
 
 export default function BackArrow({
   onPress,

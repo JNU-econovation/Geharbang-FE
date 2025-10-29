@@ -1,16 +1,7 @@
-import TextSize from "@/src/components/ui/TextSize";
-import { ReactNode } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
-interface ButtonProps {
-  width: number;
-  height: number;
-  bgColor: string;
-  content: string;
-  textColor: string;
-  border?: string;
-  icon?: ReactNode;
-}
+import TextSize from "@/src/components/ui/TextSize";
+import { ButtonProps } from "@/src/types/ui/Button";
 
 export default function Button({
   width,
@@ -23,7 +14,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <View
-      className={`rounded-xl flex-row items-center justify-center`}
+      className={`rounded-xl flex-row items-center justify-center gap-2`}
       style={{
         width: width,
         height: height,
@@ -32,7 +23,7 @@ export default function Button({
         borderColor: border || "transparant",
       }}
     >
-      {icon && <View className='pr-2'> {icon} </View>}
+      {icon && <Text> {icon} </Text>}
       <TextSize size={16} color={textColor} content={content} />
     </View>
   );
