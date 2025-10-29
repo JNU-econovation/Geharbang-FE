@@ -1,14 +1,18 @@
 import { View } from "react-native";
 
+import Google from "@/public/svgs/Login/google.svg";
+import Kakao from "@/public/svgs/Login/kakao.svg";
+
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button";
 import TextSize from "@/src/components/ui/TextSize";
 
-import Google from "@/public/svgs/Login/google.svg";
-import Kakao from "@/public/svgs/Login/kakao.svg";
+import { useKakaoLogin } from "@/src/hooks/Login/useKakaoLogin";
 import PersonalInfo from "./PersonalInfo";
 
 export default function LoginBody() {
+  const { mutate: kakaoLogin, isPending } = useKakaoLogin();
+
   return (
     <Flex items='center' justify='start'>
       <View className='pt-10'>
@@ -42,6 +46,8 @@ export default function LoginBody() {
           textColor='#1F2937'
           content='카카오 로그인'
           icon={<Kakao width={18} height={18} />}
+          onPress={kakaoLogin}
+          isPending={isPending}
         />
       </View>
 

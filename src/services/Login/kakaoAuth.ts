@@ -6,6 +6,7 @@ import { KakaoLoginResponse } from "@/src/types/api/Login/kakaoLoginResponse";
 
 WebBrowser.maybeCompleteAuthSession();
 
+// 카카오 인증 플로우
 export const kakaoAuth = {
   async kakaoLogin(): Promise<KakaoLoginResponse> {
     const redirectUrl = AuthSession.makeRedirectUri({

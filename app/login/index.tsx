@@ -2,9 +2,8 @@ import React from "react";
 import { ScrollView, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import LoginFooter from "./_components/LoginFooter";
-
 import LoginBody from "./_components/LoginBody";
+import LoginFooter from "./_components/LoginFooter";
 import LoginHeader from "./_components/LoginHeader";
 
 export default function Login() {
