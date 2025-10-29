@@ -1,14 +1,16 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import "../global.css";
 
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 export { ErrorBoundary } from "expo-router";
+
+import "../global.css";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -39,17 +41,21 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+const queryClient = new QueryClient();
+
 function RootLayoutNav() {
   return (
     <SafeAreaProvider>
-      <ThemeProvider value={DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='(tabs)' />
-          <Stack.Screen name='login' />
-          <Stack.Screen name='create-application' />
-          <Stack.Screen name='modal' options={{ presentation: "modal" }} />
-        </Stack>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider value={DefaultTheme}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='(tabs)' />
+            <Stack.Screen name='login' />
+            <Stack.Screen name='create-application' />
+            <Stack.Screen name='modal' options={{ presentation: "modal" }} />
+          </Stack>
+        </ThemeProvider>
+      </QueryClientProvider>
     </SafeAreaProvider>
   );
 }
