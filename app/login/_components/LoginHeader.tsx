@@ -11,12 +11,7 @@ export default function LoginHeader() {
     <View className='w-full bg-[#0EA5E9]'>
       <View className='pb-16'>
         <View className='px-4 pt-3'>
-          <BackArrow
-            onPress={() => router.back()}
-            name='arrow-back'
-            size={24}
-            color='#ffffff'
-          />
+          <BackArrow onPress={() => router.back()} size={24} color='#ffffff' />
         </View>
 
         <Flex items='center' justify='center'>

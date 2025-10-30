@@ -1,7 +1,19 @@
+import { ReactNode } from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 import TextSize from "@/src/components/ui/TextSize";
-import { ButtonProps } from "@/src/types/ui/Button";
+
+interface ButtonProps {
+  width: number;
+  height: number;
+  bgColor: string;
+  content: string;
+  textColor: string;
+  border?: string;
+  icon?: ReactNode;
+  onPress?: () => void;
+  isPending?: boolean;
+}
 
 export default function Button({
   width,
