@@ -1,12 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { Alert } from "react-native";
 
-import { kakaoAuth } from "@/src/services/Login/kakaoAuth";
-import { KakaoLoginResponse } from "@/src/types/api/Login/kakaoLoginResponse";
+import { oauthAuth } from "@/src/services/Login/oauthAuth";
+import { loginResponse, OauthLoginType } from "@/src/types/api/Login/loginType";
 
-export const useKakaoLogin = () => {
-  return useMutation<KakaoLoginResponse>({
-    mutationFn: kakaoAuth.kakaoLogin,
+export const useOauthLogin = (provider: OauthLoginType) => {
+  return useMutation<loginResponse>({
+    mutationFn: () => oauthAuth.login(provider),
 
     onSuccess: async (data) => {
       console.log("로그인 성공:", data);
