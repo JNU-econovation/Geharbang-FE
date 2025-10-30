@@ -1,26 +1,28 @@
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 
-import { kakaoApi } from "@/src/services/Login/kakao";
-import { KakaoLoginResponse } from "@/src/types/api/Login/kakaoLoginResponse";
+import { googleApi, kakaoApi } from "@/src/services/Login/loginUrlRequest";
+import { loginResponse, OauthLoginType } from "@/src/types/api/Login/loginType";
 
 WebBrowser.maybeCompleteAuthSession();
 
-// 카카오 인증 플로우
-export const kakaoAuth = {
-  async kakaoLogin(): Promise<KakaoLoginResponse> {
+const apiMap = {
+  kakao: kakaoApi,
+  google: googleApi,
+};
+
+// oauth 인증 플로우
+export const oauthAuth = {
+  async login(provider: OauthLoginType): Promise<loginResponse> {
     const redirectUrl = AuthSession.makeRedirectUri({
       scheme: "geharbang",
-      path: "auth/kakao/callback",
+      path: `auth/${provider}/callback`,
     });
 
-    const kakaoLoginUrl = await kakaoApi.getKakaoLoginUrl();
+    const loginUrl = await apiMap[provider].getLoginUrl();
 
-    // 카카오 앱으로 열기
-    const result = await WebBrowser.openAuthSessionAsync(
-      kakaoLoginUrl,
-      redirectUrl
-    );
+    // oauth 앱으로 열기
+    const result = await WebBrowser.openAuthSessionAsync(loginUrl, redirectUrl);
 
     // 코드 파싱
     if (result.type === "success") {
@@ -28,6 +30,7 @@ export const kakaoAuth = {
       const accessToken = parsedUrl.searchParams.get("accessToken");
       const userId = parsedUrl.searchParams.get("userId");
 
+      // accessToken, userId의 값에 null 포함될 수 있으므로
       if (!accessToken || !userId) {
         throw new Error("로그인 정보가 올바르지 않습니다.");
       }
