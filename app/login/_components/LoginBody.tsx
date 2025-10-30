@@ -7,11 +7,15 @@ import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button";
 import TextSize from "@/src/components/ui/TextSize";
 
-import { useKakaoLogin } from "@/src/hooks/Login/useKakaoLogin";
+import { useOauthLogin } from "@/src/hooks/Login/useOauthLogin";
 import PersonalInfo from "./PersonalInfo";
 
 export default function LoginBody() {
-  const { mutate: kakaoLogin, isPending } = useKakaoLogin();
+  const { mutate: kakaoLogin, isPending: isKakaoPending } =
+    useOauthLogin("kakao");
+
+  const { mutate: googleLogin, isPending: isGooglePending } =
+    useOauthLogin("google");
 
   return (
     <Flex items='center' justify='start'>
@@ -35,6 +39,8 @@ export default function LoginBody() {
           content='Googel 로그인'
           border='#D1D5DB'
           icon={<Google width={18} height={18} />}
+          onPress={googleLogin}
+          isPending={isGooglePending}
         />
       </View>
 
@@ -47,7 +53,7 @@ export default function LoginBody() {
           content='카카오 로그인'
           icon={<Kakao width={18} height={18} />}
           onPress={kakaoLogin}
-          isPending={isPending}
+          isPending={isKakaoPending}
         />
       </View>
 
