@@ -5,6 +5,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "geharbang",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -13,7 +18,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.econovation.geharbang"
+      "bundleIdentifier": "com.econovation.geharbang",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
