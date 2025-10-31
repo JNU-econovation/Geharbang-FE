@@ -2,7 +2,15 @@ import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 
 import { googleApi, kakaoApi } from "@/src/services/Login/loginUrlRequest";
-import { loginResponse, OauthLoginType } from "@/src/types/api/Login/loginType";
+
+type OauthLoginType = "kakao" | "google";
+
+interface loginResponse {
+  accessToken: string;
+  user: {
+    id: string;
+  };
+}
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -29,7 +37,6 @@ export const oauthAuth = {
       const parsedUrl = new URL(result.url);
       const accessToken = parsedUrl.searchParams.get("accessToken");
       const userId = parsedUrl.searchParams.get("userId");
-
       // accessToken, userId의 값에 null 포함될 수 있으므로
       if (!accessToken || !userId) {
         throw new Error("로그인 정보가 올바르지 않습니다.");
