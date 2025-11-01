@@ -13,7 +13,7 @@ export default function FieldLabel({
 }: FieldLabelProps) {
   return (
     <View className="mb-2 ml-1 flex-row">
-      <Text style={{fontSize}}>{label}</Text>
+      <Text className="text-gray-text" style={{fontSize}}>{label}</Text>
       {isRequired ? (
         <Text > *</Text>
       ) : (
