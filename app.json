@@ -5,11 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "geharbang",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "platforms": ["ios", "android", "web"],
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -37,7 +33,13 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store"
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
