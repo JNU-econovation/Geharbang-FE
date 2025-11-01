@@ -1,5 +1,5 @@
 import DatePicker from "@/src/components/ui/DatePicker";
-import { useDatePicker } from "@/src/hooks/useDatePicker"
+import { useDatePicker } from "@/src/hooks/useDatePicker";
 import { COLORS } from "@/src/utils/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
@@ -11,6 +11,7 @@ interface DateInputFieldProps {
   label: string;
   isRequired?: boolean;
   labelSize?: number;
+  errorMessage?: string;
   size: number;
   align: "left" | "right" | "center";
   width?: number;
@@ -24,6 +25,7 @@ export default function DateInputField({
   label,
   isRequired,
   labelSize,
+  errorMessage,
   size,
   align,
   width,
@@ -44,7 +46,9 @@ export default function DateInputField({
       <View style={{ width: width, position: "relative" }}>
         <Pressable
           onPress={() => setToggleCalendar((prev) => !prev)}
-          className="flex-row justify-between border rounded-lg px-3 py-3 border-gray-border"
+          className={`flex-row justify-between border rounded-lg px-3 py-3 ${
+            errorMessage ? "border-primary-red" : "border-gray-border"
+          }`}
         >
           <Text
             className={`${
@@ -71,6 +75,11 @@ export default function DateInputField({
           ></DatePicker>
         )}
 
+        <View className="mt-1 ml-1">
+          <Text className="text-primary-red text-xs">
+            {errorMessage ? errorMessage : " "}
+          </Text>
+        </View>
       </View>
     </View>
   );
