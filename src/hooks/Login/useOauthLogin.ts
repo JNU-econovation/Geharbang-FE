@@ -1,4 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
+import { router } from "expo-router";
+import { Alert } from "react-native";
 
 import { oauthAuth } from "@/src/services/Login/oauthAuth";
 import {
@@ -6,7 +8,6 @@ import {
   OauthLoginType,
 } from "@/src/types/api/Login/loginOauthType";
 import { setAccessToken } from "@/src/utils/Login/secureStore";
-import { Alert } from "react-native";
 
 export const useOauthLogin = (provider: OauthLoginType) => {
   return useMutation<loginResponse>({
@@ -14,6 +15,8 @@ export const useOauthLogin = (provider: OauthLoginType) => {
 
     onSuccess: async (data) => {
       await setAccessToken("access-token", data.accessToken);
+
+      router.replace("/(tabs)");
     },
     onError: (error) => {
       Alert.alert("로그인 실패", error.message);
