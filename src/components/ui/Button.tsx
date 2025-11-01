@@ -13,6 +13,7 @@ interface ButtonProps {
   icon?: ReactNode;
   onPress?: () => void;
   isPending?: boolean;
+  clicked?: boolean;
 }
 
 export default function Button({
@@ -25,6 +26,7 @@ export default function Button({
   icon,
   onPress,
   isPending,
+  clicked,
 }: ButtonProps) {
   return (
     <Pressable
@@ -37,6 +39,7 @@ export default function Button({
         borderColor: border || "transparent",
       }}
       onPress={onPress}
+      disabled={!clicked}
     >
       {isPending ? (
         <ActivityIndicator color='#000000' />
