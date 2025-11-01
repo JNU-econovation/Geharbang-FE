@@ -1,7 +1,20 @@
-import { Text, View } from "react-native";
+import { ReactNode } from "react";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 import TextSize from "@/src/components/ui/TextSize";
-import { ButtonProps } from "@/src/types/ui/Button";
+
+interface ButtonProps {
+  width: number;
+  height: number;
+  bgColor: string;
+  content: string;
+  textColor: string;
+  border?: string;
+  icon?: ReactNode;
+  onPress?: () => void;
+  isPending?: boolean;
+  clicked?: boolean;
+}
 
 export default function Button({
   width,
@@ -11,9 +24,12 @@ export default function Button({
   content,
   border,
   icon,
+  onPress,
+  isPending,
+  clicked,
 }: ButtonProps) {
   return (
-    <View
+    <Pressable
       className={`rounded-xl flex-row items-center justify-center`}
       style={{
         width: width,
@@ -22,10 +38,18 @@ export default function Button({
         borderWidth: border ? 1 : 0,
         borderColor: border || "transparent",
       }}
+      onPress={onPress}
+      disabled={!clicked}
     >
-      {icon && <Text> {icon} </Text>}
-      <View style={{ width: 3 }} />
-      <TextSize size={16} color={textColor} content={content} />
-    </View>
+      {isPending ? (
+        <ActivityIndicator color='#000000' />
+      ) : (
+        <>
+          {icon && <Text> {icon} </Text>}
+          <View style={{ width: 3 }} />
+          <TextSize size={16} color={textColor} content={content} />
+        </>
+      )}
+    </Pressable>
   );
 }
