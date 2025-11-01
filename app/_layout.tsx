@@ -43,11 +43,14 @@ function RootLayoutNav() {
   return (
     <SafeAreaProvider>
       <ThemeProvider value={DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='(tabs)' />
-          <Stack.Screen name='login' />
-          <Stack.Screen name='create-application' />
-          <Stack.Screen name='modal' options={{ presentation: "modal" }} />
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="login" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="application"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         </Stack>
       </ThemeProvider>
     </SafeAreaProvider>
