@@ -1,5 +1,6 @@
-import TextSize from "@/src/components/ui/TextSize";
 import { View } from "react-native";
+
+import TextSize from "@/src/components/ui/TextSize";
 
 interface ContentProps {
   contentTitle: string;

@@ -1,13 +1,20 @@
 import { ScrollView, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
+import BackArrorHeader from "../../../src/components/ui/BackArrorHeader";
 import LoginPolicyContent from "../_components/LoginPolicy/LoginPolicyContent";
-import LoginPolicyHeader from "../_components/LoginPolicy/LoginPolicyHeader";
 
 export default function ServiceUseCondition() {
   return (
     <CustomSafeAreaView pageColor='bg-white'>
-      <LoginPolicyHeader content='서비스 이용약관' />
+      <>
+        <View className='px-4 py-3'>
+          <BackArrorHeader content='서비스 이용약관' />
+        </View>
+
+        <View className='pt-3' />
+        <View className='border-b w-full border-[#E5E7EB]' />
+      </>
 
       <ScrollView className='p-4'>
         <LoginPolicyContent
