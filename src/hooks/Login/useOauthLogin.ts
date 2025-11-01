@@ -2,7 +2,10 @@ import { useMutation } from "@tanstack/react-query";
 import { Alert } from "react-native";
 
 import { oauthAuth } from "@/src/services/Login/oauthAuth";
-import { loginResponse, OauthLoginType } from "@/src/types/api/Login/loginType";
+import {
+  loginResponse,
+  OauthLoginType,
+} from "@/src/types/api/Login/loginOauthType";
 
 export const useOauthLogin = (provider: OauthLoginType) => {
   return useMutation<loginResponse>({
