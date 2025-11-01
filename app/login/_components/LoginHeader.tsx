@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import { View } from "react-native";
 
 import Icon from "@/public/svgs/Login/icon.svg";
@@ -11,7 +10,7 @@ export default function LoginHeader() {
     <View className='w-full bg-[#0EA5E9]'>
       <View className='pb-16'>
         <View className='px-4 pt-3'>
-          <BackArrow onPress={() => router.back()} size={24} color='#ffffff' />
+          <BackArrow size={24} color='#ffffff' />
         </View>
 
         <Flex items='center' justify='center'>
