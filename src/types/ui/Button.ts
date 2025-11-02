@@ -8,4 +8,5 @@ export interface ButtonProps {
   textColor: string;
   border?: string;
   icon?: ReactNode;
+  onPress?: () => void;
 }
