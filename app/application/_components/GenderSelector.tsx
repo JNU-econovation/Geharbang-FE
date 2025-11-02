@@ -53,7 +53,7 @@ export default function GenderSelector({
             >
               <View
                 className={`rounded-full w-3.5 h-3.5 ${
-                  isSelected ? "bg-primary-blue" : " border border-border-gray"
+                  isSelected ? "bg-primary-blue" : " border border-gray-placeholder"
                 }`}
               ></View>
 

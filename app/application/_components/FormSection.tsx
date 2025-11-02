@@ -8,7 +8,7 @@ interface FormSectionProps {
 
 export default function FormSection({ title, children }: FormSectionProps) {
   return (
-    <View className="bg-white p-4 pb-6 mb-4 rounded-lg shadow-xs"> 
+    <View className="bg-white p-4 pb-6 mb-4 rounded-lg shadow-sm"> 
       <Text className="text-[16px] font-extrabold mb-6">
         {title}
       </Text>
