@@ -5,7 +5,7 @@ export const COLORS = {
     PLACEHOLDER: '#ADAEBC',
   },
   PRIMARY:{
-    BLUE: '#1E90FF',
+    BLUE: '#0EA5E9',
     RED :'#FB2C36'
   }
 } as const;
