@@ -1,6 +1,20 @@
 import { ApplicationData } from "@/src/types/models/ApplicationData";
 import { create } from "zustand";
 
+const initialData: ApplicationData = {
+  name: "",
+  phoneNumber: "",
+  birthDate: "",
+  gender: "",
+  availableStartDate: "",
+  availableDayOfWeek: [],
+  selfIntroduction: "",
+  mbti: "",
+  style: [],
+  instagramId: "",
+  imageUrl: "",
+};
+
 interface ApplicationStore {
   data: ApplicationData;
   setUpdate: <K extends keyof ApplicationData>(
@@ -10,22 +24,11 @@ interface ApplicationStore {
   currentStep: number;
   goToNextStep: () => void;
   goToPrevStep: () => void;
+  resetData: () => void;
 }
 
 export const useApplicationStore = create<ApplicationStore>((set) => ({
-  data: {
-    name: "",
-    phoneNumber: "",
-    birthDate: "",
-    gender: "",
-    availableStartDate: "",
-    availableDayOfWeek: [],
-    selfIntroduction: "",
-    mbti: "",
-    style: [],
-    instagramId: "",
-    imageUrl: "",
-  },
+  data: initialData,
 
   setUpdate: (key, value) =>
     set((state) => ({
@@ -44,6 +47,12 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
 
   goToPrevStep: () =>
     set((state) => ({
-      currentStep: state.currentStep - 1,
+      currentStep: Math.max(1, state.currentStep - 1),
     })),
+
+  resetData: () =>
+    set({
+      data: initialData,
+      currentStep: 1,
+    }),
 }));
