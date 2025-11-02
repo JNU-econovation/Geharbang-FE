@@ -1,5 +1,5 @@
 import { useMultiSelect } from "@/src/hooks/useMultiSelect";
-import { COLORS } from "@/src/utils/constants/Colors";
+import { COLORS } from "@/src/utils/constants/colors";
 import { Checkbox } from "expo-checkbox";
 import React from "react";
 import { Pressable, Text, View } from "react-native";

@@ -1,6 +1,6 @@
 import DatePicker from "@/src/components/ui/DatePicker";
 import { useDatePicker } from "@/src/hooks/useDatePicker";
-import { COLORS } from "@/src/utils/constants/Colors";
+import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
 import FieldLabel from "./FieldLabel";

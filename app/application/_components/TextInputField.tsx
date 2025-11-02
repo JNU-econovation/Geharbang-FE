@@ -1,4 +1,4 @@
-import { COLORS } from "@/src/utils/constants/Colors";
+import { COLORS } from "@/src/utils/constants/colors";
 import { Text, TextInput, TextInputProps, View } from "react-native";
 import FieldLabel from "./FieldLabel";
 

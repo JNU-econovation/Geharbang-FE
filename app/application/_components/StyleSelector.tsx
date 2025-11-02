@@ -1,5 +1,5 @@
 import { useMultiSelect } from "@/src/hooks/useMultiSelect";
-import { COLORS } from "@/src/utils/constants/Colors";
+import { COLORS } from "@/src/utils/constants/colors";
 import { STYLE_OPTIONS } from "@/src/utils/constants/options";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";

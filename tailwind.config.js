@@ -1,4 +1,4 @@
-import { COLORS } from "./src/utils/constants/Colors.ts";
+import { COLORS } from "./src/utils/constants/colors.ts";
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {

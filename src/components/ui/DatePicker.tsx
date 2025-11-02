@@ -1,4 +1,4 @@
-import { COLORS } from "@/src/utils/constants/Colors";
+import { COLORS } from "@/src/utils/constants/colors"
 import { Calendar, DateData } from "react-native-calendars";
 
 interface DatePickerProps {
