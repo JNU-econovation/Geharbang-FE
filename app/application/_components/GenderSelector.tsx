@@ -12,6 +12,7 @@ interface GenderSelectorProps {
   option: Option[];
   isRequired?: boolean;
   labelSize?: number;
+  errorMessage?: string;
 }
 
 export default function GenderSelector({
@@ -22,6 +23,7 @@ export default function GenderSelector({
   option,
   isRequired,
   labelSize,
+  errorMessage
 }: GenderSelectorProps) {
   return (
     <View>
@@ -40,7 +42,9 @@ export default function GenderSelector({
               className="w-[43%] flex-row justify-center gap-3 rounded-lg border border-border-gray items-center py-3.5"
               style={[
                 { width: size },
-                isSelected
+                errorMessage
+                  ? { borderColor: COLORS.PRIMARY.RED }
+                  : isSelected
                   ? {
                       backgroundColor: "#EFF6FF",
                       borderColor: COLORS.PRIMARY.BLUE,
@@ -61,6 +65,11 @@ export default function GenderSelector({
             </Pressable>
           );
         })}
+      </View>
+       <View className="mt-1 ml-1">
+        <Text className="text-primary-red text-xs">
+          {errorMessage ? errorMessage : " "}
+        </Text>
       </View>
     </View>
   );
