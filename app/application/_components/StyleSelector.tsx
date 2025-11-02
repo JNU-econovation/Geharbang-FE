@@ -1,14 +1,10 @@
 import { useMultiSelect } from "@/src/hooks/useMultiSelect";
 import { COLORS } from "@/src/utils/constants/Colors";
+import { STYLE_OPTIONS } from "@/src/utils/constants/options";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Pressable, Text, View, DimensionValue } from "react-native";
+import { DimensionValue, Pressable, Text, View } from "react-native";
 import FieldLabel from "./FieldLabel";
-
-interface StyleOption {
-  value: string;
-  label: string;
-}
 
 interface StyleSelectorProps {
   selectedStyles: string[];
@@ -18,15 +14,6 @@ interface StyleSelectorProps {
   labelSize?: number;
   size: DimensionValue;
 }
-
-const STYLES: StyleOption[] = [
-  { value: "친근한", label: "#친근한" },
-  { value: "활발한", label: "#활발한" },
-  { value: "차분한", label: "#차분한" },
-  { value: "성실한", label: "#성실한" },
-  { value: "유머", label: "#유머" },
-  { value: "책임감", label: "#책임감" },
-];
 
 export default function StyleSelector({
   selectedStyles,
@@ -47,7 +34,7 @@ export default function StyleSelector({
       ></FieldLabel>
 
       <View className="flex-row flex-wrap justify-start gap-3">
-        {STYLES.map((day) => {
+        {STYLE_OPTIONS.map((day) => {
           const isSelected = selectedStyles.includes(day.value);
 
           return (
