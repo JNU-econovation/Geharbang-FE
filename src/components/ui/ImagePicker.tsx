@@ -46,7 +46,7 @@ export default function ImagePicker({
         )}
       </Pressable>
 
-      <Pressable onPress={pickImage} className="mt-3">
+      <Pressable onPress={pickImage} className="pt-4">
         <Text className="text-gray-text">사진 선택</Text>
       </Pressable>
 

@@ -29,10 +29,10 @@ export default function DatePicker({
         },
       }}
       style={[
-        { width: size, zIndex: 999, position: "absolute" },
+        { width: size, zIndex: 999 },
 
-        align === "left" ? { left: 0 } : null,
-        align === "right" ? { right: 0 } : null,
+        align === "left" ? { alignSelf: "flex-start" } : null,
+        align === "right" ? { alignSelf: "flex-end" } : null,
         align === "center" ? { alignSelf: "center" } : null,
       ]}
       minDate={minDate}

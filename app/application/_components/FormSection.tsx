@@ -3,17 +3,18 @@ import { View, Text } from 'react-native';
 
 interface FormSectionProps {
   title: string;
+  gap?: number;
   children: React.ReactNode;
 }
 
-export default function FormSection({ title, children }: FormSectionProps) {
+export default function FormSection({ title, gap=5, children }: FormSectionProps) {
   return (
-    <View className="bg-white p-4 pb-6 mb-4 rounded-lg shadow-sm"> 
+    <View className="bg-white p-4 mb-4 rounded-lg shadow-sm "> 
       <Text className="text-[16px] font-extrabold mb-6">
         {title}
       </Text>
       
-      <View className="gap-2.5"> 
+      <View style={{gap}}> 
         {children}
       </View>
     </View>

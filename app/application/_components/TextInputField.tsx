@@ -9,6 +9,7 @@ interface TextInputFieldProps {
   isRequired?: boolean;
   labelSize?: number;
   placeholder?: string;
+  lineHeight?: number;
   errorMessage?: string;
   fontSize?: number;
   width?: number;
@@ -26,6 +27,7 @@ export default function TextInputField({
   labelSize,
   isRequired,
   placeholder,
+  lineHeight,
   errorMessage,
   width,
   height,
@@ -48,9 +50,9 @@ export default function TextInputField({
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={COLORS.GRAY.PLACEHOLDER}
-        className={`border rounded-lg px-3 py-3
+        className={`border rounded-lg px-3 py-3 
           ${errorMessage ? "border-primary-red" : "border-gray-border"}`}
-        style={{ height: height, width: width }}
+        style={{ height: height, width: width , lineHeight: lineHeight }}
         keyboardType={keyboardType}
         maxLength={maxLength}
         multiline={multiline}
