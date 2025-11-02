@@ -1,4 +1,5 @@
 import { useImagePicker } from "@/src/hooks/useImagePicker";
+import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
@@ -22,12 +23,14 @@ export default function ImagePicker({
     <View className="items-center justify-center">
       <Pressable
         onPress={pickImage}
-        className={`items-center justify-center bg-gray-100 border overflow-hidden ${errorMessage ? "border-primary-red" : "border-dashed border-gray-400"}`}
-        style={{
+        className={`items-center justify-center border overflow-hidden`}
+        style={[{
           width: size,
           height: size,
           borderRadius: size / 2,
-        }}
+          backgroundColor: "#F3F4F6"
+          
+        }, errorMessage ? {borderColor : COLORS.PRIMARY.RED}:{ borderColor: "#afb1b4ff" , borderStyle: "dashed"}]}
       >
         {selectedImageFile ? (
           <Image
