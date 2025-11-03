@@ -2,7 +2,7 @@ import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button";
 import ImagePicker from "@/src/components/ui/ImagePicker";
-import { useApplicationFormValidation } from "@/src/hooks/useApplicationFormValidation";
+import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
 import { useApplicationStore } from "@/src/stores/slices /applicationSlice";
 import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import { COLORS } from "@/src/utils/constants/colors";

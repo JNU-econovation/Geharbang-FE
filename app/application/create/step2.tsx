@@ -1,7 +1,7 @@
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button";
-import { useApplicationFormValidation } from "@/src/hooks/useApplicationFormValidation";
+import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
 import { useApplicationStore } from "@/src/stores/slices /applicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
 import { COLORS } from "@/src/utils/constants/colors";
