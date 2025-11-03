@@ -11,8 +11,9 @@ interface FlexProps {
 export default function Flex({ children, items, justify, flexDir }: FlexProps) {
   return (
     <View
-      className={`items-${items} justify-${justify}`}
-      style={{ ...(flexDir && { flexDirection: flexDir }) }}
+      className={`items-${items} justify-${justify} ${
+        flexDir && `flex-${flexDir}`
+      }`}
     >
       {children}
     </View>
