@@ -39,7 +39,7 @@ export default function LoginBody() {
           height={56}
           bgColor='#FFFFFF'
           textColor='#1F1F1F'
-          content='Googel 로그인'
+          content='Google 로그인'
           border='#D1D5DB'
           icon={<Google width={18} height={18} />}
           onPress={googleLogin}
