@@ -8,13 +8,14 @@ import {
   OauthLoginType,
 } from "@/src/types/api/Login/loginOauthType";
 import { setAccessToken } from "@/src/utils/Login/secureStore";
+import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
 
 export const useOauthLogin = (provider: OauthLoginType) => {
   return useMutation<loginResponse>({
     mutationFn: () => oauthAuth.login(provider),
 
     onSuccess: async (data) => {
-      await setAccessToken("access-token", data.accessToken);
+      await setAccessToken(TOKEN_KEYS.ACCESS_TOKEN, data.accessToken);
 
       router.replace("/(tabs)");
     },
