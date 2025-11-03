@@ -7,8 +7,9 @@ import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button";
 import TextSize from "@/src/components/ui/TextSize";
 
-import { useHandleInfoClicked } from "@/src/hooks/Login/useHandleInfoClicked";
+import { useHandleInfoAgreed } from "@/src/hooks/Login/useHandleInfoAgreed";
 import { useOauthLogin } from "@/src/hooks/Login/useOauthLogin";
+
 import PersonalInfo from "./PersonalInfo";
 
 export default function LoginBody() {
@@ -18,7 +19,8 @@ export default function LoginBody() {
   const { mutate: googleLogin, isPending: isGooglePending } =
     useOauthLogin("google");
 
-  const { clicked, handleInfoClicked } = useHandleInfoClicked();
+  const { isInfoAgreed, isLoginClicked, handleIsInfoAgreed, handleLogin } =
+    useHandleInfoAgreed(googleLogin, kakaoLogin);
 
   return (
     <Flex items='center' justify='start'>
@@ -42,9 +44,8 @@ export default function LoginBody() {
           content='Google 로그인'
           border='#D1D5DB'
           icon={<Google width={18} height={18} />}
-          onPress={googleLogin}
+          onPress={() => handleLogin("google")}
           isPending={isGooglePending}
-          clicked={clicked}
         />
       </View>
 
@@ -56,13 +57,16 @@ export default function LoginBody() {
           textColor='#1F2937'
           content='카카오 로그인'
           icon={<Kakao width={18} height={18} />}
-          onPress={kakaoLogin}
+          onPress={() => handleLogin("kakao")}
           isPending={isKakaoPending}
-          clicked={clicked}
         />
       </View>
 
-      <PersonalInfo clicked={clicked} handleInfoClicked={handleInfoClicked} />
+      <PersonalInfo
+        isInfoAgreed={isInfoAgreed}
+        handleIsInfoAgreed={handleIsInfoAgreed}
+        isLoginClicked={isLoginClicked}
+      />
     </Flex>
   );
 }

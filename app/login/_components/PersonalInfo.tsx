@@ -1,28 +1,41 @@
 import { Link } from "expo-router";
 import { Pressable, View } from "react-native";
 
+import CheckMark from "@/public/svgs/Login/checkMark.svg";
 import Star from "@/public/svgs/Login/star.svg";
 import TextSize from "@/src/components/ui/TextSize";
 
+import Flex from "@/src/components/layout/Flex";
+import { useShakeAnimation } from "@/src/hooks/Login/useShakeAnimation";
+import Animated from "react-native-reanimated";
+
 interface PersonalInfoProps {
-  clicked: boolean;
-  handleInfoClicked: () => void;
+  isInfoAgreed: boolean;
+  handleIsInfoAgreed: () => void;
+  isLoginClicked: boolean;
 }
 
 export default function PersonalInfo({
-  clicked,
-
-  handleInfoClicked,
+  isInfoAgreed,
+  handleIsInfoAgreed,
+  isLoginClicked,
 }: PersonalInfoProps) {
+  const { animated } = useShakeAnimation({ isLoginClicked, isInfoAgreed });
+
   return (
     <View className='pt-6'>
       <View className='flex-row'>
-        <Pressable onPress={handleInfoClicked}>
-          <View
-            className={`border rounded-sm w-4 h-4 ${
-              clicked ? "bg-[#0EA5E9] border-[#0EA5E9]" : "border-gray-400"
-            }`}
-          />
+        <Pressable onPress={handleIsInfoAgreed}>
+          <Animated.View
+            style={animated}
+            className={"border rounded-sm w-4 h-4 border-gray-300"}
+          >
+            {isInfoAgreed && (
+              <Flex items='center' justify='center'>
+                <CheckMark width={13} height={13} />
+              </Flex>
+            )}
+          </Animated.View>
         </Pressable>
         <View className='pr-1' />
 
