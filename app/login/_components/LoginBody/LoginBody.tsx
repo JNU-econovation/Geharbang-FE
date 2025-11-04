@@ -4,7 +4,7 @@ import Google from "@/public/svgs/Login/google.svg";
 import Kakao from "@/public/svgs/Login/kakao.svg";
 
 import Flex from "@/src/components/layout/Flex";
-import Button from "@/src/components/ui/Button";
+import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 
 import { useHandleInfoAgreed } from "@/src/hooks/Login/useHandleInfoAgreed";
@@ -37,12 +37,11 @@ export default function LoginBody() {
 
       <View className='pt-7'>
         <Button
+          variant='google'
           width={327}
           height={56}
-          bgColor='#FFFFFF'
           textColor='#1F1F1F'
           content='Google 로그인'
-          border='#D1D5DB'
           icon={<Google width={18} height={18} />}
           onPress={() => handleLogin("google")}
           isPending={isGooglePending}
@@ -51,9 +50,9 @@ export default function LoginBody() {
 
       <View className='pt-4'>
         <Button
+          variant='kakao'
           width={327}
           height={56}
-          bgColor='#FEE500'
           textColor='#1F2937'
           content='카카오 로그인'
           icon={<Kakao width={18} height={18} />}
