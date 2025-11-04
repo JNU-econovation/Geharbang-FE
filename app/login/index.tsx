@@ -1,7 +1,7 @@
 import React from "react";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
-import LoginBody from "./_components/LoginBody";
+import LoginBody from "./_components/LoginBody/LoginBody";
 import LoginFooter from "./_components/LoginFooter";
 import LoginHeader from "./_components/LoginHeader";
 
