@@ -8,7 +8,10 @@ import LoginHeader from "./_components/LoginHeader";
 export default function Login() {
   return (
     <>
-      <CustomSafeAreaView pageColor='bg-gray-50'>
+      <CustomSafeAreaView
+        pageColor='bg-gray-50'
+        statusBarBackgroundColor='bg-[#0EA5E9]'
+      >
         <LoginHeader />
         <LoginBody />
       </CustomSafeAreaView>
