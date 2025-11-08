@@ -2,9 +2,12 @@ import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button";
 import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
+import { useSubmitApplication } from "@/src/hooks/application/useSubmitApplication";
+import { useUploadImage } from "@/src/hooks/application/useUploadImage";
 import { useApplicationStore } from "@/src/stores/slices /applicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
 import { COLORS } from "@/src/utils/constants/colors";
+import { setAccessToken } from "@/src/utils/Login/secureStore";
 import { router } from "expo-router";
 import { ScrollView, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,20 +19,38 @@ import StyleSelector from "../_components/StyleSelector";
 import TextInputField from "../_components/TextInputField";
 
 export default function Step2Screen() {
-  const { data, setUpdate, currentStep, goToPrevStep } = useApplicationStore();
+  const { data, setUpdate, currentStep, goToPrevStep, imageFile } =
+    useApplicationStore();
 
   const { errors, clearError, validateForm } = useApplicationFormValidation({
     data,
-    selectedImageFile: null,
+    imageFile,
     step: 2,
   });
 
-  const handleSubmit = () => {
+  const uploadMutation = useUploadImage();
+  const submitMutation = useSubmitApplication();
+
+  const handleSubmit = async () => {
     if (validateForm()) {
-      // router.push("/application/create/step3");
+      router.replace({
+        pathname: "/application/create/result",
+        params: { status: "pending" },
+      });
+
+      try {
+        await uploadMutation.mutateAsync(imageFile);
+        const latestData = useApplicationStore.getState().data;
+        await submitMutation.mutateAsync(latestData);
+        
+        router.setParams({ status: "success" });
+      } catch (e) {
+        console.error(e);
+        router.setParams({ status: "error" });
+      }
     }
   };
-  
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -113,7 +134,7 @@ export default function Step2Screen() {
                   isRequired={true}
                   onChangeText={(text) => {
                     setUpdate("mbti", formatUpperCase(text));
-                    clearError("mbti")
+                    clearError("mbti");
                   }}
                   placeholder="예: ENFP"
                   autoCapitalize="characters"
