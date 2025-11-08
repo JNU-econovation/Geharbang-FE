@@ -1,3 +1,4 @@
+import { File } from "@/src/types/File";
 import { ApplicationData } from "@/src/types/models/ApplicationData";
 import { useState } from "react";
 
@@ -15,13 +16,13 @@ interface FormErrors {
 
 interface UseApplicationFormValidationProps {
   data: ApplicationData;
-  selectedImageFile: string | null;
+  imageFile: File | null;
   step?: number;
 }
 
 export function useApplicationFormValidation({
   data,
-  selectedImageFile,
+  imageFile,
   step = 1,
 }: UseApplicationFormValidationProps) {
   const [errors, setErrors] = useState<FormErrors>({
@@ -45,7 +46,7 @@ export function useApplicationFormValidation({
   };
 
   const validatePhoneNumber = (phoneNumber: string): boolean => {
-    return /^010-(\d{3,4})-\d{4}$/.test(phoneNumber);
+    return /^010-(\d{4})-\d{4}$/.test(phoneNumber);
   };
 
   //1단계 항목 검증
@@ -53,7 +54,7 @@ export function useApplicationFormValidation({
     let isValid = true;
     const newErrors: FormErrors = { ...errors };
 
-    if (!selectedImageFile) {
+    if (!imageFile || imageFile.uri === "") {
       newErrors.image = "대표 사진을 선택해주세요";
       isValid = false;
     }
@@ -72,7 +73,7 @@ export function useApplicationFormValidation({
     }
 
     if (!data.birthDate || data.birthDate.trim() === "") {
-      newErrors.birthDate = "생일을 선택해주세요";
+      newErrors.birthDate = "생년월일을 선택해주세요";
       isValid = false;
     }
 
@@ -100,6 +101,9 @@ export function useApplicationFormValidation({
       isValid = false;
     } else if (data.selfIntroduction.trim().length < 10) {
       newErrors.selfIntroduction = "자기소개는 10자 이상 입력해주세요";
+      isValid = false;
+    } else if (data.selfIntroduction.trim().length > 300) {
+      newErrors.selfIntroduction = "자기소개는 300자 이하로 입력해주세요";
       isValid = false;
     }
 
