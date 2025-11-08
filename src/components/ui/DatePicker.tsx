@@ -1,11 +1,9 @@
-import { COLORS } from "@/src/utils/constants/colors"
+import { COLORS } from "@/src/utils/constants/colors";
 import { Calendar, DateData } from "react-native-calendars";
 
 interface DatePickerProps {
   onDayPress: (date: DateData) => void;
   selectedDate: string;
-  size: number;
-  align?: string;
   minDate?: string;
   maxDate?: string;
 }
@@ -13,8 +11,6 @@ interface DatePickerProps {
 export default function DatePicker({
   onDayPress,
   selectedDate,
-  size,
-  align = "center",
   minDate,
   maxDate,
 }: DatePickerProps) {
@@ -28,13 +24,8 @@ export default function DatePicker({
           selectedColor: COLORS.PRIMARY.BLUE,
         },
       }}
-      style={[
-        { width: size, zIndex: 999 },
-
-        align === "left" ? { alignSelf: "flex-start" } : null,
-        align === "right" ? { alignSelf: "flex-end" } : null,
-        align === "center" ? { alignSelf: "center" } : null,
-      ]}
+      style={{ zIndex: 999 }}
+      className="w-88"
       minDate={minDate}
       maxDate={maxDate}
     />

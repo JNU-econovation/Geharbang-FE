@@ -1,21 +1,25 @@
+import { router } from "expo-router";
+import { ScrollView, StatusBar, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
+import Flex from "@/src/components/layout/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button";
+import TextSize from "@/src/components/ui/TextSize";
 import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
 import { useSubmitApplication } from "@/src/hooks/application/useSubmitApplication";
 import { useUploadImage } from "@/src/hooks/application/useUploadImage";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
 import { COLORS } from "@/src/utils/constants/colors";
-import { router } from "expo-router";
-import { ScrollView, StatusBar, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import DateInputField from "../_components/DateInputField";
+import DateInput from "../_components/DateInput";
 import DaySelector from "../_components/DaySelector";
+import FormField from "../_components/FormField";
 import FormSection from "../_components/FormSection";
 import ProgressBar from "../_components/ProgressBar";
 import StyleSelector from "../_components/StyleSelector";
-import TextInputField from "../_components/TextInputField";
+import TextInput from "../_components/TextInput";
 
 export default function Step2Screen() {
   const { data, setUpdate, currentStep, goToPrevStep, imageFile } =
@@ -54,131 +58,150 @@ export default function Step2Screen() {
     <>
       <StatusBar barStyle="dark-content" />
       <DismissKeyboardView>
-        <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
-          <View className="p-2 flex-row gap-32">
-            <BackArrow
-              color="black"
-              size={24}
-              onPress={() => {
-                goToPrevStep();
-                router.back();
-              }}
-            ></BackArrow>
-            <Text className="text-base ">지원서 작성</Text>
+        <SafeAreaView className="flex-1 bg-white">
+          <View className="p-3">
+            <Flex justify="start" items="center" flexDir="row" gap={124}>
+              <BackArrow
+                color="black"
+                size={24}
+                onPress={() => {
+                  goToPrevStep();
+                  router.back();
+                }}
+              />
+              <TextSize size={18} content="지원서 작성" />
+            </Flex>
           </View>
 
           <ProgressBar
             stepTitle="자기소개"
             currentStep={currentStep}
             totalSteps={2}
-          ></ProgressBar>
+          />
 
           <ScrollView className="bg-[#F9FAFB]">
-            <View className="px-3 pt-4 pb-8">
-              {/* 근무 일정 */}
-              <FormSection title="근무 일정">
-                <DateInputField
-                  selectedDate={data.availableStartDate}
-                  setSelectedDate={(date) => {
-                    setUpdate("availableStartDate", date);
-                    clearError("availableStartDate");
-                  }}
-                  label="근무 시작 가능일"
-                  isRequired={true}
-                  size={330}
-                  minDate={new Date().toISOString().split("T")[0]}
-                  align="right"
-                  maxDate={undefined}
-                  errorMessage={errors.availableStartDate}
-                ></DateInputField>
+            <View className="pt-4 px-3">
+              <Flex justify="start" items="center" gap={24}>
+                {/* 근무 일정 */}
+                <FormSection title="근무 일정">
+                  <FormField
+                    label="근무 시작 가능일"
+                    required={true}
+                    errorMessage={errors.availableStartDate}
+                  >
+                    <DateInput
+                      selectedDate={data.availableStartDate}
+                      setSelectedDate={(date) => {
+                        setUpdate("availableStartDate", date);
+                        clearError("availableStartDate");
+                      }}
+                      minDate={new Date().toISOString().split("T")[0]}
+                      maxDate={undefined}
+                      error={!!errors.availableStartDate}
+                    />
+                  </FormField>
 
-                <DaySelector
-                  selectedDays={data.availableDayOfWeek}
-                  setSelectedDays={(action) => {
-                    if (typeof action === "function") {
-                      setUpdate(
-                        "availableDayOfWeek",
-                        action(data.availableDayOfWeek)
-                      );
-                    } else {
-                      setUpdate("availableDayOfWeek", action);
-                    }
-                  }}
-                  label="근무가능요일"
-                ></DaySelector>
-              </FormSection>
+                  <FormField label="근무 가능 요일" required={false}>
+                    <DaySelector
+                      selectedDays={data.availableDayOfWeek}
+                      setSelectedDays={(action) => {
+                        if (typeof action === "function") {
+                          setUpdate(
+                            "availableDayOfWeek",
+                            action(data.availableDayOfWeek)
+                          );
+                        } else {
+                          setUpdate("availableDayOfWeek", action);
+                        }
+                      }}
+                    />
+                  </FormField>
+                </FormSection>
 
-              {/* 자기소개 */}
-              <FormSection title="자기소개">
-                <TextInputField
-                  label="자기소개글"
-                  value={data.selfIntroduction}
-                  isRequired={true}
-                  onChangeText={(text) => {
-                    setUpdate("selfIntroduction", text);
-                    clearError("selfIntroduction");
-                  }}
-                  placeholder={
-                    "본인을 소개해주세요.\n성격, 경험, 장점 등을 자유롭게 적어주세요"
-                  }
-                  multiline={true}
-                  lineHeight={22}
-                  height={150}
-                  errorMessage={errors.selfIntroduction}
-                ></TextInputField>
+                {/* 자기소개 */}
+                <FormSection title="자기소개">
+                  <FormField
+                    label="자기소개글"
+                    required={true}
+                    errorMessage={errors.selfIntroduction}
+                  >
+                    <TextInput
+                      value={data.selfIntroduction}
+                      onChangeText={(text) => {
+                        setUpdate("selfIntroduction", text);
+                        clearError("selfIntroduction");
+                      }}
+                      placeholder={
+                        "본인을 소개해주세요.\n성격, 경험, 장점 등을 자유롭게 적어주세요"
+                      }
+                      multiline={true}
+                      lineHeight={22}
+                      height={150}
+                      error={!!errors.selfIntroduction}
+                    />
+                  </FormField>
 
-                <TextInputField
-                  label="MBTI"
-                  value={data.mbti}
-                  isRequired={true}
-                  onChangeText={(text) => {
-                    setUpdate("mbti", formatUpperCase(text));
-                    clearError("mbti");
-                  }}
-                  placeholder="예: ENFP"
-                  autoCapitalize="characters"
-                  maxLength={4}
-                ></TextInputField>
-              </FormSection>
+                  <FormField
+                    label="MBTI"
+                    required={true}
+                    errorMessage={errors.mbti}
+                  >
+                    <TextInput
+                      value={data.mbti}
+                      onChangeText={(text) => {
+                        setUpdate("mbti", formatUpperCase(text));
+                        clearError("mbti");
+                      }}
+                      placeholder="예: ENFP"
+                      autoCapitalize="characters"
+                      maxLength={4}
+                      error={!!errors.mbti}
+                    />
+                  </FormField>
+                </FormSection>
 
-              {/* 스타일 & 소셜 */}
-              <FormSection title="스타일 & 소셜" gap={32}>
-                <StyleSelector
-                  label="나의 스타일"
-                  selectedStyles={data.style}
-                  setSelectedStyles={(action) => {
-                    if (typeof action === "function") {
-                      setUpdate("style", action(data.style));
-                    } else {
-                      setUpdate("style", action);
-                    }
-                  }}
-                  size="30%"
-                ></StyleSelector>
+                {/* 스타일 & 소셜 */}
+                <FormSection title="스타일 & 소셜" gap={22}>
+                  <FormField label="나의 스타일" required={false}>
+                    <StyleSelector
+                      selectedStyles={data.style}
+                      setSelectedStyles={(action) => {
+                        if (typeof action === "function") {
+                          setUpdate("style", action(data.style));
+                        } else {
+                          setUpdate("style", action);
+                        }
+                      }}
+                      size="32%"
+                    />
+                  </FormField>
 
-                <TextInputField
-                  label="인스타그램 아이디"
-                  value={data.instagramId}
-                  isRequired={false}
-                  onChangeText={(id) => {
-                    setUpdate("instagramId", id);
-                    clearError("instagramId");
-                  }}
-                  placeholder="@ username"
-                  errorMessage={errors.instagramId}
-                ></TextInputField>
-              </FormSection>
+                  <FormField
+                    label="인스타그램 아이디"
+                    required={false}
+                    errorMessage={errors.instagramId}
+                  >
+                    <TextInput
+                      value={data.instagramId}
+                      onChangeText={(id) => {
+                        setUpdate("instagramId", id);
+                        clearError("instagramId");
+                      }}
+                      placeholder="@ username"
+                      error={!!errors.instagramId}
+                    />
+                  </FormField>
+                </FormSection>
 
-              <View className="h-52"></View>
-
-              <Button
-                width={365}
-                height={40}
-                bgColor={COLORS.PRIMARY.BLUE}
-                textColor="white"
-                content="작성 완료"
-                onPress={handleSubmit}
-              ></Button>
+                <Button
+                  width={370}
+                  height={50}
+                  bgColor={COLORS.PRIMARY.BLUE}
+                  textColor="white"
+                  content="작성 완료"
+                  onPress={handleSubmit}
+                />
+              </Flex>
             </View>
           </ScrollView>
         </SafeAreaView>

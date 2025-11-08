@@ -1,62 +1,57 @@
+import Checkbox from "expo-checkbox";
+import React from "react";
+import { Pressable, View } from "react-native";
+
+import Flex from "@/src/components/layout/Flex";
+import TextSize from "@/src/components/ui/TextSize";
 import { useMultiSelect } from "@/src/hooks/useMultiSelect";
 import { COLORS } from "@/src/utils/constants/colors";
-import { Checkbox } from "expo-checkbox";
-import React from "react";
-import { Pressable, Text, View } from "react-native";
-import FieldLabel from "./FieldLabel";
 import { DAYS_OF_WEEK } from "@/src/utils/constants/options";
 
 interface DaySelectorProps {
   selectedDays: string[];
   setSelectedDays: React.Dispatch<React.SetStateAction<string[]>>;
-  label: string;
-  isRequired?: boolean;
-  labelSize?: number;
 }
 
 export default function DaySelector({
   selectedDays,
   setSelectedDays,
-  label,
-  isRequired,
-  labelSize,
 }: DaySelectorProps) {
   const { toggleSelect } = useMultiSelect(setSelectedDays);
 
   return (
-    <View>
-      <FieldLabel
-        label={label}
-        isRequired={isRequired}
-        fontSize={labelSize}
-      ></FieldLabel>
+    <Flex justify="between" items="center" flexDir="row" flexWrap="wrap">
+      {DAYS_OF_WEEK.map((day) => {
+        const isSelected = selectedDays.includes(day.value);
 
-      <View className="flex-row flex-wrap justify-between">
-        {DAYS_OF_WEEK.map((day) => {
-          const isSelected = selectedDays.includes(day.value);
-
-          return (
+        return (
+          <View className="w-[13%] mt-2" key={day.value}>
             <Pressable
-              key={day.value}
-              className="w-[13%] justify-between gap-2 rounded-lg border border-gray-border items-center py-2.5"
+              className="rounded-lg border border-gray-border py-2.5"
               onPress={() => toggleSelect(day.value)}
             >
-              <Checkbox
-                style={{
-                  width: 18,
-                  height: 18,
-                  borderWidth: 1,
-                }}
-                value={isSelected}
-                color={isSelected ? COLORS.PRIMARY.BLUE : "lightgray"}
-                onValueChange={() => toggleSelect(day.value)}
-              />
+              <Flex justify="center" items="center" gap={3}>
+                <Checkbox
+                  style={{
+                    width: 18,
+                    height: 18,
+                    borderWidth: 1,
+                  }}
+                  value={isSelected}
+                  color={isSelected ? COLORS.PRIMARY.BLUE : "lightgray"}
+                  onValueChange={() => toggleSelect(day.value)}
+                />
 
-              <Text className="text-gray-text">{day.label}</Text>
+                <TextSize
+                  size={16}
+                  color={COLORS.GRAY.TEXT}
+                  content={day.label}
+                />
+              </Flex>
             </Pressable>
-          );
-        })}
-      </View>
-    </View>
+          </View>
+        );
+      })}
+    </Flex>
   );
 }

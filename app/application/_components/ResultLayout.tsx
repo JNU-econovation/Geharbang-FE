@@ -1,8 +1,11 @@
-import Button from "@/src/components/ui/Button";
-import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import React, { ComponentProps } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
+
+import Flex from "@/src/components/layout/Flex";
+import Button from "@/src/components/ui/Button";
+import TextSize from "@/src/components/ui/TextSize";
+import { COLORS } from "@/src/utils/constants/colors";
 
 type IconName = ComponentProps<typeof Ionicons>["name"];
 type Btn = { label: string; onPress?: () => void; icon?: IconName };
@@ -43,9 +46,9 @@ export default function ResultLayout({
   const iconName = isSuccess ? "checkmark" : isError ? "close" : null;
 
   return (
-    <View className="gap-8">
+    <Flex justify="start" items="center" gap={32}>
       <View
-        className="bg-white p-8 rounded-lg gap-4 items-center justify-center "
+        className="bg-white p-8 rounded-lg w-full"
         style={{
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 0 },
@@ -53,25 +56,29 @@ export default function ResultLayout({
           shadowRadius: 3,
         }}
       >
-        <View
-          className={`w-24 h-24 ${bgColorClass} rounded-full items-center justify-center`}
-        >
-          {isPending ? (
-            <ActivityIndicator size={80} color={COLORS.PRIMARY.BLUE}  />
-          ) : (
-            iconName && <Ionicons name={iconName} size={50} color={iconColor} />
+        <Flex justify="center" items="center" gap={16}>
+          <View
+            className={`w-24 h-24 ${bgColorClass} rounded-full items-center justify-center`}
+          >
+            {isPending ? (
+              <ActivityIndicator size={80} color={COLORS.PRIMARY.BLUE} />
+            ) : (
+              iconName && (
+                <Ionicons name={iconName} size={50} color={iconColor} />
+              )
+            )}
+          </View>
+          <TextSize size={18} content={title} />
+          {description && (
+            <Text className="text-gray-text text-center">{description}</Text>
           )}
-        </View>
-        <Text className="text-xl">{title}</Text>
-        {description && (
-          <Text className="text-gray-text text-center">{description}</Text>
-        )}
+        </Flex>
       </View>
 
-      <View className="gap-3">
+      <Flex justify="center" items="center" gap={8}>
         {primary && (
           <Button
-            width={365}
+            width={370}
             height={50}
             bgColor={COLORS.PRIMARY.BLUE}
             textColor="white"
@@ -82,7 +89,7 @@ export default function ResultLayout({
         )}
         {secondary && (
           <Button
-            width={365}
+            width={370}
             height={50}
             bgColor="white"
             textColor="black"
@@ -94,7 +101,7 @@ export default function ResultLayout({
         )}
         {tertiary && (
           <Button
-            width={365}
+            width={370}
             height={50}
             bgColor="#e9e9efff"
             textColor="black"
@@ -103,7 +110,7 @@ export default function ResultLayout({
             icon={<Ionicons name={tertiary.icon} size={18} />}
           ></Button>
         )}
-      </View>
-    </View>
+      </Flex>
+    </Flex>
   );
 }

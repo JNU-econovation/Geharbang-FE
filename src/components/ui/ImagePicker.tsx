@@ -1,61 +1,61 @@
 import { useImagePicker } from "@/src/hooks/useImagePicker";
+import { File } from "@/src/types/File";
 import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Image, Pressable, Text, View } from "react-native";
-import { File } from "@/src/types/File";
+import { Image, Pressable, View} from "react-native";
+import Flex from "../layout/Flex";
+import TextSize from "./TextSize";
 
 interface ImagePickerProps {
   selectedImageFile: File;
   setSelectedImageFile: (file: File) => void;
-  errorMessage?: string;
-  size?: number;
+  error?: boolean;
 }
 
 export default function ImagePicker({
   selectedImageFile,
   setSelectedImageFile,
-  errorMessage,
-  size = 100,
+  error,
 }: ImagePickerProps) {
   const { pickImage } = useImagePicker(setSelectedImageFile);
 
   return (
-    <View className="items-center justify-center">
+    <Flex items="center" justify="center" gap={10}>
       <Pressable
         onPress={pickImage}
-        className={`items-center justify-center border overflow-hidden`}
-        style={[{
-          width: size,
-          height: size,
-          borderRadius: size / 2,
-          backgroundColor: "#F3F4F6"
-          
-        }, errorMessage ? {borderColor : COLORS.PRIMARY.RED}:{ borderColor: "#afb1b4ff" , borderStyle: "dashed"}]}
+        className="border overflow-hidden rounded-full"
+        style={[
+          {
+            width: 100,
+            height: 100,
+            borderRadius: 50,
+            backgroundColor: "#F3F4F6",
+          },
+          error
+            ? { borderColor: COLORS.PRIMARY.RED }
+            : { borderColor: "#afb1b4ff", borderStyle: "dashed" },
+        ]}
       >
-        {selectedImageFile.uri  ? (
-          <Image
-            source={{ uri: selectedImageFile.uri }}
-            style={{ width: size, height: size }}
-          />
-        ) : (
-          <Ionicons
-            name="camera-outline"
-            size={size * 0.2}
-            color={"#9CA3AF"}
-          ></Ionicons>
-        )}
+        <View className="flex-1 justify-center items-center">
+          {selectedImageFile.uri ? (
+            <Image
+              source={{ uri: selectedImageFile.uri }}
+              style={{ width: 100, height: 100 }}
+            />
+          ) : (
+            <Ionicons
+              name="camera-outline"
+              size={20}
+              color={"#9CA3AF"}
+            ></Ionicons>
+          )}
+        </View>
       </Pressable>
 
-      <Pressable onPress={pickImage} className="pt-4">
-        <Text className="text-gray-text">사진 선택</Text>
+      <Pressable onPress={pickImage}>
+        <TextSize size={14} color={COLORS.GRAY.TEXT} content="사진 선택"/>
       </Pressable>
-
-      <View style={{alignSelf:"flex-start"}} className="mt-4 ml-1">
-        <Text className="text-primary-red text-xs">
-          {errorMessage ? errorMessage : " "}
-        </Text>
-      </View>
-    </View>
+    </Flex>
   );
 }

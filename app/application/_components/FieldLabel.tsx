@@ -1,24 +1,26 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
+
+import Flex from "@/src/components/layout/Flex";
+import TextSize from "@/src/components/ui/TextSize";
+import { COLORS } from "@/src/utils/constants/colors";
+
 
 interface FieldLabelProps {
   label: string;
   isRequired?: boolean;
-  fontSize?: number;
 }
 
-export default function FieldLabel({
-  label,
-  isRequired,
-  fontSize,
-}: FieldLabelProps) {
+export default function FieldLabel({ label, isRequired }: FieldLabelProps) {
   return (
-    <View className="mb-2 ml-1 flex-row">
-      <Text className="text-gray-text" style={{fontSize}}>{label}</Text>
-      {isRequired ? (
-        <Text className="text-primary-red" > *</Text>
-      ) : (
-        <Text className="text-gray-placeholder"> (선택)</Text>
-      )}
+    <View className="mb-2 ml-1"> 
+      <Flex justify="start" items="center" flexDir="row">
+        <TextSize size={15} color={COLORS.GRAY.TEXT} content={label}/>
+        {isRequired ? (
+            <TextSize size={16} color={COLORS.PRIMARY.RED} content=" *"/>
+        ) : (
+            <TextSize size={16} color={COLORS.GRAY.PLACEHOLDER} content="(선택)"/>
+        )}
+      </Flex>
     </View>
   );
 }

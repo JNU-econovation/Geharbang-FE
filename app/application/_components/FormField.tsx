@@ -1,6 +1,7 @@
+import { View } from "react-native";
+
 import TextSize from "@/src/components/ui/TextSize";
 import { COLORS } from "@/src/utils/constants/colors";
-import { View } from "react-native";
 import FieldLabel from "./FieldLabel";
 
 interface FormFieldProps {

@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React from "react";
+import { View } from "react-native";
+import TextSize from "@/src/components/ui/TextSize";
 
 interface FormSectionProps {
   title: string;
@@ -7,16 +8,24 @@ interface FormSectionProps {
   children: React.ReactNode;
 }
 
-export default function FormSection({ title, gap=5, children }: FormSectionProps) {
+export default function FormSection({
+  title,
+  gap = 5,
+  children,
+}: FormSectionProps) {
   return (
-    <View className="bg-white p-4 mb-4 rounded-lg shadow-sm "> 
-      <Text className="text-[16px] font-extrabold mb-6">
-        {title}
-      </Text>
+    <View
+      className="bg-white p-4 w-full rounded-lg"
+      style={{
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+      }}
+    >
+      <TextSize size={16} weight="bold" content={title} />
       
-      <View style={{gap}}> 
-        {children}
-      </View>
+      <View className="pt-5" style={{ gap }}>{children}</View>
     </View>
   );
 }
