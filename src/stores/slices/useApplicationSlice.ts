@@ -36,7 +36,7 @@ interface ApplicationStore {
   setImageFile: (file: File) => void;
 }
 
-export const useApplicationStore = create<ApplicationStore>((set) => ({
+export const useApplicationSlice = create<ApplicationStore>((set) => ({
   data: initialData,
 
   setUpdate: (key, value) =>

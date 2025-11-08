@@ -4,10 +4,9 @@ import Button from "@/src/components/ui/Button";
 import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
 import { useSubmitApplication } from "@/src/hooks/application/useSubmitApplication";
 import { useUploadImage } from "@/src/hooks/application/useUploadImage";
-import { useApplicationStore } from "@/src/stores/slices /applicationSlice";
+import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
 import { COLORS } from "@/src/utils/constants/colors";
-import { setAccessToken } from "@/src/utils/Login/secureStore";
 import { router } from "expo-router";
 import { ScrollView, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,7 +19,7 @@ import TextInputField from "../_components/TextInputField";
 
 export default function Step2Screen() {
   const { data, setUpdate, currentStep, goToPrevStep, imageFile } =
-    useApplicationStore();
+    useApplicationSlice();
 
   const { errors, clearError, validateForm } = useApplicationFormValidation({
     data,
@@ -40,9 +39,9 @@ export default function Step2Screen() {
 
       try {
         await uploadMutation.mutateAsync(imageFile);
-        const latestData = useApplicationStore.getState().data;
+        const latestData = useApplicationSlice.getState().data;
         await submitMutation.mutateAsync(latestData);
-        
+
         router.setParams({ status: "success" });
       } catch (e) {
         console.error(e);

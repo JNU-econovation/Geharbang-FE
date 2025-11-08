@@ -3,12 +3,12 @@ import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button";
 import ImagePicker from "@/src/components/ui/ImagePicker";
 import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
-import { useApplicationStore } from "@/src/stores/slices /applicationSlice";
+import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import { COLORS } from "@/src/utils/constants/colors";
 import { GENDER_BASIC } from "@/src/utils/constants/options";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ScrollView, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DateInputField from "../_components/DateInputField";
@@ -18,7 +18,6 @@ import ProgressBar from "../_components/ProgressBar";
 import TextInputField from "../_components/TextInputField";
 
 export default function CreateCrewScreen() {
-  
   const {
     data, // 전역 값
     setUpdate,
@@ -26,8 +25,8 @@ export default function CreateCrewScreen() {
     goToNextStep,
     resetData,
     imageFile,
-    setImageFile
-  } = useApplicationStore();
+    setImageFile,
+  } = useApplicationSlice();
 
   useEffect(() => {
     resetData();
@@ -52,10 +51,7 @@ export default function CreateCrewScreen() {
       <DismissKeyboardView>
         <SafeAreaView className="flex-1 bg-white">
           <View className="p-2 flex-row gap-32">
-            <BackArrow
-              color="black"
-              size={24}
-            ></BackArrow>
+            <BackArrow color="black" size={24}></BackArrow>
             <Text className="text-base ">지원서 작성</Text>
           </View>
           <ProgressBar

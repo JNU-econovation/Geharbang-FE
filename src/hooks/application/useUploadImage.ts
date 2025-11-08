@@ -1,10 +1,10 @@
 import { uploadImage } from "@/src/services/Application/uploadImage";
-import { useApplicationStore } from "@/src/stores/slices /applicationSlice";
+import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { File } from "@/src/types/File";
 import { useMutation } from "@tanstack/react-query";
 
 export const useUploadImage = () => {
-  const { setUpdate } = useApplicationStore();
+  const { setUpdate } = useApplicationSlice();
   return useMutation<string, Error, File>({
     mutationFn: uploadImage,
     onSuccess: (data) => {
