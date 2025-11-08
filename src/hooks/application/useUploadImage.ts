@@ -1,0 +1,17 @@
+import { uploadImage } from "@/src/services/Application/uploadImage";
+import { useApplicationStore } from "@/src/stores/slices /applicationSlice";
+import { File } from "@/src/types/File";
+import { useMutation } from "@tanstack/react-query";
+
+export const useUploadImage = () => {
+  const { setUpdate } = useApplicationStore();
+  return useMutation<string, Error, File>({
+    mutationFn: uploadImage,
+    onSuccess: (data) => {
+      setUpdate("imageUrl", data);
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+};
