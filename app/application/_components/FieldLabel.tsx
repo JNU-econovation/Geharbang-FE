@@ -15,7 +15,7 @@ export default function FieldLabel({
     <View className="mb-2 ml-1 flex-row">
       <Text className="text-gray-text" style={{fontSize}}>{label}</Text>
       {isRequired ? (
-        <Text > *</Text>
+        <Text className="text-primary-red" > *</Text>
       ) : (
         <Text className="text-gray-placeholder"> (선택)</Text>
       )}
