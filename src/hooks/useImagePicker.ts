@@ -1,11 +1,12 @@
 import * as ImagePicker from "expo-image-picker";
+import { File } from "../types/File";
 
 export function useImagePicker(
-  setSelectedImageFile: (uri: string | null) => void
+  setSelectedImageFile: (file: File) => void
 ) {
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
-  const pickImage = async (): Promise<string | null> => {
+  const pickImage = async (): Promise<File | null> => {
     if (!status?.granted) {
       const permission = await requestPermission();
       if (!permission.granted) return null;
@@ -20,9 +21,15 @@ export function useImagePicker(
 
     if (result.canceled) return null;
 
-    const uri = result.assets[0].uri;
-    setSelectedImageFile(uri);
-    return uri;
+    const imageFile = {
+      uri: result.assets[0].uri,
+      type: result.assets[0].mimeType || "image/jpeg",
+      name: result.assets[0].fileName || "image"
+    }
+
+    setSelectedImageFile(imageFile);
+
+    return imageFile;
   };
 
   return { pickImage };

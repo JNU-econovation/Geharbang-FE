@@ -18,14 +18,15 @@ import ProgressBar from "../_components/ProgressBar";
 import TextInputField from "../_components/TextInputField";
 
 export default function CreateCrewScreen() {
-  const [selectedImageFile, setSelectedImageFile] = useState<string | null>(null); // 임시 이미지 파일
-
+  
   const {
     data, // 전역 값
     setUpdate,
     currentStep,
     goToNextStep,
     resetData,
+    imageFile,
+    setImageFile
   } = useApplicationStore();
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function CreateCrewScreen() {
 
   const { errors, clearError, validateForm } = useApplicationFormValidation({
     data,
-    selectedImageFile,
+    imageFile,
     step: 1,
   });
 
@@ -57,7 +58,6 @@ export default function CreateCrewScreen() {
             ></BackArrow>
             <Text className="text-base ">지원서 작성</Text>
           </View>
-
           <ProgressBar
             stepTitle="기본정보"
             currentStep={currentStep}
@@ -69,10 +69,10 @@ export default function CreateCrewScreen() {
               {/* 대표 사진 */}
               <FormSection title="대표사진">
                 <ImagePicker
-                  selectedImageFile={selectedImageFile}
-                  setSelectedImageFile={(uri) => {
-                    setSelectedImageFile(uri);
-                    if (uri) clearError("image");
+                  selectedImageFile={imageFile}
+                  setSelectedImageFile={(file) => {
+                    setImageFile(file);
+                    if (file) clearError("image");
                   }}
                   size={100}
                   errorMessage={errors.image}

@@ -1,3 +1,4 @@
+import { File } from "@/src/types/File";
 import { ApplicationData } from "@/src/types/models/ApplicationData";
 import { create } from "zustand";
 
@@ -15,6 +16,12 @@ const initialData: ApplicationData = {
   imageUrl: "",
 };
 
+const initialImageFile: File = {
+  uri: "",
+  type: "",
+  name: "",
+};
+
 interface ApplicationStore {
   data: ApplicationData;
   setUpdate: <K extends keyof ApplicationData>(
@@ -25,6 +32,8 @@ interface ApplicationStore {
   goToNextStep: () => void;
   goToPrevStep: () => void;
   resetData: () => void;
+  imageFile: File;
+  setImageFile: (file: File) => void;
 }
 
 export const useApplicationStore = create<ApplicationStore>((set) => ({
@@ -37,7 +46,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
         [key]: value,
       },
     })),
-    
+
   currentStep: 1,
 
   goToNextStep: () =>
@@ -53,6 +62,11 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
   resetData: () =>
     set({
       data: initialData,
+      imageFile: initialImageFile,
       currentStep: 1,
     }),
+
+  imageFile: initialImageFile,
+
+  setImageFile: (file) => set({ imageFile: file }),
 }));

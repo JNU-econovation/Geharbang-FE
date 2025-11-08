@@ -3,10 +3,11 @@ import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
+import { File } from "@/src/types/File";
 
 interface ImagePickerProps {
-  selectedImageFile: string | null;
-  setSelectedImageFile: (uri: string | null) => void;
+  selectedImageFile: File;
+  setSelectedImageFile: (file: File) => void;
   errorMessage?: string;
   size?: number;
 }
@@ -32,9 +33,9 @@ export default function ImagePicker({
           
         }, errorMessage ? {borderColor : COLORS.PRIMARY.RED}:{ borderColor: "#afb1b4ff" , borderStyle: "dashed"}]}
       >
-        {selectedImageFile ? (
+        {selectedImageFile.uri  ? (
           <Image
-            source={{ uri: selectedImageFile }}
+            source={{ uri: selectedImageFile.uri }}
             style={{ width: size, height: size }}
           />
         ) : (
