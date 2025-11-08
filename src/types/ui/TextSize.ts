@@ -1,5 +1,8 @@
+import { TextStyle } from 'react-native';
+
 export interface TextSizeProps {
   size: number;
-  color: string;
+  color?: string;
+  weight?: TextStyle['fontWeight'];
   content: string;
 }
