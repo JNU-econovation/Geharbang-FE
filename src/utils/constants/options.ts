@@ -1,4 +1,5 @@
 import { Option } from "@/src/types/Option";
+import { Gender } from "@/src/types/Gender";
 
 export const STYLE_OPTIONS: Option[] = [
   { value: "친근한", label: "#친근한" },
@@ -9,12 +10,12 @@ export const STYLE_OPTIONS: Option[] = [
   { value: "책임감", label: "#책임감" },
 ];
 
-export const GENDER_BASIC: Option[] = [
+export const GENDER_BASIC: Option<Gender>[] = [
   { value: "남", label: "남" },
   { value: "여", label: "여" },
 ];
 
-export const GENDER_FULL: Option[] = [
+export const GENDER_FULL: Option<Gender>[] = [
   { value: "남", label: "남" },
   { value: "여", label: "여" },
   { value: "무관", label: "무관" },

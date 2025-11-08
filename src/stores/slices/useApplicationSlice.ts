@@ -6,7 +6,7 @@ const initialData: ApplicationData = {
   name: "",
   phoneNumber: "",
   birthDate: "",
-  gender: "",
+  gender: "무관",
   availableStartDate: "",
   availableDayOfWeek: [],
   selfIntroduction: "",

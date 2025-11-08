@@ -3,13 +3,14 @@ import { COLORS } from "@/src/utils/constants/colors";
 import React from "react";
 import { DimensionValue, Pressable, Text, View } from "react-native";
 import FieldLabel from "./FieldLabel";
+import { Gender } from "@/src/types/Gender";
 
 interface GenderSelectorProps {
-  selectedGender: string;
-  setSelectedGender: (gender: string) => void;
+  selectedGender: Gender;
+  setSelectedGender: (gender: Gender) => void;
   label: string;
   size: DimensionValue;
-  option: Option[];
+  option: Option<Gender>[];
   isRequired?: boolean;
   labelSize?: number;
   errorMessage?: string;
