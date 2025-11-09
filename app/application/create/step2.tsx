@@ -95,8 +95,7 @@ export default function Step2Screen() {
                         setUpdate("availableStartDate", date);
                         clearError("availableStartDate");
                       }}
-                      minDate={new Date().toISOString().split("T")[0]}
-                      maxDate={undefined}
+                      minDate={String(new Date())}
                       error={!!errors.availableStartDate}
                     />
                   </FormField>

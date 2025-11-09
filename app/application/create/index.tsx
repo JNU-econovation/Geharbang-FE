@@ -134,7 +134,7 @@ export default function CreateCrewScreen() {
                         setUpdate("birthDate", date);
                         clearError("birthDate");
                       }}
-                      maxDate={new Date().toISOString().split("T")[0]}
+                      maxDate={String(new Date())}
                       error={!!errors.birthDate}
                     />
                   </FormField>
