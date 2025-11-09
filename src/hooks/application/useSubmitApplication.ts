@@ -6,7 +6,7 @@ export function useSubmitApplication() {
   return useMutation<number, Error, ApplicationData>({
     mutationFn: submitApplication,
     onError: (err) => {
-      console.log(err);
+      console.error(err);
     },
   });
 }

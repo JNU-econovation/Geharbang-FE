@@ -11,7 +11,7 @@ export const useUploadImage = () => {
       setUpdate("imageUrl", data);
     },
     onError: (err) => {
-      console.log(err);
+      console.error(err);
     },
   });
 };
