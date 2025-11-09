@@ -1,5 +1,7 @@
 import { router } from "expo-router";
+import { useEffect } from "react";
 import {
+  BackHandler,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -28,6 +30,15 @@ import StyleSelector from "../_components/StyleSelector";
 import TextInput from "../_components/TextInput";
 
 export default function Step2Screen() {
+  
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener( // 안드로이드 하드웨어 뒤로가기 방지
+      "hardwareBackPress",
+      () => true
+    );
+    return () => backHandler.remove();
+  }, []);
+
   const { data, setUpdate, currentStep, goToPrevStep, imageFile } =
     useApplicationSlice();
 
@@ -88,7 +99,7 @@ export default function Step2Screen() {
           <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : undefined}
-            keyboardVerticalOffset={0} 
+            keyboardVerticalOffset={0}
           >
             <ScrollView className="bg-[#F9FAFB]">
               <View className="pt-4 px-3">
