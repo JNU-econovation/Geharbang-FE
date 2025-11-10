@@ -1,7 +1,7 @@
-import { customAxios } from "../api/customAxios";
+import { axiosPublic } from "../api/customAxios";
 
 const getLoginUrl = async (provider: "kakao" | "google"): Promise<string> => {
-  const response = await customAxios.get<{ loginUri: string }>(
+  const response = await axiosPublic.get<{ loginUri: string }>(
     `/api/v1/oauth/${provider}/login`
   );
 
