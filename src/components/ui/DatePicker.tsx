@@ -16,14 +16,14 @@ export default function DatePicker({
   minDate,
   maxDate,
 }: DatePickerProps) {
-  const pickDate = selectedDate ? new Date(selectedDate) : new Date();
+  const pickDate = selectedDate && new Date(selectedDate);
 
   return (
     <View className="mt-2">
       <DateTimePicker
         mode="single"
-        date={pickDate}
-        onChange={({ date }) => onDayPress(toISO(date))}
+        {...(pickDate ? { date: pickDate } : {})}
+        onChange={({ date }) => date && onDayPress(toISO(date))}
         locale="ko"
         initialView="day"
         minDate={minDate}
@@ -36,7 +36,7 @@ export default function DatePicker({
 }
 
 const CUSTOM_STYLES = {
-  today: { borderColor: COLORS.PRIMARY.BLUE, borderWidth: 2, borderRadius: 50 },
+  today_label: { color: COLORS.PRIMARY.BLUE },
 
   header: { backgroundColor: "white" },
   days: { backgroundColor: "white" },
