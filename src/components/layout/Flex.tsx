@@ -1,5 +1,14 @@
+import { ReactNode } from "react";
 import { View } from "react-native";
-import { FlexProps } from "@/src/types/ui/Flex";
+
+interface FlexProps {
+  children: ReactNode;
+  items: string;
+  justify: string;
+  flexDir?: "row" | "row-reverse" | "column" | "column-reverse";
+  flexWrap?: "wrap" | "nowrap" | "wrap-reverse";
+  gap?: number;
+}
 
 export default function Flex({
   children,

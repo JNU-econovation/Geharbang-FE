@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Header from "../../src/components/ui/Header";
 import AdBanner from "../home/_components/AdBanner";
+import HomeHeader from "../home/_components/HomeHeader";
 import QuickServices from "../home/_components/QuickServices";
 
 export default function HomeScreen() {
@@ -17,7 +17,7 @@ export default function HomeScreen() {
     <>
       <StatusBar barStyle='dark-content' />
       <View className='flex-1 bg-white'>
-        <Header />
+        <HomeHeader />
 
         <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
           <AdBanner />

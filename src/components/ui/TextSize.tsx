@@ -1,6 +1,11 @@
-import { Text } from "react-native";
+import { Text, TextStyle } from "react-native";
 
-import { TextSizeProps } from "@/src/types/ui/TextSize";
+interface TextSizeProps {
+  size: number;
+  color: string;
+  content: string;
+  weight?: TextStyle["fontWeight"];
+}
 
 export default function TextSize({
   size,

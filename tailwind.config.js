@@ -6,6 +6,7 @@ module.exports = {
     "./App.{js,jsx,ts,tsx}",
     "./components/**/*.{js,jsx,ts,tsx}",
     "./app/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
   presets: [require("nativewind/preset")],
   theme: {
@@ -20,6 +21,8 @@ module.exports = {
           text: COLORS.GRAY.TEXT,
           placeholder: COLORS.GRAY.PLACEHOLDER,
         },
+        kakao: COLORS.KAKAO,
+        google: COLORS.GOOGLE,
       },
       fontFamily: {},
     },

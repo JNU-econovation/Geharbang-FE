@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { TouchableOpacity } from "react-native";
+import { Pressable } from "react-native";
 
 interface BackArrowProps {
   size: number;
@@ -18,8 +18,8 @@ export default function BackArrow({ size, color, onPress }: BackArrowProps) {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress}>
+    <Pressable onPress={handlePress}>
       <Ionicons name="arrow-back" size={size} color={color} />
-    </TouchableOpacity>
+    </Pressable>
   );
 }
