@@ -6,7 +6,7 @@ import TextSize from "@/src/components/ui/TextSize";
 import { button } from "./button.variants";
 
 interface ButtonProps {
-  variant: "primary" | "kakao" | "google";
+  variant: "primary" | "kakao" | "google" | "white" | "gray";
   width: number;
   height: number;
   content: string;

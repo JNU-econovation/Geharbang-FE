@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import Flex from "@/src/components/layout/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
-import Button from "@/src/components/ui/Button";
+import Button from "@/src/components/ui/Button/Button";
 import ImagePicker from "@/src/components/ui/ImagePicker";
 import TextSize from "@/src/components/ui/TextSize";
 import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
@@ -158,9 +158,9 @@ export default function applicationCreate() {
                 </FormSection>
 
                 <Button
+                 variant='primary'
                   width={370}
                   height={50}
-                  bgColor={COLORS.PRIMARY.BLUE}
                   textColor="white"
                   content="다음"
                   onPress={handleNext}

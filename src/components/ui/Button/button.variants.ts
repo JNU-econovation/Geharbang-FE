@@ -7,6 +7,8 @@ export const button = tv({
       primary: "bg-primary-blue border border-gray-border",
       kakao: "bg-kakao border border-gray-border",
       google: "border border-google",
+      white: "bg-white border border-gray-border",
+      gray: "bg-gray-button border border-gray-border",
     },
   },
   defaultVariants: {

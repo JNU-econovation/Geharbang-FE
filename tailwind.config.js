@@ -20,6 +20,7 @@ module.exports = {
           border: COLORS.GRAY.BORDER,
           text: COLORS.GRAY.TEXT,
           placeholder: COLORS.GRAY.PLACEHOLDER,
+          button: COLORS.GRAY.BUTTON,
         },
         kakao: COLORS.KAKAO,
         google: COLORS.GOOGLE,

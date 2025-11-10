@@ -3,7 +3,7 @@ import React, { ComponentProps } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex";
-import Button from "@/src/components/ui/Button";
+import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 import { COLORS } from "@/src/utils/constants/colors";
 
@@ -78,9 +78,9 @@ export default function ResultLayout({
       <Flex justify="center" items="center" gap={8}>
         {primary && (
           <Button
+            variant="primary"
             width={370}
             height={50}
-            bgColor={COLORS.PRIMARY.BLUE}
             textColor="white"
             content={primary.label}
             onPress={primary.onPress}
@@ -89,11 +89,10 @@ export default function ResultLayout({
         )}
         {secondary && (
           <Button
+            variant="white"
             width={370}
             height={50}
-            bgColor="white"
-            textColor="black"
-            border={COLORS.GRAY.BORDER}
+            textColor={COLORS.GRAY.TEXT}
             content={secondary.label}
             onPress={secondary.onPress}
             icon={<Ionicons name={secondary.icon} size={18} />}
@@ -101,10 +100,10 @@ export default function ResultLayout({
         )}
         {tertiary && (
           <Button
+            variant="gray"
             width={370}
             height={50}
-            bgColor="#e9e9efff"
-            textColor="black"
+            textColor={COLORS.GRAY.TEXT}
             content={tertiary.label}
             onPress={tertiary.onPress}
             icon={<Ionicons name={tertiary.icon} size={18} />}

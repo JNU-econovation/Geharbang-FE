@@ -49,7 +49,7 @@ export default function StyleSelector({
                     style={{ position: "absolute", left: 9 }}
                   />
                 )}
-                <TextSize size={16} content={style.label} />
+                <TextSize size={14} color={COLORS.GRAY.TEXT} content={style.label} />
               </Flex>
             </Pressable>
           </View>

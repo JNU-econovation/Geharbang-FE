@@ -30,7 +30,7 @@ export default function DaySelector({
               className="rounded-lg border border-gray-border py-2.5"
               onPress={() => toggleSelect(day.value)}
             >
-              <Flex justify="center" items="center" gap={3}>
+              <Flex justify="center" items="center" gap={4}>
                 <Checkbox
                   style={{
                     width: 18,
@@ -43,7 +43,7 @@ export default function DaySelector({
                 />
 
                 <TextSize
-                  size={16}
+                  size={15}
                   color={COLORS.GRAY.TEXT}
                   content={day.label}
                 />

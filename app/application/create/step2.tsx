@@ -13,14 +13,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import Flex from "@/src/components/layout/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
-import Button from "@/src/components/ui/Button";
+import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
 import { useSubmitApplication } from "@/src/hooks/application/useSubmitApplication";
 import { useUploadImage } from "@/src/hooks/application/useUploadImage";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
-import { COLORS } from "@/src/utils/constants/colors";
 import DateInput from "../_components/DateInput";
 import DaySelector from "../_components/DaySelector";
 import FormField from "../_components/FormField";
@@ -30,9 +29,9 @@ import StyleSelector from "../_components/StyleSelector";
 import TextInput from "../_components/TextInput";
 
 export default function Step2Screen() {
-  
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener( // 안드로이드 하드웨어 뒤로가기 방지
+    const backHandler = BackHandler.addEventListener(
+      // 안드로이드 하드웨어 뒤로가기 방지
       "hardwareBackPress",
       () => true
     );
@@ -215,9 +214,9 @@ export default function Step2Screen() {
                   </FormSection>
 
                   <Button
+                    variant="primary"
                     width={370}
                     height={50}
-                    bgColor={COLORS.PRIMARY.BLUE}
                     textColor="white"
                     content="작성 완료"
                     onPress={handleSubmit}

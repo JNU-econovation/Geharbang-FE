@@ -37,6 +37,12 @@ export default function DatePicker({
 
 const CUSTOM_STYLES = {
   today: { borderColor: COLORS.PRIMARY.BLUE, borderWidth: 2, borderRadius: 50 },
+
+  header: { backgroundColor: "white" },
+  days: { backgroundColor: "white" },
+  months: { backgroundColor: "white" },
+  years: { backgroundColor: "white" },
+
   // 선택된 일/월/일
   selected: { backgroundColor: COLORS.PRIMARY.BLUE, borderRadius: 50 },
   selected_label: { color: "white" },
@@ -77,6 +83,6 @@ const CUSTOM_STYLES = {
     padding: 10,
   },
   //요일
-  weekdays: { marginVertical: 8 },
+  weekdays: { backgroundColor: "white" },
   weekday_label: { color: COLORS.GRAY.TEXT },
 };

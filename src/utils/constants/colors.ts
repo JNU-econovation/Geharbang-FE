@@ -3,6 +3,7 @@ export const COLORS = {
     BORDER: "#E5E7EB",
     TEXT: "#4A5565",
     PLACEHOLDER: "#ADAEBC",
+    BUTTON: "#e9e9efff",
   },
   PRIMARY: {
     BLUE: "#0EA5E9",
