@@ -1,7 +1,5 @@
 import { router } from "expo-router";
-import { useEffect } from "react";
 import {
-  BackHandler,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -16,8 +14,8 @@ import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
-import { useSubmitApplication } from "@/src/hooks/application/useSubmitApplication";
-import { useUploadImage } from "@/src/hooks/application/useUploadImage";
+import { useHandleSubmit } from "@/src/hooks/application/useHandleSubmit";
+import { usePreventHardwareBack } from "@/src/hooks/usePreventHardwareBack";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
 import DateInput from "../_components/DateInput";
@@ -29,46 +27,18 @@ import StyleSelector from "../_components/StyleSelector";
 import TextInput from "../_components/TextInput";
 
 export default function Step2Screen() {
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      // 안드로이드 하드웨어 뒤로가기 방지
-      "hardwareBackPress",
-      () => true
-    );
-    return () => backHandler.remove();
-  }, []);
-
   const { data, setUpdate, currentStep, goToPrevStep, imageFile } =
     useApplicationSlice();
 
-  const { errors, clearError, validateForm } = useApplicationFormValidation({
+  const { errors, clearError } = useApplicationFormValidation({
     data,
     imageFile,
     step: 2,
   });
 
-  const uploadMutation = useUploadImage();
-  const submitMutation = useSubmitApplication();
+  usePreventHardwareBack(); // 안드로이드 하드웨어 뒤로가기 방지
 
-  const handleSubmit = async () => {
-    if (validateForm()) {
-      router.replace({
-        pathname: "/application/create/result",
-        params: { status: "pending" },
-      });
-
-      try {
-        await uploadMutation.mutateAsync(imageFile);
-        const latestData = useApplicationSlice.getState().data;
-        await submitMutation.mutateAsync(latestData);
-
-        router.setParams({ status: "success" });
-      } catch (e) {
-        console.error(e);
-        router.setParams({ status: "error" });
-      }
-    }
-  };
+  const handleSubmit = useHandleSubmit();
 
   return (
     <>
