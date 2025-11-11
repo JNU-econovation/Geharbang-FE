@@ -5,12 +5,21 @@ import { Pressable } from "react-native";
 interface BackArrowProps {
   size: number;
   color: string;
+  onPress?: () => void;
 }
 
-export default function BackArrow({ size, color }: BackArrowProps) {
+export default function BackArrow({ size, color, onPress }: BackArrowProps) {
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else {
+      router.back();
+    }
+  };
+
   return (
-    <Pressable onPress={() => router.back()}>
-      <Ionicons name='arrow-back' size={size} color={color} />
+    <Pressable onPress={handlePress}>
+      <Ionicons name="arrow-back" size={size} color={color} />
     </Pressable>
   );
 }

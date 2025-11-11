@@ -1,4 +1,6 @@
+import { COLORS } from "./src/utils/constants/colors.ts";
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: [
     "./App.{js,jsx,ts,tsx}",
@@ -10,10 +12,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#0EA5E9",
-        kakao: "#FACC15",
-        primaryBorder: "#E5E7EB",
-        googleBorder: "#D1D5DB",
+        primary: {
+          blue: COLORS.PRIMARY.BLUE,
+          red: COLORS.PRIMARY.RED,
+        },
+        gray: {
+          border: COLORS.GRAY.BORDER,
+          text: COLORS.GRAY.TEXT,
+          placeholder: COLORS.GRAY.PLACEHOLDER,
+          button: COLORS.GRAY.BUTTON,
+        },
+        kakao: COLORS.KAKAO,
+        google: COLORS.GOOGLE,
       },
       fontFamily: {},
     },

@@ -48,9 +48,9 @@ export default function HomeScreen() {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  className='bg-white border border-gray-200 rounded-xl p-4 items-center active:opacity-70'
-                  style={{ width: "47%" }}
-                  onPress={() => router.push("/create-application")}
+                  className="bg-white border border-gray-200 rounded-xl p-4 items-center active:opacity-70"
+                  style={{ width: '47%' }}
+                  onPress={() => router.push('/application/create')}
                 >
                   <View className='w-12 h-12 bg-amber-500/10 rounded-full items-center justify-center mb-3'>
                     <Ionicons name='star' size={20} color='#F59E0B' />
