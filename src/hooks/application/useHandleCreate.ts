@@ -1,11 +1,11 @@
 import { router } from "expo-router";
 
-import { useSubmitApplication } from "@/src/hooks/application/useSubmitApplication";
+import { useCreateApplication } from "@/src/hooks/application/useCreateApplication";
 import { useUploadImage } from "@/src/hooks/application/useUploadImage";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { useApplicationFormValidation } from "./useApplicationFormValidation";
 
-export const useHandleSubmit = () => {
+export const useHandleCreate = () => {
   const { data, imageFile } = useApplicationSlice();
 
   const { validateForm } = useApplicationFormValidation({
@@ -15,9 +15,9 @@ export const useHandleSubmit = () => {
   });
 
   const uploadMutation = useUploadImage();
-  const submitMutation = useSubmitApplication();
+  const createMutation = useCreateApplication();
 
-  const handleSubmit = async () => {
+  const handleCreate = async () => {
     if (validateForm()) {
       router.replace({
         pathname: "/application/create/result",
@@ -27,7 +27,7 @@ export const useHandleSubmit = () => {
       try {
         await uploadMutation.mutateAsync(imageFile);
         const latestData = useApplicationSlice.getState().data;
-        await submitMutation.mutateAsync(latestData);
+        await createMutation.mutateAsync(latestData);
 
         router.setParams({ status: "success" });
       } catch (e) {
@@ -37,5 +37,5 @@ export const useHandleSubmit = () => {
     }
   };
 
-  return handleSubmit
+  return handleCreate;
 };

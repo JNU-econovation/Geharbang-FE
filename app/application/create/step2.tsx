@@ -14,7 +14,7 @@ import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
-import { useHandleSubmit } from "@/src/hooks/application/useHandleSubmit";
+import { useHandleCreate } from "@/src/hooks/application/useHandleCreate";
 import { usePreventHardwareBack } from "@/src/hooks/usePreventHardwareBack";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
@@ -38,7 +38,7 @@ export default function Step2Screen() {
 
   usePreventHardwareBack(); // 안드로이드 하드웨어 뒤로가기 방지
 
-  const handleSubmit = useHandleSubmit();
+  const handleCreate = useHandleCreate();
 
   return (
     <>
@@ -189,7 +189,7 @@ export default function Step2Screen() {
                     height={50}
                     textColor="white"
                     content="작성 완료"
-                    onPress={handleSubmit}
+                    onPress={handleCreate}
                   />
                 </Flex>
               </View>
