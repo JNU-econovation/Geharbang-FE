@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
@@ -22,7 +23,10 @@ export default function QuickServices() {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity className="flex-1 active:opacity-90">
+        <TouchableOpacity
+          className="flex-1 active:opacity-90"
+          onPress={() => router.push('/step')}
+        >
           <View className="bg-white border-2 border-emerald-500/30 p-6 rounded-2xl shadow-sm">
             <View className="flex-row items-center" style={{ gap: 16 }}>
               <View className="w-12 h-12 bg-emerald-500/10 rounded-xl items-center justify-center">
