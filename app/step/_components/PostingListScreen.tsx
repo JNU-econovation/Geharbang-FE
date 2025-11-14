@@ -1,3 +1,4 @@
+import BottomSheetModal, { FilterState } from '@/app/step/_components/BottomSheetModal';
 import BackArrow from '@/src/components/ui/BackArrow';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -6,7 +7,6 @@ import React, { useState } from 'react';
 import {
   Dimensions,
   Image,
-  Modal,
   ScrollView,
   Text,
   TextInput,
@@ -25,6 +25,13 @@ export default function GuestHouseListScreen() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [likedItems, setLikedItems] = useState<Set<number>>(new Set());
+  const [filters, setFilters] = useState<FilterState>({
+    location: [],
+    period: '단기',
+    workdays: '주 5일 (주말 휴무)',
+    gender: '무관',
+  });
 
   const filterOptions = [
     { key: 'views', label: '조회수' },
@@ -103,15 +110,40 @@ export default function GuestHouseListScreen() {
 
   const getFilteredAndSortedGuesthouses = () => {
     let filtered = originalGuesthouses;
+
+    // Apply search filter
     if (searchText.trim()) {
       const searchLower = searchText.toLowerCase();
-      filtered = originalGuesthouses.filter(
+      filtered = filtered.filter(
         (guesthouse) =>
           guesthouse.name.toLowerCase().includes(searchLower) ||
           guesthouse.location.toLowerCase().includes(searchLower),
       );
     }
 
+    // Apply location filter
+    if (filters.location.length > 0) {
+      filtered = filtered.filter((guesthouse) =>
+        filters.location.some((loc) => guesthouse.location.includes(loc.replace(' 권역', '')))
+      );
+    }
+
+    // Apply period filter (based on period field in data)
+    if (filters.period) {
+      filtered = filtered.filter((guesthouse) => {
+        const periodMonths = parseInt(guesthouse.period);
+        if (filters.period === '단기') {
+          return periodMonths <= 1;
+        } else if (filters.period === '중기') {
+          return periodMonths > 1 && periodMonths <= 3;
+        } else if (filters.period === '장기') {
+          return periodMonths > 3;
+        }
+        return true;
+      });
+    }
+
+    // Sort by selected filter
     switch (selectedFilter) {
       case 'views':
         return filtered.sort((a, b) => b.views - a.views);
@@ -128,6 +160,18 @@ export default function GuestHouseListScreen() {
   };
 
   const guesthouses = getFilteredAndSortedGuesthouses();
+
+  const toggleLike = (itemId: number) => {
+    setLikedItems((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <View className="flex-1 bg-white">
@@ -214,7 +258,7 @@ export default function GuestHouseListScreen() {
             onPress={() => setIsDropdownVisible(!isDropdownVisible)}
           >
             <Ionicons name="funnel-outline" size={20} color="#1d2838" />
-            <Text className="text-[#1d2838] text-[13px] font-normal">
+            <Text className="text-[#1d2838] text-[13px] font-normal w-12 text-center">
               {
                 filterOptions.find((option) => option.key === selectedFilter)
                   ?.label
@@ -270,70 +314,13 @@ export default function GuestHouseListScreen() {
       </View>
 
       {/* Bottom Sheet Modal */}
-      <Modal
+      <BottomSheetModal
         visible={isBottomSheetVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setIsBottomSheetVisible(false)}
-      >
-        <TouchableOpacity
-          className="flex-1 bg-black/50 justify-end"
-          activeOpacity={1}
-          onPress={() => setIsBottomSheetVisible(false)}
-        >
-          <View
-            className="bg-white rounded-t-2xl"
-            style={{
-              height: '90%',
-              borderTopWidth: 2,
-              borderTopColor: '#e5e7eb',
-            }}
-            onStartShouldSetResponder={() => true}
-          >
-            <View className="p-6">
-              <View className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-6" />
-              <Text className="text-center text-lg font-semibold mb-6 text-gray-800">
-                필터 옵션
-              </Text>
-
-              <View className="space-y-4">
-                <Text className="text-base font-medium text-gray-700 mb-3">
-                  정렬 기준
-                </Text>
-                {filterOptions.map((option) => (
-                  <TouchableOpacity
-                    key={option.key}
-                    className={`py-4 px-4 rounded-lg border ${
-                      selectedFilter === option.key
-                        ? 'bg-blue-50 border-blue-200'
-                        : 'bg-gray-50 border-gray-200'
-                    }`}
-                    onPress={() => {
-                      setSelectedFilter(option.key as FilterOption);
-                      setIsBottomSheetVisible(false);
-                    }}
-                  >
-                    <View className="flex-row items-center justify-between">
-                      <Text
-                        className={`text-base ${
-                          selectedFilter === option.key
-                            ? 'text-blue-600 font-semibold'
-                            : 'text-gray-700'
-                        }`}
-                      >
-                        {option.label}
-                      </Text>
-                      {selectedFilter === option.key && (
-                        <Ionicons name="checkmark" size={20} color="#2563eb" />
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </Modal>
+        onClose={() => setIsBottomSheetVisible(false)}
+        title="필터 옵션"
+        filters={filters}
+        onApply={(newFilters) => setFilters(newFilters)}
+      />
 
       {/* Guesthouse List */}
       <ScrollView
@@ -343,7 +330,7 @@ export default function GuestHouseListScreen() {
         {guesthouses.map((item) => (
           <View
             key={item.id}
-            className="px-4 pt-4 pb-1 bg-white rounded-xl border border-gray-200 mb-3"
+            className="px-4 pt-4 pb-4 bg-white rounded-xl border border-gray-200 mb-3"
           >
             <View className="flex-row">
               <View className="w-16 h-16 rounded-lg overflow-hidden">
@@ -378,13 +365,14 @@ export default function GuestHouseListScreen() {
                 </View>
               </View>
 
-              <TouchableOpacity className="w-6 h-6 items-center justify-center">
-                <Image
-                  source={{
-                    uri: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-46ed99ef-c965-40bb-9c25-9e19f80f0efd.svg',
-                  }}
-                  className="w-4 h-4"
-                  resizeMode="contain"
+              <TouchableOpacity
+                className="w-6 h-6 items-center justify-center"
+                onPress={() => toggleLike(item.id)}
+              >
+                <Ionicons
+                  name={likedItems.has(item.id) ? 'heart' : 'heart-outline'}
+                  size={16}
+                  color={likedItems.has(item.id) ? '#ef4444' : '#d1d5db'}
                 />
               </TouchableOpacity>
             </View>
