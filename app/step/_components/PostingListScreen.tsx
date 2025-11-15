@@ -2,6 +2,8 @@ import BottomSheetModal from '@/app/step/_components/BottomSheetModal';
 import FilterBar from '@/app/step/_components/FilterBar';
 import GuestHouseCard from '@/app/step/_components/GuestHouseCard';
 import BackArrorHeader from '@/src/components/ui/BackArrorHeader';
+import ErrorMessage from '@/src/components/ui/ErrorMessage';
+import LoadingSkeleton from '@/src/components/ui/LoadingSkeleton';
 import SearchInput from '@/src/components/ui/SearchInput';
 import { FilterOption, FilterState, GuestHouse } from '@/src/types/step/types';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,6 +22,10 @@ export default function GuestHouseListScreen() {
     workdays: '주 5일 (주말 휴무)',
     gender: '무관',
   });
+
+  // 로딩 및 에러 상태 (API 연동 시 사용)
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const filterOptions: Array<{ key: FilterOption; label: string }> = [
     { key: 'views', label: '조회수' },
@@ -188,13 +194,30 @@ export default function GuestHouseListScreen() {
         className="flex-1 px-4 pt-3"
         showsVerticalScrollIndicator={false}
       >
-        {guesthouses.map((item) => (
-          <GuestHouseCard
-            key={item.id}
-            item={item}
-            isLiked={likedItems.has(item.id)}
+        {/* 로딩 상태 */}
+        {isLoading && <LoadingSkeleton count={5} />}
+
+        {/* 에러 상태 */}
+        {error && !isLoading && (
+          <ErrorMessage
+            message={error}
+            onRetry={() => {
+              setError(null);
+              // TODO: API 재호출 로직 추가
+              // refetch();
+            }}
           />
-        ))}
+        )}
+
+        {!isLoading &&
+          !error &&
+          guesthouses.map((item) => (
+            <GuestHouseCard
+              key={item.id}
+              item={item}
+              isLiked={likedItems.has(item.id)}
+            />
+          ))}
       </ScrollView>
     </View>
   );
