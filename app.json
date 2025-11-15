@@ -17,6 +17,9 @@
       "bundleIdentifier": "com.econovation.geharbang",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
+      },
+      "config": {
+        "googleMapsApiKey": "AIzaSyA7Eo2CqNtLVy0d8O2_wwszP7rtUcodzxc"
       }
     },
     "android": {
@@ -25,7 +28,12 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.econovation.geharbang"
+      "package": "com.econovation.geharbang",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyA7Eo2CqNtLVy0d8O2_wwszP7rtUcodzxc"
+        }
+      }
     },
     "web": {
       "bundler": "metro",
