@@ -1,11 +1,17 @@
 import { ReactNode } from "react";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  PressableProps,
+  Text,
+  View,
+} from "react-native";
 import { twMerge } from "tailwind-merge";
 
 import TextSize from "@/src/components/ui/TextSize";
 import { button } from "./button.variants";
 
-interface ButtonProps {
+interface ButtonProps extends PressableProps {
   variant: "primary" | "kakao" | "google" | "white" | "gray";
   width: number;
   height: number;
@@ -25,6 +31,7 @@ export default function Button({
   icon,
   onPress,
   isPending,
+  ...props
 }: ButtonProps) {
   return (
     <Pressable
@@ -34,6 +41,7 @@ export default function Button({
         height,
       }}
       onPress={onPress}
+      {...props}
     >
       {isPending ? (
         <ActivityIndicator color='#000000' />
