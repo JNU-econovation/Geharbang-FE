@@ -1,6 +1,6 @@
 import { Pressable, View } from "react-native";
 
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import DatePicker from "@/src/components/ui/DatePicker";
 import TextSize from "@/src/components/ui/TextSize";
 import { useDatePicker } from "@/src/hooks/common/useDatePicker";
@@ -35,7 +35,7 @@ export default function DateInputField({
           error ? "border-primary-red" : "border-gray-border"
         }`}
       >
-        <Flex items='center' justify='between' flexDir='row'>
+        <Flex items='center' justify='between' dir='row'>
           <TextSize
             size={16}
             color={selectedDate ? "black" : COLORS.GRAY.PLACEHOLDER}

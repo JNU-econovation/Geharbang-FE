@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { DimensionValue, Pressable, View } from "react-native";
 
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import TextSize from "@/src/components/ui/TextSize";
 import { useMultiSelect } from "@/src/hooks/common/useMultiSelect";
 import { COLORS } from "@/src/utils/constants/colors";
@@ -22,7 +22,7 @@ export default function StyleSelector({
   const { toggleSelect } = useMultiSelect(setSelectedStyles);
 
   return (
-    <Flex justify='start' items='center' flexDir='row' flexWrap='wrap' gap={5}>
+    <Flex justify='start' items='center' dir='row' wrap='wrap' gap={5}>
       {STYLE_OPTIONS.map((style) => {
         const isSelected = selectedStyles.includes(style.value);
 

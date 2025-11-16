@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
@@ -46,7 +46,7 @@ export default function Step2Screen() {
       <DismissKeyboardView>
         <SafeAreaView className='flex-1 bg-white'>
           <View className='p-3'>
-            <Flex justify='start' items='center' flexDir='row' gap={124}>
+            <Flex justify='start' items='center' dir='row' gap={124}>
               <BackArrow
                 color='black'
                 size={24}

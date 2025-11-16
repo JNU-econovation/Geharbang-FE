@@ -1,10 +1,12 @@
-import { useImagePicker } from "@/src/hooks/common/useImagePicker";
-import { File } from "@/src/types/File";
-import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Image, Pressable, View } from "react-native";
-import Flex from "../layout/Flex";
+
+import { useImagePicker } from "@/src/hooks/common/useImagePicker";
+import { File } from "@/src/types/File";
+import { COLORS } from "@/src/utils/constants/colors";
+
+import Flex from "../layout/Flex/Flex";
 import TextSize from "./TextSize";
 
 interface ImagePickerProps {

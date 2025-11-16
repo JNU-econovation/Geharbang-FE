@@ -4,7 +4,7 @@ import { ScrollView, StatusBar, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
 import ImagePicker from "@/src/components/ui/ImagePicker";
@@ -54,7 +54,7 @@ export default function applicationCreate() {
       <DismissKeyboardView>
         <SafeAreaView className='flex-1 bg-white'>
           <View className='p-3'>
-            <Flex justify='start' items='center' flexDir='row' gap={80}>
+            <Flex justify='start' items='center' dir='row' gap={80}>
               <BackArrow color='black' size={24} />
               <TextSize size={18} content='지원서 작성' />
             </Flex>

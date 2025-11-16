@@ -2,7 +2,7 @@ import Checkbox from "expo-checkbox";
 import React from "react";
 import { Pressable, View } from "react-native";
 
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import TextSize from "@/src/components/ui/TextSize";
 import { useMultiSelect } from "@/src/hooks/common/useMultiSelect";
 import { COLORS } from "@/src/utils/constants/colors";
@@ -20,7 +20,7 @@ export default function DaySelector({
   const { toggleSelect } = useMultiSelect(setSelectedDays);
 
   return (
-    <Flex justify='between' items='center' flexDir='row' flexWrap='wrap'>
+    <Flex justify='between' items='center' dir='row' wrap='wrap'>
       {DAYS_OF_WEEK.map((day) => {
         const isSelected = selectedDays.includes(day.value);
 
