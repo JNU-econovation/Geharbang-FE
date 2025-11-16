@@ -13,7 +13,7 @@ import { button } from "./button.variants";
 
 interface ButtonProps extends PressableProps {
   variant: "primary" | "kakao" | "google" | "white" | "gray";
-  width: number;
+  width?: number;
   height: number;
   content: string;
   textColor: string;
