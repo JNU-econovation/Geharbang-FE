@@ -1,19 +1,17 @@
 import { View } from "react-native";
 
-import SectionYPosition from "../SectionYPosition";
-import WorkInfoDetail from "./WorkInfoDetail";
-
 import Calendar from "@/public/svgs/StepDetail/calendar.svg";
 import Clock from "@/public/svgs/StepDetail/clock.svg";
 import WorkBag from "@/public/svgs/StepDetail/workBag.svg";
 
-interface WorkInfoProps {
-  setSectionYPositions: React.Dispatch<
-    React.SetStateAction<{ [key: string]: number }>
-  >;
-}
+import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
 
-export default function WorkInfo({ setSectionYPositions }: WorkInfoProps) {
+import SectionYPosition from "../SectionYPosition";
+import WorkInfoDetail from "./WorkInfoDetail";
+
+export default function WorkInfo({
+  setSectionYPositions,
+}: SetSectionYPositionProps) {
   return (
     <SectionYPosition
       section='workInfo'
