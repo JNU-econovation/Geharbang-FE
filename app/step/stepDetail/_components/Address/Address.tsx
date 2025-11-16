@@ -1,16 +1,14 @@
 import { View } from "react-native";
 
 import TextSize from "@/src/components/ui/TextSize";
+import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
+
 import SectionYPosition from "../SectionYPosition";
 import AddressMap from "./AddressMap";
 
-interface AddressProps {
-  setSectionYPositions: React.Dispatch<
-    React.SetStateAction<{ [key: string]: number }>
-  >;
-}
-
-export default function Address({ setSectionYPositions }: AddressProps) {
+export default function Address({
+  setSectionYPositions,
+}: SetSectionYPositionProps) {
   return (
     <SectionYPosition
       section='address'
