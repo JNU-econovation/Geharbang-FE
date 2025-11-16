@@ -6,19 +6,19 @@ interface ViewContextProps extends ViewProps {
   variant: "primary" | "insta" | "phone" | "email" | "webSite" | "owerMes";
   height: number;
   children: React.ReactNode;
+  className?: string;
 }
 
 export default function ViewContext({
   variant,
   height,
   children,
-  ...props
+  className,
 }: ViewContextProps) {
   return (
     <View
-      className={twMerge(viewContext({ variant }))}
+      className={twMerge(viewContext({ variant }), className)}
       style={{ height }}
-      {...props}
     >
       {children}
     </View>

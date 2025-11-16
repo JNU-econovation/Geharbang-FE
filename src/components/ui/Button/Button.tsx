@@ -20,6 +20,7 @@ interface ButtonProps extends PressableProps {
   icon?: ReactNode;
   onPress?: () => void;
   isPending?: boolean;
+  className?: string;
 }
 
 export default function Button({
@@ -31,17 +32,16 @@ export default function Button({
   icon,
   onPress,
   isPending,
-  ...props
+  className,
 }: ButtonProps) {
   return (
     <Pressable
-      className={twMerge(button({ variant }))}
+      className={twMerge(button({ variant }), className)}
       style={{
         width,
         height,
       }}
       onPress={onPress}
-      {...props}
     >
       {isPending ? (
         <ActivityIndicator color='#000000' />

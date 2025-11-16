@@ -5,11 +5,12 @@ import { flex } from "./flex.variant";
 
 interface FlexProps extends ViewProps {
   children: ReactNode;
-  items?: "start" | "center" | "end" | "between";
+  items?: "start" | "center" | "end";
   justify?: "start" | "center" | "end" | "between";
   dir?: "row" | "col" | "rowReverse" | "colReverse";
   wrap?: "wrap" | "nowrap" | "reverse";
   gap?: number;
+  className?: string;
 }
 
 export default function Flex({
@@ -19,15 +20,14 @@ export default function Flex({
   dir,
   wrap,
   gap,
-  ...props
+  className,
 }: FlexProps) {
   return (
     <View
-      className={twMerge(flex({ items, justify, dir, wrap }))}
+      className={twMerge(flex({ items, justify, dir, wrap }), className)}
       style={{
         ...(gap && { gap }),
       }}
-      {...props}
     >
       {children}
     </View>

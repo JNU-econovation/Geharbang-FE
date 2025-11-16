@@ -7,7 +7,6 @@ export const flex = tv({
       start: "items-start",
       center: "items-center",
       end: "items-end",
-      between: "items-between",
     },
 
     justify: {
@@ -29,11 +28,5 @@ export const flex = tv({
       nowrap: "flex-nowrap",
       reverse: "flex-wrap-reverse",
     },
-  },
-  defaultVariants: {
-    items: "start",
-    justify: "start",
-    dir: "row",
-    wrap: "nowrap",
   },
 });
