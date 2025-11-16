@@ -5,7 +5,7 @@ export default function AddressMap() {
   return (
     <View className='h-60'>
       <MapView
-        style={{ flex: 1, borderRadius: 10 }}
+        style={{ flex: 1, borderRadius: 8 }}
         initialRegion={{
           latitude: 37,
           longitude: 127,
