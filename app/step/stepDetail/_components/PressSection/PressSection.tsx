@@ -14,7 +14,7 @@ export default function PressSection({
     <Flex items='center' justify='center' dir='row' gap={30}>
       <PressSectionToScroll
         section='address'
-        content='주소'
+        content='위치'
         handleSectionToScroll={handleSectionToScroll}
         isActive={selectedSection === "address"}
       />

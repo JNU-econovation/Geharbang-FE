@@ -5,7 +5,7 @@ import Streamed from "@/public/svgs/StepDetail/steamed.svg";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import Flex from "@/src/components/layout/Flex/Flex";
-import BackArrorHeader from "@/src/components/ui/BackArrorHeader";
+import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import { useHandleSection } from "@/src/hooks/stepDetail/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/stepDetail/useSectionToScroll";
@@ -74,15 +74,14 @@ export default function StepDetail() {
 
           <View className='pt-10' />
           <Contact setSectionYPositions={setSectionYPositions} />
+          <View className='pt-10' />
+          <Button
+            variant='primary'
+            height={56}
+            content='지원하기'
+            textColor='#ffffff'
+          />
         </View>
-
-        <View className='pt-10' />
-        <Button
-          variant='primary'
-          height={56}
-          content='지원하기'
-          textColor='#ffffff'
-        />
       </ScrollView>
     </CustomSafeAreaView>
   );
