@@ -13,18 +13,18 @@ import Flex from "@/src/components/layout/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
-import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
-import { useHandleCreate } from "@/src/hooks/application/useHandleCreate";
+import { useApplicationFormValidation } from "@/src/hooks/application/create/useApplicationFormValidation";
+import { useHandleCreate } from "@/src/hooks/application/create/useHandleCreate";
 import { usePreventHardwareBack } from "@/src/hooks/usePreventHardwareBack";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
+import TextInput from "../../../src/components/ui/TextInput";
 import DateInput from "../_components/DateInput";
 import DaySelector from "../_components/DaySelector";
 import FormField from "../_components/FormField";
 import FormSection from "../_components/FormSection";
 import ProgressBar from "../_components/ProgressBar";
 import StyleSelector from "../_components/StyleSelector";
-import TextInput from "../_components/TextInput";
 
 export default function Step2Screen() {
   const { data, setUpdate, currentStep, goToPrevStep, imageFile } =

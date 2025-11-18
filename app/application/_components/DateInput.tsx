@@ -16,7 +16,7 @@ interface DateInputFieldProps {
   maxDate?: string;
 }
 
-export default function DateInputField({
+export default function DateInput({
   setSelectedDate,
   selectedDate,
   error,

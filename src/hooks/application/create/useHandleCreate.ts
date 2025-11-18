@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 
-import { useCreateApplication } from "@/src/hooks/application/useCreateApplication";
-import { useUploadImage } from "@/src/hooks/application/useUploadImage";
+import { useCreateApplication } from "@/src/hooks/application/create/useCreateApplication";
+import { useUploadImage } from "@/src/hooks/application/create/useUploadImage";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { useApplicationFormValidation } from "./useApplicationFormValidation";
 
