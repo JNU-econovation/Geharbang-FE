@@ -1,4 +1,4 @@
-import { ScrollView, View } from "react-native";
+import { Pressable, ScrollView, Share, View } from "react-native";
 
 import ShareArrow from "@/public/svgs/StepDetail/shareArrow.svg";
 import Streamed from "@/public/svgs/StepDetail/steamed.svg";
@@ -36,7 +36,11 @@ export default function StepDetail() {
           icon={
             <Flex items='center' justify='center' dir='row' gap={20}>
               <Streamed width={20} height={20} />
-              <ShareArrow width={20} height={20} />
+              <Pressable
+                onPress={async () => await Share.share({ message: "공유하기" })}
+              >
+                <ShareArrow width={20} height={20} />
+              </Pressable>
             </Flex>
           }
         />
