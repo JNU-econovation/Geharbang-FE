@@ -8,7 +8,6 @@ import LoadingSkeleton from '@/src/components/ui/LoadingSkeleton';
 import SearchInput from '@/src/components/ui/SearchInput';
 import { FilterOption, FilterState, GuestHouse } from '@/src/types/step/types';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
 
@@ -125,9 +124,7 @@ export default function GuestHouseListScreen() {
 
   return (
     <DismissKeyboardView>
-      <View className="flex-1 bg-white">
-        <StatusBar style="dark" />
-        <View className="px-4 pt-3 pb-1 border-b border-gray-200">
+      <View className="px-4 pt-3 pb-1 border-b border-gray-200">
         <View className="mb-4">
           <BackArrorHeader content="스텝 공고 찾기 " />
         </View>
@@ -221,7 +218,6 @@ export default function GuestHouseListScreen() {
             />
           ))}
       </ScrollView>
-      </View>
     </DismissKeyboardView>
   );
 }
