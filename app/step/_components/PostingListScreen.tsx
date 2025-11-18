@@ -1,6 +1,7 @@
 import BottomSheetModal from '@/app/step/_components/BottomSheetModal';
 import FilterBar from '@/app/step/_components/FilterBar';
 import GuestHouseCard from '@/app/step/_components/GuestHouseCard';
+import DismissKeyboardView from '@/src/components/layout/DismissKeyboardView';
 import BackArrorHeader from '@/src/components/ui/BackArrorHeader';
 import ErrorMessage from '@/src/components/ui/ErrorMessage';
 import LoadingSkeleton from '@/src/components/ui/LoadingSkeleton';
@@ -123,9 +124,10 @@ export default function GuestHouseListScreen() {
   const guesthouses = getFilteredAndSortedGuesthouses();
 
   return (
-    <View className="flex-1 bg-white">
-      <StatusBar style="dark" />
-      <View className="px-4 pt-3 pb-1 border-b border-gray-200">
+    <DismissKeyboardView>
+      <View className="flex-1 bg-white">
+        <StatusBar style="dark" />
+        <View className="px-4 pt-3 pb-1 border-b border-gray-200">
         <View className="mb-4">
           <BackArrorHeader content="스텝 공고 찾기 " />
         </View>
@@ -219,6 +221,7 @@ export default function GuestHouseListScreen() {
             />
           ))}
       </ScrollView>
-    </View>
+      </View>
+    </DismissKeyboardView>
   );
 }
