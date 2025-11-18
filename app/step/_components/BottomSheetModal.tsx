@@ -4,6 +4,12 @@ import CollapsibleSection from '@/src/components/ui/CollapsibleSection';
 import RadioButton from '@/src/components/ui/RadioButton';
 import TextSize from '@/src/components/ui/TextSize';
 import { FilterState } from '@/src/types/step/types';
+import {
+  GENDER_OPTIONS,
+  LOCATION_OPTIONS,
+  PERIOD_OPTIONS,
+  WORKDAYS_OPTIONS,
+} from '@/src/utils/constants/filterOptions';
 import React, { useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
@@ -117,14 +123,7 @@ export default function BottomSheetModal({
           onToggle={() => toggleSection('location')}
         >
           <View className="flex-row flex-wrap gap-2">
-            {[
-              '제주시',
-              '서귀포시',
-              '서부권',
-              '동부권',
-              '중문/대정',
-              '도서지역',
-            ].map((loc) => (
+            {LOCATION_OPTIONS.map((loc) => (
               <TouchableOpacity
                 key={loc}
                 onPress={() => toggleLocation(loc)}
@@ -148,11 +147,7 @@ export default function BottomSheetModal({
           onToggle={() => toggleSection('period')}
         >
           <View className="gap-2">
-            {[
-              { label: '단기', desc: '4주 이하' },
-              { label: '중기', desc: '1개월 ~ 3개월' },
-              { label: '장기', desc: '3개월 이상' },
-            ].map((period) => (
+            {PERIOD_OPTIONS.map((period) => (
               <TouchableOpacity
                 key={period.label}
                 onPress={() => togglePeriod(period.label)}
@@ -181,13 +176,7 @@ export default function BottomSheetModal({
           onToggle={() => toggleSection('workdays')}
         >
           <View className="gap-2">
-            {[
-              '주 1일 (6일 휴무)',
-              '주 2일 (5일 휴무)',
-              '주 3일 (4일 휴무)',
-              '주 4일 (3일 휴무)',
-              '주 5일 (2일 휴무)',
-            ].map((workday) => (
+            {WORKDAYS_OPTIONS.map((workday) => (
               <TouchableOpacity
                 key={workday}
                 onPress={() => toggleWorkdays(workday)}
@@ -214,7 +203,7 @@ export default function BottomSheetModal({
           showBorder={false}
         >
           <View className="flex-row gap-2">
-            {['무관', '남', '여'].map((gender) => (
+            {GENDER_OPTIONS.map((gender) => (
               <TouchableOpacity
                 key={gender}
                 onPress={() => selectGender(gender)}
