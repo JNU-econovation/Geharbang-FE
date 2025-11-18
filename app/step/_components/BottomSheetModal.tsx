@@ -1,3 +1,4 @@
+import FilterModalFooter from '@/app/step/_components/FilterModalFooter';
 import BottomSheet from '@/src/components/ui/BottomSheet';
 import Checkbox from '@/src/components/ui/Checkbox';
 import CollapsibleSection from '@/src/components/ui/CollapsibleSection';
@@ -91,30 +92,12 @@ export default function BottomSheetModal({
     setFilters((prev) => ({ ...prev, gender }));
   };
 
-  const footer = (
-    <View className="p-4 mb-4 flex-row gap-3">
-      <TouchableOpacity
-        onPress={resetFilters}
-        className="flex-1 py-3 border border-gray-300 rounded-lg items-center"
-      >
-        <TextSize size={14} content="초기화" />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={applyFilters}
-        className="flex-1 py-3 bg-primary-blue rounded-lg items-center"
-      >
-        <TextSize size={14} content="적용하기" color="white" />
-      </TouchableOpacity>
-    </View>
-  );
-
   return (
     <BottomSheet
       visible={visible}
       onClose={onClose}
       title={title}
-      footer={footer}
+      footer={<FilterModalFooter onReset={resetFilters} onApply={applyFilters} />}
     >
       <View className="p-4 gap-6">
         <CollapsibleSection
