@@ -1,3 +1,4 @@
+import { COLORS } from '@/src/utils/constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { TextInput, View } from 'react-native';
@@ -17,14 +18,14 @@ export default function SearchInput({
   placeholder,
   iconName = 'search',
   iconSize = 16,
-  iconColor = '#99A1AE',
+  iconColor = COLORS.GRAY.PLACEHOLDER,
 }: SearchInputProps) {
   return (
     <View className="relative flex-row items-center">
       <TextInput
-        className="flex-1 pl-9 pr-4 py-2.5 bg-white rounded-lg border border-gray-200 text-[13px] text-gray-800"
+        className="flex-1 pl-9 pr-4 py-2.5 bg-white rounded-lg border border-gray-border text-[13px] text-gray-text"
         placeholder={placeholder}
-        placeholderTextColor="#99A1AE"
+        placeholderTextColor={COLORS.GRAY.PLACEHOLDER}
         value={value}
         onChangeText={onChangeText}
         style={{ fontFamily: 'Noto Sans KR' }}

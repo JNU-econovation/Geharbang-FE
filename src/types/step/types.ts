@@ -11,8 +11,8 @@ export interface GuestHouse {
 
 export interface FilterState {
   location: string[];
-  period: string;
-  workdays: string;
+  period: string[];
+  workdays: string[];
   gender: string;
 }
 
