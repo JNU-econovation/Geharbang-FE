@@ -81,7 +81,7 @@ export function StepNoticeSection() {
 
       <HorizontalSlider
         data={currentStepNotices}
-        renderItem={(house) => <ItemCard {...house} type="stepNotice" />}
+        renderItem={(house) => <ItemCard key={house.id} {...house} type="stepNotice" />}
         renderMoreCard={<MoreCard onPress={() => router.push("/step")} />}
       />
     </View>

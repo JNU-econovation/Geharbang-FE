@@ -23,7 +23,6 @@ export function ItemCard({
 
   return (
     <View
-      key={id}
       className="rounded-2xl border border-gray-border bg-white"
       style={{
         width: CARD_WIDTH,

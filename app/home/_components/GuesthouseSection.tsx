@@ -84,7 +84,7 @@ export function GuesthouseSection() {
 
       <HorizontalSlider
         data={currentGuestHouses}
-        renderItem={(house) => <ItemCard {...house} type="guestHouse" />}
+        renderItem={(house) => <ItemCard key={house.id} {...house} type="guestHouse" />}
         renderMoreCard={<MoreCard onPress={() => router.push("/step")} />}
       />
     </View>
