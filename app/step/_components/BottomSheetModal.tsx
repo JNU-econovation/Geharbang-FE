@@ -4,6 +4,7 @@ import Checkbox from '@/src/components/ui/Checkbox';
 import CollapsibleSection from '@/src/components/ui/CollapsibleSection';
 import RadioButton from '@/src/components/ui/RadioButton';
 import TextSize from '@/src/components/ui/TextSize';
+import { useExpandableSections } from '@/src/hooks/useExpandableSections';
 import { FilterState } from '@/src/types/step/types';
 import {
   GENDER_OPTIONS,
@@ -31,21 +32,13 @@ export default function BottomSheetModal({
 }: BottomSheetModalProps) {
   const [filters, setFilters] = useState(initialFilters);
 
-  const [expandedSections, setExpandedSections] = useState({
-    location: true,
-    period: true,
-    workdays: true,
-    gender: true,
-  });
-
-  const toggleSection = (
-    section: 'location' | 'period' | 'workdays' | 'gender',
-  ) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
+  const { expanded: expandedSections, toggle: toggleSection } =
+    useExpandableSections({
+      location: true,
+      period: true,
+      workdays: true,
+      gender: true,
+    });
 
   const resetFilters = () => {
     setFilters({
