@@ -66,15 +66,16 @@ export default function HomeScreen() {
                 <TouchableOpacity
                   className='bg-white border border-gray-200 rounded-xl p-4 items-center active:opacity-70'
                   style={{ width: "47%" }}
+                  onPress={() => router.push('/step/1/apply')}
                 >
                   <View className='w-12 h-12 bg-emerald-500/10 rounded-full items-center justify-center mb-3'>
                     <Ionicons name='calendar' size={20} color='#10B981' />
                   </View>
                   <Text className='text-sm font-medium text-gray-900 text-center'>
-                    실시간 예약
+                    스텝 지원 하기
                   </Text>
                   <Text className='text-xs text-gray-600 mt-1 text-center'>
-                    즉시 예약 가능
+                    테스트
                   </Text>
                 </TouchableOpacity>
 
