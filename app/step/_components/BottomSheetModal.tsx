@@ -2,9 +2,10 @@ import BottomSheet from '@/src/components/ui/BottomSheet';
 import Checkbox from '@/src/components/ui/Checkbox';
 import CollapsibleSection from '@/src/components/ui/CollapsibleSection';
 import RadioButton from '@/src/components/ui/RadioButton';
+import TextSize from '@/src/components/ui/TextSize';
 import { FilterState } from '@/src/types/step/types';
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 interface BottomSheetModalProps {
   visible: boolean;
@@ -90,24 +91,14 @@ export default function BottomSheetModal({
         onPress={resetFilters}
         className="flex-1 py-3 border border-gray-300 rounded-lg items-center"
       >
-        <Text
-          className="text-gray-700 font-medium"
-          style={{ fontFamily: 'Noto Sans KR' }}
-        >
-          초기화
-        </Text>
+        <TextSize size={14} content="초기화" />
       </TouchableOpacity>
 
       <TouchableOpacity
         onPress={applyFilters}
         className="flex-1 py-3 bg-primary-blue rounded-lg items-center"
       >
-        <Text
-          className="text-white font-medium"
-          style={{ fontFamily: 'Noto Sans KR' }}
-        >
-          적용하기
-        </Text>
+        <TextSize size={14} content="적용하기" color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -145,7 +136,7 @@ export default function BottomSheetModal({
                 style={{ width: '48%' }}
               >
                 <Checkbox checked={filters.location.includes(loc)} size="md" />
-                <Text className="text-sm">{loc}</Text>
+                <TextSize size={14} content={loc} />
               </TouchableOpacity>
             ))}
           </View>
@@ -176,18 +167,8 @@ export default function BottomSheetModal({
                   size="md"
                 />
                 <View>
-                  <Text
-                    className="text-sm font-medium"
-                    style={{ fontFamily: 'Noto Sans KR' }}
-                  >
-                    {period.label}
-                  </Text>
-                  <Text
-                    className="text-xs text-gray-500"
-                    style={{ fontFamily: 'Noto Sans KR' }}
-                  >
-                    {period.desc}
-                  </Text>
+                  <TextSize size={14} content={period.label} />
+                  <TextSize size={12} content={period.desc} color="#6B7280" />
                 </View>
               </TouchableOpacity>
             ))}
@@ -220,12 +201,7 @@ export default function BottomSheetModal({
                   checked={filters.workdays.includes(workday)}
                   size="md"
                 />
-                <Text
-                  className="text-sm font-medium"
-                  style={{ fontFamily: 'Noto Sans KR' }}
-                >
-                  {workday}
-                </Text>
+                <TextSize size={14} content={workday} />
               </TouchableOpacity>
             ))}
           </View>
@@ -249,12 +225,7 @@ export default function BottomSheetModal({
                 }`}
               >
                 <RadioButton selected={filters.gender === gender} size="md" />
-                <Text
-                  className="text-sm font-medium"
-                  style={{ fontFamily: 'Noto Sans KR' }}
-                >
-                  {gender}
-                </Text>
+                <TextSize size={14} content={gender} />
               </TouchableOpacity>
             ))}
           </View>
