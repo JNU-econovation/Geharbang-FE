@@ -85,7 +85,7 @@ export default function BottomSheetModal({
   };
 
   const footer = (
-    <View className="p-4 flex-row gap-3">
+    <View className="p-4 mb-4 flex-row gap-3">
       <TouchableOpacity
         onPress={resetFilters}
         className="flex-1 py-3 border border-gray-300 rounded-lg items-center"
