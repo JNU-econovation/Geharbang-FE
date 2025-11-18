@@ -29,6 +29,7 @@ export default function Contact({
         title='Instagram'
         content='@jeju_oceanview_house'
         iconBg='#F6339A'
+        redirect={`https://jejuoceanview.com`} // scheme + contentx
       />
 
       <View className='pt-4' />
@@ -38,6 +39,7 @@ export default function Contact({
         title='전화번호'
         content='010-1234-5678'
         iconBg='#00C950'
+        redirect={`tel:+010-1234-5678`}
       />
 
       <View className='pt-4' />
@@ -47,6 +49,7 @@ export default function Contact({
         title='이메일'
         content='info@jejuoceanview.com'
         iconBg='#2B7FFF'
+        redirect={`mailto:jdyjsh77@naver.com`}
       />
 
       <View className='pt-4' />
@@ -56,6 +59,7 @@ export default function Contact({
         title='웹사이트'
         content='jejuoceanview.com'
         iconBg='#364153'
+        redirect={`https://jejuoceanview.com`}
       />
 
       <View className='pt-4' />

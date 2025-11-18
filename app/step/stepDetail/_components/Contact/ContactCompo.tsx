@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Linking, Pressable, View } from "react-native";
 
 import ContactRedirect from "@/public/svgs/StepDetail/contactIcon/contactRedirect.svg";
 
@@ -11,6 +11,7 @@ interface ContactCompoProps {
   title: string;
   content: string;
   iconBg: string;
+  redirect: string;
 }
 
 export default function ContactCompo({
@@ -19,6 +20,7 @@ export default function ContactCompo({
   title,
   content,
   iconBg,
+  redirect,
 }: ContactCompoProps) {
   return (
     <ViewContext
@@ -41,7 +43,9 @@ export default function ContactCompo({
         <TextSize color='#101828' size={14} content={content} />
       </View>
 
-      <ContactRedirect width={22} height={22} />
+      <Pressable onPress={() => Linking.openURL(redirect)}>
+        <ContactRedirect width={22} height={22} />
+      </Pressable>
     </ViewContext>
   );
 }
