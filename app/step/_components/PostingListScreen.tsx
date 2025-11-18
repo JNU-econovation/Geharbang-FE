@@ -18,9 +18,9 @@ export default function GuestHouseListScreen() {
   const [likedItems, setLikedItems] = useState<Set<number>>(new Set());
   const [filters, setFilters] = useState<FilterState>({
     location: [],
-    period: '단기',
-    workdays: '주 5일 (주말 휴무)',
-    gender: '무관',
+    period: [],
+    workdays: [],
+    gender: '',
   });
 
   // 로딩 및 에러 상태 (API 연동 시 사용)

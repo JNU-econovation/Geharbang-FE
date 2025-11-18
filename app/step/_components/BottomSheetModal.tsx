@@ -42,9 +42,9 @@ export default function BottomSheetModal({
   const resetFilters = () => {
     setFilters({
       location: [],
-      period: '단기',
-      workdays: '주 5일 (주말 휴무)',
-      gender: '무관',
+      period: [],
+      workdays: [],
+      gender: '',
     });
   };
 
@@ -62,12 +62,22 @@ export default function BottomSheetModal({
     }));
   };
 
-  const selectPeriod = (period: string) => {
-    setFilters((prev) => ({ ...prev, period }));
+  const togglePeriod = (period: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      period: prev.period.includes(period)
+        ? prev.period.filter((p) => p !== period)
+        : [...prev.period, period],
+    }));
   };
 
-  const selectWorkdays = (workdays: string) => {
-    setFilters((prev) => ({ ...prev, workdays }));
+  const toggleWorkdays = (workdays: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      workdays: prev.workdays.includes(workdays)
+        ? prev.workdays.filter((w) => w !== workdays)
+        : [...prev.workdays, workdays],
+    }));
   };
 
   const selectGender = (gender: string) => {
@@ -154,15 +164,15 @@ export default function BottomSheetModal({
             ].map((period) => (
               <TouchableOpacity
                 key={period.label}
-                onPress={() => selectPeriod(period.label)}
+                onPress={() => togglePeriod(period.label)}
                 className={`flex-row items-center gap-3 p-3 rounded-lg border ${
-                  filters.period === period.label
+                  filters.period.includes(period.label)
                     ? 'border-primary-blue bg-blue-50'
                     : 'border-gray-200'
                 }`}
               >
-                <RadioButton
-                  selected={filters.period === period.label}
+                <Checkbox
+                  checked={filters.period.includes(period.label)}
                   size="md"
                 />
                 <View>
@@ -199,15 +209,15 @@ export default function BottomSheetModal({
             ].map((workday) => (
               <TouchableOpacity
                 key={workday}
-                onPress={() => selectWorkdays(workday)}
+                onPress={() => toggleWorkdays(workday)}
                 className={`flex-row items-center gap-3 p-3 rounded-lg border ${
-                  filters.workdays === workday
+                  filters.workdays.includes(workday)
                     ? 'border-primary-blue bg-blue-50'
                     : 'border-gray-200'
                 }`}
               >
-                <RadioButton
-                  selected={filters.workdays === workday}
+                <Checkbox
+                  checked={filters.workdays.includes(workday)}
                   size="md"
                 />
                 <Text
