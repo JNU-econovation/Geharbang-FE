@@ -1,5 +1,6 @@
+import { getDropdownPositionStyles } from '@/src/utils/common/dropdownPosition';
 import React from 'react';
-import { Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 interface DropdownOption<T> {
   key: T;
@@ -29,22 +30,12 @@ export default function Dropdown<T extends string>({
 }: DropdownProps<T>) {
   if (!visible) return null;
 
-  const positionStyles: ViewStyle = {
-    top: top ?? '150%',
-    marginTop: 4,
-    zIndex: 1000,
-    elevation: 5,
-    minWidth: 100,
-  };
-
-  if (position === 'right' && right !== undefined) {
-    positionStyles.right = right;
-  } else if (position === 'left' && left !== undefined) {
-    positionStyles.left = left;
-  } else if (position === 'center') {
-    positionStyles.left = '50%';
-    positionStyles.transform = [{ translateX: -50 }];
-  }
+  const positionStyles = getDropdownPositionStyles({
+    position,
+    top,
+    right,
+    left,
+  });
 
   return (
     <View
