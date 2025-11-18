@@ -1,11 +1,14 @@
-import { useState } from "react";
-import { Image, View } from "react-native";
+import { Image, Pressable, View } from "react-native";
 import Swiper from "react-native-swiper";
 
+import ModalImage from "@/src/components/ui/Modal/ModalImage";
 import TextSize from "@/src/components/ui/TextSize";
+import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
 
 export default function GehaImage() {
-  const [currentIdx, setCurrentIdx] = useState(1);
+  const { modalVisible, setModalVisible, currentIdx, setCurrentIdx } =
+    useImageModal();
+
   const images = [
     require("@/public/images/test1.png"),
     require("@/public/images/test1.png"),
@@ -22,12 +25,13 @@ export default function GehaImage() {
         showsPagination={false}
       >
         {images.map((img, i) => (
-          <Image
-            key={i}
-            source={img}
-            className='w-full h-full'
-            resizeMode='contain'
-          />
+          <Pressable key={i} onPress={() => setModalVisible(!modalVisible)}>
+            <Image
+              source={img}
+              className='w-full h-full'
+              resizeMode='contain'
+            />
+          </Pressable>
         ))}
       </Swiper>
 
@@ -40,6 +44,14 @@ export default function GehaImage() {
           />
         </View>
       </View>
+
+      <ModalImage
+        modalVisible={modalVisible}
+        currentIdx={currentIdx}
+        images={images}
+        setModalVisible={setModalVisible}
+        setCurrentIdx={setCurrentIdx}
+      />
     </View>
   );
 }

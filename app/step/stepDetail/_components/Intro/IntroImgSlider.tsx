@@ -1,6 +1,12 @@
-import { Dimensions, FlatList, Image, View } from "react-native";
+import { Dimensions, FlatList, Image, Pressable, View } from "react-native";
+
+import ModalImage from "@/src/components/ui/Modal/ModalImage";
+import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
 
 export default function IntroImgSlider() {
+  const { modalVisible, setModalVisible, currentIdx, setCurrentIdx } =
+    useImageModal();
+
   const images = [
     require("@/public/images/test1.png"),
     require("@/public/images/test1.png"),
@@ -19,14 +25,28 @@ export default function IntroImgSlider() {
         decelerationRate='normal'
         contentContainerStyle={{ gap: 20 }}
         renderItem={({ item, index }) => (
-          <View style={{ width: PHONEWIDTH }} key={index}>
+          <Pressable
+            key={index}
+            style={{ width: PHONEWIDTH }}
+            onPress={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
             <Image
               source={item}
               className='w-full h-full rounded-3xl'
               resizeMode='cover'
             />
-          </View>
+          </Pressable>
         )}
+      />
+
+      <ModalImage
+        modalVisible={modalVisible}
+        currentIdx={currentIdx}
+        images={images}
+        setModalVisible={setModalVisible}
+        setCurrentIdx={setCurrentIdx}
       />
     </View>
   );

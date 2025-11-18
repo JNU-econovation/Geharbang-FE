@@ -1,6 +1,7 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Pressable, View } from "react-native";
+import { Pressable } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+
+import ModalCloseBtn from "@/src/components/ui/Modal/ModalCloseBtn";
 
 interface AddressMapDetailProps {
   latitudeDelta: number;
@@ -44,12 +45,7 @@ export default function AddressMapDetail({
           modalVisible ? "top-12 right-5" : "top-3 right-3"
         }`}
       >
-        <View className='h-10 w-10 bg-[#ffffff] rounded-full flex items-center justify-center'>
-          <Ionicons
-            name={modalVisible ? "close-outline" : "expand-outline"}
-            size={22}
-          />
-        </View>
+        <ModalCloseBtn modalVisible={modalVisible} />
       </Pressable>
     </>
   );
