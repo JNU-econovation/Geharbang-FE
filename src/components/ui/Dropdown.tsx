@@ -30,7 +30,7 @@ export default function Dropdown<T extends string>({
   if (!visible) return null;
 
   const positionStyles: ViewStyle = {
-    top: top ?? '100%',
+    top: top ?? '150%',
     marginTop: 4,
     zIndex: 1000,
     elevation: 5,
@@ -62,7 +62,7 @@ export default function Dropdown<T extends string>({
           <Text
             className={`text-sm ${
               selectedKey === option.key
-                ? 'text-blue-600 font-semibold'
+                ? 'text-primary-blue font-semibold'
                 : 'text-gray-700'
             }`}
           >
