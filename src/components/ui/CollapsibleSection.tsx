@@ -7,6 +7,7 @@ interface CollapsibleSectionProps {
   onToggle: () => void;
   children: ReactNode;
   showBorder?: boolean;
+  className?: string;
 }
 
 export default function CollapsibleSection({
@@ -15,9 +16,12 @@ export default function CollapsibleSection({
   onToggle,
   children,
   showBorder = true,
+  className = '',
 }: CollapsibleSectionProps) {
   return (
-    <View className={showBorder ? 'border-b border-gray-100 pb-4' : 'pb-4'}>
+    <View
+      className={`${showBorder ? 'border-b border-gray-100' : ''} ${className}`.trim()}
+    >
       <TouchableOpacity
         onPress={onToggle}
         className="w-full flex-row items-center justify-between py-2"

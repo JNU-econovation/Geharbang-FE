@@ -97,6 +97,7 @@ export default function BottomSheetModal({
           title="근무지역"
           isExpanded={expandedSections.location}
           onToggle={() => toggleSection('location')}
+          className="pb-4"
         >
           <View className="flex-row flex-wrap gap-2">
             {LOCATION_OPTIONS.map((loc) => (
@@ -121,6 +122,7 @@ export default function BottomSheetModal({
           title="근무기간"
           isExpanded={expandedSections.period}
           onToggle={() => toggleSection('period')}
+          className="pb-4"
         >
           <View className="gap-2">
             {PERIOD_OPTIONS.map((period) => (
@@ -150,6 +152,7 @@ export default function BottomSheetModal({
           title="근무일 (휴일)"
           isExpanded={expandedSections.workdays}
           onToggle={() => toggleSection('workdays')}
+          className="pb-4"
         >
           <View className="gap-2">
             {WORKDAYS_OPTIONS.map((workday) => (
