@@ -39,7 +39,7 @@ export default function Contact({
         title='전화번호'
         content='010-1234-5678'
         iconBg='#00C950'
-        redirect={`tel:+010-1234-5678`}
+        redirect={`tel:010-1234-5678`}
       />
 
       <View className='pt-4' />
