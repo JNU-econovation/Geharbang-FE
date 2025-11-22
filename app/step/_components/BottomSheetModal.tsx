@@ -5,6 +5,7 @@ import CollapsibleSection from '@/src/components/ui/CollapsibleSection';
 import RadioButton from '@/src/components/ui/RadioButton';
 import TextSize from '@/src/components/ui/TextSize';
 import { useExpandableSections } from '@/src/hooks/useExpandableSections';
+import { useFilterState } from '@/src/hooks/useFilterState';
 import { FilterState } from '@/src/types/step/types';
 import {
   GENDER_OPTIONS,
@@ -12,7 +13,7 @@ import {
   PERIOD_OPTIONS,
   WORKDAYS_OPTIONS,
 } from '@/src/utils/constants/filterOptions';
-import React, { useState } from 'react';
+import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 interface BottomSheetModalProps {
@@ -30,7 +31,14 @@ export default function BottomSheetModal({
   filters: initialFilters,
   onApply,
 }: BottomSheetModalProps) {
-  const [filters, setFilters] = useState(initialFilters);
+  const {
+    filters,
+    resetFilters,
+    toggleLocation,
+    togglePeriod,
+    toggleWorkdays,
+    selectGender,
+  } = useFilterState(initialFilters);
 
   const { expanded: expandedSections, toggle: toggleSection } =
     useExpandableSections({
@@ -40,49 +48,9 @@ export default function BottomSheetModal({
       gender: true,
     });
 
-  const resetFilters = () => {
-    setFilters({
-      location: [],
-      period: [],
-      workdays: [],
-      gender: '',
-    });
-  };
-
   const applyFilters = () => {
     onApply(filters);
     onClose();
-  };
-
-  const toggleLocation = (location: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      location: prev.location.includes(location)
-        ? prev.location.filter((loc) => loc !== location)
-        : [...prev.location, location],
-    }));
-  };
-
-  const togglePeriod = (period: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      period: prev.period.includes(period)
-        ? prev.period.filter((p) => p !== period)
-        : [...prev.period, period],
-    }));
-  };
-
-  const toggleWorkdays = (workdays: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      workdays: prev.workdays.includes(workdays)
-        ? prev.workdays.filter((w) => w !== workdays)
-        : [...prev.workdays, workdays],
-    }));
-  };
-
-  const selectGender = (gender: string) => {
-    setFilters((prev) => ({ ...prev, gender }));
   };
 
   return (
