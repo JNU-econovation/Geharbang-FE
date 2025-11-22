@@ -64,7 +64,7 @@ export default function Contact({
 
       <View className='pt-4' />
 
-      <ViewContext variant='owerMes' height={74}>
+      <ViewContext variant='owerMes'>
         <View className='px-4 py-3'>
           <TextSize
             size={14}
