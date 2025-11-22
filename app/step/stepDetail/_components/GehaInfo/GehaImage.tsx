@@ -6,13 +6,8 @@ import TextSize from "@/src/components/ui/TextSize";
 import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
 
 export default function GehaImage() {
-  const {
-    modalVisible,
-    currentIdx,
-    setModalVisible,
-    setCurrentIdx,
-    closeModal,
-  } = useImageModal();
+  const { modalVisible, currentIdx, setModalVisible, setCurrentIdx } =
+    useImageModal();
 
   const images = [
     require("@/public/images/test1.png"),
@@ -55,7 +50,7 @@ export default function GehaImage() {
         currentIdx={currentIdx}
         images={images}
         setCurrentIdx={setCurrentIdx}
-        closeModal={closeModal}
+        setModalVisible={setModalVisible}
       />
     </View>
   );

@@ -4,13 +4,8 @@ import ModalImage from "@/src/components/ui/Modal/ModalImage";
 import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
 
 export default function IntroImgSlider() {
-  const {
-    modalVisible,
-    setModalVisible,
-    currentIdx,
-    setCurrentIdx,
-    closeModal,
-  } = useImageModal();
+  const { modalVisible, setModalVisible, currentIdx, setCurrentIdx } =
+    useImageModal();
 
   const images = [
     require("@/public/images/test1.png"),
@@ -51,7 +46,7 @@ export default function IntroImgSlider() {
         currentIdx={currentIdx}
         images={images}
         setCurrentIdx={setCurrentIdx}
-        closeModal={closeModal}
+        setModalVisible={setModalVisible}
       />
     </View>
   );
