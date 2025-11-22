@@ -8,7 +8,7 @@ interface ModalImageProps {
   currentIdx: number;
   images: any[];
   setCurrentIdx: (value: React.SetStateAction<number>) => void;
-  closeModal: () => void;
+  setModalVisible: (value: React.SetStateAction<boolean>) => void;
 }
 
 export default function ModalImage({
@@ -16,7 +16,7 @@ export default function ModalImage({
   currentIdx,
   images,
   setCurrentIdx,
-  closeModal,
+  setModalVisible,
 }: ModalImageProps) {
   return (
     <Modal visible={modalVisible} animationType='slide'>
@@ -28,15 +28,16 @@ export default function ModalImage({
         />
       </View>
 
-      <Pressable onPress={closeModal} className='absolute top-12 right-5 z-10'>
+      <Pressable
+        onPress={() => setModalVisible(!modalVisible)}
+        className='absolute top-12 right-5 z-10'
+      >
         <ModalCloseBtn modalVisible={modalVisible} />
       </Pressable>
 
       <View className='flex-1 bg-[#ffffff]'>
         <Swiper
-          key={modalVisible ? `swiper-open-${currentIdx}` : "swiper-closed"}
           loop={false}
-          index={0}
           onIndexChanged={(idx) => setCurrentIdx(idx + 1)}
           showsPagination={false}
         >

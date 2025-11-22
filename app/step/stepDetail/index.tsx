@@ -17,7 +17,6 @@ import GehaImage from "./_components/GehaInfo/GehaImage";
 import GehaInfo from "./_components/GehaInfo/GehaInfo";
 import Intro from "./_components/Intro/Intro";
 import PressSection from "./_components/PressSection/PressSection";
-import WorkDate from "./_components/WorkDate/WorkDate";
 import WorkInfo from "./_components/WorkInfo/WorkInfo";
 
 export default function StepDetail() {
@@ -37,7 +36,12 @@ export default function StepDetail() {
             <Flex items='center' justify='center' dir='row' gap={20}>
               <Streamed width={20} height={20} />
               <Pressable
-                onPress={async () => await Share.share({ message: "공유하기" })}
+                onPress={async () =>
+                  await Share.share({
+                    title: "스텝 공고 상세 공유하기",
+                    message: "스텝 공고를 공유해보세요!",
+                  })
+                }
               >
                 <ShareArrow width={20} height={20} />
               </Pressable>
@@ -54,11 +58,12 @@ export default function StepDetail() {
           <GehaInfo />
         </View>
 
-        <View className='pt-8' />
-        <PressSection
-          handleSectionToScroll={handleSectionToScroll}
-          selectedSection={selectedSection}
-        />
+        <View className='pt-8'>
+          <PressSection
+            handleSectionToScroll={handleSectionToScroll}
+            selectedSection={selectedSection}
+          />
+        </View>
 
         <View className='px-4'>
           <View className='pt-10' />
@@ -66,9 +71,6 @@ export default function StepDetail() {
 
           <View className='pt-10' />
           <WorkInfo setSectionYPositions={setSectionYPositions} />
-
-          <View className='pt-10' />
-          <WorkDate setSectionYPositions={setSectionYPositions} />
 
           <View className='pt-10' />
           <Intro setSectionYPositions={setSectionYPositions} />

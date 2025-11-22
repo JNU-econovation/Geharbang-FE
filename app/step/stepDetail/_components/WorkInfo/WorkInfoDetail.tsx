@@ -6,30 +6,27 @@ import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
 interface WorkInfoDetailProps {
   icon: React.ReactNode;
   workInfoTitle: string;
-  workInfoContent: string;
+  children: React.ReactNode;
 }
 
 export default function WorkInfoDetail({
   icon,
   workInfoTitle,
-  workInfoContent,
+  children,
 }: WorkInfoDetailProps) {
   return (
-    <ViewContext
-      variant='primary'
-      height={74}
-      className='flex items-center justify-start flex-row'
-    >
-      <View className='pl-3' />
-      <View className='w-10 h-10 bg-[#DFF2FE] rounded-full flex items-center justify-center'>
-        {icon}
-      </View>
-      <View className='pr-5' />
-      <View>
+    <ViewContext variant='primary' className='px-4 py-3'>
+      <View className='flex flex-row items-center'>
+        <View className='w-10 h-10 bg-[#DFF2FE] rounded-full flex items-center justify-center'>
+          {icon}
+        </View>
+        <View className='pr-5' />
+
         <TextSize size={16} color='#364153' content={workInfoTitle} />
-        <View className='pt-1' />
-        <TextSize size={12} color='#364153' content={workInfoContent} />
       </View>
+
+      <View className='pt-2' />
+      <View className='flex flex-col '>{children}</View>
     </ViewContext>
   );
 }
