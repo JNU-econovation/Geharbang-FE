@@ -5,6 +5,7 @@
       "nativewind/types"
     ],
     "strict": true,
+    "jsx": "react-native",
     "paths": {
       "@/*": [
         "./*"
