@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 interface CustomSafeAreaViewProps {
   children: ReactNode;
   pageColor: "bg-gray-50" | "bg-white";
-  statusBarBackgroundColor?: "bg-[#0EA5E9]";
+  statusBarBackgroundColor?: "bg-[#0EA5E9]"| "bg-white";
 }
 
 export default function CustomSafeAreaView({
