@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { ComponentProps } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 import { COLORS } from "@/src/utils/constants/colors";
@@ -46,9 +46,9 @@ export default function ResultLayout({
   const iconName = isSuccess ? "checkmark" : isError ? "close" : null;
 
   return (
-    <Flex justify="start" items="center" gap={32}>
+    <Flex justify='start' items='center' gap={32}>
       <View
-        className="bg-white p-8 rounded-lg w-full"
+        className='bg-white p-8 rounded-lg w-full'
         style={{
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 0 },
@@ -56,7 +56,7 @@ export default function ResultLayout({
           shadowRadius: 3,
         }}
       >
-        <Flex justify="center" items="center" gap={16}>
+        <Flex justify='center' items='center' gap={16}>
           <View
             className={`w-24 h-24 ${bgColorClass} rounded-full items-center justify-center`}
           >
@@ -70,18 +70,18 @@ export default function ResultLayout({
           </View>
           <TextSize size={18} content={title} />
           {description && (
-            <Text className="text-gray-text text-center">{description}</Text>
+            <Text className='text-gray-text text-center'>{description}</Text>
           )}
         </Flex>
       </View>
 
-      <Flex justify="center" items="center" gap={8}>
+      <Flex justify='center' items='center' gap={8}>
         {primary && (
           <Button
-            variant="primary"
+            variant='primary'
             width={370}
             height={50}
-            textColor="white"
+            textColor='white'
             content={primary.label}
             onPress={primary.onPress}
             icon={<Ionicons name={primary.icon} size={18} />}
@@ -89,7 +89,7 @@ export default function ResultLayout({
         )}
         {secondary && (
           <Button
-            variant="white"
+            variant='white'
             width={370}
             height={50}
             textColor={COLORS.GRAY.TEXT}
@@ -100,7 +100,7 @@ export default function ResultLayout({
         )}
         {tertiary && (
           <Button
-            variant="gray"
+            variant='gray'
             width={370}
             height={50}
             textColor={COLORS.GRAY.TEXT}
