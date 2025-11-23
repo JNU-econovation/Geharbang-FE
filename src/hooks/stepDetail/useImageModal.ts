@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useImageModal = () => {
-  const [currentIdx, setCurrentIdx] = useState(1);
+  const [imageIdx, setImageIdx] = useState(1);
+  const [modalIdx, setModalIdx] = useState(1);
   const [modalVisible, setModalVisible] = useState(false);
 
+  useEffect(() => {
+    setModalIdx(1);
+  }, [modalVisible]);
+
   return {
-    currentIdx,
-    setCurrentIdx,
+    imageIdx,
+    setImageIdx,
+    modalIdx,
+    setModalIdx,
     modalVisible,
     setModalVisible,
   };

@@ -5,17 +5,17 @@ import ModalCloseBtn from "./ModalCloseBtn";
 
 interface ModalImageProps {
   modalVisible: boolean;
-  currentIdx: number;
+  modalIdx: number;
   images: any[];
-  setCurrentIdx: (value: React.SetStateAction<number>) => void;
+  setModalIdx: (value: React.SetStateAction<number>) => void;
   setModalVisible: (value: React.SetStateAction<boolean>) => void;
 }
 
 export default function ModalImage({
   modalVisible,
-  currentIdx,
+  modalIdx,
   images,
-  setCurrentIdx,
+  setModalIdx,
   setModalVisible,
 }: ModalImageProps) {
   return (
@@ -24,7 +24,7 @@ export default function ModalImage({
         <TextSize
           color='#000000'
           size={17}
-          content={`${currentIdx} / ${images.length} `}
+          content={`${modalIdx} / ${images.length} `}
         />
       </View>
 
@@ -38,7 +38,7 @@ export default function ModalImage({
       <View className='flex-1 bg-[#ffffff]'>
         <Swiper
           loop={false}
-          onIndexChanged={(idx) => setCurrentIdx(idx + 1)}
+          onIndexChanged={(idx) => setModalIdx(idx + 1)}
           showsPagination={false}
         >
           {images.map((img, i) => (
