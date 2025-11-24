@@ -1,7 +1,7 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Image, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex";
+import CheckmarkCircle from "@/src/components/ui/CheckmarkCircle";
 import TextSize from "@/src/components/ui/TextSize";
 import { COLORS } from "@/src/utils/constants/colors";
 
@@ -32,12 +32,10 @@ export default function SelectedApplication({
         color={COLORS.GRAY.TEXT}
         content={"작성 완료된 지원서를 사용합니다"}
       />
-      <Ionicons
-        name="checkmark-circle"
-        color={COLORS.PRIMARY.BLUE}
-        size={25}
-        className="absolute right-4 top-5"
-      />
+
+      <View className="absolute right-4 top-5">
+        <CheckmarkCircle />
+      </View>
     </View>
   );
 }
