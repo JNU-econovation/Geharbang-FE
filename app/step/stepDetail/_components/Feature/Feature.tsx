@@ -1,16 +1,22 @@
 import { View } from "react-native";
 
-import Dot from "@/public/svgs/StepDetail/dot.svg";
-
-import Flex from "@/src/components/layout/Flex/Flex";
-import TextSize from "@/src/components/ui/TextSize";
 import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
 
 import SectionYPosition from "../SectionYPosition";
+import FeatureDetail from "./FeatureDetail";
+
+interface FeatureProps extends SetSectionYPositionProps {
+  feature?: {
+    advantages: string[];
+    employeeBenefits: string[];
+    gender: string;
+  };
+}
 
 export default function Feature({
   setSectionYPositions,
-}: SetSectionYPositionProps) {
+  feature,
+}: FeatureProps) {
   return (
     <SectionYPosition
       section='feature'
@@ -18,17 +24,13 @@ export default function Feature({
       setSectionYPositions={setSectionYPositions}
     >
       <View className='pt-6' />
-      <TextSize color='#101828' size={14} content='성별' />
-      <View className='pt-2' />
+      <FeatureDetail title='성별' featureDetail={feature?.gender} />
 
-      <Flex items='center' justify='start' dir='row'>
-        <Dot width={12} height={12} />
-        <TextSize
-          color='#101828'
-          size={14}
-          content='게스트 체크인/체크아웃 및 예약 관리'
-        />
-      </Flex>
+      <View className='pt-6' />
+      <FeatureDetail title='우대 사항' featureDetail={feature?.advantages} />
+
+      <View className='pt-6' />
+      <FeatureDetail title='복지' featureDetail={feature?.employeeBenefits} />
     </SectionYPosition>
   );
 }
