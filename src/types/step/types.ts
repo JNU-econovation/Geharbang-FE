@@ -9,10 +9,33 @@ export interface GuestHouse {
   image: string;
 }
 
+export interface StaffRecruitmentPost {
+  id: number;
+  name: string;
+  tags: string[];
+  region: string;
+  isWished: boolean;
+  imageUrl: string;
+}
+
+export interface StaffRecruitmentParams {
+  keyword?: string;
+  sort?: string;
+  region?: string[];
+  period?: string[];
+  workScheduleType?: string[];
+  gender?: string;
+  pageNumber?: number;
+}
+
+export interface StaffRecruitmentResponse {
+  staffRecruitmentPosts: StaffRecruitmentPost[];
+}
+
 export interface FilterState {
-  location: string[];
+  region: string[];
   period: string[];
-  workdays: string[];
+  workScheduleType: string[];
   gender: string;
 }
 
