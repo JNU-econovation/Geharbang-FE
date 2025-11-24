@@ -5,7 +5,11 @@ import ModalImage from "@/src/components/ui/Modal/ModalImage";
 import TextSize from "@/src/components/ui/TextSize";
 import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
 
-export default function GehaImage() {
+interface GehaImageProps {
+  images?: string[];
+}
+
+export default function GehaImage({ images }: GehaImageProps) {
   const {
     modalVisible,
     imageIdx,
@@ -15,14 +19,6 @@ export default function GehaImage() {
     setModalIdx,
   } = useImageModal();
 
-  const images = [
-    require("@/public/images/test1.png"),
-    require("@/public/images/test1.png"),
-    require("@/public/images/test1.png"),
-    require("@/public/images/test1.png"),
-    require("@/public/images/test1.png"),
-  ];
-
   return (
     <View className='w-full h-72'>
       <Swiper
@@ -30,10 +26,10 @@ export default function GehaImage() {
         onIndexChanged={(idx) => setImageIdx(idx + 1)}
         showsPagination={false}
       >
-        {images.map((img, i) => (
+        {images?.map((img, i) => (
           <Pressable key={i} onPress={() => setModalVisible(!modalVisible)}>
             <Image
-              source={img}
+              source={{ uri: img }}
               className='w-full h-full'
               resizeMode='contain'
             />
@@ -46,7 +42,7 @@ export default function GehaImage() {
           <TextSize
             color='#ffffff'
             size={12}
-            content={`${imageIdx} / ${images.length} `}
+            content={`${imageIdx} / ${images?.length} `}
           />
         </View>
       </View>

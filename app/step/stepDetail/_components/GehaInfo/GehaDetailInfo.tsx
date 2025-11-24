@@ -5,7 +5,7 @@ import TextSize from "@/src/components/ui/TextSize";
 
 interface GehaDetailInfoProps {
   icon: React.ReactNode;
-  content: string;
+  content?: string;
 }
 
 export default function GehaDetailInfo({ icon, content }: GehaDetailInfoProps) {
