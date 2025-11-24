@@ -9,6 +9,7 @@ import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import { useHandleSection } from "@/src/hooks/stepDetail/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/stepDetail/useSectionToScroll";
+import { useStepDetail } from "@/src/hooks/stepDetail/useStepDetail";
 
 import Address from "./_components/Address/Address";
 import Contact from "./_components/Contact/Contact";
@@ -26,6 +27,8 @@ export default function StepDetail() {
   const { selectedSection, handleSectionToScroll } = useHandleSection({
     sectionToScroll,
   });
+
+  const { data } = useStepDetail();
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -50,12 +53,15 @@ export default function StepDetail() {
         />
       </View>
 
-      {/* FlatList로 바꿀 예정 */}
       <ScrollView ref={scrollViewRef}>
-        <GehaImage />
+        <GehaImage images={data?.representativeImages} />
 
         <View className='px-4 pt-4'>
-          <GehaInfo />
+          <GehaInfo
+            title={data?.title}
+            guesthouseName={data?.guesthouseName}
+            region={data?.region}
+          />
         </View>
 
         <View className='pt-8'>
@@ -67,19 +73,35 @@ export default function StepDetail() {
 
         <View className='px-4'>
           <View className='pt-10' />
-          <Address setSectionYPositions={setSectionYPositions} />
+          <Address
+            setSectionYPositions={setSectionYPositions}
+            location={data?.location}
+          />
 
           <View className='pt-10' />
-          <WorkInfo setSectionYPositions={setSectionYPositions} />
+          <WorkInfo
+            setSectionYPositions={setSectionYPositions}
+            workingInfomation={data?.workingInformation}
+          />
 
           <View className='pt-10' />
-          <Intro setSectionYPositions={setSectionYPositions} />
+          <Intro
+            setSectionYPositions={setSectionYPositions}
+            introduction={data?.introduction}
+          />
 
           <View className='pt-10' />
-          <Feature setSectionYPositions={setSectionYPositions} />
+          <Feature
+            setSectionYPositions={setSectionYPositions}
+            feature={data?.feature}
+          />
 
           <View className='pt-10' />
-          <Contact setSectionYPositions={setSectionYPositions} />
+          <Contact
+            setSectionYPositions={setSectionYPositions}
+            contact={data?.contact}
+            owerMessage={data?.ownerMessage}
+          />
           <View className='pt-10' />
           <Button
             variant='primary'
