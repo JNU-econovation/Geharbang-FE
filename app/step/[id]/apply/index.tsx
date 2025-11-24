@@ -10,7 +10,7 @@ import TextInput from "@/src/components/ui/TextInput";
 import SelectedApplication from "./_components/SelectedApplication";
 import TargetPostingInfo from "./_components/TargetPostingInfo";
 
-export default function staffApplly() {
+export default function staffApply() {
   const stapNotice = {
     id: 52,
     name: "비양도 스테이",
@@ -25,7 +25,7 @@ export default function staffApplly() {
     <>
       <DismissKeyboardView>
         <CustomSafeAreaView pageColor="bg-white">
-          <View className="p-2">
+          <View className="p-3">
             <BackArrorHeader content="지원하기" />
           </View>
           <KeyboardAvoidingView
