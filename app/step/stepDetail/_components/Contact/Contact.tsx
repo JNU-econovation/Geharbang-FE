@@ -71,7 +71,7 @@ export default function Contact({
         title='웹사이트'
         content={`${contact?.webSite}`}
         iconBg='#364153'
-        redirect={`${contact?.webSite}`}
+        redirect={contact?.webSite}
       />
 
       <View className='pt-4' />

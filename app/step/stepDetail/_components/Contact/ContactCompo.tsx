@@ -12,7 +12,7 @@ interface ContactCompoProps {
   title: string;
   content: string;
   iconBg: string;
-  redirect: string;
+  redirect?: string;
 }
 
 export default function ContactCompo({
