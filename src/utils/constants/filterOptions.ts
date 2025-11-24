@@ -1,10 +1,10 @@
-export const LOCATION_OPTIONS = [
+export const REGION_OPTIONS = [
   '제주시',
   '서귀포시',
   '서부권',
   '동부권',
-  '중문/대정',
   '도서지역',
+  '중문_대정',
 ] as const;
 
 export const PERIOD_OPTIONS = [
@@ -13,12 +13,19 @@ export const PERIOD_OPTIONS = [
   { label: '장기', desc: '3개월 이상' },
 ] as const;
 
-export const WORKDAYS_OPTIONS = [
-  '주 1일 (6일 휴무)',
-  '주 2일 (5일 휴무)',
-  '주 3일 (4일 휴무)',
-  '주 4일 (3일 휴무)',
-  '주 5일 (2일 휴무)',
+export const WORK_SCHEDULE_OPTIONS = [
+  { label: '주1일', desc: '주6일 휴무' },
+  { label: '주2일', desc: '주5일 휴무' },
+  { label: '주3일', desc: '주4일 휴무' },
+  { label: '주4일', desc: '주3일 휴무' },
+  { label: '주5일', desc: '주2일 휴무' },
 ] as const;
 
 export const GENDER_OPTIONS = ['무관', '남', '여'] as const;
+
+// api 한글 값 전송하는 용도
+export const SORT_OPTIONS = {
+  views: '조회순',
+  likes: '찜_많은순',
+  recent: '최신순',
+} as const;
