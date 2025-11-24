@@ -6,7 +6,7 @@ import ModalCloseBtn from "./ModalCloseBtn";
 interface ModalImageProps {
   modalVisible: boolean;
   modalIdx: number;
-  images: any[];
+  images?: string[];
   setModalIdx: (value: React.SetStateAction<number>) => void;
   setModalVisible: (value: React.SetStateAction<boolean>) => void;
 }
@@ -24,7 +24,7 @@ export default function ModalImage({
         <TextSize
           color='#000000'
           size={17}
-          content={`${modalIdx} / ${images.length} `}
+          content={`${modalIdx} / ${images?.length} `}
         />
       </View>
 
@@ -41,10 +41,10 @@ export default function ModalImage({
           onIndexChanged={(idx) => setModalIdx(idx + 1)}
           showsPagination={false}
         >
-          {images.map((img, i) => (
+          {images?.map((img, i) => (
             <View key={i}>
               <Image
-                source={img}
+                source={{ uri: img }}
                 className='w-full h-full'
                 resizeMode='contain'
               />
