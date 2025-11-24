@@ -22,15 +22,16 @@ export default function IntroImgSlider({ images }: IntroImgSliderProps) {
         showsHorizontalScrollIndicator={false}
         decelerationRate='normal'
         contentContainerStyle={{ gap: 20 }}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <Pressable
             style={{ width: PHONEWIDTH }}
             onPress={() => {
-              setModalVisible(!modalVisible);
+              setModalVisible(true);
+              setModalIdx(index);
             }}
           >
             <Image
-              source={{ uri: item }}
+              source={{ uri: `${process.env.EXPO_PUBLIC_BASE_URL}${item}` }}
               className='w-full h-full rounded-3xl'
               resizeMode='cover'
             />
