@@ -11,11 +11,11 @@ interface UseApplicationFormValidationProps {
   step?: number;
 }
 
-export function useApplicationFormValidation({
+export const useApplicationFormValidation = ({
   data,
   imageFile,
   step = 1,
-}: UseApplicationFormValidationProps) {
+}: UseApplicationFormValidationProps) => {
   const [errors, setErrors] = useState<FormErrors>({
     image: "",
     name: "",
@@ -59,4 +59,4 @@ export function useApplicationFormValidation({
     clearError,
     validateForm,
   };
-}
+};
