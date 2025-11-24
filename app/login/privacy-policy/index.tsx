@@ -1,7 +1,7 @@
 import { ScrollView, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
-import BackArrorHeader from "../../../src/components/ui/BackArrorHeader";
+import BackArrorHeader from "../../../src/components/ui/BackArrowHeader";
 import LoginPolicyContent from "../_components/LoginPolicy/LoginPolicyContent";
 
 export default function PrivacyPolicy() {

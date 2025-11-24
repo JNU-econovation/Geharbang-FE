@@ -3,7 +3,7 @@ import { View } from "react-native";
 import Google from "@/public/svgs/Login/google.svg";
 import Kakao from "@/public/svgs/Login/kakao.svg";
 
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 

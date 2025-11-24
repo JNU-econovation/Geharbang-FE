@@ -4,7 +4,7 @@ import Animated from "react-native-reanimated";
 import CheckMark from "@/public/svgs/Login/checkMark.svg";
 import Star from "@/public/svgs/Login/star.svg";
 
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import TextSize from "@/src/components/ui/TextSize";
 import { useShakeAnimation } from "@/src/hooks/Login/useShakeAnimation";
 import PersonalInfoContext from "./PersonalInfoContext";
@@ -42,7 +42,7 @@ export default function PersonalInfo({
         <Star width={6} height={6} />
 
         <View className='pr-1' />
-        <Flex items='center' justify='center' flexDir='row'>
+        <Flex items='center' justify='center' dir='row'>
           <PersonalInfoContext
             link='/login/service-use-condition'
             content='서비스 이용약관'
