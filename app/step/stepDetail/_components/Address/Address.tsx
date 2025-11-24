@@ -6,9 +6,17 @@ import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSecti
 import SectionYPosition from "../SectionYPosition";
 import AddressMap from "./AddressMap";
 
+interface AddressProps extends SetSectionYPositionProps {
+  location?: {
+    address: string;
+    coordinates: number[];
+  };
+}
+
 export default function Address({
   setSectionYPositions,
-}: SetSectionYPositionProps) {
+  location,
+}: AddressProps) {
   return (
     <SectionYPosition
       section='address'
@@ -16,14 +24,10 @@ export default function Address({
       setSectionYPositions={setSectionYPositions}
     >
       <View className='pt-6' />
-      <AddressMap />
+      <AddressMap coordinates={location?.coordinates} />
 
       <View className='pt-4' />
-      <TextSize
-        size={14}
-        color='#364153'
-        content='제주특별자치도 제주시 애월읍 하귀2리 123-45'
-      />
+      <TextSize size={14} color='#364153' content={location?.address} />
     </SectionYPosition>
   );
 }
