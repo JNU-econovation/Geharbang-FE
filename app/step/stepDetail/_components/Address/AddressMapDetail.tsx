@@ -26,7 +26,7 @@ export default function AddressMapDetail({
     <>
       <MapView
         style={{ flex: 1, borderRadius: 8 }}
-        initialRegion={{
+        region={{
           latitude: latitude,
           longitude: longitude,
           latitudeDelta: latitudeDelta,

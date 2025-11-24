@@ -1,3 +1,4 @@
+import React from "react";
 import { View } from "react-native";
 
 import Calendar from "@/public/svgs/StepDetail/calendar.svg";
@@ -77,11 +78,11 @@ export default function WorkInfo({
         icon={<Clock width={16} height={16} />}
         workInfoTitle='근무 시간 및 업무'
       >
-        {workingInfomation?.jobs.map((job) => {
+        {workingInfomation?.jobs.map((job, index) => {
           const startTime = job.startTIme.slice(0, 5);
           const endTime = job.endTime.slice(0, 5);
           return (
-            <>
+            <React.Fragment key={index}>
               <TextSize
                 size={15}
                 color='#101828'
@@ -101,7 +102,7 @@ export default function WorkInfo({
                 color='#4A5565'
                 content={`근무일 : 주 ${job.workDays}일, 휴무 ${job.restDays}일`}
               />
-            </>
+            </React.Fragment>
           );
         })}
       </WorkInfoDetail>

@@ -20,13 +20,13 @@ export default function FeatureDetail({
 
   return (
     <>
-      <TextSize color='#101828' size={14} content={title} />
+      <TextSize color='#101828' size={16} content={title} />
       <View className='pt-2' />
 
-      {featureDetails?.map((featureDetail) => (
-        <Flex items='center' justify='start' dir='row'>
+      {featureDetails?.map((featureDetail, index) => (
+        <Flex items='center' justify='start' dir='row' key={index}>
           <Dot width={12} height={12} />
-          <TextSize color='#101828' size={14} content={`${featureDetail}`} />
+          <TextSize color='#101828' size={15} content={`${featureDetail}`} />
           <View className='pt-1' />
         </Flex>
       ))}
