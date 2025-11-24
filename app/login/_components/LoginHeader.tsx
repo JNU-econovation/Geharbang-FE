@@ -14,9 +14,9 @@ export default function LoginHeader() {
         </View>
 
         <Flex items='center' justify='center'>
-          <Icon width={700} height={200} />
+          <Icon width={400} height={130} />
 
-          <View className='-mt-5'>
+          <View className="mt-5">
             <TextSize size={30} color='#FFFFFF' content='게하르방' />
           </View>
           <View className='pt-1'>
