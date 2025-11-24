@@ -1,15 +1,8 @@
-import { router } from "expo-router";
 import React, { useState } from "react";
-import { View } from "react-native";
 
 import GuestHouse from "@/public/svgs/home/guestHouse.svg";
 import { GuestHouseCard } from "@/src/types/models/GuestHouseCard";
-import { regions } from "@/src/utils/constants/regions";
-import HorizontalSlider from "./HorizontalSlider";
-import { ItemCard } from "./ItemCard";
-import { ListLinkButton } from "./ListLinkButton";
-import MoreCard from "./MoreCard";
-import RegionTab from "./RegionTab";
+import { SlideSectionLayout } from "./SlideSectionLayout";
 
 interface GuestHouseData {
   [key: string]: GuestHouseCard[];
@@ -67,26 +60,14 @@ export function GuesthouseSection() {
   const currentGuestHouses = guestHouses[selectedRegion];
 
   return (
-    <View className="w-full items-center gap-3 mt-6 mb-14">
-      {/* 추후 라우터는 변경 예정*/}
-      <ListLinkButton label="게스트하우스 찾기" icon={<GuestHouse/>} onPress={() => router.push("/step")}/> 
-      <HorizontalSlider
-        data={regions}
-        renderItem={(region) => (
-          <RegionTab
-            key={region}
-            label={region}
-            selected={selectedRegion === region}
-            onPress={() => setSelectedRegion(region)}
-          />
-        )}
-      />
-
-      <HorizontalSlider
-        data={currentGuestHouses}
-        renderItem={(house) => <ItemCard key={house.id} {...house} type="guestHouse" />}
-        renderMoreCard={<MoreCard onPress={() => router.push("/step")} />}
-      />
-    </View>
+    <SlideSectionLayout
+      itemType="guestHouse"
+      title="게스트하우스 찾기"
+      icon={<GuestHouse />}
+      data={currentGuestHouses}
+      linkPath="/guestHouse"
+      selectedRegion={selectedRegion}
+      setSelectedRegion={setSelectedRegion}
+  />
   );
 }

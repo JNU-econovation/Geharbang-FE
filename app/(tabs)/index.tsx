@@ -13,10 +13,9 @@ export default function HomeScreen() {
       <HomeHeader />
 
       <ScrollView className="py-4 flex-1 ">
-        <View className="w-full items-center">
+        <View className="w-full items-center gap-9">
           <AdBanner />
           <GuesthouseSection />
-
           <StepNoticeSection />
         </View>
       </ScrollView>

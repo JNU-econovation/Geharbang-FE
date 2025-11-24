@@ -34,7 +34,7 @@ export function ListLinkButton({ label, onPress, icon }: ListLinkButtonProps) {
         size={22}
         color="#99A1AF"
         className="absolute right-3 top-3"
-      ></Ionicons>
+      />
     </Pressable>
   );
 }

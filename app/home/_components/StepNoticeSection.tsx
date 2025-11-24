@@ -1,15 +1,8 @@
-import { router } from "expo-router";
 import React, { useState } from "react";
-import { View } from "react-native";
 
-import { GuestHouseCard } from "@/src/types/models/GuestHouseCard";
-import { regions } from "@/src/utils/constants/regions";
-import HorizontalSlider from "./HorizontalSlider";
-import { ItemCard } from "./ItemCard";
-import MoreCard from "./MoreCard";
-import RegionTab from "./RegionTab";
 import Step from "@/public/svgs/home/step.svg";
-import { ListLinkButton } from "./ListLinkButton";
+import { GuestHouseCard } from "@/src/types/models/GuestHouseCard";
+import { SlideSectionLayout } from "./SlideSectionLayout";
 
 interface StepNoticeData {
   [key: string]: GuestHouseCard[];
@@ -65,25 +58,14 @@ export function StepNoticeSection() {
   const currentStepNotices = StepNotices[selectedRegion];
 
   return (
-    <View className="w-full items-center gap-3">
-      <ListLinkButton label="스텝 공고 찾기" icon={<Step/>} onPress={() => router.push("/step")}/> 
-      <HorizontalSlider
-        data={regions}
-        renderItem={(region) => (
-          <RegionTab
-            key={region}
-            label={region}
-            selected={selectedRegion === region}
-            onPress={() => setSelectedRegion(region)}
-          />
-        )}
-      />
-
-      <HorizontalSlider
-        data={currentStepNotices}
-        renderItem={(house) => <ItemCard key={house.id} {...house} type="stepNotice" />}
-        renderMoreCard={<MoreCard onPress={() => router.push("/step")} />}
-      />
-    </View>
+    <SlideSectionLayout
+      itemType="stepNotice"
+      title="스텝 공고 찾기"
+      icon={<Step />}
+      data={currentStepNotices}
+      linkPath="/step"
+      selectedRegion={selectedRegion}
+      setSelectedRegion={setSelectedRegion}
+    />
   );
 }
