@@ -12,9 +12,21 @@ import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSecti
 import SectionYPosition from "../SectionYPosition";
 import ContactCompo from "./ContactCompo";
 
+interface ContactProps extends SetSectionYPositionProps {
+  contact?: {
+    email: string;
+    instagramId: string;
+    phoneNumber: string;
+    webSite: string;
+  };
+  owerMessage?: string;
+}
+
 export default function Contact({
   setSectionYPositions,
-}: SetSectionYPositionProps) {
+  contact,
+  owerMessage,
+}: ContactProps) {
   return (
     <SectionYPosition
       section='contact'
@@ -27,9 +39,9 @@ export default function Contact({
         variant='insta'
         icon={<Insta width={20} height={20} />}
         title='Instagram'
-        content='@jeju_oceanview_house'
+        content={`${contact?.instagramId}`}
         iconBg='#F6339A'
-        redirect={`https://jejuoceanview.com`} // scheme + contentx
+        redirect={`https://www.instagram.com/${contact?.instagramId}/`}
       />
 
       <View className='pt-4' />
@@ -37,9 +49,9 @@ export default function Contact({
         variant='phone'
         icon={<Phone width={20} height={20} />}
         title='전화번호'
-        content='010-1234-5678'
+        content={`${contact?.phoneNumber}`}
         iconBg='#00C950'
-        redirect={`tel:010-1234-5678`}
+        redirect={`tel:${contact?.phoneNumber}`}
       />
 
       <View className='pt-4' />
@@ -47,9 +59,9 @@ export default function Contact({
         variant='email'
         icon={<Email width={20} height={20} />}
         title='이메일'
-        content='info@jejuoceanview.com'
+        content={`${contact?.email}`}
         iconBg='#2B7FFF'
-        redirect={`mailto:jdyjsh77@naver.com`}
+        redirect={`mailto:${contact?.email}`}
       />
 
       <View className='pt-4' />
@@ -57,20 +69,16 @@ export default function Contact({
         variant='webSite'
         icon={<WebSite width={20} height={20} />}
         title='웹사이트'
-        content='jejuoceanview.com'
+        content={`${contact?.webSite}`}
         iconBg='#364153'
-        redirect={`https://jejuoceanview.com`}
+        redirect={`${contact?.webSite}`}
       />
 
       <View className='pt-4' />
 
       <ViewContext variant='owerMes'>
         <View className='px-4 py-3'>
-          <TextSize
-            size={14}
-            color='#973C00'
-            content='💡 궁금한 점이 있으시면 언제든지 연락주세요. 빠르고 친절하게 답변 드리겠습니다!'
-          />
+          <TextSize size={14} color='#973C00' content={owerMessage ?? ""} />
         </View>
       </ViewContext>
     </SectionYPosition>
