@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Dimensions, Pressable, View } from "react-native";
+import { Pressable, useWindowDimensions, View } from "react-native";
 
 import TextSize from "@/src/components/ui/TextSize";
 import { COLORS } from "@/src/utils/constants/colors";
@@ -10,7 +10,7 @@ interface MoreCardProps {
 }
 
 export default function MoreCard({ onPress }: MoreCardProps) {
-  const { width: SCREEN_WIDTH } = Dimensions.get("window");
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const CARD_WIDTH = SCREEN_WIDTH * 0.4;
   return (
     <Pressable

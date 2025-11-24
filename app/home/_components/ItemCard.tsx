@@ -1,9 +1,9 @@
-import { router } from "expo-router";
-import { Dimensions, Image, Pressable, View } from "react-native";
+import { Image, Pressable, useWindowDimensions, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex";
 import Tag from "@/src/components/ui/Tag";
 import TextSize from "@/src/components/ui/TextSize";
+import { useCardPress } from "@/src/hooks/useCardPress";
 import { GuestHouseCard } from "@/src/types/models/GuestHouseCard";
 import { COLORS } from "@/src/utils/constants/colors";
 
@@ -18,8 +18,9 @@ export function ItemCard({
   tags,
   type,
 }: GuesthouseCardProps) {
-  const { width: SCREEN_WIDTH } = Dimensions.get("window");
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const CARD_WIDTH = SCREEN_WIDTH * 0.4;
+  const handleCardPress = useCardPress(type, id);
 
   return (
     <View
@@ -34,17 +35,7 @@ export function ItemCard({
     >
       <Pressable
         className="rounded-2xl overflow-hidden"
-        onPress={() => {
-          if (type === "guestHouse") {
-            //추후 추가 에정
-          }
-          if (type === "stepNotice") {
-            router.push({
-              pathname: "/step/[id]",
-              params: { id: id },
-            });
-          }
-        }}
+        onPress={handleCardPress}
       >
         <Image source={{ uri: imageUrl }} className="w-full h-36" />
         <View className="p-3 gap-2">
