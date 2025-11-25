@@ -1,6 +1,7 @@
 import Tag from '@/src/components/ui/Tag';
 import { StaffRecruitmentPost } from '@/src/types/step/types';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
@@ -9,14 +10,19 @@ interface GuestHouseCardProps {
   onPress?: () => void;
 }
 
-export default function GuestHouseCard({
-  item,
-  onPress,
-}: GuestHouseCardProps) {
+export default function GuestHouseCard({ item, onPress }: GuestHouseCardProps) {
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else {
+      router.push(`/step/stepDetail/${item.id}`);
+    }
+  };
+
   return (
     <TouchableOpacity
-      activeOpacity={onPress ? 0.7 : 1}
-      onPress={onPress}
+      activeOpacity={0.7}
+      onPress={handlePress}
       className="px-4 pt-4 pb-4 bg-white rounded-xl border border-gray-200 mb-3"
     >
       <View className="flex-row">
@@ -44,7 +50,13 @@ export default function GuestHouseCard({
           </Text>
           <View className="flex-row gap-1">
             {item.tags.map((tag, index) => (
-              <Tag key={index} label={tag} variant="info" size="sm" prefix="#" />
+              <Tag
+                key={index}
+                label={tag}
+                variant="info"
+                size="sm"
+                prefix="#"
+              />
             ))}
           </View>
         </View>
