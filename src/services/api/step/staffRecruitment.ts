@@ -40,12 +40,8 @@ export const getStaffRecruitmentList = async (
   }
 
   const url = `/api/v1/staff-recruitment?${queryParams.toString()}`;
-  console.log('API Request URL:', url);
 
   const response = await axiosPrivate.get<StaffRecruitmentResponse>(url);
-
-  console.log('Raw API Response:', response);
-  console.log('Response Data:', response.data);
 
   return response.data;
 };

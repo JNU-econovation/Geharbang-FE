@@ -6,6 +6,7 @@ import {
 } from '@/src/types/step/types';
 import { SORT_OPTIONS } from '@/src/utils/constants/filterOptions';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDebounce } from './useDebounce';
 
 interface UseStaffRecruitmentListParams {
   keyword: string;
@@ -30,26 +31,18 @@ export function useStaffRecruitmentList({
   const [data, setData] = useState<StaffRecruitmentPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [debouncedKeyword, setDebouncedKeyword] = useState(keyword);
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  useEffect(() => {
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
-
-    debounceTimerRef.current = setTimeout(() => {
-      setDebouncedKeyword(keyword);
-    }, 500);
-
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, [keyword]);
+  // 검색어 디바운스 (500ms)
+  const debouncedKeyword = useDebounce(keyword, 500);
 
   const fetchData = useCallback(async () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    abortControllerRef.current = new AbortController();
+
     setIsLoading(true);
     setError(null);
 
@@ -67,26 +60,20 @@ export function useStaffRecruitmentList({
         pageNumber,
       };
 
-      console.log('API Request Params:', params);
-
       const response = await getStaffRecruitmentList(params);
-
-      console.log('API Response:', response);
-      console.log('Staff Recruitment Posts:', response.staffRecruitmentPosts);
-      console.log('Posts Length:', response.staffRecruitmentPosts?.length);
 
       setData(response.staffRecruitmentPosts);
     } catch (err: any) {
-      console.error('API Error:', err);
+      if (err.name === 'AbortError' || err.name === 'CanceledError') {
+        return;
+      }
 
       let errorMessage = '데이터를 불러오는데 실패했습니다.';
 
-      // Axios 에러인 경우
       if (err.response) {
         const status = err.response.status;
         const data = err.response.data;
 
-        // 서버 응답 에러 메시지가 있으면 사용
         if (data?.message) {
           errorMessage = `[${status}] ${data.message}`;
         } else if (data?.error) {
@@ -95,10 +82,8 @@ export function useStaffRecruitmentList({
           errorMessage = `[${status}] 서버 오류가 발생했습니다.`;
         }
       } else if (err.request) {
-        // 요청은 보냈지만 응답이 없는 경우
         errorMessage = '서버로부터 응답이 없습니다. 네트워크를 확인해주세요.';
       } else if (err instanceof Error) {
-        // 기타 에러
         errorMessage = err.message;
       }
 
@@ -106,6 +91,7 @@ export function useStaffRecruitmentList({
       setData([]);
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
     }
   }, [debouncedKeyword, sort, filters, pageNumber]);
 
