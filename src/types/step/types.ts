@@ -30,6 +30,10 @@ export interface StaffRecruitmentParams {
 
 export interface StaffRecruitmentResponse {
   staffRecruitmentPosts: StaffRecruitmentPost[];
+  // 백엔드가 제공하는 경우 (선택사항)
+  hasNext?: boolean;
+  totalPages?: number;
+  pageSize?: number;
 }
 
 export interface FilterState {
@@ -40,3 +44,6 @@ export interface FilterState {
 }
 
 export type FilterOption = 'views' | 'likes' | 'recent';
+
+// 페이지네이션 상수
+export const PAGE_SIZE = 20; // 백엔드 기본값

@@ -2,6 +2,7 @@ import { getStaffRecruitmentList } from '@/src/services/api/step/staffRecruitmen
 import {
   FilterOption,
   FilterState,
+  PAGE_SIZE,
   StaffRecruitmentPost,
 } from '@/src/types/step/types';
 import { SORT_OPTIONS } from '@/src/utils/constants/filterOptions';
@@ -12,13 +13,15 @@ interface UseStaffRecruitmentListParams {
   keyword: string;
   sort: FilterOption;
   filters: FilterState;
-  pageNumber?: number;
 }
 
 interface UseStaffRecruitmentListReturn {
   data: StaffRecruitmentPost[];
   isLoading: boolean;
+  isLoadingMore: boolean;
   error: string | null;
+  hasMore: boolean;
+  loadMore: () => void;
   refetch: () => void;
 }
 
@@ -26,83 +29,133 @@ export function useStaffRecruitmentList({
   keyword,
   sort,
   filters,
-  pageNumber = 0,
 }: UseStaffRecruitmentListParams): UseStaffRecruitmentListReturn {
   const [data, setData] = useState<StaffRecruitmentPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // 검색어 디바운스 (500ms)
   const debouncedKeyword = useDebounce(keyword, 500);
 
-  const fetchData = useCallback(async () => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
+  useEffect(() => {
+    setPage(0);
+    setHasMore(true);
+    setData([]);
+  }, [debouncedKeyword, sort, filters]);
 
-    abortControllerRef.current = new AbortController();
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const params = {
-        keyword: debouncedKeyword || undefined,
-        sort: SORT_OPTIONS[sort],
-        region: filters.region.length > 0 ? filters.region : undefined,
-        period: filters.period.length > 0 ? filters.period : undefined,
-        workScheduleType:
-          filters.workScheduleType.length > 0
-            ? filters.workScheduleType
-            : undefined,
-        gender: filters.gender || undefined,
-        pageNumber,
-      };
-
-      const response = await getStaffRecruitmentList(params);
-
-      setData(response.staffRecruitmentPosts);
-    } catch (err: any) {
-      if (err.name === 'AbortError' || err.name === 'CanceledError') {
-        return;
+  const fetchData = useCallback(
+    async (pageNumber: number, isLoadMore: boolean = false) => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
       }
 
-      let errorMessage = '데이터를 불러오는데 실패했습니다.';
+      abortControllerRef.current = new AbortController();
 
-      if (err.response) {
-        const status = err.response.status;
-        const data = err.response.data;
+      if (isLoadMore) {
+        setIsLoadingMore(true);
+      } else {
+        setIsLoading(true);
+      }
+      setError(null);
 
-        if (data?.message) {
-          errorMessage = `[${status}] ${data.message}`;
-        } else if (data?.error) {
-          errorMessage = `[${status}] ${data.error}`;
+      try {
+        const params = {
+          keyword: debouncedKeyword || undefined,
+          sort: SORT_OPTIONS[sort],
+          region: filters.region.length > 0 ? filters.region : undefined,
+          period: filters.period.length > 0 ? filters.period : undefined,
+          workScheduleType:
+            filters.workScheduleType.length > 0
+              ? filters.workScheduleType
+              : undefined,
+          gender: filters.gender || undefined,
+          pageNumber,
+        };
+
+        const response = await getStaffRecruitmentList(params);
+
+        if (isLoadMore) {
+          setData((prev) => [...prev, ...response.staffRecruitmentPosts]);
         } else {
-          errorMessage = `[${status}] 서버 오류가 발생했습니다.`;
+          setData(response.staffRecruitmentPosts);
         }
-      } else if (err.request) {
-        errorMessage = '서버로부터 응답이 없습니다. 네트워크를 확인해주세요.';
-      } else if (err instanceof Error) {
-        errorMessage = err.message;
-      }
 
-      setError(errorMessage);
-      setData([]);
-    } finally {
-      setIsLoading(false);
-      abortControllerRef.current = null;
-    }
-  }, [debouncedKeyword, sort, filters, pageNumber]);
+        // 배열 길이로 hasMore 판단
+        if (response.hasNext !== undefined) {
+          setHasMore(response.hasNext);
+        } else {
+          setHasMore(response.staffRecruitmentPosts.length === PAGE_SIZE);
+        }
+      } catch (err: any) {
+        if (err.name === 'AbortError' || err.name === 'CanceledError') {
+          return;
+        }
+
+        let errorMessage = '데이터를 불러오는데 실패했습니다.';
+
+        if (err.response) {
+          const status = err.response.status;
+          const data = err.response.data;
+
+          if (data?.message) {
+            errorMessage = `[${status}] ${data.message}`;
+          } else if (data?.error) {
+            errorMessage = `[${status}] ${data.error}`;
+          } else {
+            errorMessage = `[${status}] 서버 오류가 발생했습니다.`;
+          }
+        } else if (err.request) {
+          errorMessage = '서버로부터 응답이 없습니다. 네트워크를 확인해주세요.';
+        } else if (err instanceof Error) {
+          errorMessage = err.message;
+        }
+
+        setError(errorMessage);
+        if (!isLoadMore) {
+          setData([]);
+        }
+      } finally {
+        if (isLoadMore) {
+          setIsLoadingMore(false);
+        } else {
+          setIsLoading(false);
+        }
+        abortControllerRef.current = null;
+      }
+    },
+    [debouncedKeyword, sort, filters],
+  );
 
   useEffect(() => {
-    fetchData();
+    fetchData(page, false);
+  }, [fetchData, page]);
+
+  const loadMore = useCallback(() => {
+    if (!hasMore || isLoading || isLoadingMore) {
+      return;
+    }
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchData(nextPage, true);
+  }, [hasMore, isLoading, isLoadingMore, page, fetchData]);
+
+  const refetch = useCallback(() => {
+    setPage(0);
+    setHasMore(true);
+    setData([]);
+    fetchData(0, false);
   }, [fetchData]);
 
   return {
     data,
     isLoading,
+    isLoadingMore,
     error,
-    refetch: fetchData,
+    hasMore,
+    loadMore,
+    refetch,
   };
 }
