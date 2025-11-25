@@ -23,7 +23,7 @@ export default function GuestHouseCard({ item, onPress }: GuestHouseCardProps) {
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={handlePress}
-      className="px-4 pt-4 pb-4 bg-white rounded-xl border border-gray-200 mb-3"
+      className="mx-4 px-4 pt-4 pb-4 bg-white rounded-xl border border-gray-200 mb-3"
     >
       <View className="flex-row">
         <View className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 items-center justify-center">

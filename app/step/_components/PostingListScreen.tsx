@@ -55,12 +55,10 @@ export default function GuestHouseListScreen() {
     <PostingListFooter isLoadingMore={isLoadingMore} />
   );
 
-  // FlatList 빈 상태
   const renderEmpty = () => (
     <PostingListEmpty isLoading={isLoading} error={error} onRetry={refetch} />
   );
 
-  // FlatList 아이템 렌더링
   const renderItem: ListRenderItem<(typeof staffRecruitmentPosts)[0]> = ({
     item,
   }) => <GuestHouseCard item={item} />;
@@ -77,7 +75,7 @@ export default function GuestHouseListScreen() {
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 12 }}
+        contentContainerStyle={{ paddingTop: 12 }}
       />
 
       <BottomSheetModal
