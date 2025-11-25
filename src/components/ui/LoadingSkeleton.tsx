@@ -24,7 +24,8 @@ interface SkeletonCardProps {
 
 function SkeletonCard({ fadeAnim }: SkeletonCardProps) {
   return (
-    <View className="flex-row items-center bg-white border border-gray-200 rounded-xl px-4 py-4 mb-3">
+    <View className="mx-4 bg-white border border-gray-200 rounded-xl px-4 pt-4 pb-4 mb-3">
+      <View className="flex-row">
       <Animated.View
         className="w-16 h-16 bg-gray-200 rounded-lg"
         style={{ opacity: fadeAnim }}
@@ -51,6 +52,7 @@ function SkeletonCard({ fadeAnim }: SkeletonCardProps) {
         className="w-4 h-4 bg-gray-200 rounded-full ml-2"
         style={{ opacity: fadeAnim }}
       />
+      </View>
     </View>
   );
 }
