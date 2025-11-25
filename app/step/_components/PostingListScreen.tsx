@@ -29,15 +29,12 @@ export default function GuestHouseListScreen() {
     { key: 'recent', label: '최신순' },
   ];
 
-  const { data: staffRecruitmentPosts, isLoading, error, refetch } = useStaffRecruitmentList({
-    keyword: searchText,
-    sort: selectedFilter,
-    filters,
-  });
-
-  console.log('PostingListScreen - staffRecruitmentPosts:', staffRecruitmentPosts);
-  console.log('PostingListScreen - isLoading:', isLoading);
-  console.log('PostingListScreen - error:', error);
+  const { data: staffRecruitmentPosts, isLoading, error, refetch } =
+    useStaffRecruitmentList({
+      keyword: searchText,
+      sort: selectedFilter,
+      filters,
+    });
 
   return (
     <DismissKeyboardView>
