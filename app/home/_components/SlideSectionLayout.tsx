@@ -54,7 +54,10 @@ export function SlideSectionLayout({
         )}
       />
       {loading ? (
-        <ActivityIndicator size={80} color={COLORS.PRIMARY.BLUE} />
+        <View className="pt-2 h-64">
+          <ActivityIndicator size={80} color={COLORS.PRIMARY.BLUE} />
+        </View>
+        
       ) : error ? (
         <View className="py-2">
           <TextSize size={14} color={COLORS.GRAY.TEXT} content="잠시 오류가 발생했어요" />
