@@ -5,7 +5,7 @@ import { ScrollView, View } from "react-native";
 import AdBanner from "../home/_components/AdBanner";
 import { GuesthouseSection } from "../home/_components/GuesthouseSection";
 import HomeHeader from "../home/_components/HomeHeader";
-import { StepNoticeSection } from "../home/_components/StepNoticeSection";
+import { StepRecruitmentSection } from "../home/_components/StepRecruitmentSection";
 
 export default function HomeScreen() {
   return (
@@ -16,7 +16,7 @@ export default function HomeScreen() {
         <View className="w-full items-center gap-9">
           <AdBanner />
           <GuesthouseSection />
-          <StepNoticeSection />
+          <StepRecruitmentSection />
         </View>
       </ScrollView>
     </CustomSafeAreaView>

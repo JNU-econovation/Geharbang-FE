@@ -6,7 +6,7 @@ export const useCardPress = (type: CardType, id: number) => {
     if (type === "guestHouse") {
       /* 라우팅 추가 예정 */
     } else if (type === "stepNotice") {
-      router.push({ pathname: "/step/[id]", params: { id } });
+      router.push({ pathname: "/step/stepDetail/[id]", params: { id } });
     }
   };
   return handleCardPress;
