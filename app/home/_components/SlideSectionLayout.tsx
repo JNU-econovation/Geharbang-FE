@@ -1,8 +1,10 @@
 import { router, type Href } from "expo-router";
 import React, { ReactNode } from "react";
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
+import TextSize from "@/src/components/ui/TextSize";
 import { GuestHouseCard } from "@/src/types/models/GuestHouseCard";
+import { COLORS } from "@/src/utils/constants/colors";
 import { regions } from "@/src/utils/constants/regions";
 import HorizontalSlider from "./HorizontalSlider";
 import { ItemCard } from "./ItemCard";
@@ -18,6 +20,8 @@ interface SlideSectionLayoutProps {
   linkPath: Href;
   selectedRegion: string;
   setSelectedRegion: (region: string) => void;
+  loading?: boolean;
+  error?: boolean;
 }
 
 export function SlideSectionLayout({
@@ -28,6 +32,8 @@ export function SlideSectionLayout({
   linkPath,
   selectedRegion,
   setSelectedRegion,
+  loading,
+  error,
 }: SlideSectionLayoutProps) {
   return (
     <View className="w-full items-center gap-3">
@@ -36,7 +42,6 @@ export function SlideSectionLayout({
         icon={icon}
         onPress={() => router.push(linkPath)}
       />
-
       <HorizontalSlider
         data={regions}
         renderItem={(region) => (
@@ -48,14 +53,26 @@ export function SlideSectionLayout({
           />
         )}
       />
-
-      <HorizontalSlider
-        data={data}
-        renderItem={(item) => (
-          <ItemCard key={item.id} {...item} type={itemType} />
-        )}
-        renderMoreCard={<MoreCard onPress={() => router.push(linkPath)} />}
-      />
+      {loading ? (
+        <ActivityIndicator size={80} color={COLORS.PRIMARY.BLUE} />
+      ) : error ? (
+        <View className="py-2">
+          <TextSize size={14} color={COLORS.GRAY.TEXT} content="잠시 오류가 발생했어요" />
+        </View>
+      ) : data.length === 0 ? (
+        <View className="py-2">
+          <TextSize size={14} color={COLORS.GRAY.TEXT} content="해당 지역에 올라온 게시물이 없어요" />
+        </View>
+      ) : (
+        <HorizontalSlider
+          key={selectedRegion}
+          data={data}
+          renderItem={(item) => (
+            <ItemCard key={item.id} {...item} type={itemType} />
+          )}
+          renderMoreCard={<MoreCard onPress={() => router.push(linkPath)} />}
+        />
+      )}
     </View>
   );
 }
