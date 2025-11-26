@@ -3,13 +3,15 @@ import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Flex from "@/src/components/layout/Flex";
 import Tag from "@/src/components/ui/Tag";
 import TextSize from "@/src/components/ui/TextSize";
-import { useCardPress } from "@/src/hooks/useCardPress";
+import { useCardPress } from "@/src/hooks/Home/useCardPress";
 import { GuestHouseCard } from "@/src/types/models/GuestHouseCard";
 import { COLORS } from "@/src/utils/constants/colors";
 
 interface GuesthouseCardProps extends GuestHouseCard {
   type: "guestHouse" | "stepNotice";
 }
+
+const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export function ItemCard({
   id,
@@ -37,7 +39,10 @@ export function ItemCard({
         className="rounded-2xl overflow-hidden"
         onPress={handleCardPress}
       >
-        <Image source={{ uri: imageUrl }} className="w-full h-36" />
+        <Image
+          source={{ uri: `${baseURL}${imageUrl}` }}
+          className="w-full h-36"
+        />
         <View className="p-3 gap-2">
           <TextSize
             size={16}
