@@ -66,7 +66,7 @@ export default function HomeScreen() {
                 <TouchableOpacity
                   className='bg-white border border-gray-200 rounded-xl p-4 items-center active:opacity-70'
                   style={{ width: "47%" }}
-                  onPress={() => router.push('/step/1/apply')}
+                  onPress={() => router.push('/step/stepDetail/1/apply')}
                 >
                   <View className='w-12 h-12 bg-emerald-500/10 rounded-full items-center justify-center mb-3'>
                     <Ionicons name='calendar' size={20} color='#10B981' />

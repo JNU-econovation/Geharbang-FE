@@ -5,6 +5,8 @@ import CheckmarkCircle from "@/src/components/ui/CheckmarkCircle";
 import TextSize from "@/src/components/ui/TextSize";
 import { COLORS } from "@/src/utils/constants/colors";
 
+const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
+
 interface SelectedApplicationProps {
   name: string;
   imageUrl: string;
@@ -17,7 +19,10 @@ export default function SelectedApplication({
   return (
     <View className="gap-3 py-3 px-4 border-b border-gray-border">
       <Flex justify="start" items="center" flexDir="row" gap={10}>
-        <Image src={imageUrl} className="rounded-full w-12 h-12" />
+        <Image
+          src={`${baseURL}${imageUrl}`}
+          className="rounded-full w-12 h-12"
+        />
         <View className="gap-2">
           <TextSize size={17} content={name} />
           <TextSize
