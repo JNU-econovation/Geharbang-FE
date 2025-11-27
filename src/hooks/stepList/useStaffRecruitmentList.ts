@@ -38,7 +38,7 @@ export function useStaffRecruitmentList({
   const [page, setPage] = useState(0);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const debouncedKeyword = useDebounce(keyword, 500);
+  const debouncedKeyword = useDebounce(keyword, 300);
 
   useEffect(() => {
     setPage(0);
