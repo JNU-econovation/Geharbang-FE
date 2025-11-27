@@ -4,7 +4,7 @@ import PostingListEmpty from '@/app/step/_components/PostingList/PostingListEmpt
 import PostingListFooter from '@/app/step/_components/PostingList/PostingListFooter';
 import PostingListHeader from '@/app/step/_components/PostingList/PostingListHeader';
 import DismissKeyboardView from '@/src/components/layout/DismissKeyboardView';
-import { useStaffRecruitmentList } from '@/src/hooks/useStaffRecruitmentList';
+import { useStaffRecruitmentList } from '@/src/hooks/stepList/useStaffRecruitmentList';
 import { FilterOption, FilterState } from '@/src/types/step/types';
 import React, { useState } from 'react';
 import { FlatList, ListRenderItem } from 'react-native';

@@ -7,7 +7,7 @@ import {
 } from '@/src/types/step/types';
 import { SORT_OPTIONS } from '@/src/utils/constants/filterOptions';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDebounce } from './useDebounce';
+import { useDebounce } from '../useDebounce';
 
 interface UseStaffRecruitmentListParams {
   keyword: string;

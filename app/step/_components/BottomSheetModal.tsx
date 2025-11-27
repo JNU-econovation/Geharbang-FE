@@ -4,8 +4,8 @@ import Checkbox from '@/src/components/ui/Checkbox';
 import CollapsibleSection from '@/src/components/ui/CollapsibleSection';
 import RadioButton from '@/src/components/ui/RadioButton';
 import TextSize from '@/src/components/ui/TextSize';
-import { useExpandableSections } from '@/src/hooks/useExpandableSections';
-import { useFilterState } from '@/src/hooks/useFilterState';
+import { useExpandableSections } from '@/src/hooks/stepList/useExpandableSections';
+import { useFilterState } from '@/src/hooks/stepList/useFilterState';
 import { FilterState } from '@/src/types/step/types';
 import {
   GENDER_OPTIONS,
@@ -136,12 +136,18 @@ export default function BottomSheetModal({
                 }`}
               >
                 <Checkbox
-                  checked={filters.workScheduleType.includes(workSchedule.label)}
+                  checked={filters.workScheduleType.includes(
+                    workSchedule.label,
+                  )}
                   size="md"
                 />
                 <View>
                   <TextSize size={14} content={workSchedule.label} />
-                  <TextSize size={12} content={workSchedule.desc} color="#6B7280" />
+                  <TextSize
+                    size={12}
+                    content={workSchedule.desc}
+                    color="#6B7280"
+                  />
                 </View>
               </TouchableOpacity>
             ))}
