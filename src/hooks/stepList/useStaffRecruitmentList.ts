@@ -1,4 +1,4 @@
-import { getStaffRecruitmentList } from '@/src/services/api/step/staffRecruitment';
+import { getStaffRecruitmentList } from '@/src/services/Step/staffRecruitment';
 import {
   FilterOption,
   FilterState,

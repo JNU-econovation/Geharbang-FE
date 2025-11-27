@@ -2,7 +2,7 @@ import {
   StaffRecruitmentParams,
   StaffRecruitmentResponse,
 } from '@/src/types/step/types';
-import { axiosPrivate } from '../customAxios';
+import { axiosPublic } from '../api/customAxios';
 
 export const getStaffRecruitmentList = async (
   params: StaffRecruitmentParams,
@@ -41,7 +41,7 @@ export const getStaffRecruitmentList = async (
 
   const url = `/api/v1/staff-recruitment?${queryParams.toString()}`;
 
-  const response = await axiosPrivate.get<StaffRecruitmentResponse>(url);
+  const response = await axiosPublic.get<StaffRecruitmentResponse>(url);
 
   return response.data;
 };
