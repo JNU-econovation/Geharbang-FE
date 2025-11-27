@@ -1,5 +1,5 @@
 import { stepApply } from "@/src/services/StepApply/stepApply";
-import { Answer } from "@/src/types/models/Answer";
+import { Answer } from "@/src/types/models/stepApply";
 import { useMutation } from "@tanstack/react-query";
 
 export function useStepApply(recruitmentId: number) {

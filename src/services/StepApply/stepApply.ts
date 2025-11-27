@@ -1,5 +1,5 @@
 import { axiosPrivate } from "@/src/services/api/customAxios";
-import { Answer } from "@/src/types/models/Answer";
+import { Answer } from "@/src/types/models/stepApply";
 
 export const stepApply = async (
   recruitmentId: number,
