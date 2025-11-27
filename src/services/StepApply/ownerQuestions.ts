@@ -1,5 +1,5 @@
 import { GuestHouseCard } from "@/src/types/models/GuestHouseCard";
-import { axiosPublic } from "../api/customAxios";
+import { axiosPrivate } from "../api/customAxios";
 
 interface ProfileInfo {
   name: string;
@@ -18,7 +18,7 @@ interface ApiResponse {
 }
 
 export const getOwnerQuestions = async (recruitmentId: number) => {
-  const response = await axiosPublic.get<ApiResponse>(
+  const response = await axiosPrivate.get<ApiResponse>(
     `/api/v1/staff-recruitment/${recruitmentId}/questions`
   );
   return response.data;
