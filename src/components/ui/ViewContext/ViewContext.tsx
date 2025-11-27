@@ -3,7 +3,14 @@ import { twMerge } from "tailwind-merge";
 import { viewContext } from "./viewContext.variants";
 
 interface ViewContextProps extends ViewProps {
-  variant: "primary" | "insta" | "phone" | "email" | "webSite" | "owerMes";
+  variant:
+    | "primary"
+    | "insta"
+    | "phone"
+    | "email"
+    | "webSite"
+    | "owerMes"
+    | "modalApply";
   children: React.ReactNode;
   className?: string;
 }

@@ -10,6 +10,7 @@ export const viewContext = tv({
       email: "bg-[#EFF6FF] border border-[#BEDBFF]",
       webSite: "bg-[#F9FAFB] border border-[#E5E7EB]",
       owerMes: "bg-[#FFFBEB] border border-[#FEE685]",
+      modalApply: "bg-[#ffffff] border border-[#E5E7EB]",
     },
   },
   defaultVariants: {
