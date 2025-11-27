@@ -5,6 +5,7 @@ import {
   PAGE_SIZE,
   StaffRecruitmentPost,
 } from '@/src/types/step/types';
+import { getApiErrorMessage } from '@/src/utils/api/errorHandler';
 import { SORT_OPTIONS } from '@/src/utils/constants/filterOptions';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDebounce } from '../useDebounce';
@@ -94,26 +95,7 @@ export function useStaffRecruitmentList({
           return;
         }
 
-        let errorMessage = '데이터를 불러오는데 실패했습니다.';
-
-        if (err.response) {
-          const status = err.response.status;
-          const data = err.response.data;
-
-          if (data?.message) {
-            errorMessage = `[${status}] ${data.message}`;
-          } else if (data?.error) {
-            errorMessage = `[${status}] ${data.error}`;
-          } else {
-            errorMessage = `[${status}] 서버 오류가 발생했습니다.`;
-          }
-        } else if (err.request) {
-          errorMessage = '서버로부터 응답이 없습니다. 네트워크를 확인해주세요.';
-        } else if (err instanceof Error) {
-          errorMessage = err.message;
-        }
-
-        setError(errorMessage);
+        setError(getApiErrorMessage(err));
         if (!isLoadMore) {
           setData([]);
         }
