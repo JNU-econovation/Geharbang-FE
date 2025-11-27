@@ -83,6 +83,7 @@ export default function WorkInfo({
           const endTime = job.endTime.slice(0, 5);
           return (
             <React.Fragment key={index}>
+              <View className='pt-2' />
               <TextSize
                 size={15}
                 color='#101828'
@@ -102,6 +103,7 @@ export default function WorkInfo({
                 color='#4A5565'
                 content={`근무일 : 주 ${job.workDays}일, 휴무 ${job.restDays}일`}
               />
+              <View className='pt-4' />
             </React.Fragment>
           );
         })}
