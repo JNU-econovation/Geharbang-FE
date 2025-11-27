@@ -48,7 +48,7 @@ export default function StepDetail() {
         <View className='flex-1 items-center justify-center'>
           <ActivityIndicator size='large' color='#000' />
         </View>
-      ) : !isError ? (
+      ) : isError ? (
         <View className='flex-1 items-center justify-center'>
           <TextSize size={18} content='데이터를 불러오는데 실패했습니다.' />
           <View className='pt-4' />
