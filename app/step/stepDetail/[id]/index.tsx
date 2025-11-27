@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Pressable, ScrollView, Share, View } from "react-native";
 
 import ShareArrow from "@/public/svgs/StepDetail/shareArrow.svg";
@@ -7,28 +8,32 @@ import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
+import { useApplicationExist } from "@/src/hooks/stepDetail/useApplicationExist";
 import { useHandleSection } from "@/src/hooks/stepDetail/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/stepDetail/useSectionToScroll";
 import { useStepDetail } from "@/src/hooks/stepDetail/useStepDetail";
 
-import Address from "./_components/Address/Address";
-import Contact from "./_components/Contact/Contact";
-import Feature from "./_components/Feature/Feature";
-import GehaImage from "./_components/GehaInfo/GehaImage";
-import GehaInfo from "./_components/GehaInfo/GehaInfo";
-import Intro from "./_components/Intro/Intro";
-import PressSection from "./_components/PressSection/PressSection";
-import WorkInfo from "./_components/WorkInfo/WorkInfo";
+import Address from "../_components/Address/Address";
+import Contact from "../_components/Contact/Contact";
+import Feature from "../_components/Feature/Feature";
+import GehaImage from "../_components/GehaInfo/GehaImage";
+import GehaInfo from "../_components/GehaInfo/GehaInfo";
+import Intro from "../_components/Intro/Intro";
+import StepDetailModal from "../_components/Modal/StepDetailModal";
+import PressSection from "../_components/PressSection/PressSection";
+import WorkInfo from "../_components/WorkInfo/WorkInfo";
 
 export default function StepDetail() {
   const { scrollViewRef, setSectionYPositions, sectionToScroll } =
     useSectionToScroll();
-
   const { selectedSection, handleSectionToScroll } = useHandleSection({
     sectionToScroll,
   });
 
   const { data } = useStepDetail();
+
+  const { isApplicationExist } = useApplicationExist();
+  const [isVisible, setIsVisible] = useState(false);
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -103,11 +108,19 @@ export default function StepDetail() {
             owerMessage={data?.ownerMessage}
           />
           <View className='pt-10' />
+
           <Button
             variant='primary'
             height={56}
             content='지원하기'
             textColor='#ffffff'
+            onPress={() => setIsVisible(true)}
+          />
+
+          <StepDetailModal
+            isVisible={isVisible}
+            onPress={() => setIsVisible(false)}
+            isApplicationExist={isApplicationExist}
           />
         </View>
       </ScrollView>
