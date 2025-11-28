@@ -9,11 +9,41 @@ export interface GuestHouse {
   image: string;
 }
 
+export interface StaffRecruitmentPost {
+  id: number;
+  name: string;
+  tags: string[];
+  region: string;
+  isWished: boolean;
+  imageUrl: string;
+}
+
+export interface StaffRecruitmentParams {
+  keyword?: string;
+  sort?: string;
+  region?: string[];
+  period?: string[];
+  workScheduleType?: string[];
+  gender?: string;
+  pageNumber?: number;
+}
+
+export interface StaffRecruitmentResponse {
+  staffRecruitmentPosts: StaffRecruitmentPost[];
+  // 백엔드가 제공하는 경우 (선택사항)
+  hasNext?: boolean;
+  totalPages?: number;
+  pageSize?: number;
+}
+
 export interface FilterState {
-  location: string[];
+  region: string[];
   period: string[];
-  workdays: string[];
+  workScheduleType: string[];
   gender: string;
 }
 
 export type FilterOption = 'views' | 'likes' | 'recent';
+
+// 페이지네이션 상수
+export const PAGE_SIZE = 20; // 백엔드 기본값

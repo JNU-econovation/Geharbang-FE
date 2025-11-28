@@ -4,14 +4,14 @@ import Checkbox from '@/src/components/ui/Checkbox';
 import CollapsibleSection from '@/src/components/ui/CollapsibleSection';
 import RadioButton from '@/src/components/ui/RadioButton';
 import TextSize from '@/src/components/ui/TextSize';
-import { useExpandableSections } from '@/src/hooks/useExpandableSections';
-import { useFilterState } from '@/src/hooks/useFilterState';
+import { useExpandableSections } from '@/src/hooks/stepList/useExpandableSections';
+import { useFilterState } from '@/src/hooks/stepList/useFilterState';
 import { FilterState } from '@/src/types/step/types';
 import {
   GENDER_OPTIONS,
-  LOCATION_OPTIONS,
   PERIOD_OPTIONS,
-  WORKDAYS_OPTIONS,
+  REGION_OPTIONS,
+  WORK_SCHEDULE_OPTIONS,
 } from '@/src/utils/constants/filterOptions';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
@@ -34,17 +34,17 @@ export default function BottomSheetModal({
   const {
     filters,
     resetFilters,
-    toggleLocation,
+    toggleRegion,
     togglePeriod,
-    toggleWorkdays,
+    toggleWorkScheduleType,
     selectGender,
   } = useFilterState(initialFilters);
 
   const { expanded: expandedSections, toggle: toggleSection } =
     useExpandableSections({
-      location: true,
+      region: true,
       period: true,
-      workdays: true,
+      workScheduleType: true,
       gender: true,
     });
 
@@ -58,29 +58,31 @@ export default function BottomSheetModal({
       visible={visible}
       onClose={onClose}
       title={title}
-      footer={<FilterModalFooter onReset={resetFilters} onApply={applyFilters} />}
+      footer={
+        <FilterModalFooter onReset={resetFilters} onApply={applyFilters} />
+      }
     >
       <View className="p-4 gap-6">
         <CollapsibleSection
           title="근무지역"
-          isExpanded={expandedSections.location}
-          onToggle={() => toggleSection('location')}
+          isExpanded={expandedSections.region}
+          onToggle={() => toggleSection('region')}
           className="pb-4"
         >
           <View className="flex-row flex-wrap gap-2">
-            {LOCATION_OPTIONS.map((loc) => (
+            {REGION_OPTIONS.map((region) => (
               <TouchableOpacity
-                key={loc}
-                onPress={() => toggleLocation(loc)}
+                key={region}
+                onPress={() => toggleRegion(region)}
                 className={`flex-row items-center gap-2 p-3 rounded-lg border ${
-                  filters.location.includes(loc)
+                  filters.region.includes(region)
                     ? 'border-primary-blue bg-blue-50'
                     : 'border-gray-200'
                 }`}
                 style={{ width: '48%' }}
               >
-                <Checkbox checked={filters.location.includes(loc)} size="md" />
-                <TextSize size={14} content={loc} />
+                <Checkbox checked={filters.region.includes(region)} size="md" />
+                <TextSize size={14} content={region} />
               </TouchableOpacity>
             ))}
           </View>
@@ -118,26 +120,35 @@ export default function BottomSheetModal({
 
         <CollapsibleSection
           title="근무일 (휴일)"
-          isExpanded={expandedSections.workdays}
-          onToggle={() => toggleSection('workdays')}
+          isExpanded={expandedSections.workScheduleType}
+          onToggle={() => toggleSection('workScheduleType')}
           className="pb-4"
         >
           <View className="gap-2">
-            {WORKDAYS_OPTIONS.map((workday) => (
+            {WORK_SCHEDULE_OPTIONS.map((workSchedule) => (
               <TouchableOpacity
-                key={workday}
-                onPress={() => toggleWorkdays(workday)}
+                key={workSchedule.label}
+                onPress={() => toggleWorkScheduleType(workSchedule.label)}
                 className={`flex-row items-center gap-3 p-3 rounded-lg border ${
-                  filters.workdays.includes(workday)
+                  filters.workScheduleType.includes(workSchedule.label)
                     ? 'border-primary-blue bg-blue-50'
                     : 'border-gray-200'
                 }`}
               >
                 <Checkbox
-                  checked={filters.workdays.includes(workday)}
+                  checked={filters.workScheduleType.includes(
+                    workSchedule.label,
+                  )}
                   size="md"
                 />
-                <TextSize size={14} content={workday} />
+                <View>
+                  <TextSize size={14} content={workSchedule.label} />
+                  <TextSize
+                    size={12}
+                    content={workSchedule.desc}
+                    color="#6B7280"
+                  />
+                </View>
               </TouchableOpacity>
             ))}
           </View>

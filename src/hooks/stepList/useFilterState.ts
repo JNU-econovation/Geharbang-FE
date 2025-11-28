@@ -4,9 +4,9 @@ import { useState } from 'react';
 interface UseFilterStateReturn {
   filters: FilterState;
   resetFilters: () => void;
-  toggleLocation: (location: string) => void;
+  toggleRegion: (region: string) => void;
   togglePeriod: (period: string) => void;
-  toggleWorkdays: (workdays: string) => void;
+  toggleWorkScheduleType: (workScheduleType: string) => void;
   selectGender: (gender: string) => void;
 }
 
@@ -17,19 +17,19 @@ export function useFilterState(
 
   const resetFilters = () => {
     setFilters({
-      location: [],
+      region: [],
       period: [],
-      workdays: [],
+      workScheduleType: [],
       gender: '',
     });
   };
 
-  const toggleLocation = (location: string) => {
+  const toggleRegion = (region: string) => {
     setFilters((prev) => ({
       ...prev,
-      location: prev.location.includes(location)
-        ? prev.location.filter((loc) => loc !== location)
-        : [...prev.location, location],
+      region: prev.region.includes(region)
+        ? prev.region.filter((r) => r !== region)
+        : [...prev.region, region],
     }));
   };
 
@@ -42,12 +42,12 @@ export function useFilterState(
     }));
   };
 
-  const toggleWorkdays = (workdays: string) => {
+  const toggleWorkScheduleType = (workScheduleType: string) => {
     setFilters((prev) => ({
       ...prev,
-      workdays: prev.workdays.includes(workdays)
-        ? prev.workdays.filter((w) => w !== workdays)
-        : [...prev.workdays, workdays],
+      workScheduleType: prev.workScheduleType.includes(workScheduleType)
+        ? prev.workScheduleType.filter((w) => w !== workScheduleType)
+        : [...prev.workScheduleType, workScheduleType],
     }));
   };
 
@@ -58,9 +58,9 @@ export function useFilterState(
   return {
     filters,
     resetFilters,
-    toggleLocation,
+    toggleRegion,
     togglePeriod,
-    toggleWorkdays,
+    toggleWorkScheduleType,
     selectGender,
   };
 }
