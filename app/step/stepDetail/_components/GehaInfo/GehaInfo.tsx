@@ -7,26 +7,32 @@ import GehaName from "@/public/svgs/StepDetail/gehaName.svg";
 
 import GehaDetailInfo from "./GehaDetailInfo";
 
-export default function GehaInfo() {
+interface GehaInfpProps {
+  title?: string;
+  guesthouseName?: string;
+  region?: string;
+}
+
+export default function GehaInfo({
+  title,
+  guesthouseName,
+  region,
+}: GehaInfpProps) {
   return (
     <>
-      <TextSize
-        size={20}
-        color='#101828'
-        content='제주 바다뷰 게스트하우스 직원'
-      />
+      <TextSize size={20} color='#101828' content={title} />
 
       <View className='pt-8' />
 
       <GehaDetailInfo
         icon={<GehaName width={14} height={14} />}
-        content='제주 오션뷰 게스트하우스'
+        content={guesthouseName}
       />
       <View className='pt-2' />
 
       <GehaDetailInfo
         icon={<GehaLocation width={14} height={14} />}
-        content='제주시 애월읍'
+        content={region}
       />
     </>
   );

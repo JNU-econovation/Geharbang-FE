@@ -11,7 +11,7 @@ export default function PressSection({
   selectedSection,
 }: PressSectionProps) {
   return (
-    <Flex items='center' justify='center' dir='row' gap={24}>
+    <Flex items='center' justify='center' dir='row' gap={32}>
       <PressSectionToScroll
         section='address'
         content='위치'
@@ -23,12 +23,6 @@ export default function PressSection({
         content='근무 정보'
         handleSectionToScroll={handleSectionToScroll}
         isActive={selectedSection === "workInfo"}
-      />
-      <PressSectionToScroll
-        section='workDate'
-        content='근무일'
-        handleSectionToScroll={handleSectionToScroll}
-        isActive={selectedSection === "workDate"}
       />
       <PressSectionToScroll
         section='intro'

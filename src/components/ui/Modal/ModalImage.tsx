@@ -6,7 +6,7 @@ import ModalCloseBtn from "./ModalCloseBtn";
 interface ModalImageProps {
   modalVisible: boolean;
   modalIdx: number;
-  images: any[];
+  images?: string[];
   setModalIdx: (value: React.SetStateAction<number>) => void;
   setModalVisible: (value: React.SetStateAction<boolean>) => void;
 }
@@ -20,17 +20,17 @@ export default function ModalImage({
 }: ModalImageProps) {
   return (
     <Modal visible={modalVisible} animationType='slide'>
-      <View className='absolute top-14 left-0 right-0 items-center z-10'>
+      <View className='absolute top-16 left-0 right-0 items-center z-10'>
         <TextSize
           color='#000000'
           size={17}
-          content={`${modalIdx} / ${images.length} `}
+          content={`${modalIdx + 1} / ${images?.length} `}
         />
       </View>
 
       <Pressable
-        onPress={() => setModalVisible(!modalVisible)}
-        className='absolute top-12 right-5 z-10'
+        onPress={() => setModalVisible(false)}
+        className='absolute top-14 right-5 z-10'
       >
         <ModalCloseBtn modalVisible={modalVisible} />
       </Pressable>
@@ -38,13 +38,14 @@ export default function ModalImage({
       <View className='flex-1 bg-[#ffffff]'>
         <Swiper
           loop={false}
-          onIndexChanged={(idx) => setModalIdx(idx + 1)}
+          index={modalIdx}
+          onIndexChanged={(idx) => setModalIdx(idx)}
           showsPagination={false}
         >
-          {images.map((img, i) => (
+          {images?.map((img, i) => (
             <View key={i}>
               <Image
-                source={img}
+                source={{ uri: `${process.env.EXPO_PUBLIC_BASE_URL}${img}` }}
                 className='w-full h-full'
                 resizeMode='contain'
               />

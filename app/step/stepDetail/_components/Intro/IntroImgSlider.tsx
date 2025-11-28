@@ -3,37 +3,35 @@ import { Dimensions, FlatList, Image, Pressable, View } from "react-native";
 import ModalImage from "@/src/components/ui/Modal/ModalImage";
 import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
 
-export default function IntroImgSlider() {
+interface IntroImgSliderProps {
+  images?: string[];
+}
+
+export default function IntroImgSlider({ images }: IntroImgSliderProps) {
   const { modalVisible, setModalVisible, modalIdx, setModalIdx } =
     useImageModal();
 
-  const images = [
-    require("@/public/images/test1.png"),
-    require("@/public/images/test1.png"),
-    require("@/public/images/test1.png"),
-    require("@/public/images/test1.png"),
-    require("@/public/images/test1.png"),
-  ];
-
   const PHONEWIDTH = Dimensions.get("window").width * 0.6;
+
   return (
     <View className='h-48'>
       <FlatList
         data={images}
+        keyExtractor={(index) => index.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
         decelerationRate='normal'
         contentContainerStyle={{ gap: 20 }}
         renderItem={({ item, index }) => (
           <Pressable
-            key={index}
             style={{ width: PHONEWIDTH }}
             onPress={() => {
-              setModalVisible(!modalVisible);
+              setModalVisible(true);
+              setModalIdx(index);
             }}
           >
             <Image
-              source={item}
+              source={{ uri: `${process.env.EXPO_PUBLIC_BASE_URL}${item}` }}
               className='w-full h-full rounded-3xl'
               resizeMode='cover'
             />

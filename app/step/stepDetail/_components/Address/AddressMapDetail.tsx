@@ -4,6 +4,8 @@ import MapView, { Marker } from "react-native-maps";
 import ModalCloseBtn from "@/src/components/ui/Modal/ModalCloseBtn";
 
 interface AddressMapDetailProps {
+  latitude: number;
+  longitude: number;
   latitudeDelta: number;
   longitudeDelta: number;
   modalVisible: boolean;
@@ -12,6 +14,8 @@ interface AddressMapDetailProps {
 }
 
 export default function AddressMapDetail({
+  latitude,
+  longitude,
   latitudeDelta,
   longitudeDelta,
   modalVisible,
@@ -22,9 +26,9 @@ export default function AddressMapDetail({
     <>
       <MapView
         style={{ flex: 1, borderRadius: 8 }}
-        initialRegion={{
-          latitude: 37,
-          longitude: 127,
+        region={{
+          latitude: latitude,
+          longitude: longitude,
           latitudeDelta: latitudeDelta,
           longitudeDelta: longitudeDelta,
         }}
@@ -33,8 +37,8 @@ export default function AddressMapDetail({
       >
         <Marker
           coordinate={{
-            latitude: 37,
-            longitude: 127,
+            latitude: latitude,
+            longitude: longitude,
           }}
         />
       </MapView>
