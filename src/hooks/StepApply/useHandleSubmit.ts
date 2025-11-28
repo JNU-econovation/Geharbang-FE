@@ -19,7 +19,7 @@ export const useHandleSubmit = ({
 
   const handleSubmit = async () => {
     if (validateForm()) {
-      router.replace({
+      router.push({
         pathname: "/step/stepDetail/[id]/apply/result",
         params: { id: recruitmentId.toString(), status: "pending" },
       });
@@ -32,7 +32,7 @@ export const useHandleSubmit = ({
             questionId: question.questionId,
             content: answers[question.questionId] || "",
           }));
-          console.log(answersArray);1
+
           await submitMutation.mutateAsync(answersArray);
         }
         router.setParams({ status: "success" });

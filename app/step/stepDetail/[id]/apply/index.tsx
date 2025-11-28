@@ -35,7 +35,8 @@ export default function staffApply() {
     );
   }
 
-  const { data, isLoading, isError } = useOwnerQuestions(recruitmentId);
+  const { data, isLoading, isError, refetch } =
+    useOwnerQuestions(recruitmentId);
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
 
   const { errors, clearError, validateForm } = useStepApplyFormValidation({
@@ -49,7 +50,6 @@ export default function staffApply() {
       [questionId]: text,
     }));
     clearError(questionId);
-    console.log(answers);
   };
 
   const handleSubmit = useHandleSubmit({
@@ -70,11 +70,20 @@ export default function staffApply() {
             <ActivityIndicator size={80} color={COLORS.PRIMARY.BLUE} />
           </View>
         ) : isError ? (
-          <View className="py-2">
+          <View className="py-8 items-center">
             <TextSize
-              size={14}
+              size={18}
               color={COLORS.GRAY.TEXT}
               content="잠시 오류가 발생했어요"
+            /> 
+            <View className="pt-4" />
+            <Button
+              variant="gray"
+              height={56}
+              width={320}
+              content="다시 시도"
+              textColor="#000"
+              onPress={() => refetch()}
             />
           </View>
         ) : (

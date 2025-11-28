@@ -19,7 +19,7 @@ export const useStepApplyFormValidation = ({
   const clearError = (questionId: number) => {
     setErrors((prev) => {
       const newErrors = { ...prev };
-      delete newErrors[questionId]; // 키 자체를 삭제
+      delete newErrors[questionId]; 
       return newErrors;
     });
   };
