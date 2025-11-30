@@ -1,7 +1,7 @@
-import TextSize from "@/src/components/ui/TextSize";
-import { router } from "expo-router";
-import React from "react";
-import { Pressable, Text, View } from "react-native";
+import TextSize from '@/src/components/ui/TextSize';
+import { router } from 'expo-router';
+import React from 'react';
+import { Pressable, Text, View } from 'react-native';
 
 export default function ChatScreen() {
   return (
@@ -13,20 +13,20 @@ export default function ChatScreen() {
 
         <View className="gap-3 pt-5">
           <TextSize size={16} content="페이지 바로가기 버튼 ▼" />
-          <Pressable onPress={() => router.push("/login")}>
+          <Pressable onPress={() => router.push('/login')}>
             <TextSize size={16} color="deepskyblue" content="로그인" />
           </Pressable>
-          <Pressable onPress={() => router.push("/application/create")}>
+          <Pressable onPress={() => router.push('/application/create')}>
             <TextSize
               size={16}
               color="deepskyblue"
               content="공통 지원서 작성하기"
             />
           </Pressable>
-          <Pressable onPress={() => router.push("/step/stepDetail/1")}>
+          <Pressable onPress={() => router.push('/step/stepDetail/1')}>
             <TextSize size={16} color="deepskyblue" content="스텝 상세보기" />
           </Pressable>
-          <Pressable onPress={() => router.push("/step/stepDetail/1/apply")}>
+          <Pressable onPress={() => router.push('/step/recruitment/step4')}>
             <TextSize size={16} color="deepskyblue" content="스텝 지원하기" />
           </Pressable>
         </View>

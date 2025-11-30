@@ -1,11 +1,11 @@
-import ProgressBar from "@/app/application/_components/ProgressBar";
-import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
-import Flex from "@/src/components/layout/Flex";
-import BackArrow from "@/src/components/ui/BackArrow";
-import TextSize from "@/src/components/ui/TextSize";
-import React, { ReactNode } from "react";
-import { StatusBar, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import DismissKeyboardView from '@/src/components/layout/DismissKeyboardView';
+import Flex from '@/src/components/layout/Flex';
+import BackArrow from '@/src/components/ui/BackArrow';
+import ProgressBar from '@/src/components/ui/Form/ProgressBar';
+import TextSize from '@/src/components/ui/TextSize';
+import React, { ReactNode } from 'react';
+import { StatusBar, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface RecruitmentStepLayoutProps {
   currentStep: number;
@@ -36,9 +36,7 @@ export default function RecruitmentStepLayout({
             totalSteps={5}
           />
 
-          <View className="flex-1 bg-[#F9FAFB]">
-            {children}
-          </View>
+          <View className="flex-1 bg-[#F9FAFB]">{children}</View>
         </SafeAreaView>
       </DismissKeyboardView>
     </>

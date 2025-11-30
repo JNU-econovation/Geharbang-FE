@@ -1,21 +1,21 @@
-import FormField from "@/app/application/_components/FormField";
-import FormSection from "@/app/application/_components/FormSection";
-import RecruitmentStepLayout from "@/app/step/recruitment/_components/RecruitmentStepLayout";
-import Flex from "@/src/components/layout/Flex";
-import Button from "@/src/components/ui/Button/Button";
-import TextInput from "@/src/components/ui/TextInput";
-import { useRecruitmentStep4Validation } from "@/src/hooks/recruitment/useRecruitmentStep4Validation";
-import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
-import { router } from "expo-router";
-import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import RecruitmentStepLayout from '@/app/step/recruitment/_components/RecruitmentStepLayout';
+import Flex from '@/src/components/layout/Flex';
+import Button from '@/src/components/ui/Button/Button';
+import FormField from '@/src/components/ui/Form/FormField';
+import FormSection from '@/src/components/ui/Form/FormSection';
+import TextInput from '@/src/components/ui/TextInput';
+import { useRecruitmentStep4Validation } from '@/src/hooks/recruitment/useRecruitmentStep4Validation';
+import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
+import { router } from 'expo-router';
+import React, { useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 
 export default function RecruitmentStep4() {
-  const [instagram, setInstagram] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [website, setWebsite] = useState("");
-  const [message, setMessage] = useState("");
+  const [instagram, setInstagram] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [website, setWebsite] = useState('');
+  const [message, setMessage] = useState('');
 
   const { errors, clearError, validateForm } = useRecruitmentStep4Validation({
     instagram,
@@ -27,7 +27,7 @@ export default function RecruitmentStep4() {
 
   const handleNext = () => {
     if (validateForm()) {
-      router.push("/step/recruitment/step5");
+      router.push('/step/recruitment/step5');
     }
   };
 
@@ -45,7 +45,11 @@ export default function RecruitmentStep4() {
           <View className="pt-4 px-3">
             <Flex justify="start" items="center" gap={24}>
               <FormSection title="연락처 및 사장님 한마디">
-                <FormField label="인스타그램" required={false} errorMessage={errors.instagram}>
+                <FormField
+                  label="인스타그램"
+                  required={false}
+                  errorMessage={errors.instagram}
+                >
                   <TextInput
                     value={instagram}
                     onChangeText={(text) => {
@@ -58,7 +62,11 @@ export default function RecruitmentStep4() {
                   />
                 </FormField>
 
-                <FormField label="전화번호" required={false} errorMessage={errors.phone}>
+                <FormField
+                  label="전화번호"
+                  required={false}
+                  errorMessage={errors.phone}
+                >
                   <TextInput
                     value={phone}
                     onChangeText={(text) => {
@@ -72,7 +80,11 @@ export default function RecruitmentStep4() {
                   />
                 </FormField>
 
-                <FormField label="이메일" required={false} errorMessage={errors.email}>
+                <FormField
+                  label="이메일"
+                  required={false}
+                  errorMessage={errors.email}
+                >
                   <TextInput
                     value={email}
                     onChangeText={(text) => {
@@ -86,7 +98,11 @@ export default function RecruitmentStep4() {
                   />
                 </FormField>
 
-                <FormField label="웹사이트" required={false} errorMessage={errors.website}>
+                <FormField
+                  label="웹사이트"
+                  required={false}
+                  errorMessage={errors.website}
+                >
                   <TextInput
                     value={website}
                     onChangeText={(text) => {
@@ -100,7 +116,11 @@ export default function RecruitmentStep4() {
                   />
                 </FormField>
 
-                <FormField label="사장님 한마디" required={false} errorMessage={errors.message}>
+                <FormField
+                  label="사장님 한마디"
+                  required={false}
+                  errorMessage={errors.message}
+                >
                   <TextInput
                     value={message}
                     onChangeText={(text) => {

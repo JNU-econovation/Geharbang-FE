@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
 import { Text, View } from 'react-native';
-import FormSection from '@/app/application/_components/FormSection';
-import EmptyQuestionCard from './EmptyQuestionCard';
-import QuestionItem from './QuestionItem';
-import AddQuestionButton from './AddQuestionButton';
+
+import FormSection from '@/src/components/ui/Form/FormSection';
 import { Question } from '@/src/types/models/Question';
 import { COLORS } from '@/src/utils/constants/colors';
+import AddQuestionButton from './AddQuestionButton';
+import EmptyQuestionCard from './EmptyQuestionCard';
+import QuestionItem from './QuestionItem';
 
 interface QuestionSectionProps {
   questions: Question[];
@@ -26,21 +27,24 @@ export default function QuestionSection({
     (id: string) => (text: string) => {
       onUpdateQuestion(id, text);
     },
-    [onUpdateQuestion]
+    [onUpdateQuestion],
   );
 
   const handleDelete = useCallback(
     (id: string) => () => {
       onDeleteQuestion(id);
     },
-    [onDeleteQuestion]
+    [onDeleteQuestion],
   );
 
   return (
     <FormSection title="추가 질문" gap={24}>
       <View>
         <View className="flex-row items-center gap-1 mb-1">
-          <Text className="text-xs font-normal" style={{ color: COLORS.GRAY.PLACEHOLDER }}>
+          <Text
+            className="text-xs font-normal"
+            style={{ color: COLORS.GRAY.PLACEHOLDER }}
+          >
             (선택)
           </Text>
         </View>
