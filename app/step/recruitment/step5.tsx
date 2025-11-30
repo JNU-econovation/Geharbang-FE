@@ -28,8 +28,8 @@ export default function RecruitmentStep5() {
       >
         <ScrollView
           ref={scrollViewRef}
-          className="flex-1 bg-gray-50"
-          contentContainerStyle={{ padding: 24, paddingBottom: 100 }}
+          className="flex-1"
+          contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
           <View className="pt-4 px-3">

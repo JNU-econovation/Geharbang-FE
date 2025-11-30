@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Text, View } from 'react-native';
 import FormSection from '@/app/application/_components/FormSection';
 import EmptyQuestionCard from './EmptyQuestionCard';
 import QuestionItem from './QuestionItem';
 import AddQuestionButton from './AddQuestionButton';
-import { Question } from '@/src/hooks/recruitment/useQuestions';
+import { Question } from '@/src/types/models/Question';
+import { COLORS } from '@/src/utils/constants/colors';
 
 interface QuestionSectionProps {
   questions: Question[];
@@ -21,15 +22,29 @@ export default function QuestionSection({
   onUpdateQuestion,
   canAddMore,
 }: QuestionSectionProps) {
+  const handleTextChange = useCallback(
+    (id: string) => (text: string) => {
+      onUpdateQuestion(id, text);
+    },
+    [onUpdateQuestion]
+  );
+
+  const handleDelete = useCallback(
+    (id: string) => () => {
+      onDeleteQuestion(id);
+    },
+    [onDeleteQuestion]
+  );
+
   return (
     <FormSection title="추가 질문" gap={24}>
       <View>
         <View className="flex-row items-center gap-1 mb-1">
-          <Text className="text-xs font-normal" style={{ color: '#697282' }}>
+          <Text className="text-xs font-normal" style={{ color: COLORS.GRAY.PLACEHOLDER }}>
             (선택)
           </Text>
         </View>
-        <Text className="text-xs" style={{ color: '#697282' }}>
+        <Text className="text-xs" style={{ color: COLORS.GRAY.PLACEHOLDER }}>
           최대 5개까지 등록할 수 있습니다
         </Text>
       </View>
@@ -43,8 +58,8 @@ export default function QuestionSection({
               key={question.id}
               index={index}
               value={question.text}
-              onChangeText={(text) => onUpdateQuestion(question.id, text)}
-              onDelete={() => onDeleteQuestion(question.id)}
+              onChangeText={handleTextChange(question.id)}
+              onDelete={handleDelete(question.id)}
             />
           ))}
 

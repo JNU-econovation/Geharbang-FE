@@ -1,10 +1,6 @@
 import { useRef, useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
-
-export interface Question {
-  id: string;
-  text: string;
-}
+import { Question } from '@/src/types/models/Question';
 
 export const useQuestions = () => {
   const [questions, setQuestions] = useState<Question[]>([]);

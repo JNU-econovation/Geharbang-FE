@@ -2,6 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import TextInput from '@/src/components/ui/TextInput';
+import { COLORS } from '@/src/utils/constants/colors';
 
 interface QuestionItemProps {
   index: number;
@@ -29,7 +30,7 @@ export default function QuestionItem({
         onPress={onDelete}
         className="w-8 h-8 items-center justify-center mt-2 active:opacity-50"
       >
-        <Feather name="trash-2" size={20} color="#9ca3af" style={{ opacity: 0.5 }} />
+        <Feather name="trash-2" size={20} color={COLORS.GRAY.PLACEHOLDER} style={{ opacity: 0.5 }} />
       </TouchableOpacity>
     </View>
   );

@@ -15,7 +15,7 @@ export default function EmptyQuestionCard({ onPress }: EmptyQuestionCardProps) {
       style={{ borderColor: COLORS.GRAY.BORDER }}
     >
       <View className="opacity-60">
-        <Feather name="plus-circle" size={32} color="#101727" />
+        <Feather name="plus-circle" size={32} color={COLORS.GRAY.TEXT} />
       </View>
       <View className="items-center">
         <Text
