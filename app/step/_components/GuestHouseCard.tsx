@@ -1,4 +1,4 @@
-import Tag from '@/src/components/ui/Tag';
+import Tag from '@/src/components/ui/Tag/Tag';
 import { StaffRecruitmentPost } from '@/src/types/step/types';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
