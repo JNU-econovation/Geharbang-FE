@@ -1,6 +1,6 @@
 import { File } from "@/src/types/File";
-import { ApplicationData } from "@/src/types/models/ApplicationData";
-import { FormErrors } from "@/src/types/models/FormErrors";
+import { ApplicationData } from "@/src/types/models/application/ApplicationData";
+import { FormErrors } from "@/src/types/models/application/FormErrors";
 import { validateStep1 } from "@/src/utils/application/step1Validation";
 import { validateStep2 } from "@/src/utils/application/step2Validation";
 import { useState } from "react";
@@ -11,11 +11,11 @@ interface UseApplicationFormValidationProps {
   step?: number;
 }
 
-export function useApplicationFormValidation({
+export const useApplicationFormValidation = ({
   data,
   imageFile,
   step = 1,
-}: UseApplicationFormValidationProps) {
+}: UseApplicationFormValidationProps) => {
   const [errors, setErrors] = useState<FormErrors>({
     image: "",
     name: "",
@@ -59,4 +59,4 @@ export function useApplicationFormValidation({
     clearError,
     validateForm,
   };
-}
+};

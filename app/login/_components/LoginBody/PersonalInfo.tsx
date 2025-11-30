@@ -6,7 +6,7 @@ import Star from "@/public/svgs/Login/star.svg";
 
 import Flex from "@/src/components/layout/Flex/Flex";
 import TextSize from "@/src/components/ui/TextSize";
-import { useShakeAnimation } from "@/src/hooks/Login/useShakeAnimation";
+import { useShakeAnimation } from "@/src/hooks/login/useShakeAnimation";
 import PersonalInfoContext from "./PersonalInfoContext";
 
 interface PersonalInfoProps {
@@ -23,38 +23,38 @@ export default function PersonalInfo({
   const { animated } = useShakeAnimation({ isLoginClicked, isInfoAgreed });
 
   return (
-    <View className='pt-6'>
-      <View className='flex-row'>
+    <View className="pt-6">
+      <View className="flex-row">
         <Pressable onPress={handleIsInfoAgreed}>
           <Animated.View
             style={animated}
             className={"border rounded-sm w-4 h-4 border-gray-300"}
           >
             {isInfoAgreed && (
-              <Flex items='center' justify='center'>
+              <Flex items="center" justify="center">
                 <CheckMark width={13} height={13} />
               </Flex>
             )}
           </Animated.View>
         </Pressable>
 
-        <View className='pr-1' />
+        <View className="pr-1" />
         <Star width={6} height={6} />
 
-        <View className='pr-1' />
-        <Flex items='center' justify='center' dir='row'>
+        <View className="pr-1" />
+        <Flex items="center" justify="center" dir="row">
           <PersonalInfoContext
-            link='/login/service-use-condition'
-            content='서비스 이용약관'
+            link="/login/service-use-condition"
+            content="서비스 이용약관"
           />
 
-          <TextSize size={14} color='#4B5563' content='과' />
-          <View className='pr-1' />
+          <TextSize size={14} color="#4B5563" content="과" />
+          <View className="pr-1" />
           <PersonalInfoContext
-            link='/login/privacy-policy'
-            content='개인정보처리방침'
+            link="/login/privacy-policy"
+            content="개인정보처리방침"
           />
-          <TextSize size={14} color='#4B5563' content='에 동의합니다.' />
+          <TextSize size={14} color="#4B5563" content="에 동의합니다." />
         </Flex>
       </View>
     </View>

@@ -1,5 +1,5 @@
 import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
-import { getAccessToken } from "@/src/utils/Login/secureStore";
+import { getAccessToken } from "@/src/utils/login/secureStore";
 import axios from "axios";
 
 const baseURL = process.env.EXPO_PUBLIC_BASE_URL;

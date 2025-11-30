@@ -1,4 +1,4 @@
-import { uploadImage } from "@/src/services/Application/uploadImage";
+import { uploadImage } from "@/src/services/application/uploadImage";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { File } from "@/src/types/File";
 import { useMutation } from "@tanstack/react-query";

@@ -1,29 +1,29 @@
-import BottomSheetModal from '@/app/step/_components/BottomSheetModal';
-import GuestHouseCard from '@/app/step/_components/GuestHouseCard';
-import PostingListEmpty from '@/app/step/_components/PostingList/PostingListEmpty';
-import PostingListFooter from '@/app/step/_components/PostingList/PostingListFooter';
-import PostingListHeader from '@/app/step/_components/PostingList/PostingListHeader';
-import DismissKeyboardView from '@/src/components/layout/DismissKeyboardView';
-import { useStaffRecruitmentList } from '@/src/hooks/stepList/useStaffRecruitmentList';
-import { FilterOption, FilterState } from '@/src/types/step/types';
-import React, { useState } from 'react';
-import { FlatList, ListRenderItem } from 'react-native';
+import BottomSheetModal from "@/app/step/_components/BottomSheetModal";
+import GuestHouseCard from "@/app/step/_components/GuestHouseCard";
+import PostingListEmpty from "@/app/step/_components/PostingList/PostingListEmpty";
+import PostingListFooter from "@/app/step/_components/PostingList/PostingListFooter";
+import PostingListHeader from "@/app/step/_components/PostingList/PostingListHeader";
+import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
+import { useStaffRecruitmentList } from "@/src/hooks/stepList/useStaffRecruitmentList";
+import { FilterOption, FilterState } from "@/src/types/models/step/types";
+import React, { useState } from "react";
+import { FlatList, ListRenderItem } from "react-native";
 
 export default function GuestHouseListScreen() {
-  const [selectedFilter, setSelectedFilter] = useState<FilterOption>('recent');
+  const [selectedFilter, setSelectedFilter] = useState<FilterOption>("recent");
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [filters, setFilters] = useState<FilterState>({
     region: [],
     period: [],
     workScheduleType: [],
-    gender: '',
+    gender: "",
   });
 
   const filterOptions: Array<{ key: FilterOption; label: string }> = [
-    { key: 'views', label: '조회수' },
-    { key: 'likes', label: '찜' },
-    { key: 'recent', label: '최신순' },
+    { key: "views", label: "조회수" },
+    { key: "likes", label: "찜" },
+    { key: "recent", label: "최신순" },
   ];
 
   const {

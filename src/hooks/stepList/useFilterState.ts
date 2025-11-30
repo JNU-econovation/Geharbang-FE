@@ -1,5 +1,5 @@
-import { FilterState } from '@/src/types/step/types';
-import { useState } from 'react';
+import { FilterState } from "@/src/types/models/step/types";
+import { useState } from "react";
 
 interface UseFilterStateReturn {
   filters: FilterState;
@@ -20,7 +20,7 @@ export function useFilterState(
       region: [],
       period: [],
       workScheduleType: [],
-      gender: '',
+      gender: "",
     });
   };
 

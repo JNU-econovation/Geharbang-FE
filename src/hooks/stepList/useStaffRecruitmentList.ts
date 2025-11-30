@@ -1,14 +1,14 @@
-import { getStaffRecruitmentList } from '@/src/services/Step/staffRecruitment';
+import { getStaffRecruitmentList } from "@/src/services/step/staffRecruitment";
 import {
   FilterOption,
   FilterState,
   PAGE_SIZE,
   StaffRecruitmentPost,
-} from '@/src/types/step/types';
-import { getApiErrorMessage } from '@/src/utils/api/errorHandler';
-import { SORT_OPTIONS } from '@/src/utils/constants/filterOptions';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDebounce } from '../useDebounce';
+} from "@/src/types/models/step/types";
+import { getApiErrorMessage } from "@/src/utils/api/errorHandler";
+import { SORT_OPTIONS } from "@/src/utils/constants/filterOptions";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDebounce } from "../useDebounce";
 
 interface UseStaffRecruitmentListParams {
   keyword: string;
@@ -91,7 +91,7 @@ export function useStaffRecruitmentList({
           setHasMore(response.staffRecruitmentPosts.length === PAGE_SIZE);
         }
       } catch (err: any) {
-        if (err.name === 'AbortError' || err.name === 'CanceledError') {
+        if (err.name === "AbortError" || err.name === "CanceledError") {
           return;
         }
 
@@ -108,7 +108,7 @@ export function useStaffRecruitmentList({
         abortControllerRef.current = null;
       }
     },
-    [debouncedKeyword, sort, filters],
+    [debouncedKeyword, sort, filters]
   );
 
   useEffect(() => {

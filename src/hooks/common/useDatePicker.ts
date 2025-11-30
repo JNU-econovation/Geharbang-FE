@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function useDatePicker(setSelectedDate: (date: string) => void) {
+export const useDatePicker = (setSelectedDate: (date: string) => void) => {
   const [toggleCalendar, setToggleCalendar] = useState(false);
 
   const onDayPress = (date: string) => {
@@ -9,4 +9,4 @@ export function useDatePicker(setSelectedDate: (date: string) => void) {
   };
 
   return { toggleCalendar, setToggleCalendar, onDayPress };
-}
+};

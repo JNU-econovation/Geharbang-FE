@@ -1,5 +1,5 @@
-import { ApplicationData } from "@/src/types/models/ApplicationData";
-import { FormErrors } from "@/src/types/models/FormErrors";
+import { ApplicationData } from "@/src/types/models/application/ApplicationData";
+import { FormErrors } from "@/src/types/models/application/FormErrors";
 
 export const validateStep2 = (
   data: ApplicationData,

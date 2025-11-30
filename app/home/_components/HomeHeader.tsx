@@ -1,24 +1,30 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { Pressable, View } from "react-native";
+
+import MainIcon from "@/public/svgs/mainIcon.svg";
+import Flex from "@/src/components/layout/Flex/Flex";
+import TextSize from "@/src/components/ui/TextSize";
 
 export default function Header() {
   return (
-    <View className="bg-white px-4 pb-4 pt-2 shadow-sm border-b border-gray-100">
-      <View className="flex-row items-center justify-between">
-        <View className="flex-row items-center" style={{ gap: 12 }}>
-          <View className="w-12 h-12 bg-sky-500 rounded-full items-center justify-center shadow-lg">
-            {/* 여기에 로고 넣기 */}
-            <Ionicons name="logo-alipay" size={20} color="white" />
-          </View>
-          <Text className="text-xl font-bold text-gray-900">게하르방</Text>
-        </View>
-        <View className="flex-row items-center" style={{ gap: 12 }}>
-          <TouchableOpacity className="p-2 active:bg-emerald-500/10 rounded-lg">
-            <Ionicons name="settings-outline" size={22} color="#4B5563" />
-          </TouchableOpacity>
-        </View>
-      </View>
+    <View className="px-4 py-2 border-b-2 border-gray-border">
+      <Flex items="center" justify="between" dir="row">
+        <Flex items="center" justify="start" dir="row" gap={12}>
+          <MainIcon width={50} height={50} />
+          <TextSize size={23} content="게하르방" weight="semibold"></TextSize>
+        </Flex>
+
+        <Pressable className="p-1 rounded-full">
+          {({ pressed }) => (
+            <Ionicons
+              name="notifications-outline"
+              size={25}
+              color={pressed ? "#9CA3AF" : "#4B5563"}
+            />
+          )}
+        </Pressable>
+      </Flex>
     </View>
   );
 }

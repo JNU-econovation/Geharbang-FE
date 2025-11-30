@@ -1,6 +1,6 @@
 import { Image, View } from "react-native";
 
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import CheckmarkCircle from "@/src/components/ui/CheckmarkCircle";
 import TextSize from "@/src/components/ui/TextSize";
 import { COLORS } from "@/src/utils/constants/colors";
@@ -18,7 +18,7 @@ export default function SelectedApplication({
 }: SelectedApplicationProps) {
   return (
     <View className="gap-3 py-3 px-4 border-b border-gray-border">
-      <Flex justify="start" items="center" flexDir="row" gap={10}>
+      <Flex justify="start" items="center" dir="row" gap={10}>
         <Image
           src={`${baseURL}${imageUrl}`}
           className="rounded-full w-12 h-12"

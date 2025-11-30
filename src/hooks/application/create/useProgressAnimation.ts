@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Animated } from "react-native";
 
-export function useProgressAnimation(progressPercent: number) {
+export const useProgressAnimation = (progressPercent: number) => {
   const loadValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -19,4 +19,4 @@ export function useProgressAnimation(progressPercent: number) {
   });
 
   return { loadWidth };
-}
+};

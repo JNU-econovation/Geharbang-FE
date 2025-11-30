@@ -1,6 +1,6 @@
 import { File } from "@/src/types/File";
-import { ApplicationData } from "@/src/types/models/ApplicationData";
-import { FormErrors } from "@/src/types/models/FormErrors";
+import { ApplicationData } from "@/src/types/models/application/ApplicationData";
+import { FormErrors } from "@/src/types/models/application/FormErrors";
 
 const validatePhoneNumber = (phoneNumber: string): boolean => {
   return /^010-(\d{4})-\d{4}$/.test(phoneNumber);

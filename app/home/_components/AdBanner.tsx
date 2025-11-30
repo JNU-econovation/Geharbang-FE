@@ -1,30 +1,43 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
+import { View } from "react-native";
+
+import MainIcon from "@/public/svgs/mainIcon.svg";
+import Flex from "@/src/components/layout//Flex/Flex";
+import TextSize from "@/src/components/ui/TextSize";
 
 export default function AdBanner() {
   return (
-    <View className="bg-sky-500 p-6 relative overflow-hidden">
-      <View className="relative z-10">
-        <View className="flex-row items-center justify-between">
-          <View className="flex-1">
-            <Text className="text-lg font-bold text-white mb-1">
-              제주 특가 숙소
-            </Text>
-            <Text className="text-sm text-white/80 mb-4">
-              최대 30% 할인 혜택
-            </Text>
-            <TouchableOpacity className="bg-white self-start px-5 py-2.5 rounded-xl shadow-sm active:opacity-80">
-              <Text className="text-sky-500 text-sm font-medium">
-                지금 보기
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View className="w-20 h-20 bg-white rounded-2xl items-center justify-center shadow-sm ml-4">
-            <Ionicons name="pricetag" size={24} color="#F59E0B" />
-          </View>
+    <LinearGradient
+      colors={["#EFF6FF", "#E0F2FE"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      style={{
+        paddingHorizontal: 16,
+        paddingTop: 16,
+        paddingBottom: 16,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: "#BAE6FD",
+        width: "90%",
+      }}
+    >
+      <Flex justify="center" items="center" dir="row" gap={90}>
+        <View className="gap-1">
+          <TextSize size={15} color="#0069A8" content="🌊 제주 성수기 특가" />
+          <TextSize
+            size={12}
+            color="#0069A8"
+            content="게스트하우스 예약 시 최대 30% 할인"
+          />
         </View>
-      </View>
-    </View>
+
+        <View className="w-12 h-12 bg-sky-200 rounded-lg overflow-hidden">
+          <Flex items="center" justify="center">
+            <MainIcon width={35} height={50} />
+          </Flex>
+        </View>
+      </Flex>
+    </LinearGradient>
   );
 }
