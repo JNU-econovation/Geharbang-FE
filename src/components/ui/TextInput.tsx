@@ -15,7 +15,7 @@ interface TextInputFieldProps {
   autoCapitalize?: TextInputProps["autoCapitalize"];
 }
 
-export default function TextInputField({
+export default function CustomTextInput({
   value,
   onChangeText,
   placeholder,

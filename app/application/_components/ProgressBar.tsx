@@ -2,7 +2,7 @@ import { Animated, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex/Flex";
 import TextSize from "@/src/components/ui/TextSize";
-import { useProgressAnimation } from "@/src/hooks/application/useProgressAnimation";
+import { useProgressAnimation } from "@/src/hooks/application/create/useProgressAnimation";
 import { COLORS } from "@/src/utils/constants/colors";
 
 interface ProgressBarProps {

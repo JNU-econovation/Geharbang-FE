@@ -13,18 +13,18 @@ import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
-import { useApplicationFormValidation } from "@/src/hooks/application/useApplicationFormValidation";
-import { useHandleSubmit } from "@/src/hooks/application/useHandleSubmit";
+import { useApplicationFormValidation } from "@/src/hooks/application/create/useApplicationFormValidation";
+import { useHandleCreate } from "@/src/hooks/application/create/useHandleCreate";
 import { usePreventHardwareBack } from "@/src/hooks/common/usePreventHardwareBack";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
+import TextInput from "../../../src/components/ui/TextInput";
 import DateInput from "../_components/DateInput";
 import DaySelector from "../_components/DaySelector";
 import FormField from "../_components/FormField";
 import FormSection from "../_components/FormSection";
 import ProgressBar from "../_components/ProgressBar";
 import StyleSelector from "../_components/StyleSelector";
-import TextInput from "../_components/TextInput";
 
 export default function Step2Screen() {
   const { data, setUpdate, currentStep, goToPrevStep, imageFile } =
@@ -38,29 +38,29 @@ export default function Step2Screen() {
 
   usePreventHardwareBack(); // 안드로이드 하드웨어 뒤로가기 방지
 
-  const handleSubmit = useHandleSubmit();
+  const handleCreate = useHandleCreate();
 
   return (
     <>
-      <StatusBar barStyle='dark-content' />
+      <StatusBar barStyle="dark-content" />
       <DismissKeyboardView>
-        <SafeAreaView className='flex-1 bg-white'>
-          <View className='p-3'>
-            <Flex justify='start' items='center' dir='row' gap={124}>
+        <SafeAreaView className="flex-1 bg-white">
+          <View className="p-3">
+            <Flex justify="start" items="center" dir="row" gap={124}>
               <BackArrow
-                color='black'
+                color="black"
                 size={24}
                 onPress={() => {
                   goToPrevStep();
                   router.back();
                 }}
               />
-              <TextSize size={18} content='지원서 작성' />
+              <TextSize size={18} content="지원서 작성" />
             </Flex>
           </View>
 
           <ProgressBar
-            stepTitle='자기소개'
+            stepTitle="자기소개"
             currentStep={currentStep}
             totalSteps={2}
           />
@@ -70,13 +70,13 @@ export default function Step2Screen() {
             behavior={Platform.OS === "ios" ? "padding" : undefined}
             keyboardVerticalOffset={0}
           >
-            <ScrollView className='bg-[#F9FAFB]'>
-              <View className='pt-4 px-3'>
-                <Flex justify='start' items='center' gap={24}>
+            <ScrollView className="bg-[#F9FAFB]">
+              <View className="pt-4 px-3">
+                <Flex justify="start" items="center" gap={24}>
                   {/* 근무 일정 */}
-                  <FormSection title='근무 일정'>
+                  <FormSection title="근무 일정">
                     <FormField
-                      label='근무 시작 가능일'
+                      label="근무 시작 가능일"
                       required={true}
                       errorMessage={errors.availableStartDate}
                     >
@@ -91,7 +91,7 @@ export default function Step2Screen() {
                       />
                     </FormField>
 
-                    <FormField label='근무 가능 요일' required={false}>
+                    <FormField label="근무 가능 요일" required={false}>
                       <DaySelector
                         selectedDays={data.availableDayOfWeek}
                         setSelectedDays={(action) => {
@@ -109,9 +109,9 @@ export default function Step2Screen() {
                   </FormSection>
 
                   {/* 자기소개 */}
-                  <FormSection title='자기소개'>
+                  <FormSection title="자기소개">
                     <FormField
-                      label='자기소개글'
+                      label="자기소개글"
                       required={true}
                       errorMessage={errors.selfIntroduction}
                     >
@@ -132,7 +132,7 @@ export default function Step2Screen() {
                     </FormField>
 
                     <FormField
-                      label='MBTI'
+                      label="MBTI"
                       required={true}
                       errorMessage={errors.mbti}
                     >
@@ -142,8 +142,8 @@ export default function Step2Screen() {
                           setUpdate("mbti", formatUpperCase(text));
                           clearError("mbti");
                         }}
-                        placeholder='예: ENFP'
-                        autoCapitalize='characters'
+                        placeholder="예: ENFP"
+                        autoCapitalize="characters"
                         maxLength={4}
                         error={!!errors.mbti}
                       />
@@ -151,8 +151,8 @@ export default function Step2Screen() {
                   </FormSection>
 
                   {/* 스타일 & 소셜 */}
-                  <FormSection title='스타일 & 소셜' gap={22}>
-                    <FormField label='나의 스타일' required={false}>
+                  <FormSection title="스타일 & 소셜" gap={22}>
+                    <FormField label="나의 스타일" required={false}>
                       <StyleSelector
                         selectedStyles={data.style}
                         setSelectedStyles={(action) => {
@@ -162,12 +162,12 @@ export default function Step2Screen() {
                             setUpdate("style", action);
                           }
                         }}
-                        size='32%'
+                        size="32%"
                       />
                     </FormField>
 
                     <FormField
-                      label='인스타그램 아이디'
+                      label="인스타그램 아이디"
                       required={false}
                       errorMessage={errors.instagramId}
                     >
@@ -177,19 +177,19 @@ export default function Step2Screen() {
                           setUpdate("instagramId", id);
                           clearError("instagramId");
                         }}
-                        placeholder='@ username'
+                        placeholder="@ username"
                         error={!!errors.instagramId}
                       />
                     </FormField>
                   </FormSection>
 
                   <Button
-                    variant='primary'
+                    variant="primary"
                     width={370}
                     height={50}
-                    textColor='white'
-                    content='작성 완료'
-                    onPress={handleSubmit}
+                    textColor="white"
+                    content="작성 완료"
+                    onPress={handleCreate}
                   />
                 </Flex>
               </View>
