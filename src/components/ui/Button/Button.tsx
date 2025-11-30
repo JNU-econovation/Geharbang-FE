@@ -1,19 +1,26 @@
 import { ReactNode } from "react";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  PressableProps,
+  Text,
+  View,
+} from "react-native";
 import { twMerge } from "tailwind-merge";
 
 import TextSize from "@/src/components/ui/TextSize";
 import { button } from "./button.variants";
 
-interface ButtonProps {
+interface ButtonProps extends PressableProps {
   variant: "primary" | "kakao" | "google" | "white" | "gray";
-  width: number;
+  width?: number;
   height: number;
   content: string;
   textColor: string;
   icon?: ReactNode;
   onPress?: () => void;
   isPending?: boolean;
+  className?: string;
 }
 
 export default function Button({
@@ -25,10 +32,11 @@ export default function Button({
   icon,
   onPress,
   isPending,
+  className,
 }: ButtonProps) {
   return (
     <Pressable
-      className={twMerge(button({ variant }))}
+      className={twMerge(button({ variant }), className)}
       style={{
         width,
         height,

@@ -1,4 +1,4 @@
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout//Flex/Flex";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable } from "react-native";
@@ -8,8 +8,8 @@ import { COLORS } from "@/src/utils/constants/colors";
 
 interface RegionTabProps {
   label: string;
-  selected: boolean; 
-  onPress: () => void; 
+  selected: boolean;
+  onPress: () => void;
 }
 
 export default function RegionTab({
@@ -24,7 +24,7 @@ export default function RegionTab({
         selected ? "bg-primary-blue" : "border border-gray-border"
       }`}
     >
-      <Flex justify="between" items="center" flexDir="row" gap={4}>
+      <Flex justify="between" items="center" dir="row" gap={4}>
         <Ionicons
           name="location-outline"
           size={16}

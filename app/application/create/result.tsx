@@ -3,9 +3,9 @@ import { View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import TextSize from "@/src/components/ui/TextSize";
-import ResultLayout from "../_components/ResultLayout";
+import ResultLayout from "../../../src/components/layout/ResultLayout";
 
-export default function ResultScreen() {
+export default function CreateResultScreen() {
   const { status } = useLocalSearchParams();
   const goHome = () => router.replace("/(tabs)");
 

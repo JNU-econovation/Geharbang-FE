@@ -4,21 +4,21 @@ import { ScrollView, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
 import ImagePicker from "@/src/components/ui/ImagePicker";
 import TextSize from "@/src/components/ui/TextSize";
-import { useApplicationFormValidation } from "@/src/hooks/Application/useApplicationFormValidation";
+import { useApplicationFormValidation } from "@/src/hooks/application/create/useApplicationFormValidation";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import { GENDER_BASIC } from "@/src/utils/constants/options";
+import TextInput from "../../../src/components/ui/TextInput";
 import DateInput from "../_components/DateInput";
 import FormField from "../_components/FormField";
 import FormSection from "../_components/FormSection";
 import GenderSelector from "../_components/GenderSelector";
 import ProgressBar from "../_components/ProgressBar";
-import TextInput from "../_components/TextInput";
 
 export default function applicationCreate() {
   const {
@@ -52,7 +52,7 @@ export default function applicationCreate() {
     <DismissKeyboardView>
       <CustomSafeAreaView pageColor="bg-white">
         <View className="p-3">
-          <Flex justify="start" items="center" flexDir="row" gap={124}>
+          <Flex justify="start" items="center" dir="row" gap={124}>
             <BackArrow color="black" size={24} />
             <TextSize size={18} content="지원서 작성" />
           </Flex>

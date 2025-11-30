@@ -3,4 +3,5 @@ export interface GuestHouseCard {
   name: string;
   imageUrl: string;
   tags: string[];
+  region?: string;
 }

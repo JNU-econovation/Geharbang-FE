@@ -1,6 +1,6 @@
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout//Flex/Flex";
 import Tag from "@/src/components/ui/Tag";
 import TextSize from "@/src/components/ui/TextSize";
 import { useCardPress } from "@/src/hooks/Home/useCardPress";
@@ -51,13 +51,7 @@ export function ItemCard({
             weight="semibold"
           />
 
-          <Flex
-            justify="start"
-            items="center"
-            flexDir="row"
-            gap={3}
-            flexWrap="wrap"
-          >
+          <Flex justify="start" items="center" dir="row" gap={3} wrap="wrap">
             {tags.map((tag) => (
               <Tag key={tag} size={12} content={"# " + tag} />
             ))}

@@ -1,7 +1,7 @@
 import { View } from "react-native";
 
-import Icon from "@/public/svgs/mainIcon.svg";
-import Flex from "@/src/components/layout/Flex";
+import Icon from "@/public/svgs/Login/icon.svg";
+import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import TextSize from "@/src/components/ui/TextSize";
 

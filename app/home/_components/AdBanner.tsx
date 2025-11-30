@@ -3,7 +3,7 @@ import React from "react";
 import { View } from "react-native";
 
 import MainIcon from "@/public/svgs/mainIcon.svg";
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout//Flex/Flex";
 import TextSize from "@/src/components/ui/TextSize";
 
 export default function AdBanner() {
@@ -22,7 +22,7 @@ export default function AdBanner() {
         width: "90%",
       }}
     >
-      <Flex justify="center" items="center" flexDir="row" gap={90}>
+      <Flex justify="center" items="center" dir="row" gap={90}>
         <View className="gap-1">
           <TextSize size={15} color="#0069A8" content="🌊 제주 성수기 특가" />
           <TextSize

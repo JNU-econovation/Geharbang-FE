@@ -3,7 +3,7 @@ import { Text, TextStyle } from "react-native";
 interface TextSizeProps {
   size: number;
   color?: string;
-  content: string;
+  content?: string;
   weight?: TextStyle["fontWeight"];
 }
 

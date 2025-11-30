@@ -3,22 +3,22 @@ import { router } from "expo-router";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
-import { useApplicationFormValidation } from "@/src/hooks/Application/useApplicationFormValidation";
-import { useHandleSubmit } from "@/src/hooks/Application/useHandleSubmit";
-import { usePreventHardwareBack } from "@/src/hooks/usePreventHardwareBack";
+import { useApplicationFormValidation } from "@/src/hooks/application/create/useApplicationFormValidation";
+import { useHandleCreate } from "@/src/hooks/application/create/useHandleCreate";
+import { usePreventHardwareBack } from "@/src/hooks/common/usePreventHardwareBack";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
+import TextInput from "../../../src/components/ui/TextInput";
 import DateInput from "../_components/DateInput";
 import DaySelector from "../_components/DaySelector";
 import FormField from "../_components/FormField";
 import FormSection from "../_components/FormSection";
 import ProgressBar from "../_components/ProgressBar";
 import StyleSelector from "../_components/StyleSelector";
-import TextInput from "../_components/TextInput";
 
 export default function Step2Screen() {
   const { data, setUpdate, currentStep, goToPrevStep, imageFile } =
@@ -32,13 +32,13 @@ export default function Step2Screen() {
 
   usePreventHardwareBack(); // 안드로이드 하드웨어 뒤로가기 방지
 
-  const handleSubmit = useHandleSubmit();
+  const handleCreate = useHandleCreate();
 
   return (
     <DismissKeyboardView>
       <CustomSafeAreaView pageColor="bg-white">
         <View className="p-3">
-          <Flex justify="start" items="center" flexDir="row" gap={124}>
+          <Flex justify="start" items="center" dir="row" gap={124}>
             <BackArrow
               color="black"
               size={24}
@@ -181,7 +181,7 @@ export default function Step2Screen() {
                   height={50}
                   textColor="white"
                   content="작성 완료"
-                  onPress={handleSubmit}
+                  onPress={handleCreate}
                 />
               </Flex>
             </View>

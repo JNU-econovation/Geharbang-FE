@@ -1,6 +1,17 @@
-import React from "react";
-import { Text } from "react-native";
+import React from 'react';
+
+import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
+import PostingListScreen from './_components/PostingListScreen';
 
 export default function Step() {
-  return <Text className="mt-40">스텝 목록 페이지</Text>;
+  return (
+    <>
+      <CustomSafeAreaView
+        pageColor="bg-white"
+        statusBarBackgroundColor="bg-white"
+      >
+        <PostingListScreen />
+      </CustomSafeAreaView>
+    </>
+  );
 }

@@ -1,10 +1,12 @@
-import { useImagePicker } from "@/src/hooks/useImagePicker";
-import { File } from "@/src/types/File";
-import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Image, Pressable, View} from "react-native";
-import Flex from "../layout/Flex";
+import { Image, Pressable, View } from "react-native";
+
+import { useImagePicker } from "@/src/hooks/common/useImagePicker";
+import { File } from "@/src/types/File";
+import { COLORS } from "@/src/utils/constants/colors";
+
+import Flex from "../layout/Flex/Flex";
 import TextSize from "./TextSize";
 
 interface ImagePickerProps {
@@ -21,10 +23,10 @@ export default function ImagePicker({
   const { pickImage } = useImagePicker(setSelectedImageFile);
 
   return (
-    <Flex items="center" justify="center" gap={10}>
+    <Flex items='center' justify='center' gap={10}>
       <Pressable
         onPress={pickImage}
-        className="border overflow-hidden rounded-full"
+        className='border overflow-hidden rounded-full'
         style={[
           {
             width: 100,
@@ -37,7 +39,7 @@ export default function ImagePicker({
             : { borderColor: "#afb1b4ff", borderStyle: "dashed" },
         ]}
       >
-        <View className="flex-1 justify-center items-center">
+        <View className='flex-1 justify-center items-center'>
           {selectedImageFile.uri ? (
             <Image
               source={{ uri: selectedImageFile.uri }}
@@ -45,7 +47,7 @@ export default function ImagePicker({
             />
           ) : (
             <Ionicons
-              name="camera-outline"
+              name='camera-outline'
               size={20}
               color={"#9CA3AF"}
             ></Ionicons>
@@ -54,7 +56,7 @@ export default function ImagePicker({
       </Pressable>
 
       <Pressable onPress={pickImage}>
-        <TextSize size={14} color={COLORS.GRAY.TEXT} content="사진 선택"/>
+        <TextSize size={14} color={COLORS.GRAY.TEXT} content='사진 선택' />
       </Pressable>
     </Flex>
   );

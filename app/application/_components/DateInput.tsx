@@ -1,9 +1,9 @@
 import { Pressable, View } from "react-native";
 
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import DatePicker from "@/src/components/ui/DatePicker";
 import TextSize from "@/src/components/ui/TextSize";
-import { useDatePicker } from "@/src/hooks/useDatePicker";
+import { useDatePicker } from "@/src/hooks/common/useDatePicker";
 import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -16,7 +16,7 @@ interface DateInputFieldProps {
   maxDate?: string;
 }
 
-export default function DateInputField({
+export default function DateInput({
   setSelectedDate,
   selectedDate,
   error,
@@ -28,21 +28,21 @@ export default function DateInputField({
     useDatePicker(setSelectedDate);
 
   return (
-    <View className="relative" style={{ width }}>
+    <View className='relative' style={{ width }}>
       <Pressable
         onPress={() => setToggleCalendar((prev) => !prev)}
         className={`border rounded-lg p-3 ${
           error ? "border-primary-red" : "border-gray-border"
         }`}
       >
-        <Flex items="center" justify="between" flexDir="row">
+        <Flex items='center' justify='between' dir='row'>
           <TextSize
             size={16}
             color={selectedDate ? "black" : COLORS.GRAY.PLACEHOLDER}
             content={selectedDate ? selectedDate : "yyyy-mm-dd"}
           />
           <Ionicons
-            name="calendar-clear-outline"
+            name='calendar-clear-outline'
             color={COLORS.GRAY.PLACEHOLDER}
             size={22}
           />
