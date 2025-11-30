@@ -3,8 +3,8 @@ import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Flex from "@/src/components/layout//Flex/Flex";
 import Tag from "@/src/components/ui/Tag/Tag";
 import TextSize from "@/src/components/ui/TextSize";
-import { useCardPress } from "@/src/hooks/Home/useCardPress";
-import { GuestHouseCard } from "@/src/types/models/GuestHouseCard";
+import { useCardPress } from "@/src/hooks/home/useCardPress";
+import { GuestHouseCard } from "@/src/types/models/home/GuestHouseCard";
 import { COLORS } from "@/src/utils/constants/colors";
 
 interface GuesthouseCardProps extends GuestHouseCard {

@@ -1,11 +1,11 @@
-import FilterBar from '@/app/step/_components/FilterBar';
-import BackArrorHeader from '@/src/components/ui/BackArrowHeader';
+import FilterBar from "@/app/step/_components/FilterBar";
+import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 
-import SearchInput from '@/src/components/ui/SearchInput';
-import { FilterOption } from '@/src/types/step/types';
-import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
-import { Image, Text, View } from 'react-native';
+import SearchInput from "@/src/components/ui/SearchInput";
+import { FilterOption } from "@/src/types/models/step/types";
+import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
+import { Image, Text, View } from "react-native";
 
 interface PostingListHeaderProps {
   searchText: string;
@@ -32,7 +32,7 @@ export default function PostingListHeader({
         </View>
 
         <LinearGradient
-          colors={['#EFF6FF', '#E0F2FE']}
+          colors={["#EFF6FF", "#E0F2FE"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={{
@@ -41,7 +41,7 @@ export default function PostingListHeader({
             paddingBottom: 16,
             borderRadius: 12,
             borderWidth: 1,
-            borderColor: '#BAE6FD',
+            borderColor: "#BAE6FD",
             marginBottom: 16,
           }}
         >
@@ -49,7 +49,7 @@ export default function PostingListHeader({
             <View className="flex-1 gap-1">
               <Text
                 className="text-sky-700 text-[13px] font-normal"
-                style={{ fontFamily: 'Noto Sans KR' }}
+                style={{ fontFamily: "Noto Sans KR" }}
               >
                 🌊 제주 성수기 특가
               </Text>
@@ -60,7 +60,7 @@ export default function PostingListHeader({
             <View className="w-10 h-10 bg-sky-200 rounded items-center justify-center overflow-hidden">
               <Image
                 source={{
-                  uri: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2%2F3ff66237-4c53-418e-9721-014e2e32bf75.png',
+                  uri: "https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2%2F3ff66237-4c53-418e-9721-014e2e32bf75.png",
                 }}
                 className="w-16 h-16"
                 resizeMode="cover"

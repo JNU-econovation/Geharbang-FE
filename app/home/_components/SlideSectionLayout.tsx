@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { ActivityIndicator, View } from "react-native";
 
 import TextSize from "@/src/components/ui/TextSize";
-import { GuestHouseCard } from "@/src/types/models/GuestHouseCard";
+import { GuestHouseCard } from "@/src/types/models/home/GuestHouseCard";
 import { COLORS } from "@/src/utils/constants/colors";
 import { regions } from "@/src/utils/constants/regions";
 import HorizontalSlider from "./HorizontalSlider";
@@ -57,14 +57,21 @@ export function SlideSectionLayout({
         <View className="pt-2 h-64">
           <ActivityIndicator size={80} color={COLORS.PRIMARY.BLUE} />
         </View>
-        
       ) : error ? (
         <View className="py-2">
-          <TextSize size={14} color={COLORS.GRAY.TEXT} content="잠시 오류가 발생했어요" />
+          <TextSize
+            size={14}
+            color={COLORS.GRAY.TEXT}
+            content="잠시 오류가 발생했어요"
+          />
         </View>
       ) : data.length === 0 ? (
         <View className="py-2">
-          <TextSize size={14} color={COLORS.GRAY.TEXT} content="해당 지역에 올라온 게시물이 없어요" />
+          <TextSize
+            size={14}
+            color={COLORS.GRAY.TEXT}
+            content="해당 지역에 올라온 게시물이 없어요"
+          />
         </View>
       ) : (
         <HorizontalSlider

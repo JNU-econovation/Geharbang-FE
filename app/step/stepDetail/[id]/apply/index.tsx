@@ -8,16 +8,16 @@ import {
   View,
 } from "react-native";
 
-import FormField from "@/app/application/_components/FormField";
+import FormField from "@/src/components/ui/Form/FormField";
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import TextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
-import { useHandleSubmit } from "@/src/hooks/StepApply/useHandleSubmit";
-import { useOwnerQuestions } from "@/src/hooks/StepApply/useOwnerQuestions";
-import { useStepApplyFormValidation } from "@/src/hooks/StepApply/useStepApplyFormValidation";
+import { useHandleSubmit } from "@/src/hooks/stepApply/useHandleSubmit";
+import { useOwnerQuestions } from "@/src/hooks/stepApply/useOwnerQuestions";
+import { useStepApplyFormValidation } from "@/src/hooks/stepApply/useStepApplyFormValidation";
 import { COLORS } from "@/src/utils/constants/colors";
 import SelectedApplication from "./_components/SelectedApplication";
 import TargetPostingInfo from "./_components/TargetPostingInfo";

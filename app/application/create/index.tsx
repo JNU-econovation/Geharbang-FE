@@ -13,12 +13,12 @@ import { useApplicationFormValidation } from "@/src/hooks/application/create/use
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import { GENDER_BASIC } from "@/src/utils/constants/options";
+import FormSection from "../../../src/components/ui/Form/FormSection";
+import ProgressBar from "../../../src/components/ui/Form/ProgressBar";
 import TextInput from "../../../src/components/ui/TextInput";
 import DateInput from "../_components/DateInput";
-import FormField from "../_components/FormField";
-import FormSection from "../_components/FormSection";
+import FormField from "@/src/components/ui/Form/FormField";
 import GenderSelector from "../_components/GenderSelector";
-import ProgressBar from "../_components/ProgressBar";
 
 export default function applicationCreate() {
   const {

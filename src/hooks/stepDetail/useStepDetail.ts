@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getStepDetail } from "@/src/services/StepDetail/stepDetail";
+import { getStepDetail } from "@/src/services/stepDetail/stepDetail";
 import { StepDetailResponse } from "@/src/types/models/stepDetail/StepDetailResponse";
 import { useLocalSearchParams } from "expo-router";
 

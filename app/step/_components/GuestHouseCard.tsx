@@ -1,9 +1,9 @@
-import Tag from '@/src/components/ui/Tag/Tag';
-import { StaffRecruitmentPost } from '@/src/types/step/types';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import Tag from "@/src/components/ui/Tag/Tag";
+import { StaffRecruitmentPost } from "@/src/types/models/step/types";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import React from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 interface GuestHouseCardProps {
   item: StaffRecruitmentPost;
@@ -63,9 +63,9 @@ export default function GuestHouseCard({ item, onPress }: GuestHouseCardProps) {
 
         <TouchableOpacity className="w-6 h-6 items-center justify-center">
           <Ionicons
-            name={item.isWished ? 'heart' : 'heart-outline'}
+            name={item.isWished ? "heart" : "heart-outline"}
             size={16}
-            color={item.isWished ? '#ef4444' : '#d1d5db'}
+            color={item.isWished ? "#ef4444" : "#d1d5db"}
           />
         </TouchableOpacity>
       </View>

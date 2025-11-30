@@ -1,9 +1,9 @@
 import { Image, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex/Flex";
-import Tag from "@/src/components/ui/Tag";
+import Tag from "@/src/components/ui/Tag/Tag";
 import TextSize from "@/src/components/ui/TextSize";
-import { GuestHouseCard } from "@/src/types/models/GuestHouseCard";
+import { GuestHouseCard } from "@/src/types/models/home/GuestHouseCard";
 import { COLORS } from "@/src/utils/constants/colors";
 
 const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
@@ -24,8 +24,14 @@ export default function TargetPostingInfo({
             <TextSize size={12} color={COLORS.GRAY.TEXT} content={region} />
           )}
           <Flex justify="start" items="center" dir="row" gap={3} wrap="wrap">
-            {tags.map((tag) => (
-              <Tag key={tag} size={12} content={"# " + tag} />
+            {tags.map((tag, index) => (
+              <Tag
+                key={index}
+                label={tag}
+                variant="info"
+                size="sm"
+                prefix="#"
+              />
             ))}
           </Flex>
         </Flex>

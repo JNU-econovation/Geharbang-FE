@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import Step from "@/public/svgs/home/step.svg";
-import { useStepRecruitment } from "@/src/hooks/Home/useStepRecruitment";
+import Step from "@/public/svgs/Home/step.svg";
+import { useStepRecruitment } from "@/src/hooks/home/useStepRecruitment";
 import { SlideSectionLayout } from "./SlideSectionLayout";
 
 export function StepRecruitmentSection() {

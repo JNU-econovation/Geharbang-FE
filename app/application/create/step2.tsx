@@ -12,12 +12,12 @@ import { useHandleCreate } from "@/src/hooks/application/create/useHandleCreate"
 import { usePreventHardwareBack } from "@/src/hooks/common/usePreventHardwareBack";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
+import FormSection from "../../../src/components/ui/Form/FormSection";
+import ProgressBar from "../../../src/components/ui/Form/ProgressBar";
 import TextInput from "../../../src/components/ui/TextInput";
 import DateInput from "../_components/DateInput";
 import DaySelector from "../_components/DaySelector";
-import FormField from "../_components/FormField";
-import FormSection from "../_components/FormSection";
-import ProgressBar from "../_components/ProgressBar";
+import FormField from "@/src/components/ui/Form/FormField";
 import StyleSelector from "../_components/StyleSelector";
 
 export default function Step2Screen() {
