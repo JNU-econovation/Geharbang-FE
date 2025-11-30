@@ -1,31 +1,31 @@
-import { useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   View,
-} from "react-native";
+} from 'react-native';
 
-import FormField from "@/src/components/ui/Form/FormField";
-import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
-import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
-import BackArrowHeader from "@/src/components/ui/BackArrowHeader";
-import Button from "@/src/components/ui/Button/Button";
-import TextInput from "@/src/components/ui/TextInput";
-import TextSize from "@/src/components/ui/TextSize";
-import { useHandleSubmit } from "@/src/hooks/stepApply/useHandleSubmit";
-import { useOwnerQuestions } from "@/src/hooks/stepApply/useOwnerQuestions";
-import { useStepApplyFormValidation } from "@/src/hooks/stepApply/useStepApplyFormValidation";
-import { COLORS } from "@/src/utils/constants/colors";
-import SelectedApplication from "./_components/SelectedApplication";
-import TargetPostingInfo from "./_components/TargetPostingInfo";
+import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
+import DismissKeyboardView from '@/src/components/layout/DismissKeyboardView';
+import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
+import Button from '@/src/components/ui/Button/Button';
+import FormField from '@/src/components/ui/Form/FormField';
+import TextInput from '@/src/components/ui/TextInput';
+import TextSize from '@/src/components/ui/TextSize';
+import { useHandleSubmit } from '@/src/hooks/stepApply/useHandleSubmit';
+import { useOwnerQuestions } from '@/src/hooks/stepApply/useOwnerQuestions';
+import { useStepApplyFormValidation } from '@/src/hooks/stepApply/useStepApplyFormValidation';
+import { COLORS } from '@/src/utils/constants/colors';
+import SelectedApplication from './_components/SelectedApplication';
+import TargetPostingInfo from './_components/TargetPostingInfo';
 
 export default function staffApply() {
   const params = useLocalSearchParams();
   const { id } = params;
-  const recruitmentId = typeof id === "string" ? parseInt(id, 10) : null;
+  const recruitmentId = typeof id === 'string' ? parseInt(id, 10) : null;
 
   if (recruitmentId === null) {
     return (
@@ -89,7 +89,7 @@ export default function staffApply() {
         ) : (
           <KeyboardAvoidingView
             style={{ flex: 1 }}
-            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             keyboardVerticalOffset={0}
           >
             <ScrollView>
@@ -111,7 +111,7 @@ export default function staffApply() {
                         errorMessage={errors[question.questionId]}
                       >
                         <TextInput
-                          value={answers[question.questionId] || ""}
+                          value={answers[question.questionId] || ''}
                           onChangeText={(text) =>
                             handleAnswerChange(question.questionId, text)
                           }
