@@ -11,7 +11,7 @@ import {
 import FormField from "@/src/components/ui/Form/FormField";
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
-import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
+import BackArrowHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import TextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
@@ -63,7 +63,7 @@ export default function staffApply() {
     <DismissKeyboardView>
       <CustomSafeAreaView pageColor="bg-white">
         <View className="p-3">
-          <BackArrorHeader content="지원하기" />
+          <BackArrowHeader content="지원하기" />
         </View>
         {isLoading ? (
           <View className="pt-2 h-64">
