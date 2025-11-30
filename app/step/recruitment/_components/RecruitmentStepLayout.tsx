@@ -24,7 +24,7 @@ export default function RecruitmentStepLayout({
       <DismissKeyboardView>
         <SafeAreaView className="flex-1 bg-white">
           <View className="p-3">
-            <Flex justify="start" items="center" dir="row" gap={80}>
+            <Flex justify="start" items="center" dir="row" gap={100}>
               <BackArrow color="black" size={24} />
               <TextSize size={18} content="스텝 공고 올리기" />
             </Flex>
