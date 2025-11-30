@@ -1,11 +1,11 @@
-import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
-import React from "react";
-import { ScrollView, View } from "react-native";
+import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
+import React from 'react';
+import { ScrollView, View } from 'react-native';
 
-import AdBanner from "../home/_components/AdBanner";
-import { GuesthouseSection } from "../home/_components/GuesthouseSection";
-import HomeHeader from "../home/_components/HomeHeader";
-import { StepRecruitmentSection } from "../home/_components/StepRecruitmentSection";
+import AdBanner from '../home/_components/AdBanner';
+import { GuesthouseSection } from '../home/_components/GuesthouseSection';
+import HomeHeader from '../home/_components/HomeHeader';
+import { StepRecruitmentSection } from '../home/_components/StepRecruitmentSection';
 
 export default function HomeScreen() {
   return (
