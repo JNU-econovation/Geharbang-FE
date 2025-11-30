@@ -1,6 +1,6 @@
 import { Animated, View } from "react-native";
 
-import Flex from "@/src/components/layout/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import TextSize from "@/src/components/ui/TextSize";
 import { useProgressAnimation } from "@/src/hooks/application/create/useProgressAnimation";
 import { COLORS } from "@/src/utils/constants/colors";
@@ -23,8 +23,8 @@ export default function ProgressBar({
   const { loadWidth } = useProgressAnimation(progressPercent);
 
   return (
-    <View className="p-3">
-      <Flex flexDir="row" items="center" justify="between">
+    <View className='p-3'>
+      <Flex items='center' justify='between' dir='row'>
         <TextSize size={14} color={COLORS.GRAY.TEXT} content={titleText} />
         <TextSize
           size={14}
@@ -33,9 +33,9 @@ export default function ProgressBar({
         />
       </Flex>
 
-      <View className="h-2" />
+      <View className='h-2' />
 
-      <View className="h-2 bg-gray-border rounded-full">
+      <View className='h-2 bg-gray-border rounded-full'>
         <Animated.View
           style={{
             height: 8,
