@@ -19,18 +19,20 @@ export default function QuestionItem({
 }: QuestionItemProps) {
   return (
     <View className="flex-row items-start gap-3">
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={`질문 ${index + 1}을(를) 입력해주세요`}
-        multiline={true}
-        height={86}
-      />
+      <View className="flex-1">
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          placeholder={`질문 ${index + 1}을(를) 입력해주세요`}
+          multiline={true}
+          height={86}
+        />
+      </View>
       <TouchableOpacity
         onPress={onDelete}
         className="w-8 h-8 items-center justify-center mt-2 active:opacity-50"
       >
-        <Feather name="trash-2" size={20} color={COLORS.GRAY.PLACEHOLDER} style={{ opacity: 0.5 }} />
+        <Feather name="x" size={24} color={COLORS.GRAY.PLACEHOLDER} />
       </TouchableOpacity>
     </View>
   );
