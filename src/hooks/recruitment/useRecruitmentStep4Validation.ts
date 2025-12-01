@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { validateEmail, validatePhoneNumber } from '@/src/utils/common/validation';
 
 interface FormErrors {
   instagram: string;
@@ -15,15 +16,6 @@ interface UseRecruitmentStep4ValidationProps {
   website: string;
   ownerMessage: string;
 }
-
-const validatePhoneNumber = (phone: string): boolean => {
-  // 형식: XXX-XXX-XXXX 또는 XXX-XXXX-XXXX
-  return /^\d{3}-\d{3,4}-\d{4}$/.test(phone);
-};
-
-const validateEmail = (email: string): boolean => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-};
 
 export function useRecruitmentStep4Validation({
   instagram,
