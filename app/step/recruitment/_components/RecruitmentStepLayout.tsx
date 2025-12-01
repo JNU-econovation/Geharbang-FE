@@ -1,11 +1,10 @@
-import DismissKeyboardView from '@/src/components/layout/DismissKeyboardView';
+import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import Flex from '@/src/components/layout/Flex';
 import BackArrow from '@/src/components/ui/BackArrow';
 import ProgressBar from '@/src/components/ui/Form/ProgressBar';
 import TextSize from '@/src/components/ui/TextSize';
 import React, { ReactNode } from 'react';
-import { StatusBar, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 
 interface RecruitmentStepLayoutProps {
   currentStep: number;
@@ -20,25 +19,22 @@ export default function RecruitmentStepLayout({
 }: RecruitmentStepLayoutProps) {
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <DismissKeyboardView>
-        <SafeAreaView className="flex-1 bg-white">
-          <View className="p-3">
-            <Flex justify="start" items="center" dir="row" gap={100}>
-              <BackArrow color="black" size={24} />
-              <TextSize size={18} content="스텝 공고 올리기" />
-            </Flex>
-          </View>
+      <CustomSafeAreaView pageColor="bg-white">
+        <View className="p-3">
+          <Flex justify="start" items="center" dir="row" gap={100}>
+            <BackArrow color="black" size={24} />
+            <TextSize size={18} content="스텝 공고 올리기" />
+          </Flex>
+        </View>
 
-          <ProgressBar
-            stepTitle={stepTitle}
-            currentStep={currentStep}
-            totalSteps={5}
-          />
+        <ProgressBar
+          stepTitle={stepTitle}
+          currentStep={currentStep}
+          totalSteps={5}
+        />
 
-          <View className="flex-1 bg-[#F9FAFB]">{children}</View>
-        </SafeAreaView>
-      </DismissKeyboardView>
+        <View className="flex-1 bg-[#F9FAFB]">{children}</View>
+      </CustomSafeAreaView>
     </>
   );
 }
