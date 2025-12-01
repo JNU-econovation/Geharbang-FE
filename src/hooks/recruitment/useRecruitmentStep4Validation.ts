@@ -5,7 +5,7 @@ interface FormErrors {
   phone: string;
   email: string;
   website: string;
-  message: string;
+  ownerMessage: string;
 }
 
 interface UseRecruitmentStep4ValidationProps {
@@ -13,7 +13,7 @@ interface UseRecruitmentStep4ValidationProps {
   phone: string;
   email: string;
   website: string;
-  message: string;
+  ownerMessage: string;
 }
 
 const validatePhoneNumber = (phone: string): boolean => {
@@ -30,14 +30,14 @@ export function useRecruitmentStep4Validation({
   phone,
   email,
   website,
-  message,
+  ownerMessage,
 }: UseRecruitmentStep4ValidationProps) {
   const [errors, setErrors] = useState<FormErrors>({
     instagram: '',
     phone: '',
     email: '',
     website: '',
-    message: '',
+    ownerMessage: '',
   });
 
   const clearError = (field: keyof FormErrors) => {
@@ -51,7 +51,7 @@ export function useRecruitmentStep4Validation({
       phone: '',
       email: '',
       website: '',
-      message: '',
+      ownerMessage: '',
     };
 
     // 인스타그램 검증 (선택 필드)
@@ -86,8 +86,8 @@ export function useRecruitmentStep4Validation({
     }
 
     // 사장님 한마디 검증 (선택 필드)
-    if (message && message.length > 100) {
-      newErrors.message = '메시지는 100자 이내로 입력해주세요';
+    if (ownerMessage && ownerMessage.length > 100) {
+      newErrors.ownerMessage = '메시지는 100자 이내로 입력해주세요';
       isValid = false;
     }
 

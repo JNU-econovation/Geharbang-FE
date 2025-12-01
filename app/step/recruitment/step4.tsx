@@ -15,14 +15,14 @@ export default function RecruitmentStep4() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [website, setWebsite] = useState('');
-  const [message, setMessage] = useState('');
+  const [ownerMessage, setOwnerMessage] = useState('');
 
   const { errors, clearError, validateForm } = useRecruitmentStep4Validation({
     instagram,
     phone,
     email,
     website,
-    message,
+    ownerMessage,
   });
 
   const handleNext = () => {
@@ -119,18 +119,18 @@ export default function RecruitmentStep4() {
                 <FormField
                   label="사장님 한마디"
                   required={false}
-                  errorMessage={errors.message}
+                  errorMessage={errors.ownerMessage}
                 >
                   <TextInput
-                    value={message}
+                    value={ownerMessage}
                     onChangeText={(text) => {
-                      setMessage(text);
-                      clearError('message');
+                      setOwnerMessage(text);
+                      clearError('ownerMessage');
                     }}
                     placeholder="스텝들에게 전하고 싶은 메시지를 입력해주세요"
                     multiline={true}
                     height={120}
-                    error={!!errors.message}
+                    error={!!errors.ownerMessage}
                     maxLength={100}
                   />
                 </FormField>
