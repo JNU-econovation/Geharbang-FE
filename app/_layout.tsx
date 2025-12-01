@@ -55,6 +55,10 @@ function RootLayoutNav() {
               name="application/create"
               options={{ gestureEnabled: false }}
             />
+            <Stack.Screen
+              name="step/recruitment"
+              options={{ gestureEnabled: false }}
+            />
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
           </Stack>
         </ThemeProvider>
