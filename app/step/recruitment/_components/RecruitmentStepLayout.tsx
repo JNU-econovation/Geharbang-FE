@@ -1,8 +1,6 @@
 import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
-import Flex from '@/src/components/layout/Flex';
-import BackArrow from '@/src/components/ui/BackArrow';
+import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
 import ProgressBar from '@/src/components/ui/Form/ProgressBar';
-import TextSize from '@/src/components/ui/TextSize';
 import React, { ReactNode } from 'react';
 import { View } from 'react-native';
 
@@ -21,10 +19,7 @@ export default function RecruitmentStepLayout({
     <>
       <CustomSafeAreaView pageColor="bg-white">
         <View className="p-3">
-          <Flex justify="start" items="center" dir="row" gap={100}>
-            <BackArrow color="black" size={24} />
-            <TextSize size={18} content="스텝 공고 올리기" />
-          </Flex>
+          <BackArrowHeader content="스텝 공고 올리기" />
         </View>
 
         <ProgressBar
