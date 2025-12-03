@@ -24,8 +24,6 @@ export default function applicationCreate() {
   const {
     data,
     setUpdate,
-    currentStep,
-    goToNextStep,
     resetData,
     imageFile,
     setImageFile,
@@ -44,7 +42,6 @@ export default function applicationCreate() {
   const handleNext = () => {
     if (validateForm()) {
       router.push("/application/create/step2");
-      goToNextStep();
     }
   };
 
@@ -60,7 +57,7 @@ export default function applicationCreate() {
 
         <ProgressBar
           stepTitle='기본정보'
-          currentStep={currentStep}
+          currentStep={1}
           totalSteps={2}
         />
 
