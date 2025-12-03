@@ -1,5 +1,5 @@
 import { File } from "@/src/types/File";
-import { ApplicationData } from "@/src/types/models/ApplicationData";
+import { ApplicationData } from "@/src/types/models/application/ApplicationData";
 import { create } from "zustand";
 
 const initialData: ApplicationData = {

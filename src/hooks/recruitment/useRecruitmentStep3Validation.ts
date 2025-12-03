@@ -1,5 +1,4 @@
-import { File } from "@/src/types/File";
-import { Feature } from "@/src/types/models/stepRecruitment/Feature";
+import { Step3Data } from "@/src/types/models/stepRecruitment/Step3Data";
 import { validateRepeatableItems } from "@/src/utils/common/validation";
 import { useState } from "react";
 
@@ -12,23 +11,7 @@ interface FormErrors {
   employeeBenefits: string;
 }
 
-interface UseRecruitmentStep3ValidationProps {
-  title: string;
-  mainImageFiles: File[];
-  introduction: string;
-  introImageFiles: File[];
-  advantages: Feature[];
-  employeeBenefits: Feature[];
-}
-
-export function useRecruitmentStep3Validation({
-  title,
-  mainImageFiles,
-  introduction,
-  introImageFiles,
-  advantages,
-  employeeBenefits,
-}: UseRecruitmentStep3ValidationProps) {
+export function useRecruitmentStep3Validation(step3Data: Step3Data) {
   const [errors, setErrors] = useState<FormErrors>({
     title: "",
     mainImageFiles: "",
@@ -52,6 +35,15 @@ export function useRecruitmentStep3Validation({
       advantages: "",
       employeeBenefits: "",
     };
+
+    const {
+      title,
+      mainImageFiles,
+      introduction,
+      introImageFiles,
+      advantages,
+      employeeBenefits,
+    } = step3Data;
 
     // 공고글 제목 검증
     if (!title || title.trim() === "") {

@@ -11,7 +11,7 @@ import FormField from "@/src/components/ui/Form/FormField";
 import SingleImagePicker from "@/src/components/ui/imagePicker/SingleImagePicker";
 import TextSize from "@/src/components/ui/TextSize";
 import { useApplicationFormValidation } from "@/src/hooks/application/create/useApplicationFormValidation";
-import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
+import { useApplicationSlice } from "@/src/stores/application/useApplicationSlice";
 import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import { GENDER_BASIC } from "@/src/utils/constants/options";
 import FormSection from "../../../src/components/ui/Form/FormSection";

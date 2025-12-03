@@ -1,6 +1,6 @@
 import RecruitmentStepLayout from "@/app/step/recruitment/_components/RecruitmentStepLayout";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex";
@@ -10,26 +10,14 @@ import FormSection from "@/src/components/ui/Form/FormSection";
 import MultiImagePicker from "@/src/components/ui/imagePicker/MultiImagePicker";
 import TextInput from "@/src/components/ui/TextInput";
 import { useRecruitmentStep3Validation } from "@/src/hooks/recruitment/useRecruitmentStep3Validation";
-import { File } from "@/src/types/File";
-import { Feature } from "@/src/types/models/stepRecruitment/Feature";
+import { useStep3Slice } from "@/src/stores/stepRecruitment/useStep3Slice";
 import AppendableInputGroup from "../../../src/components/ui/Form/AppendableInputGroup";
 
 export default function RecruitmentStep3() {
-  const [title, setTitle] = useState("");
-  const [introduction, setIntroduction] = useState("");
-  const [mainImageFiles, setMainImageFiles] = useState<File[]>([]);
-  const [introImageFiles, setIntroImageFiles] = useState<File[]>([]);
-  const [advantages, setAdvantages] = useState<Feature[]>([]);
-  const [employeeBenefits, setEmployeeBenefits] = useState<Feature[]>([]);
+  const { step3Data, setStep3Update } = useStep3Slice();
 
-  const { errors, clearError, validateForm } = useRecruitmentStep3Validation({
-    title,
-    mainImageFiles,
-    introduction,
-    introImageFiles,
-    advantages,
-    employeeBenefits,
-  });
+  const { errors, clearError, validateForm } =
+    useRecruitmentStep3Validation(step3Data);
 
   const handleNext = () => {
     if (validateForm()) {
@@ -60,9 +48,9 @@ export default function RecruitmentStep3() {
                   errorMessage={errors.title}
                 >
                   <TextInput
-                    value={title}
+                    value={step3Data.title}
                     onChangeText={(text) => {
-                      setTitle(text);
+                      setStep3Update("title", text);
                       clearError("title");
                     }}
                     placeholder='예: 제주 점박이 게스트하우스 스텝 모집'
@@ -78,8 +66,10 @@ export default function RecruitmentStep3() {
                   errorMessage={errors.mainImageFiles}
                 >
                   <MultiImagePicker
-                    selectedImageFiles={mainImageFiles}
-                    setSelectedImageFiles={setMainImageFiles}
+                    selectedImageFiles={step3Data.mainImageFiles}
+                    setSelectedImageFiles={(files) =>
+                      setStep3Update("mainImageFiles", files)
+                    }
                     maxCount={10}
                     error={!!errors.mainImageFiles}
                     clearError={() => {
@@ -94,9 +84,9 @@ export default function RecruitmentStep3() {
                   errorMessage={errors.introduction}
                 >
                   <TextInput
-                    value={introduction}
+                    value={step3Data.introduction}
                     onChangeText={(text) => {
-                      setIntroduction(text);
+                      setStep3Update("introduction", text);
                       clearError("introduction");
                     }}
                     placeholder='우리 게스트하우스를 소개해주세요'
@@ -113,8 +103,10 @@ export default function RecruitmentStep3() {
                   errorMessage={errors.introImageFiles}
                 >
                   <MultiImagePicker
-                    selectedImageFiles={introImageFiles}
-                    setSelectedImageFiles={setIntroImageFiles}
+                    selectedImageFiles={step3Data.introImageFiles}
+                    setSelectedImageFiles={(files) =>
+                      setStep3Update("introImageFiles", files)
+                    }
                     maxCount={10}
                     error={!!errors.introImageFiles}
                     clearError={() => {
@@ -132,8 +124,10 @@ export default function RecruitmentStep3() {
                   errorMessage={errors.advantages}
                 >
                   <AppendableInputGroup
-                    features={advantages}
-                    setFeatures={setAdvantages}
+                    features={step3Data.advantages}
+                    setFeatures={(features) =>
+                      setStep3Update("advantages", features)
+                    }
                     maxLimit={5}
                     buttonLabel='우대사항 추가'
                     placeholder='예: 운전 가능자'
@@ -149,8 +143,10 @@ export default function RecruitmentStep3() {
                   errorMessage={errors.employeeBenefits}
                 >
                   <AppendableInputGroup
-                    features={employeeBenefits}
-                    setFeatures={setEmployeeBenefits}
+                    features={step3Data.employeeBenefits}
+                    setFeatures={(features) =>
+                      setStep3Update("employeeBenefits", features)
+                    }
                     maxLimit={5}
                     buttonLabel='복지 추가'
                     placeholder='예: 숙식 제공'
