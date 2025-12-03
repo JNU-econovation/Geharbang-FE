@@ -11,9 +11,9 @@ interface FieldLabelProps {
 
 export default function FieldLabel({ label, isRequired }: FieldLabelProps) {
   return (
-    <View className='mb-2 ml-1'>
+    <View className='mb-2'>
       <Flex justify='start' items='center' dir='row'>
-        <TextSize size={15} color={COLORS.GRAY.TEXT} content={label} />
+        <TextSize size={16} color={COLORS.GRAY.TEXT} content={label} />
         {isRequired ? (
           <TextSize size={16} color={COLORS.PRIMARY.RED} content=' *' />
         ) : (

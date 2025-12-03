@@ -7,7 +7,8 @@ import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
-import ImagePicker from "@/src/components/ui/ImagePicker";
+import FormField from "@/src/components/ui/Form/FormField";
+import SingleImagePicker from "@/src/components/ui/imagePicker/SingleImagePicker";
 import TextSize from "@/src/components/ui/TextSize";
 import { useApplicationFormValidation } from "@/src/hooks/application/create/useApplicationFormValidation";
 import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
@@ -17,7 +18,6 @@ import FormSection from "../../../src/components/ui/Form/FormSection";
 import ProgressBar from "../../../src/components/ui/Form/ProgressBar";
 import TextInput from "../../../src/components/ui/TextInput";
 import DateInput from "../_components/DateInput";
-import FormField from "@/src/components/ui/Form/FormField";
 import GenderSelector from "../_components/GenderSelector";
 
 export default function applicationCreate() {
@@ -50,27 +50,27 @@ export default function applicationCreate() {
 
   return (
     <DismissKeyboardView>
-      <CustomSafeAreaView pageColor="bg-white">
-        <View className="p-3">
-          <Flex justify="start" items="center" dir="row" gap={124}>
-            <BackArrow color="black" size={24} />
-            <TextSize size={18} content="지원서 작성" />
+      <CustomSafeAreaView pageColor='bg-white'>
+        <View className='p-3'>
+          <Flex justify='start' items='center' dir='row' gap={124}>
+            <BackArrow color='black' size={24} />
+            <TextSize size={18} content='지원서 작성' />
           </Flex>
         </View>
 
         <ProgressBar
-          stepTitle="기본정보"
+          stepTitle='기본정보'
           currentStep={currentStep}
           totalSteps={2}
         />
 
-        <ScrollView className="bg-[#F9FAFB]">
-          <View className="pt-4 px-3 ">
-            <Flex justify="start" items="center" gap={24}>
+        <ScrollView className='bg-[#F9FAFB]'>
+          <View className='pt-4 px-3 '>
+            <Flex justify='start' items='center' gap={24}>
               {/* 대표 사진 */}
-              <FormSection title="대표사진">
-                <FormField label="" errorMessage={errors.image}>
-                  <ImagePicker
+              <FormSection title='대표사진'>
+                <FormField label='' errorMessage={errors.image}>
+                  <SingleImagePicker
                     selectedImageFile={imageFile}
                     setSelectedImageFile={(file) => {
                       setImageFile(file);
@@ -82,9 +82,9 @@ export default function applicationCreate() {
               </FormSection>
 
               {/* 개인정보 */}
-              <FormSection title="개인정보">
+              <FormSection title='개인정보'>
                 <FormField
-                  label="이름"
+                  label='이름'
                   required={true}
                   errorMessage={errors.name}
                 >
@@ -94,13 +94,13 @@ export default function applicationCreate() {
                       setUpdate("name", text);
                       clearError("name");
                     }}
-                    placeholder="이름을 입력하세요"
+                    placeholder='이름을 입력하세요'
                     error={!!errors.name}
                   />
                 </FormField>
 
                 <FormField
-                  label="전화번호"
+                  label='전화번호'
                   required={true}
                   errorMessage={errors.phoneNumber}
                 >
@@ -110,15 +110,15 @@ export default function applicationCreate() {
                       setUpdate("phoneNumber", formatPhoneNumber(phoneNumber));
                       clearError("phoneNumber");
                     }}
-                    placeholder="010-0000-0000"
-                    keyboardType="numeric"
+                    placeholder='010-0000-0000'
+                    keyboardType='numeric'
                     maxLength={13}
                     error={!!errors.phoneNumber}
                   />
                 </FormField>
 
                 <FormField
-                  label="생년월일"
+                  label='생년월일'
                   required={true}
                   errorMessage={errors.birthDate}
                 >
@@ -134,12 +134,12 @@ export default function applicationCreate() {
                 </FormField>
 
                 <FormField
-                  label="성별"
+                  label='성별'
                   required={true}
                   errorMessage={errors.gender}
                 >
                   <GenderSelector
-                    size="45%"
+                    size='45%'
                     option={GENDER_BASIC}
                     selectedGender={data.gender}
                     setSelectedGender={(gender) => {
@@ -152,11 +152,11 @@ export default function applicationCreate() {
               </FormSection>
 
               <Button
-                variant="primary"
+                variant='primary'
                 width={370}
                 height={50}
-                textColor="white"
-                content="다음"
+                textColor='white'
+                content='다음'
                 onPress={handleNext}
               />
             </Flex>
