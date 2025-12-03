@@ -1,7 +1,8 @@
-import { Image, Modal, Pressable, View } from "react-native";
+import { Image, Modal, View } from "react-native";
 import Swiper from "react-native-swiper";
+
 import TextSize from "../TextSize";
-import ModalCloseBtn from "./ModalCloseBtn";
+import ModalBtn from "./ModalBtn";
 
 interface ModalImageProps {
   modalVisible: boolean;
@@ -28,12 +29,12 @@ export default function ModalImage({
         />
       </View>
 
-      <Pressable
-        onPress={() => setModalVisible(false)}
-        className='absolute top-14 right-5 z-10'
-      >
-        <ModalCloseBtn modalVisible={modalVisible} />
-      </Pressable>
+      <View className='z-10'>
+        <ModalBtn
+          modalVisible={modalVisible}
+          onPress={() => setModalVisible(false)}
+        />
+      </View>
 
       <View className='flex-1 bg-[#ffffff]'>
         <Swiper
