@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Modal, View } from "react-native";
 
-import AddressMapDetail from "./AddressMapDetail";
+import AddressMapDetail from "@/src/components/ui/AddressMapDetail";
 
 interface AddressMapProps {
   coordinates?: number[];
