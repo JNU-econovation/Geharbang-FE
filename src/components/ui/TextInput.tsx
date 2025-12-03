@@ -1,9 +1,10 @@
-import { COLORS } from "@/src/utils/constants/colors";
 import { TextInput, TextInputProps, View } from "react-native";
 
+import { COLORS } from "@/src/utils/constants/colors";
+
 interface TextInputFieldProps {
-  value: string;
-  onChangeText: (text: string) => void;
+  value?: string | number;
+  onChangeText?: (text: string) => void;
   placeholder?: string;
   error?: boolean;
   lineHeight?: number;
@@ -13,6 +14,7 @@ interface TextInputFieldProps {
   maxLength?: number;
   multiline?: boolean;
   autoCapitalize?: TextInputProps["autoCapitalize"];
+  className?: string;
 }
 
 export default function CustomTextInput({
@@ -27,11 +29,12 @@ export default function CustomTextInput({
   maxLength,
   multiline,
   autoCapitalize,
+  className,
 }: TextInputFieldProps) {
   return (
-    <View>
+    <View className={className}>
       <TextInput
-        value={value}
+        value={String(value)}
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={COLORS.GRAY.PLACEHOLDER}
