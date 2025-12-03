@@ -1,5 +1,6 @@
 import { View, ViewProps } from "react-native";
 import { twMerge } from "tailwind-merge";
+
 import { viewContext } from "./viewContext.variants";
 
 interface ViewContextProps extends ViewProps {
@@ -12,18 +13,20 @@ interface ViewContextProps extends ViewProps {
     | "owerMes"
     | "modalApply";
   children: React.ReactNode;
+  minHeight: number;
   className?: string;
 }
 
 export default function ViewContext({
   variant,
   children,
+  minHeight,
   className,
 }: ViewContextProps) {
   return (
     <View
       className={twMerge(viewContext({ variant }), className)}
-      style={{ minHeight: 74 }}
+      style={{ minHeight: minHeight }}
     >
       {children}
     </View>

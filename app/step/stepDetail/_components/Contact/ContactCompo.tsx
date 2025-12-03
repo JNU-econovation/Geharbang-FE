@@ -27,7 +27,11 @@ export default function ContactCompo({
   isModal,
 }: ContactCompoProps) {
   return (
-    <ViewContext variant={variant} className='items-center flex-row'>
+    <ViewContext
+      variant={variant}
+      minHeight={74}
+      className='items-center flex-row'
+    >
       <View className='pr-3' />
       <View
         className='h-10 w-10 rounded-full flex items-center justify-center'
