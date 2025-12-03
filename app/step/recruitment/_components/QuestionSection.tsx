@@ -1,12 +1,11 @@
-import React, { useCallback } from 'react';
-import { Text, View } from 'react-native';
+import React, { useCallback } from "react";
+import { View } from "react-native";
 
-import FormSection from '@/src/components/ui/Form/FormSection';
-import { Question } from '@/src/types/models/Question';
-import { COLORS } from '@/src/utils/constants/colors';
-import AddQuestionButton from './AddQuestionButton';
-import EmptyQuestionCard from './EmptyQuestionCard';
-import QuestionItem from './QuestionItem';
+import FormSection from "@/src/components/ui/Form/FormSection";
+import { Question } from "@/src/types/models/stepRecruitment/Question";
+import AddInputButton from "../../../../src/components/ui/Form/AddInputButton";
+import AppendableInput from "../../../../src/components/ui/Form/AppendableInput";
+import EmptyQuestionCard from "./EmptyQuestionCard";
 
 interface QuestionSectionProps {
   questions: Question[];
@@ -27,47 +26,43 @@ export default function QuestionSection({
     (id: string) => (text: string) => {
       onUpdateQuestion(id, text);
     },
-    [onUpdateQuestion],
+    [onUpdateQuestion]
   );
 
   const handleDelete = useCallback(
     (id: string) => () => {
       onDeleteQuestion(id);
     },
-    [onDeleteQuestion],
+    [onDeleteQuestion]
   );
 
   return (
-    <FormSection title="추가 질문" gap={24}>
-      <View>
-        <View className="flex-row items-center gap-1 mb-1">
-          <Text
-            className="text-xs font-normal"
-            style={{ color: COLORS.GRAY.PLACEHOLDER }}
-          >
-            (선택)
-          </Text>
-        </View>
-        <Text className="text-xs" style={{ color: COLORS.GRAY.PLACEHOLDER }}>
-          최대 5개까지 등록할 수 있습니다
-        </Text>
-      </View>
-
+    <FormSection
+      title='추가 질문'
+      gap={24}
+      description='최대 5개까지 등록할 수 있습니다 (선택)'
+    >
       {questions.length === 0 ? (
         <EmptyQuestionCard onPress={onAddQuestion} />
       ) : (
-        <View className="flex-col gap-4">
+        <View className='flex-col gap-4'>
           {questions.map((question, index) => (
-            <QuestionItem
+            <AppendableInput
               key={question.id}
-              index={index}
+              placeholder={`질문 ${index + 1}을(를) 입력해주세요`}
+              height={86}
               value={question.text}
               onChangeText={handleTextChange(question.id)}
               onDelete={handleDelete(question.id)}
             />
           ))}
 
-          {canAddMore && <AddQuestionButton onPress={onAddQuestion} />}
+          {canAddMore && (
+            <AddInputButton
+              buttonLabel='질문 추가하기'
+              onPress={onAddQuestion}
+            />
+          )}
         </View>
       )}
     </FormSection>
