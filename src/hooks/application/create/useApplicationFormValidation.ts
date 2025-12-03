@@ -1,62 +1,32 @@
+import { useFormValidation } from "@/src/hooks/common/useFormValidation";
 import { File } from "@/src/types/File";
 import { ApplicationData } from "@/src/types/models/application/ApplicationData";
-import { FormErrors } from "@/src/types/models/application/FormErrors";
-import { validateStep1 } from "@/src/utils/application/step1Validation";
-import { validateStep2 } from "@/src/utils/application/step2Validation";
-import { useState } from "react";
+import { ApplicationFormErrors } from "@/src/types/models/application/ApplicationFormErrors";
+import { applicationValidateStep1 } from "@/src/utils/application/applicationValidateStep1";
+import { applicationValidateStep2 } from "@/src/utils/application/applicationValidateStep2";
 
-interface UseApplicationFormValidationProps {
-  data: ApplicationData;
-  imageFile: File;
-  step?: number;
-}
-
-export const useApplicationFormValidation = ({
-  data,
-  imageFile,
-  step = 1,
-}: UseApplicationFormValidationProps) => {
-  const [errors, setErrors] = useState<FormErrors>({
-    image: "",
-    name: "",
-    phoneNumber: "",
-    birthDate: "",
-    gender: "",
-    availableStartDate: "",
-    selfIntroduction: "",
-    mbti: "",
-    instagramId: "",
+export const useApplicationFormValidation = (
+  applicationData: ApplicationData,
+  imageFile: File,
+  step?: number
+) => {
+  return useFormValidation<ApplicationData, ApplicationFormErrors>({
+    formData: applicationData,
+    step,
+    initialErrors: {
+      image: "",
+      name: "",
+      phoneNumber: "",
+      birthDate: "",
+      gender: "",
+      availableStartDate: "",
+      selfIntroduction: "",
+      mbti: "",
+      instagramId: "",
+    },
+    validators: {
+      1: (data, errors) => applicationValidateStep1(data, imageFile, errors),
+      2: (data, errors) => applicationValidateStep2(data, errors),
+    },
   });
-
-  const clearError = (field: keyof FormErrors) => {
-    setErrors((prev) => ({ ...prev, [field]: "" }));
-  };
-
-  const runValidateStep1 = (): boolean => {
-    const { isValid, errors: newErrors } = validateStep1(
-      data,
-      imageFile,
-      errors
-    );
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const runValidateStep2 = (): boolean => {
-    const { isValid, errors: newErrors } = validateStep2(data, errors);
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const validateForm = (): boolean => {
-    if (step === 1) return runValidateStep1();
-    if (step === 2) return runValidateStep2();
-    return false;
-  };
-
-  return {
-    errors,
-    clearError,
-    validateForm,
-  };
 };

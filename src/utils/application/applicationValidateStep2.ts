@@ -1,12 +1,12 @@
 import { ApplicationData } from "@/src/types/models/application/ApplicationData";
-import { FormErrors } from "@/src/types/models/application/FormErrors";
+import { ApplicationFormErrors } from "@/src/types/models/application/ApplicationFormErrors";
 
-export const validateStep2 = (
+export const applicationValidateStep2 = (
   data: ApplicationData,
-  currentErrors: FormErrors
-): { isValid: boolean; errors: FormErrors } => {
+  currentErrors: ApplicationFormErrors
+): { isValid: boolean; errors: ApplicationFormErrors } => {
   let isValid = true;
-  const newErrors: FormErrors = { ...currentErrors };
+  const newErrors: ApplicationFormErrors = { ...currentErrors };
 
   if (!data.availableStartDate) {
     newErrors.availableStartDate = "근무 시작 가능일을 선택해주세요";

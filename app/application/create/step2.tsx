@@ -1,11 +1,12 @@
-import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import { router } from "expo-router";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
+import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
+import FormField from "@/src/components/ui/Form/FormField";
 import TextSize from "@/src/components/ui/TextSize";
 import { useApplicationFormValidation } from "@/src/hooks/application/create/useApplicationFormValidation";
 import { useHandleCreate } from "@/src/hooks/application/create/useHandleCreate";
@@ -17,18 +18,22 @@ import ProgressBar from "../../../src/components/ui/Form/ProgressBar";
 import TextInput from "../../../src/components/ui/TextInput";
 import DateInput from "../_components/DateInput";
 import DaySelector from "../_components/DaySelector";
-import FormField from "@/src/components/ui/Form/FormField";
 import StyleSelector from "../_components/StyleSelector";
 
 export default function Step2Screen() {
-  const { data, setUpdate, currentStep, goToPrevStep, imageFile } =
-    useApplicationSlice();
-
-  const { errors, clearError } = useApplicationFormValidation({
-    data,
+  const {
+    applicationData,
+    setApplicationData,
+    currentStep,
+    goToPrevStep,
     imageFile,
-    step: 2,
-  });
+  } = useApplicationSlice();
+
+  const { errors, clearError } = useApplicationFormValidation(
+    applicationData,
+    imageFile,
+    2
+  );
 
   usePreventHardwareBack(); // 안드로이드 하드웨어 뒤로가기 방지
 
@@ -36,23 +41,23 @@ export default function Step2Screen() {
 
   return (
     <DismissKeyboardView>
-      <CustomSafeAreaView pageColor="bg-white">
-        <View className="p-3">
-          <Flex justify="start" items="center" dir="row" gap={124}>
+      <CustomSafeAreaView pageColor='bg-white'>
+        <View className='p-3'>
+          <Flex justify='start' items='center' dir='row' gap={124}>
             <BackArrow
-              color="black"
+              color='black'
               size={24}
               onPress={() => {
                 goToPrevStep();
                 router.back();
               }}
             />
-            <TextSize size={18} content="지원서 작성" />
+            <TextSize size={18} content='지원서 작성' />
           </Flex>
         </View>
 
         <ProgressBar
-          stepTitle="자기소개"
+          stepTitle='자기소개'
           currentStep={currentStep}
           totalSteps={2}
         />
@@ -62,20 +67,20 @@ export default function Step2Screen() {
           behavior={Platform.OS === "ios" ? "padding" : undefined}
           keyboardVerticalOffset={0}
         >
-          <ScrollView className="bg-[#F9FAFB]">
-            <View className="pt-4 px-3">
-              <Flex justify="start" items="center" gap={24}>
+          <ScrollView className='bg-[#F9FAFB]'>
+            <View className='pt-4 px-3'>
+              <Flex justify='start' items='center' gap={24}>
                 {/* 근무 일정 */}
-                <FormSection title="근무 일정">
+                <FormSection title='근무 일정'>
                   <FormField
-                    label="근무 시작 가능일"
+                    label='근무 시작 가능일'
                     required={true}
                     errorMessage={errors.availableStartDate}
                   >
                     <DateInput
-                      selectedDate={data.availableStartDate}
+                      selectedDate={applicationData.availableStartDate}
                       setSelectedDate={(date) => {
-                        setUpdate("availableStartDate", date);
+                        setApplicationData("availableStartDate", date);
                         clearError("availableStartDate");
                       }}
                       minDate={String(new Date())}
@@ -83,17 +88,17 @@ export default function Step2Screen() {
                     />
                   </FormField>
 
-                  <FormField label="근무 가능 요일" required={false}>
+                  <FormField label='근무 가능 요일' required={false}>
                     <DaySelector
-                      selectedDays={data.availableDayOfWeek}
+                      selectedDays={applicationData.availableDayOfWeek}
                       setSelectedDays={(action) => {
                         if (typeof action === "function") {
-                          setUpdate(
+                          setApplicationData(
                             "availableDayOfWeek",
-                            action(data.availableDayOfWeek)
+                            action(applicationData.availableDayOfWeek)
                           );
                         } else {
-                          setUpdate("availableDayOfWeek", action);
+                          setApplicationData("availableDayOfWeek", action);
                         }
                       }}
                     />
@@ -101,16 +106,16 @@ export default function Step2Screen() {
                 </FormSection>
 
                 {/* 자기소개 */}
-                <FormSection title="자기소개">
+                <FormSection title='자기소개'>
                   <FormField
-                    label="자기소개글"
+                    label='자기소개글'
                     required={true}
                     errorMessage={errors.selfIntroduction}
                   >
                     <TextInput
-                      value={data.selfIntroduction}
+                      value={applicationData.selfIntroduction}
                       onChangeText={(text) => {
-                        setUpdate("selfIntroduction", text);
+                        setApplicationData("selfIntroduction", text);
                         clearError("selfIntroduction");
                       }}
                       placeholder={
@@ -124,18 +129,18 @@ export default function Step2Screen() {
                   </FormField>
 
                   <FormField
-                    label="MBTI"
+                    label='MBTI'
                     required={true}
                     errorMessage={errors.mbti}
                   >
                     <TextInput
-                      value={data.mbti}
+                      value={applicationData.mbti}
                       onChangeText={(text) => {
-                        setUpdate("mbti", formatUpperCase(text));
+                        setApplicationData("mbti", formatUpperCase(text));
                         clearError("mbti");
                       }}
-                      placeholder="예: ENFP"
-                      autoCapitalize="characters"
+                      placeholder='예: ENFP'
+                      autoCapitalize='characters'
                       maxLength={4}
                       error={!!errors.mbti}
                     />
@@ -143,44 +148,47 @@ export default function Step2Screen() {
                 </FormSection>
 
                 {/* 스타일 & 소셜 */}
-                <FormSection title="스타일 & 소셜" gap={22}>
-                  <FormField label="나의 스타일" required={false}>
+                <FormSection title='스타일 & 소셜' gap={22}>
+                  <FormField label='나의 스타일' required={false}>
                     <StyleSelector
-                      selectedStyles={data.style}
+                      selectedStyles={applicationData.style}
                       setSelectedStyles={(action) => {
                         if (typeof action === "function") {
-                          setUpdate("style", action(data.style));
+                          setApplicationData(
+                            "style",
+                            action(applicationData.style)
+                          );
                         } else {
-                          setUpdate("style", action);
+                          setApplicationData("style", action);
                         }
                       }}
-                      size="32%"
+                      size='32%'
                     />
                   </FormField>
 
                   <FormField
-                    label="인스타그램 아이디"
+                    label='인스타그램 아이디'
                     required={false}
                     errorMessage={errors.instagramId}
                   >
                     <TextInput
-                      value={data.instagramId}
+                      value={applicationData.instagramId}
                       onChangeText={(id) => {
-                        setUpdate("instagramId", id);
+                        setApplicationData("instagramId", id);
                         clearError("instagramId");
                       }}
-                      placeholder="@ username"
+                      placeholder='@ username'
                       error={!!errors.instagramId}
                     />
                   </FormField>
                 </FormSection>
 
                 <Button
-                  variant="primary"
+                  variant='primary'
                   width={370}
                   height={50}
-                  textColor="white"
-                  content="작성 완료"
+                  textColor='white'
+                  content='작성 완료'
                   onPress={handleCreate}
                 />
               </Flex>
