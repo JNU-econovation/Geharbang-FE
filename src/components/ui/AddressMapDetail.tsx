@@ -1,10 +1,12 @@
+import Constants from "expo-constants";
 import Geocoder from "react-native-geocoding";
 import MapView, { Marker } from "react-native-maps";
 
 import ModalBtn from "@/src/components/ui/Modal/ModalBtn";
 import { useMarker } from "@/src/hooks/stepPost/useMarker";
 
-Geocoder.init("AIzaSyA7Eo2CqNtLVy0d8O2_wwszP7rtUcodzxc");
+const GOOGLE_MAPS_API_KEY = Constants.expoConfig?.extra?.googleMapsApiKey;
+Geocoder.init(GOOGLE_MAPS_API_KEY);
 
 interface AddressMapDetailProps {
   latitude: number;
