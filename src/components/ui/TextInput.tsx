@@ -14,6 +14,7 @@ interface TextInputFieldProps {
   maxLength?: number;
   multiline?: boolean;
   autoCapitalize?: TextInputProps["autoCapitalize"];
+  editable?: boolean;
   className?: string;
 }
 
@@ -29,6 +30,7 @@ export default function CustomTextInput({
   maxLength,
   multiline,
   autoCapitalize,
+  editable,
   className,
 }: TextInputFieldProps) {
   return (
@@ -45,6 +47,7 @@ export default function CustomTextInput({
         maxLength={maxLength}
         multiline={multiline}
         autoCapitalize={autoCapitalize}
+        editable={editable}
       />
     </View>
   );

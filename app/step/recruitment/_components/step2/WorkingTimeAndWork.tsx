@@ -10,6 +10,7 @@ import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
 import { IWorkingTimeAndWork } from "@/src/types/models/application/StepPostData";
 import { PerWorkingDay } from "@/src/types/models/stepPost/PerWorkingDay";
 import { PER_WORKING_DAY } from "@/src/utils/constants/options";
+import WorkdayInput from "./WorkingInput";
 
 interface WorkingTimeAndWorkProps {
   addedTimeAndWork: IWorkingTimeAndWork;
@@ -100,37 +101,14 @@ export default function WorkingTimeAndWork({
         />
       </FormField>
 
-      <FormField label='근무일 수' required={true} errorMessage=''>
-        <Flex items='center' dir='row' gap={10}>
-          <CustomTextInput
-            value={addedTimeAndWork.workingCount}
-            onChangeText={(workingCount) =>
-              setAddedTimeAndWork({
-                ...addedTimeAndWork,
-                workingCount: Number(workingCount),
-              })
-            }
-            width={250}
-          />
-          <TextSize size={16} color='#364153' content='일 근무' />
-        </Flex>
-      </FormField>
-
-      <FormField label='휴무일 수' required={true} errorMessage=''>
-        <Flex items='center' dir='row' gap={10}>
-          <CustomTextInput
-            value={addedTimeAndWork.closedCount}
-            onChangeText={(closedCount) =>
-              setAddedTimeAndWork({
-                ...addedTimeAndWork,
-                closedCount: Number(closedCount),
-              })
-            }
-            width={250}
-          />
-          <TextSize size={16} color='#364153' content='일 근무' />
-        </Flex>
-      </FormField>
+      <WorkdayInput
+        mode={
+          addedTimeAndWork.perWorkingDay === "_7일_기준" ? "auto" : "manual"
+        }
+        totalDays={7}
+        initialWorkingCount={addedTimeAndWork.workingCount}
+        initialClosedCount={addedTimeAndWork.closedCount}
+      />
     </ViewContext>
   );
 }
