@@ -14,6 +14,7 @@ interface OptionGridProps {
   onSelect: (value: string) => void;
   itemWidth?: number;
   itemHeight?: number;
+  error?: boolean;
 }
 
 export default function OptionGrid({
@@ -21,7 +22,8 @@ export default function OptionGrid({
   selected,
   onSelect,
   itemWidth = 104,
-  itemHeight = 64,
+  itemHeight = 62,
+  error,
 }: OptionGridProps) {
   return (
     <Flex dir='row' wrap='wrap' gap={10}>
@@ -33,7 +35,11 @@ export default function OptionGrid({
             key={option.value}
             onPress={() => onSelect(option.value)}
             className={`flex items-center justify-center rounded-lg ${
-              isSelected ? "bg-[#0EA5E9]" : "bg-[#F3F4F6]"
+              error
+                ? "border border-primary-red bg-[#F3F4F6]"
+                : isSelected
+                ? "bg-[#0EA5E9]"
+                : "bg-[#F3F4F6]"
             }`}
             style={{ width: itemWidth, height: itemHeight }}
           >

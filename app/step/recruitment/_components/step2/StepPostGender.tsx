@@ -6,13 +6,15 @@ import { GENDER_FULL } from "@/src/utils/constants/options";
 interface GenderProps {
   selectedGender: Gender;
   setSelectedGender: (gender: Gender) => void;
-  errorMsg: string;
+  errorMsg?: string;
+  error?: boolean;
 }
 
 export default function StepPostGender({
   selectedGender,
   setSelectedGender,
   errorMsg,
+  error,
 }: GenderProps) {
   return (
     <FormField label='성별' required={true} errorMessage={errorMsg}>
@@ -21,6 +23,7 @@ export default function StepPostGender({
         option={GENDER_FULL}
         selected={selectedGender}
         setSelected={setSelectedGender}
+        error={error}
       />
     </FormField>
   );

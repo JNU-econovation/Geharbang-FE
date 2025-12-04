@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import RecruitmentStepLayout from "@/app/step/recruitment/_components/RecruitmentStepLayout";
 import Flex from "@/src/components/layout/Flex";
@@ -41,8 +41,10 @@ export default function RecruitmentStep2() {
               clearError("workingStartDate");
             }}
             errorMsg={errors.workingStartDate}
+            error={!!errors.workingStartDate}
           />
 
+          <View className='pt-1' />
           <WorkingPeriod
             selectedPeriod={stepPostData.workingPeriod}
             setSelectedPeriod={(period) => {
@@ -50,14 +52,17 @@ export default function RecruitmentStep2() {
               clearError("workingPeriod");
             }}
             errorMsg={errors.workingPeriod}
+            error={!!errors.workingPeriod}
           />
 
+          <View className='pt-1' />
           <WorkingTimeAndWorkList
             workingTimeAndWorkList={stepPostData.workingTimeAndWork}
             setWorkingTimeAndWorkList={(workingTimeAndWork) => {
               setStepPostData("workingTimeAndWork", workingTimeAndWork);
               clearError("workingTimeAndWork");
             }}
+            errors={errors}
           />
 
           <StepPostGender
@@ -67,6 +72,7 @@ export default function RecruitmentStep2() {
               clearError("gender");
             }}
             errorMsg={errors.gender}
+            error={!!errors.gender}
           />
         </FormSection>
 

@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex";
 import FormField from "@/src/components/ui/Form/FormField";
@@ -10,6 +10,7 @@ import TimePickerField from "@/src/components/ui/TimePickerField";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
 import { IWorkingTimeAndWork } from "@/src/types/models/application/StepPostData";
 import { PerWorkingDay } from "@/src/types/models/stepPost/PerWorkingDay";
+import { WorkingTimeAndWorkErrors } from "@/src/types/models/stepPost/StepPostFormErrors";
 import { PER_WORKING_DAY } from "@/src/utils/constants/options";
 import WorkdayInput from "./WorkingInput";
 
@@ -17,12 +18,14 @@ interface WorkingTimeAndWorkProps {
   addedTimeAndWork: IWorkingTimeAndWork;
   setAddedTimeAndWork: (workingTimeAndWork: IWorkingTimeAndWork) => void;
   onDelete: () => void;
+  errors?: WorkingTimeAndWorkErrors;
 }
 
 export default function WorkingTimeAndWork({
   addedTimeAndWork,
   setAddedTimeAndWork,
   onDelete,
+  errors,
 }: WorkingTimeAndWorkProps) {
   return (
     <ViewContext
@@ -33,7 +36,11 @@ export default function WorkingTimeAndWork({
       <Pressable onPress={onDelete} className='absolute right-4 top-4'>
         <Feather name='x' size={20} color='#99A1AF' />
       </Pressable>
-      <FormField label='근무 조 이름' required={true} errorMessage=''>
+      <FormField
+        label='근무 조 이름'
+        required={true}
+        errorMessage={errors?.workingTimeName}
+      >
         <CustomTextInput
           value={addedTimeAndWork.workingTimeName}
           onChangeText={(name) =>
@@ -43,10 +50,12 @@ export default function WorkingTimeAndWork({
             })
           }
           placeholder='예: 오전조 / 오후조 / 야간조'
+          error={!!errors?.workingTimeName}
         />
       </FormField>
 
-      <FormField label='근무 시간' required errorMessage=''>
+      <View className='pt-1' />
+      <FormField label='근무 시간' required>
         <Flex items='center' justify='center' dir='row' gap={19}>
           <TimePickerField
             value={addedTimeAndWork.startTime}
@@ -68,7 +77,12 @@ export default function WorkingTimeAndWork({
         </Flex>
       </FormField>
 
-      <FormField label='해당 시간대 업무' required={true} errorMessage=''>
+      <View className='pt-1' />
+      <FormField
+        label='해당 시간대 업무'
+        required={true}
+        errorMessage={errors?.thatTimeWork}
+      >
         <CustomTextInput
           value={addedTimeAndWork.thatTimeWork}
           onChangeText={(work) =>
@@ -79,10 +93,16 @@ export default function WorkingTimeAndWork({
           }
           placeholder='예: 체크인 / 체크아웃, 객실 청소'
           multiline={true}
+          error={!!errors?.thatTimeWork}
         />
       </FormField>
 
-      <FormField label='근무일 기준' required={true} errorMessage=''>
+      <View className='pt-1' />
+      <FormField
+        label='근무일 기준'
+        required={true}
+        errorMessage={errors?.perWorkingDay}
+      >
         <OptionSelector<PerWorkingDay>
           size='49%'
           option={PER_WORKING_DAY}
@@ -93,9 +113,11 @@ export default function WorkingTimeAndWork({
               perWorkingDay: workingDay,
             })
           }
+          error={!!errors?.perWorkingDay}
         />
       </FormField>
 
+      <View className='pt-1' />
       <WorkdayInput
         mode={
           addedTimeAndWork.perWorkingDay === "_7일_기준" ? "auto" : "manual"
@@ -103,6 +125,8 @@ export default function WorkingTimeAndWork({
         totalDays={7}
         initialWorkingCount={addedTimeAndWork.workingCount}
         initialClosedCount={addedTimeAndWork.closedCount}
+        workingErrors={errors?.workingCount}
+        closedErrors={errors?.closedCount}
       />
     </ViewContext>
   );

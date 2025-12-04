@@ -6,6 +6,7 @@ import TextSize from "@/src/components/ui/TextSize";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
 import { useWorkingTimeAndWork } from "@/src/hooks/stepPost/useWorkingTimeAndWorkList";
 import { IWorkingTimeAndWork } from "@/src/types/models/application/StepPostData";
+import { StepPostFormErrors } from "@/src/types/models/stepPost/StepPostFormErrors";
 import { COLORS } from "@/src/utils/constants/colors";
 import WorkingTimeAndWork from "./WorkingTimeAndWork";
 
@@ -14,11 +15,13 @@ interface WorkingTimeAndWorkListProps {
   setWorkingTimeAndWorkList: (
     workingTimeAndWork: IWorkingTimeAndWork[]
   ) => void;
+  errors?: StepPostFormErrors;
 }
 
 export default function WorkingTimeAndWorkList({
   workingTimeAndWorkList,
   setWorkingTimeAndWorkList,
+  errors,
 }: WorkingTimeAndWorkListProps) {
   const { workingList, addWorking, updateWorking, deleteWorking } =
     useWorkingTimeAndWork(workingTimeAndWorkList, (_, value) =>
@@ -26,13 +29,22 @@ export default function WorkingTimeAndWorkList({
     );
 
   return (
-    <FormField label='근무 시간 및 업무' required={true}>
+    <FormField
+      label='근무 시간 및 업무'
+      required={true}
+      errorMessage={
+        workingTimeAndWorkList.length === 0
+          ? "근무 시간은 최소 1개 이상 입력해야 합니다."
+          : undefined
+      }
+    >
       {workingList.map((item, index) => (
         <View key={index}>
           <WorkingTimeAndWork
             addedTimeAndWork={item}
             setAddedTimeAndWork={(updated) => updateWorking(index, updated)}
             onDelete={() => deleteWorking(index)}
+            errors={errors?.workingTimeAndWork?.[index]}
           />
         </View>
       ))}
@@ -42,6 +54,7 @@ export default function WorkingTimeAndWorkList({
           variant='modalApply'
           minHeight={45}
           className='flex items-center justify-center flex-row'
+          error={workingTimeAndWorkList.length === 0}
         >
           <Feather name='plus' size={20} color={COLORS.GRAY.TEXT} />
           <View className='pr-1' />

@@ -4,11 +4,11 @@ export interface StepPostFormErrors {
   location: string;
   workingStartDate: string;
   workingPeriod: string;
-  workingTimeAndWork: workingTimeAndWorkErrors[];
+  workingTimeAndWork: WorkingTimeAndWorkErrors[];
   gender: string;
 }
 
-export interface workingTimeAndWorkErrors {
+export interface WorkingTimeAndWorkErrors {
   workingTimeName: string;
   startTime: string;
   endTime: string;

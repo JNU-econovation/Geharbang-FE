@@ -4,13 +4,15 @@ import CustomTextInput from "@/src/components/ui/TextInput";
 interface GuestHouseNameProps {
   value: string;
   onChangeText: (text: string) => void;
-  errorMsg: string;
+  errorMsg?: string;
+  error?: boolean;
 }
 
 export default function GuestHouseName({
   value,
   onChangeText,
   errorMsg,
+  error,
 }: GuestHouseNameProps) {
   return (
     <FormField
@@ -22,6 +24,7 @@ export default function GuestHouseName({
         value={value}
         onChangeText={onChangeText}
         placeholder='예: 제주 바다뷰 게스트하우스'
+        error={error}
       />
     </FormField>
   );

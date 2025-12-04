@@ -14,6 +14,8 @@ interface WorkdayInputProps {
 
   labelWorking?: string;
   labelClosed?: string;
+  workingErrors?: string;
+  closedErrors?: string;
 }
 
 export default function WorkdayInput({
@@ -23,6 +25,8 @@ export default function WorkdayInput({
   initialClosedCount = 0,
   labelWorking = "근무일 수",
   labelClosed = "휴무일 수",
+  workingErrors,
+  closedErrors,
 }: WorkdayInputProps) {
   const {
     workingCount,
@@ -39,19 +43,28 @@ export default function WorkdayInput({
 
   return (
     <View>
-      <FormField label={labelWorking} required={true}>
+      <FormField
+        label={labelWorking}
+        required={true}
+        errorMessage={workingErrors}
+      >
         <Flex items='center' dir='row' gap={10}>
           <CustomTextInput
             value={String(workingCount)}
             keyboardType='numeric'
             width={250}
             onChangeText={(v) => updateWorkingCount(Number(v))}
+            error={!!workingErrors}
           />
           <TextSize size={16} color='#364153' content='일 근무' />
         </Flex>
       </FormField>
 
-      <FormField label={labelClosed} required={true}>
+      <FormField
+        label={labelClosed}
+        required={true}
+        errorMessage={closedErrors}
+      >
         <Flex items='center' dir='row' gap={10}>
           <CustomTextInput
             value={String(closedCount)}
@@ -59,6 +72,7 @@ export default function WorkdayInput({
             width={250}
             editable={!isAuto}
             onChangeText={(v) => updateClosedCount(Number(v))}
+            error={!!closedErrors}
           />
           <TextSize size={16} color='#364153' content='일 근무' />
         </Flex>

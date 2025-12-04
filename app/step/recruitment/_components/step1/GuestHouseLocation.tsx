@@ -9,13 +9,15 @@ import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
 interface GuestHouseLocationProps {
   selectedAddress: string;
   setSelectedAddress: (address: string) => void;
-  errorMsg: string;
+  errorMsg?: string;
+  error?: boolean;
 }
 
 export default function GuestHouseLocation({
   selectedAddress,
   setSelectedAddress,
   errorMsg,
+  error,
 }: GuestHouseLocationProps) {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -26,6 +28,7 @@ export default function GuestHouseLocation({
           variant='modalApply'
           minHeight={45}
           className='p-3 flex justify-center'
+          error={error}
         >
           <TextSize
             size={16}

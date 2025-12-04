@@ -10,13 +10,15 @@ type workingPeriodType = "단기" | "중기" | "장기" | "";
 interface WorkingPeriodProps {
   selectedPeriod: workingPeriodType;
   setSelectedPeriod: (period: workingPeriodType) => void;
-  errorMsg: string;
+  errorMsg?: string;
+  error?: boolean;
 }
 
 export default function WorkingPeriod({
   selectedPeriod,
   setSelectedPeriod,
   errorMsg,
+  error,
 }: WorkingPeriodProps) {
   return (
     <FormField label='근무 기간' required={true} errorMessage={errorMsg}>
@@ -30,7 +32,9 @@ export default function WorkingPeriod({
               setSelectedPeriod(period.value as workingPeriodType);
             }}
             className={`border rounded-lg p-3 mt-3 ${
-              isSelected
+              error
+                ? "border border-primary-red"
+                : isSelected
                 ? "bg-[#EFF6FF] border-primary-blue"
                 : "border-gray-border"
             }`}

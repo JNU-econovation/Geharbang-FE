@@ -15,6 +15,7 @@ interface ViewContextProps extends ViewProps {
   children: React.ReactNode;
   minHeight: number;
   className?: string;
+  error?: boolean;
 }
 
 export default function ViewContext({
@@ -22,11 +23,16 @@ export default function ViewContext({
   children,
   minHeight,
   className,
+  error,
 }: ViewContextProps) {
   return (
     <View
-      className={twMerge(viewContext({ variant }), className)}
-      style={{ minHeight: minHeight }}
+      className={twMerge(
+        viewContext({ variant }),
+        error && "border border-primary-red",
+        className
+      )}
+      style={{ minHeight }}
     >
       {children}
     </View>

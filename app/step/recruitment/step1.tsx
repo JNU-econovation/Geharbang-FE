@@ -44,6 +44,7 @@ export default function RecruitmentStep1() {
               clearError("guestHouseName");
             }}
             errorMsg={errors.guestHouseName}
+            error={!!errors.guestHouseName}
           />
 
           <WorkingRegion
@@ -53,6 +54,7 @@ export default function RecruitmentStep1() {
               clearError("workingRegion");
             }}
             errorMsg={errors.workingRegion}
+            error={!!errors.workingRegion}
           />
 
           <GuestHouseLocation
@@ -62,6 +64,7 @@ export default function RecruitmentStep1() {
               clearError("location");
             }}
             errorMsg={errors.location}
+            error={!!errors.location}
           />
         </FormSection>
 

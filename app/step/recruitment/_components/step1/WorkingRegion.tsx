@@ -5,13 +5,15 @@ import { REGION_OPTION } from "@/src/utils/constants/options";
 interface WorkingRegionProps {
   selectedRegion: string;
   onChangeOption: (region: string) => void;
-  errorMsg: string;
+  errorMsg?: string;
+  error?: boolean;
 }
 
 export default function WorkingRegion({
   selectedRegion,
   onChangeOption,
   errorMsg,
+  error,
 }: WorkingRegionProps) {
   return (
     <FormField label='근무 지역' required={true} errorMessage={errorMsg}>
@@ -19,6 +21,7 @@ export default function WorkingRegion({
         options={REGION_OPTION}
         selected={selectedRegion}
         onSelect={onChangeOption}
+        error={error}
       />
     </FormField>
   );
