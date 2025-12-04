@@ -18,7 +18,7 @@ export const initialWorkingTimeAndWorkData: IWorkingTimeAndWork = {
 const initialStepPostData: StepPostData = {
   guestHouseName: "",
   workingRegion: "",
-  location: "",
+  location: null,
   workingStartDate: "",
   workingPeriod: "",
   workingTimeAndWork: [initialWorkingTimeAndWorkData],

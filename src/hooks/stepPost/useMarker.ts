@@ -1,11 +1,13 @@
 import { useCallback, useState } from "react";
 import Geocoder from "react-native-geocoding";
 
+import { SelectedAddressProps } from "@/src/types/models/application/StepPostData";
+
 interface UseMarkerProps {
   latitude: number;
   longitude: number;
   selectable?: boolean;
-  setSelectedAddress?: (address: string) => void;
+  setSelectedAddress: (address: SelectedAddressProps) => void;
   setModalVisible?: (value: boolean) => void;
 }
 
@@ -18,6 +20,13 @@ export function useMarker({
 }: UseMarkerProps) {
   const [markerPosition, setMarkerPosition] = useState({ latitude, longitude });
 
+  const findAddressByType = (results: any[], targetTypes: string[]) => {
+    const result = results.find((item) =>
+      item.types.some((t: string) => targetTypes.includes(t))
+    );
+    return result ? result.formatted_address : "";
+  };
+
   const selectAddress = useCallback(async () => {
     if (!selectable || !setSelectedAddress || !setModalVisible) return;
 
@@ -26,11 +35,30 @@ export function useMarker({
         markerPosition.latitude,
         markerPosition.longitude
       );
-      const address = geo.results[0].formatted_address;
-      setSelectedAddress(address);
+
+      const results = geo.results;
+
+      const roadAddress = findAddressByType(results, [
+        "street_address",
+        "route",
+      ]);
+
+      const jibunAddress = findAddressByType(results, [
+        "premise",
+        "sublocality",
+        "political",
+      ]);
+
+      setSelectedAddress({
+        roadAddress,
+        jibunAddress,
+        latitude: markerPosition.latitude,
+        longitude: markerPosition.longitude,
+      });
+
       setModalVisible(false);
     } catch (err) {
-      console.error(err);
+      console.error("Geocoding Error:", err);
     }
   }, [markerPosition, selectable, setSelectedAddress, setModalVisible]);
 

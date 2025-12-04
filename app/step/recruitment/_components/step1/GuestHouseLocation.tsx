@@ -5,10 +5,11 @@ import AddressMapDetail from "@/src/components/ui/AddressMapDetail";
 import FormField from "@/src/components/ui/Form/FormField";
 import TextSize from "@/src/components/ui/TextSize";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
+import { SelectedAddressProps } from "@/src/types/models/application/StepPostData";
 
 interface GuestHouseLocationProps {
-  selectedAddress: string;
-  setSelectedAddress: (address: string) => void;
+  selectedAddress: SelectedAddressProps | null;
+  setSelectedAddress: (address: SelectedAddressProps) => void;
   errorMsg?: string;
   error?: boolean;
 }
@@ -33,7 +34,7 @@ export default function GuestHouseLocation({
           <TextSize
             size={16}
             color={selectedAddress ? "#101828" : "#ADAEBC"}
-            content={selectedAddress || "근무 위치를 검색하세요"}
+            content={selectedAddress?.roadAddress || "근무 위치를 검색하세요"}
           />
         </ViewContext>
       </Pressable>
@@ -46,7 +47,9 @@ export default function GuestHouseLocation({
           longitudeDelta={0.01}
           modalVisible={true}
           setModalVisible={(v) => setModalVisible(v)}
-          setSelectedAddress={(address) => setSelectedAddress(address)}
+          setSelectedAddress={(address) => {
+            setSelectedAddress(address);
+          }}
           selectable={true}
         />
       </Modal>

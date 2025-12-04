@@ -3,7 +3,7 @@ import { Gender } from "../../Gender";
 export interface StepPostData {
   guestHouseName: string;
   workingRegion: string;
-  location: string;
+  location: SelectedAddressProps | null;
   workingStartDate: string;
   workingPeriod: "단기" | "중기" | "장기" | "";
   workingTimeAndWork: IWorkingTimeAndWork[];
@@ -18,4 +18,11 @@ export interface IWorkingTimeAndWork {
   perWorkingDay: "로테이션" | "_7일_기준" | "";
   workingCount: number;
   closedCount: number;
+}
+
+export interface SelectedAddressProps {
+  roadAddress: string;
+  jibunAddress: string;
+  latitude: number;
+  longitude: number;
 }
