@@ -18,7 +18,7 @@ export const stepPostValidationStep1 = (
     isValid = false;
   }
 
-  if (!data.location || data.location.trim() === "") {
+  if (!data.location) {
     newErrors.location = "근무 위치를 선택해주세요.";
     isValid = false;
   }
