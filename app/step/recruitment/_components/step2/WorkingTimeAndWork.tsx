@@ -55,7 +55,7 @@ export default function WorkingTimeAndWork({
               })
             }
             placeholder='AM 11:00'
-            className='w-32'
+            width={128}
           />
           <TextSize size={20} color='#99A1AF' content='~' />
           <CustomTextInput
@@ -67,7 +67,7 @@ export default function WorkingTimeAndWork({
               })
             }
             placeholder='PM 11:00'
-            className='w-32'
+            width={128}
           />
         </Flex>
       </FormField>
@@ -82,6 +82,7 @@ export default function WorkingTimeAndWork({
             })
           }
           placeholder='예: 체크인 / 체크아웃, 객실 청소'
+          multiline={true}
         />
       </FormField>
 

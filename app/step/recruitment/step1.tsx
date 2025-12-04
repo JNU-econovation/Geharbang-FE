@@ -7,18 +7,17 @@ import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
 import { useStepPostFormValidation } from "@/src/hooks/stepPost/useStepPostFormValidation";
-import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
+import { useStepPostSlice } from "@/src/stores/slices/stepPost/useStepPostSlice";
 import GuestHouseLocation from "./_components/step1/GuestHouseLocation";
 import GuestHouseName from "./_components/step1/GuestHouseName";
 import WorkingRegion from "./_components/step1/WorkingRegion";
 
 export default function RecruitmentStep1() {
-  const { stepPostData, setStepPostData, resetData, goToNextStep } =
-    useApplicationSlice();
+  const { stepPostData, setStepPostData, resetStepPost } = useStepPostSlice();
 
   useEffect(() => {
-    resetData();
-  }, [resetData]);
+    resetStepPost();
+  }, [resetStepPost]);
 
   const { errors, clearError, validateForm } = useStepPostFormValidation(
     stepPostData,
@@ -28,7 +27,6 @@ export default function RecruitmentStep1() {
   const handleNext = () => {
     if (validateForm()) {
       router.push("/step/recruitment/step2");
-      goToNextStep();
     }
   };
 

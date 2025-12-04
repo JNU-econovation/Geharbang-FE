@@ -11,7 +11,7 @@ import FormField from "@/src/components/ui/Form/FormField";
 import ImagePicker from "@/src/components/ui/ImagePicker";
 import OptionSelector from "@/src/components/ui/OptionSelector";
 import TextSize from "@/src/components/ui/TextSize";
-import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
+import { useApplicationSlice } from "@/src/stores/slices/application/useApplicationSlice";
 import { Gender } from "@/src/types/Gender";
 import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import { GENDER_BASIC } from "@/src/utils/constants/options";
@@ -27,15 +27,14 @@ export default function applicationCreate() {
     applicationData,
     setApplicationData,
     currentStep,
-    goToNextStep,
-    resetData,
+    resetApplication,
     imageFile,
     setImageFile,
   } = useApplicationSlice();
 
   useEffect(() => {
-    resetData();
-  }, [resetData]);
+    resetApplication();
+  }, [resetApplication]);
 
   const { errors, clearError, validateForm } = useApplicationFormValidation(
     applicationData,
@@ -46,7 +45,6 @@ export default function applicationCreate() {
   const handleNext = () => {
     if (validateForm()) {
       router.push("/application/create/step2");
-      goToNextStep();
     }
   };
 

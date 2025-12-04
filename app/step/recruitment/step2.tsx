@@ -7,14 +7,14 @@ import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
 import { useStepPostFormValidation } from "@/src/hooks/stepPost/useStepPostFormValidation";
-import { useApplicationSlice } from "@/src/stores/slices/useApplicationSlice";
+import { useStepPostSlice } from "@/src/stores/slices/stepPost/useStepPostSlice";
 import StepPostGender from "./_components/step2/StepPostGender";
 import WorkingPeriod from "./_components/step2/WorkingPeriod";
 import WorkingStartDate from "./_components/step2/WorkingStartDate";
 import WorkingTimeAndWorkList from "./_components/step2/WorkingTimeAndWorkList";
 
 export default function RecruitmentStep2() {
-  const { stepPostData, setStepPostData, goToNextStep } = useApplicationSlice();
+  const { stepPostData, setStepPostData } = useStepPostSlice();
 
   const { errors, clearError, validateForm } = useStepPostFormValidation(
     stepPostData,
@@ -24,7 +24,6 @@ export default function RecruitmentStep2() {
   const handleNext = () => {
     if (validateForm()) {
       router.push("/step/recruitment/step3");
-      goToNextStep();
     }
   };
 
