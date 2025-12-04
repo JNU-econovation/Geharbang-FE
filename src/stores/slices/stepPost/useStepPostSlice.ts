@@ -7,8 +7,8 @@ import {
 
 export const initialWorkingTimeAndWorkData: IWorkingTimeAndWork = {
   workingTimeName: "",
-  startTime: "",
-  endTime: "",
+  startTime: new Date(new Date().setHours(9, 0, 0, 0)),
+  endTime: new Date(new Date().setHours(18, 0, 0, 0)),
   thatTimeWork: "",
   perWorkingDay: "",
   workingCount: 0,

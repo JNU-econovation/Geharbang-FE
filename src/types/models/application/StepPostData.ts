@@ -12,8 +12,8 @@ export interface StepPostData {
 
 export interface IWorkingTimeAndWork {
   workingTimeName: string;
-  startTime: string;
-  endTime: string;
+  startTime: Date;
+  endTime: Date;
   thatTimeWork: string;
   perWorkingDay: "로테이션" | "_7일_기준" | "";
   workingCount: number;

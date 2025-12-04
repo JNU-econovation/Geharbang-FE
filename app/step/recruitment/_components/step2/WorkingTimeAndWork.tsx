@@ -6,6 +6,7 @@ import FormField from "@/src/components/ui/Form/FormField";
 import OptionSelector from "@/src/components/ui/OptionSelector";
 import CustomTextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
+import TimePickerField from "@/src/components/ui/TimePickerField";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
 import { IWorkingTimeAndWork } from "@/src/types/models/application/StepPostData";
 import { PerWorkingDay } from "@/src/types/models/stepPost/PerWorkingDay";
@@ -45,29 +46,23 @@ export default function WorkingTimeAndWork({
         />
       </FormField>
 
-      <FormField label='근무 시간' required={true} errorMessage=''>
+      <FormField label='근무 시간' required errorMessage=''>
         <Flex items='center' justify='center' dir='row' gap={19}>
-          <CustomTextInput
+          <TimePickerField
             value={addedTimeAndWork.startTime}
-            onChangeText={(startTime) =>
-              setAddedTimeAndWork({
-                ...addedTimeAndWork,
-                startTime: startTime,
-              })
+            onChange={(date) =>
+              setAddedTimeAndWork({ ...addedTimeAndWork, startTime: date })
             }
-            placeholder='AM 11:00'
             width={128}
           />
+
           <TextSize size={20} color='#99A1AF' content='~' />
-          <CustomTextInput
+
+          <TimePickerField
             value={addedTimeAndWork.endTime}
-            onChangeText={(endTime) =>
-              setAddedTimeAndWork({
-                ...addedTimeAndWork,
-                endTime: endTime,
-              })
+            onChange={(date) =>
+              setAddedTimeAndWork({ ...addedTimeAndWork, endTime: date })
             }
-            placeholder='PM 11:00'
             width={128}
           />
         </Flex>
