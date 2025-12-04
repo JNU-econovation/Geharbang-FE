@@ -33,9 +33,6 @@ interface ApplicationSlice {
   imageFile: File;
   setImageFile: (file: File) => void;
 
-  currentStep: number;
-  goToPrevStep: () => void;
-
   resetApplication: () => void;
 }
 
@@ -52,14 +49,7 @@ export const useApplicationSlice = create<ApplicationSlice>((set) => ({
 
   imageFile: initialImageFile,
 
-  currentStep: 1,
-
   setImageFile: (file) => set({ imageFile: file }),
-
-  goToPrevStep: () =>
-    set((state) => ({
-      currentStep: Math.max(1, state.currentStep - 1),
-    })),
 
   resetApplication: () =>
     set({

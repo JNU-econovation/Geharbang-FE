@@ -32,10 +32,6 @@ interface StepPostSlice {
     value: StepPostData[K]
   ) => void;
 
-  currentStep: number;
-
-  goToPrevStep: () => void;
-
   resetStepPost: () => void;
 }
 
@@ -50,16 +46,8 @@ export const useStepPostSlice = create<StepPostSlice>((set) => ({
       },
     })),
 
-  currentStep: 1,
-
-  goToPrevStep: () =>
-    set((state) => ({
-      currentStep: Math.max(1, state.currentStep - 1),
-    })),
-
   resetStepPost: () =>
     set({
       stepPostData: initialStepPostData,
-      currentStep: 1,
     }),
 }));
