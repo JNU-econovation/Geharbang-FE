@@ -1,1 +1,1 @@
-export type PerWorkingDay = "로테이션" | "7일 기준" | "";
+export type PerWorkingDay = "로테이션" | "_7일_기준" | "";

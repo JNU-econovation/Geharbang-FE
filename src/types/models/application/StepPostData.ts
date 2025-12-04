@@ -15,7 +15,7 @@ export interface IWorkingTimeAndWork {
   startTime: string;
   endTime: string;
   thatTimeWork: string;
-  perWorkingDay: "로테이션" | "7일 기준" | "";
+  perWorkingDay: "로테이션" | "_7일_기준" | "";
   workingCount: number;
   closedCount: number;
 }

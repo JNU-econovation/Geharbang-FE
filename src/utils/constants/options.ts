@@ -49,5 +49,5 @@ export const WORKING_PERIOD = [
 
 export const PER_WORKING_DAY: Option<PerWorkingDay>[] = [
   { value: "로테이션", label: "로테이션" },
-  { value: "7일 기준", label: "7일 기준" },
+  { value: "_7일_기준", label: "7일 기준" },
 ];
