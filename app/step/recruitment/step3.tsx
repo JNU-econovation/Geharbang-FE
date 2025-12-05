@@ -10,11 +10,11 @@ import FormSection from "@/src/components/ui/Form/FormSection";
 import MultiImagePicker from "@/src/components/ui/imagePicker/MultiImagePicker";
 import TextInput from "@/src/components/ui/TextInput";
 import { useRecruitmentStep3Validation } from "@/src/hooks/recruitment/useRecruitmentStep3Validation";
-import { useStep3Slice } from "@/src/stores/stepRecruitment/useStep3Slice";
+import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
 import AppendableInputGroup from "../../../src/components/ui/Form/AppendableInputGroup";
 
 export default function RecruitmentStep3() {
-  const { step3Data, setStep3Update } = useStep3Slice();
+  const { step3Data, setStep3Update } = useStepRecruitmentStore();
 
   const { errors, clearError, validateForm } =
     useRecruitmentStep3Validation(step3Data);

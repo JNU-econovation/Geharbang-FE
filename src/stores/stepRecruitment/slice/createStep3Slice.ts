@@ -1,9 +1,10 @@
 import { Step3Data } from "@/src/types/models/stepRecruitment/Step3Data";
-import { create } from "zustand";
+import { AllSlices } from "@/src/types/store/stepRecruitmentStore";
+import { StateCreator } from "zustand";
 
 type Updater<T> = T | ((prev: T) => T);
 
-const initialStep3Data: Step3Data = {
+export const initialStep3Data: Step3Data = {
   title: "",
   introduction: "",
   advantages: [],
@@ -14,7 +15,7 @@ const initialStep3Data: Step3Data = {
   introImageFiles: [],
 };
 
-interface Step3Store {
+export interface Step3Slice {
   step3Data: Step3Data;
   setStep3Update: <K extends keyof Step3Data>(
     key: K,
@@ -22,7 +23,9 @@ interface Step3Store {
   ) => void;
 }
 
-export const useStep3Slice = create<Step3Store>((set) => ({
+export const createStep3Slice: StateCreator<AllSlices, [], [], Step3Slice> = (
+  set
+) => ({
   step3Data: initialStep3Data,
 
   setStep3Update: (key, value) =>
@@ -41,4 +44,4 @@ export const useStep3Slice = create<Step3Store>((set) => ({
         },
       };
     }),
-}));
+});
