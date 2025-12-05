@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { ScrollView, View } from "react-native";
+import { Alert, ScrollView, View } from "react-native";
 
 import { useFeatures } from "@/src/hooks/form/useFeatures";
 import { Feature } from "@/src/types/models/stepRecruitment/Feature";
@@ -49,6 +49,19 @@ export default function AppendableInputGroup({
     [deleteFeature, clearError]
   );
 
+  const handleAdd = useCallback(() => {
+    if (!canAddMore) {
+      Alert.alert("알림", `최대 ${maxLimit}개까지만 등록할 수 있습니다.`);
+      return;
+    }
+
+    addFeatures();
+
+    setTimeout(() => {
+      scrollViewRef?.current?.scrollToEnd({ animated: true });
+    }, 100);
+  }, [addFeatures, canAddMore, clearError, maxLimit, scrollViewRef]);
+
   return (
     <View className='flex-col gap-4'>
       {features.map((feature) => (
@@ -59,14 +72,14 @@ export default function AppendableInputGroup({
           value={feature.text}
           onChangeText={handleTextChange(feature.id)}
           onDelete={handleDelete(feature.id)}
-          error= {!!error}
+          error={!!error}
         />
       ))}
 
       {canAddMore && (
         <AddInputItemButton
           buttonLabel={buttonLabel}
-          onPress={() => addFeatures(scrollViewRef)}
+          onPress={() => handleAdd()}
         />
       )}
     </View>
