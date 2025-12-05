@@ -3,7 +3,7 @@ import { ScrollView, useWindowDimensions } from "react-native";
 
 import { useMultiImagePicker } from "@/src/hooks/form/useMultiImagePicker";
 import { File } from "@/src/types/File";
-import AddImageButton from "./AddImgeButton";
+import AddImageButton from "./AddImageButton";
 import PreviewImage from "./PreviewImage";
 
 interface MultiImagePickerProps {
