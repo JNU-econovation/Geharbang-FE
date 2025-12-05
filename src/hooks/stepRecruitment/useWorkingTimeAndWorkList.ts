@@ -1,5 +1,5 @@
-import { initialWorkingTimeAndWorkData } from "@/src/stores/slices/stepPost/useStepPostSlice";
-import { IWorkingTimeAndWork } from "@/src/types/models/application/StepPostData";
+import { initialWorkingTimeAndWorkData } from "@/src/stores/slices/stepRecruitment/useStepRecruitmentSlice";
+import { IWorkingTimeAndWork } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
 
 export function useWorkingTimeAndWork(
   workingTimeAndWorkList: IWorkingTimeAndWork[],

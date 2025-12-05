@@ -1,4 +1,4 @@
-export interface StepPostFormErrors {
+export interface StepRecruitmentFormErrors {
   guestHouseName: string;
   workingRegion: string;
   location: string;

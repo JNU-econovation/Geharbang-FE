@@ -10,7 +10,7 @@ interface GenderProps {
   error?: boolean;
 }
 
-export default function StepPostGender({
+export default function StepRecruitmentGender({
   selectedGender,
   setSelectedGender,
   errorMsg,

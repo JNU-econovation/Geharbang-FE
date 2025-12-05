@@ -1,5 +1,6 @@
 import { Gender } from "@/src/types/Gender";
-import { PerWorkingDay } from "@/src/types/models/stepPost/PerWorkingDay";
+import { PerWorkingDay } from "@/src/types/models/stepRecruitment/PerWorkingDay";
+
 import { Option } from "@/src/types/Option";
 
 export const STYLE_OPTIONS: Option[] = [

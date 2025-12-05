@@ -1,9 +1,8 @@
-import { create } from "zustand";
-
 import {
   IWorkingTimeAndWork,
-  StepPostData,
-} from "@/src/types/models/application/StepPostData";
+  StepRecruitmentData,
+} from "@/src/types/models/stepRecruitment/StepRecruitmentData";
+import { create } from "zustand";
 
 export const initialWorkingTimeAndWorkData: IWorkingTimeAndWork = {
   workingTimeName: "",
@@ -11,11 +10,11 @@ export const initialWorkingTimeAndWorkData: IWorkingTimeAndWork = {
   endTime: new Date(new Date().setHours(18, 0, 0, 0)),
   thatTimeWork: "",
   perWorkingDay: "",
-  workingCount: 0,
-  closedCount: 0,
+  workingCount: "",
+  closedCount: "",
 };
 
-const initialStepPostData: StepPostData = {
+const initialStepRecruitmentData: StepRecruitmentData = {
   guestHouseName: "",
   workingRegion: "",
   location: null,
@@ -25,18 +24,18 @@ const initialStepPostData: StepPostData = {
   gender: "",
 };
 
-interface StepPostSlice {
-  stepPostData: StepPostData;
-  setStepPostData: <K extends keyof StepPostData>(
+interface StepRecruitmentSlice {
+  stepPostData: StepRecruitmentData;
+  setStepPostData: <K extends keyof StepRecruitmentData>(
     key: K,
-    value: StepPostData[K]
+    value: StepRecruitmentData[K]
   ) => void;
 
   resetStepPost: () => void;
 }
 
-export const useStepPostSlice = create<StepPostSlice>((set) => ({
-  stepPostData: initialStepPostData,
+export const useStepRecruitmentSlice = create<StepRecruitmentSlice>((set) => ({
+  stepPostData: initialStepRecruitmentData,
 
   setStepPostData: (key, value) =>
     set((state) => ({
@@ -48,6 +47,6 @@ export const useStepPostSlice = create<StepPostSlice>((set) => ({
 
   resetStepPost: () =>
     set({
-      stepPostData: initialStepPostData,
+      stepPostData: initialStepRecruitmentData,
     }),
 }));

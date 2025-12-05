@@ -3,8 +3,8 @@ import { useState } from "react";
 interface UseWorkingCalculatorProps {
   mode: "manual" | "auto";
   totalDays?: number;
-  initialWorkingCount?: number;
-  initialClosedCount?: number;
+  initialWorkingCount?: number | "";
+  initialClosedCount?: number | "";
 }
 
 export function useWorkdayCalculator({

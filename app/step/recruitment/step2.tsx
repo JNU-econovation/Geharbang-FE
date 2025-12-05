@@ -6,17 +6,18 @@ import RecruitmentStepLayout from "@/app/step/recruitment/_components/Recruitmen
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
-import { useStepPostFormValidation } from "@/src/hooks/stepPost/useStepPostFormValidation";
-import { useStepPostSlice } from "@/src/stores/slices/stepPost/useStepPostSlice";
-import StepPostGender from "./_components/step2/StepPostGender";
+
+import { useStepRecruitmentFormValidation } from "@/src/hooks/stepRecruitment/useStepRecruitmentFormValidation";
+import { useStepRecruitmentSlice } from "@/src/stores/slices/stepRecruitment/useStepRecruitmentSlice";
+import StepPostGender from "./_components/step2/StepRecruitmentGender";
 import WorkingPeriod from "./_components/step2/WorkingPeriod";
 import WorkingStartDate from "./_components/step2/WorkingStartDate";
 import WorkingTimeAndWorkList from "./_components/step2/WorkingTimeAndWorkList";
 
 export default function RecruitmentStep2() {
-  const { stepPostData, setStepPostData } = useStepPostSlice();
+  const { stepPostData, setStepPostData } = useStepRecruitmentSlice();
 
-  const { errors, clearError, validateForm } = useStepPostFormValidation(
+  const { errors, clearError, validateForm } = useStepRecruitmentFormValidation(
     stepPostData,
     2
   );
@@ -60,7 +61,10 @@ export default function RecruitmentStep2() {
             workingTimeAndWorkList={stepPostData.workingTimeAndWork}
             setWorkingTimeAndWorkList={(workingTimeAndWork) => {
               setStepPostData("workingTimeAndWork", workingTimeAndWork);
-              clearError("workingTimeAndWork");
+
+              workingTimeAndWork.forEach((_, index) => {
+                clearError("workingTimeAndWork", index);
+              });
             }}
             errors={errors}
           />

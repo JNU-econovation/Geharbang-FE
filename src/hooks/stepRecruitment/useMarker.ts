@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import Geocoder from "react-native-geocoding";
 
-import { SelectedAddressProps } from "@/src/types/models/application/StepPostData";
+import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
 
 interface UseMarkerProps {
   latitude: number;

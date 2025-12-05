@@ -4,9 +4,9 @@ import { Pressable, View } from "react-native";
 import FormField from "@/src/components/ui/Form/FormField";
 import TextSize from "@/src/components/ui/TextSize";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
-import { useWorkingTimeAndWork } from "@/src/hooks/stepPost/useWorkingTimeAndWorkList";
-import { IWorkingTimeAndWork } from "@/src/types/models/application/StepPostData";
-import { StepPostFormErrors } from "@/src/types/models/stepPost/StepPostFormErrors";
+import { useWorkingTimeAndWork } from "@/src/hooks/stepRecruitment/useWorkingTimeAndWorkList";
+import { IWorkingTimeAndWork } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
+import { StepRecruitmentFormErrors } from "@/src/types/models/stepRecruitment/StepRecruitmentFormErrors";
 import { COLORS } from "@/src/utils/constants/colors";
 import WorkingTimeAndWork from "./WorkingTimeAndWork";
 
@@ -15,7 +15,7 @@ interface WorkingTimeAndWorkListProps {
   setWorkingTimeAndWorkList: (
     workingTimeAndWork: IWorkingTimeAndWork[]
   ) => void;
-  errors?: StepPostFormErrors;
+  errors?: StepRecruitmentFormErrors;
 }
 
 export default function WorkingTimeAndWorkList({

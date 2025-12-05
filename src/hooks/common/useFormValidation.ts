@@ -22,8 +22,18 @@ export const useFormValidation = <T, E>({
 }: UseFormValidationProps<T, E>) => {
   const [errors, setErrors] = useState<E>(initialErrors);
 
-  const clearError = (field: keyof E) => {
-    setErrors((prev) => ({ ...prev, [field]: "" }));
+  const clearError = (field: keyof E, index?: number) => {
+    if (index !== undefined && Array.isArray(errors[field])) {
+      const arr = [...(errors[field] as any[])];
+
+      arr[index] = Object.fromEntries(
+        Object.keys(arr[index]).map((key) => [key, ""])
+      );
+
+      setErrors((prev) => ({ ...prev, [field]: arr } as E));
+    } else {
+      setErrors((prev) => ({ ...prev, [field]: "" } as E));
+    }
   };
 
   const validateForm = (): boolean => {

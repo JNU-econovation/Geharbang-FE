@@ -4,21 +4,20 @@ import Flex from "@/src/components/layout/Flex";
 import FormField from "@/src/components/ui/Form/FormField";
 import CustomTextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
-import { useWorkdayCalculator } from "@/src/hooks/stepPost/useWorkingCalculator";
+import { useWorkdayCalculator } from "@/src/hooks/stepRecruitment/useWorkingCalculator";
 
 interface WorkdayInputProps {
   mode: "manual" | "auto";
   totalDays?: number;
-  initialWorkingCount?: number;
-  initialClosedCount?: number;
-
+  initialWorkingCount?: number | "";
+  initialClosedCount?: number | "";
   labelWorking?: string;
   labelClosed?: string;
   workingErrors?: string;
   closedErrors?: string;
 }
 
-export default function WorkdayInput({
+export default function WorkingdayInput({
   mode,
   totalDays,
   initialWorkingCount = 0,

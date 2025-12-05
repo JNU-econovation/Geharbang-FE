@@ -1,6 +1,6 @@
 import { Gender } from "../../Gender";
 
-export interface StepPostData {
+export interface StepRecruitmentData {
   guestHouseName: string;
   workingRegion: string;
   location: SelectedAddressProps | null;
@@ -16,8 +16,8 @@ export interface IWorkingTimeAndWork {
   endTime: Date;
   thatTimeWork: string;
   perWorkingDay: "로테이션" | "_7일_기준" | "";
-  workingCount: number;
-  closedCount: number;
+  workingCount: number | "";
+  closedCount: number | "";
 }
 
 export interface SelectedAddressProps {

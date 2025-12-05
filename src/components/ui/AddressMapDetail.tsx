@@ -3,8 +3,8 @@ import Geocoder from "react-native-geocoding";
 import MapView, { Marker } from "react-native-maps";
 
 import ModalBtn from "@/src/components/ui/Modal/ModalBtn";
-import { useMarker } from "@/src/hooks/stepPost/useMarker";
-import { SelectedAddressProps } from "@/src/types/models/application/StepPostData";
+import { useMarker } from "@/src/hooks/stepRecruitment/useMarker";
+import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
 
 const GOOGLE_MAPS_API_KEY = Constants.expoConfig?.extra?.googleMapsApiKey;
 Geocoder.init(GOOGLE_MAPS_API_KEY);

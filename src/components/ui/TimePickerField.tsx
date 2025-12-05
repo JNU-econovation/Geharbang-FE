@@ -1,8 +1,8 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Modal, Platform, Pressable, View } from "react-native";
 
-import { useTimePicker } from "@/src/hooks/stepPost/useTimePicker";
-import { formatToAMPM } from "@/src/utils/stepPost/time";
+import { useTimePicker } from "@/src/hooks/stepRecruitment/useTimePicker";
+import { formatToAMPM } from "@/src/utils/stepRecruitment/time";
 import TextSize from "./TextSize";
 
 interface TimePickerFieldProps {
@@ -10,12 +10,14 @@ interface TimePickerFieldProps {
   onChange: (date: Date) => void;
   width?: number;
   placeholder?: string;
+  error?: boolean;
 }
 
 export default function TimePickerField({
   value,
   onChange,
   width,
+  error,
 }: TimePickerFieldProps) {
   const { open, time, openPicker, closePicker, onTimeChange } = useTimePicker(
     value,
@@ -26,7 +28,9 @@ export default function TimePickerField({
     <>
       <Pressable onPress={openPicker}>
         <View
-          className='h-12 rounded-lg border border-gray-border px-3 justify-center bg-white'
+          className={`h-12 rounded-lg ${
+            error ? "border-primary-red" : "border-gray-border"
+          } border  px-3 justify-center bg-white`}
           style={{ width }}
         >
           <TextSize size={16} color='#364153' content={formatToAMPM(time)} />

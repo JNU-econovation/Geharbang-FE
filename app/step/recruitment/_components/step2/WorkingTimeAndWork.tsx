@@ -8,9 +8,10 @@ import CustomTextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
 import TimePickerField from "@/src/components/ui/TimePickerField";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
-import { IWorkingTimeAndWork } from "@/src/types/models/application/StepPostData";
-import { PerWorkingDay } from "@/src/types/models/stepPost/PerWorkingDay";
-import { WorkingTimeAndWorkErrors } from "@/src/types/models/stepPost/StepPostFormErrors";
+
+import { PerWorkingDay } from "@/src/types/models/stepRecruitment/PerWorkingDay";
+import { IWorkingTimeAndWork } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
+import { WorkingTimeAndWorkErrors } from "@/src/types/models/stepRecruitment/StepRecruitmentFormErrors";
 import { PER_WORKING_DAY } from "@/src/utils/constants/options";
 import WorkdayInput from "./WorkingInput";
 
@@ -55,7 +56,11 @@ export default function WorkingTimeAndWork({
       </FormField>
 
       <View className='pt-1' />
-      <FormField label='근무 시간' required>
+      <FormField
+        label='근무 시간'
+        required
+        errorMessage={errors?.startTime || errors?.endTime}
+      >
         <Flex items='center' justify='center' dir='row' gap={19}>
           <TimePickerField
             value={addedTimeAndWork.startTime}
@@ -63,6 +68,7 @@ export default function WorkingTimeAndWork({
               setAddedTimeAndWork({ ...addedTimeAndWork, startTime: date })
             }
             width={128}
+            error={!!(errors?.startTime || errors?.endTime)}
           />
 
           <TextSize size={20} color='#99A1AF' content='~' />
@@ -73,6 +79,7 @@ export default function WorkingTimeAndWork({
               setAddedTimeAndWork({ ...addedTimeAndWork, endTime: date })
             }
             width={128}
+            error={!!(errors?.startTime || errors?.endTime)}
           />
         </Flex>
       </FormField>
