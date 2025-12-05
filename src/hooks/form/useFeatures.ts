@@ -3,14 +3,9 @@ import { Feature } from "@/src/types/models/stepRecruitment/Feature";
 interface useFeaturesProps {
   features: Feature[];
   setFeatures: React.Dispatch<React.SetStateAction<Feature[]>>;
-  maxLimit: number;
 }
 
-export const useFeatures = ({
-  features,
-  setFeatures,
-  maxLimit,
-}: useFeaturesProps) => {
+export const useFeatures = ({ features, setFeatures }: useFeaturesProps) => {
   const addFeatures = () => {
     const newFeature = {
       id: Date.now().toString(),
@@ -27,12 +22,9 @@ export const useFeatures = ({
     setFeatures(features.map((f) => (f.id === id ? { ...f, text } : f)));
   };
 
-  const canAddMore = features.length < maxLimit;
-
   return {
     addFeatures,
     deleteFeature,
     updateFeature,
-    canAddMore,
   };
 };

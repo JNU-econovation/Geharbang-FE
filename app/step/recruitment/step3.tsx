@@ -11,7 +11,7 @@ import MultiImagePicker from "@/src/components/ui/imagePicker/MultiImagePicker";
 import TextInput from "@/src/components/ui/TextInput";
 import { useRecruitmentStep3Validation } from "@/src/hooks/recruitment/useRecruitmentStep3Validation";
 import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
-import AppendableInputGroup from "../../../src/components/ui/Form/AppendableInputGroup";
+import AppendableInputGroupContainer from "@/src/components/ui/Form/AppendableInputGroupContainer";
 
 export default function RecruitmentStep3() {
   const { step3Data, setStep3Update } = useStepRecruitmentStore();
@@ -123,7 +123,7 @@ export default function RecruitmentStep3() {
                   description='최대 5개까지 등록할 수 있습니다'
                   errorMessage={errors.advantages}
                 >
-                  <AppendableInputGroup
+                  <AppendableInputGroupContainer
                     features={step3Data.advantages}
                     setFeatures={(features) =>
                       setStep3Update("advantages", features)
@@ -142,7 +142,7 @@ export default function RecruitmentStep3() {
                   description='최대 5개까지 등록할 수 있습니다'
                   errorMessage={errors.employeeBenefits}
                 >
-                  <AppendableInputGroup
+                  <AppendableInputGroupContainer
                     features={step3Data.employeeBenefits}
                     setFeatures={(features) =>
                       setStep3Update("employeeBenefits", features)
