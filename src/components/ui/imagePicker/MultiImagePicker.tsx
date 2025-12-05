@@ -27,11 +27,17 @@ export default function MultiImagePicker({
   const currentCount = selectedImageFiles.length;
   const showAddButton = currentCount < maxCount;
 
-  const { pickImages, removeImage } = useMultiImagePicker({
+  const { pickImages, updateImages, removeImage } = useMultiImagePicker({
     selectedImageFiles,
     setSelectedImageFiles,
     maxCount,
   });
+
+  const handleAdd = async () => {
+    const imageFiles = await pickImages();
+    updateImages(imageFiles);
+    clearError?.();
+  };
 
   return (
     <ScrollView
@@ -41,10 +47,7 @@ export default function MultiImagePicker({
     >
       {showAddButton && (
         <AddImageButton
-          onAdd={() => {
-            pickImages();
-            clearError();
-          }}
+          onAdd={handleAdd}
           currentImages={currentCount}
           maxImages={maxCount}
           error={error}
