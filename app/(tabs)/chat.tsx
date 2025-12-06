@@ -26,7 +26,7 @@ export default function ChatScreen() {
           <Pressable onPress={() => router.push('/step/stepDetail/1')}>
             <TextSize size={16} color="deepskyblue" content="스텝 상세보기" />
           </Pressable>
-          <Pressable onPress={() => router.push('/step/recruitment/step4')}>
+          <Pressable onPress={() => router.push('/step/recruitment/step3')}>
             <TextSize size={16} color="deepskyblue" content="스텝 지원하기" />
           </Pressable>
         </View>

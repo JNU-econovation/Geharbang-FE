@@ -1,7 +1,7 @@
 import * as ImagePicker from "expo-image-picker";
 import { File } from "../../types/File";
 
-export const useImagePicker = (setSelectedImageFile: (file: File) => void) => {
+export const useSingleImagePicker = (setSelectedImageFile: (file: File) => void) => {
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
   const pickImage = async (): Promise<File | null> => {
