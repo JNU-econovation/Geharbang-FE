@@ -1,7 +1,8 @@
-import { StepRecruitmentStore } from "@/src/types/store/stepRecruitmentStore";
 import { create } from "zustand";
-import { createStep1Slice } from "./slice/createStep1Slice";
-import { createStep2Slice } from "./slice/createStep2Slice";
+
+import { StepRecruitmentStore } from "@/src/types/store/stepRecruitmentStore";
+import { createStep1Slice, initialStep1Data } from "./slice/createStep1Slice";
+import { createStep2Slice, initialStep2Data } from "./slice/createStep2Slice";
 // import { createStep3Slice } from "./slice/createStep3Slice";
 
 export const useStepRecruitmentStore = create<StepRecruitmentStore>()(
@@ -23,9 +24,9 @@ export const useStepRecruitmentStore = create<StepRecruitmentStore>()(
     },
 
     resetAllData: () => {
-      set((state) => ({
-        step1Data: { ...state.step1Data },
-        step2Data: { ...state.step2Data },
+      set(() => ({
+        step1Data: initialStep1Data,
+        step2Data: initialStep2Data,
         // step3Data: { ...state.step3Data },
       }));
     },
