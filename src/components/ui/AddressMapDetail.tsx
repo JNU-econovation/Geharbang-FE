@@ -1,4 +1,6 @@
 import Constants from "expo-constants";
+import { useState } from "react";
+import { TextInput, View } from "react-native";
 import Geocoder from "react-native-geocoding";
 import MapView, { Marker } from "react-native-maps";
 
@@ -32,13 +34,16 @@ export default function AddressMapDetail({
   selectable,
   pointerEvents,
 }: AddressMapDetailProps) {
-  const { markerPosition, setMarkerPosition, selectAddress } = useMarker({
-    latitude,
-    longitude,
-    selectable,
-    setSelectedAddress,
-    setModalVisible,
-  });
+  const { markerPosition, setMarkerPosition, selectAddress, searchLocation } =
+    useMarker({
+      latitude,
+      longitude,
+      selectable,
+      setSelectedAddress,
+      setModalVisible,
+    });
+
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   return (
     <>
@@ -58,6 +63,23 @@ export default function AddressMapDetail({
       >
         <Marker coordinate={markerPosition} draggable={selectable} />
       </MapView>
+
+      <View className='w-9/12 absolute top-12 left-5'>
+        <TextInput
+          placeholder='주소 검색'
+          value={searchKeyword}
+          onChangeText={setSearchKeyword}
+          onSubmitEditing={() => searchLocation(searchKeyword)}
+          className='
+      bg-white
+      h-12
+      px-4
+      rounded-lg
+      border
+      border-gray-200
+      text-[15px]'
+        />
+      </View>
 
       <ModalBtn
         modalVisible={modalVisible}

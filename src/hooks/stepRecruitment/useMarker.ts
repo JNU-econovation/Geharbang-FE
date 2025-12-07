@@ -27,6 +27,30 @@ export function useMarker({
     return result ? result.formatted_address : "";
   };
 
+  const searchLocation = useCallback(async (keyword: string) => {
+    if (!keyword) return;
+
+    try {
+      const geo = await Geocoder.from(`${keyword}, 대한민국`);
+
+      if (geo.results.length === 0) {
+        console.warn("검색 결과 없음");
+        return;
+      }
+
+      const location = geo.results[0]?.geometry?.location;
+
+      if (!location) return;
+
+      setMarkerPosition({
+        latitude: location.lat,
+        longitude: location.lng,
+      });
+    } catch (err) {
+      console.error("위치 검색 오류", err);
+    }
+  }, []);
+
   const selectAddress = useCallback(async () => {
     if (!selectable || !setSelectedAddress || !setModalVisible) return;
 
@@ -58,7 +82,7 @@ export function useMarker({
 
       setModalVisible(false);
     } catch (err) {
-      console.error("Geocoding Error:", err);
+      console.error("지도 오류", err);
     }
   }, [markerPosition, selectable, setSelectedAddress, setModalVisible]);
 
@@ -66,5 +90,6 @@ export function useMarker({
     markerPosition,
     setMarkerPosition,
     selectAddress,
+    searchLocation,
   };
 }
