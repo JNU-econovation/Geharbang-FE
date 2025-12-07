@@ -6,23 +6,21 @@ import RecruitmentStepLayout from "@/app/step/recruitment/_components/Recruitmen
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
-import { useStepPostFormValidation } from "@/src/hooks/stepRecruitment/useStepPostFormValidation";
-import { useStepPostSlice } from "@/src/stores/slices/stepPost/useStepPostSlice";
+import { useStep1FormValidation } from "@/src/hooks/stepRecruitment/useStep1Valication";
+import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecuitmentStore";
 import GuestHouseLocation from "./_components/step1/GuestHouseLocation";
 import GuestHouseName from "./_components/step1/GuestHouseName";
 import WorkingRegion from "./_components/step1/WorkingRegion";
 
 export default function RecruitmentStep1() {
-  const { stepPostData, setStepPostData, resetStepPost } = useStepPostSlice();
+  const { step1Data, setStep1Update, resetAllData } = useStepRecruitmentStore();
 
   useEffect(() => {
-    resetStepPost();
-  }, [resetStepPost]);
+    resetAllData();
+  }, [resetAllData]);
 
-  const { errors, clearError, validateForm } = useStepPostFormValidation(
-    stepPostData,
-    1
-  );
+  const { errors, validateForm, clearError } =
+    useStep1FormValidation(step1Data);
 
   const handleNext = () => {
     if (validateForm()) {
@@ -38,9 +36,9 @@ export default function RecruitmentStep1() {
       >
         <FormSection title='기본 정보'>
           <GuestHouseName
-            value={stepPostData.guestHouseName}
+            value={step1Data.guestHouseName}
             onChangeText={(text) => {
-              setStepPostData("guestHouseName", text);
+              setStep1Update("guestHouseName", text);
               clearError("guestHouseName");
             }}
             errorMsg={errors.guestHouseName}
@@ -48,9 +46,9 @@ export default function RecruitmentStep1() {
           />
 
           <WorkingRegion
-            selectedRegion={stepPostData.workingRegion}
+            selectedRegion={step1Data.workingRegion}
             onChangeOption={(region) => {
-              setStepPostData("workingRegion", region);
+              setStep1Update("workingRegion", region);
               clearError("workingRegion");
             }}
             errorMsg={errors.workingRegion}
@@ -58,9 +56,9 @@ export default function RecruitmentStep1() {
           />
 
           <GuestHouseLocation
-            selectedAddress={stepPostData.location}
+            selectedAddress={step1Data.location}
             setSelectedAddress={(location) => {
-              setStepPostData("location", location);
+              setStep1Update("location", location);
               clearError("location");
             }}
             errorMsg={errors.location}

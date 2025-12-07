@@ -8,9 +8,8 @@ import CustomTextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
 import TimePickerField from "@/src/components/ui/TimePickerField";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
-
 import { PerWorkingDay } from "@/src/types/models/stepRecruitment/PerWorkingDay";
-import { IWorkingTimeAndWork } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
+import { IWorkingTimeAndWork } from "@/src/types/models/stepRecruitment/Step2Data";
 import { WorkingTimeAndWorkErrors } from "@/src/types/models/stepRecruitment/StepRecruitmentFormErrors";
 import { PER_WORKING_DAY } from "@/src/utils/constants/options";
 import WorkdayInput from "./WorkingInput";

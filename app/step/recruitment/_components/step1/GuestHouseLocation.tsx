@@ -5,7 +5,7 @@ import AddressMapDetail from "@/src/components/ui/AddressMapDetail";
 import FormField from "@/src/components/ui/Form/FormField";
 import TextSize from "@/src/components/ui/TextSize";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
-import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
+import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/Step1Data";
 
 interface GuestHouseLocationProps {
   selectedAddress: SelectedAddressProps | null;

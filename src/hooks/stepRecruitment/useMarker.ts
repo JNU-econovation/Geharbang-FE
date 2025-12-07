@@ -1,13 +1,13 @@
 import { useCallback, useState } from "react";
 import Geocoder from "react-native-geocoding";
 
-import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
+import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/Step1Data";
 
 interface UseMarkerProps {
   latitude: number;
   longitude: number;
   selectable?: boolean;
-  setSelectedAddress: (address: SelectedAddressProps) => void;
+  setSelectedAddress?: (address: SelectedAddressProps) => void;
   setModalVisible?: (value: boolean) => void;
 }
 

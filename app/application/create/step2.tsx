@@ -11,7 +11,7 @@ import TextSize from "@/src/components/ui/TextSize";
 import { useApplicationFormValidation } from "@/src/hooks/application/create/useApplicationFormValidation";
 import { useHandleCreate } from "@/src/hooks/application/create/useHandleCreate";
 import { usePreventHardwareBack } from "@/src/hooks/common/usePreventHardwareBack";
-import { useApplicationSlice } from "@/src/stores/slices/application/useApplicationSlice";
+import { useApplicationSlice } from "@/src/stores/application/useApplicationSlice";
 import { formatUpperCase } from "@/src/utils/common/upperCaseFormatter";
 import FormSection from "../../../src/components/ui/Form/FormSection";
 import ProgressBar from "../../../src/components/ui/Form/ProgressBar";

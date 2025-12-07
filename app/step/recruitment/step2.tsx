@@ -6,21 +6,18 @@ import RecruitmentStepLayout from "@/app/step/recruitment/_components/Recruitmen
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
-
-import { useStepRecruitmentFormValidation } from "@/src/hooks/stepRecruitment/useStepRecruitmentFormValidation";
-import { useStepRecruitmentSlice } from "@/src/stores/slices/stepRecruitment/useStepRecruitmentSlice";
+import { useStep2FormValidation } from "@/src/hooks/stepRecruitment/useStep2Validation";
+import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecuitmentStore";
 import StepPostGender from "./_components/step2/StepRecruitmentGender";
 import WorkingPeriod from "./_components/step2/WorkingPeriod";
 import WorkingStartDate from "./_components/step2/WorkingStartDate";
 import WorkingTimeAndWorkList from "./_components/step2/WorkingTimeAndWorkList";
 
 export default function RecruitmentStep2() {
-  const { stepPostData, setStepPostData } = useStepRecruitmentSlice();
+  const { step2Data, setStep2Update } = useStepRecruitmentStore();
 
-  const { errors, clearError, validateForm } = useStepRecruitmentFormValidation(
-    stepPostData,
-    2
-  );
+  const { errors, validateForm, clearError } =
+    useStep2FormValidation(step2Data);
 
   const handleNext = () => {
     if (validateForm()) {
@@ -36,9 +33,9 @@ export default function RecruitmentStep2() {
       >
         <FormSection title='근무 정보'>
           <WorkingStartDate
-            selectedDate={stepPostData.workingStartDate}
+            selectedDate={step2Data.workingStartDate}
             setSelectedDate={(date) => {
-              setStepPostData("workingStartDate", date);
+              setStep2Update("workingStartDate", date);
               clearError("workingStartDate");
             }}
             errorMsg={errors.workingStartDate}
@@ -47,9 +44,9 @@ export default function RecruitmentStep2() {
 
           <View className='pt-1' />
           <WorkingPeriod
-            selectedPeriod={stepPostData.workingPeriod}
+            selectedPeriod={step2Data.workingPeriod}
             setSelectedPeriod={(period) => {
-              setStepPostData("workingPeriod", period);
+              setStep2Update("workingPeriod", period);
               clearError("workingPeriod");
             }}
             errorMsg={errors.workingPeriod}
@@ -58,9 +55,9 @@ export default function RecruitmentStep2() {
 
           <View className='pt-1' />
           <WorkingTimeAndWorkList
-            workingTimeAndWorkList={stepPostData.workingTimeAndWork}
+            workingTimeAndWorkList={step2Data.workingTimeAndWork}
             setWorkingTimeAndWorkList={(workingTimeAndWork) => {
-              setStepPostData("workingTimeAndWork", workingTimeAndWork);
+              setStep2Update("workingTimeAndWork", workingTimeAndWork);
 
               workingTimeAndWork.forEach((_, index) => {
                 clearError("workingTimeAndWork", index);
@@ -70,9 +67,9 @@ export default function RecruitmentStep2() {
           />
 
           <StepPostGender
-            selectedGender={stepPostData.gender}
+            selectedGender={step2Data.gender}
             setSelectedGender={(gender) => {
-              setStepPostData("gender", gender);
+              setStep2Update("gender", gender);
               clearError("gender");
             }}
             errorMsg={errors.gender}

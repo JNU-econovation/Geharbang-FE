@@ -1,10 +1,9 @@
-import { View } from "react-native";
-
 import Flex from "@/src/components/layout/Flex";
 import FormField from "@/src/components/ui/Form/FormField";
 import CustomTextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
-import { useWorkdayCalculator } from "@/src/hooks/stepRecruitment/useWorkingCalculator";
+import { useWorkingCalculator } from "@/src/hooks/stepRecruitment/useWorkingCalculator";
+import { View } from "react-native";
 
 interface WorkdayInputProps {
   mode: "manual" | "auto";
@@ -17,11 +16,11 @@ interface WorkdayInputProps {
   closedErrors?: string;
 }
 
-export default function WorkingdayInput({
+export default function WorkdayInput({
   mode,
   totalDays,
-  initialWorkingCount = 0,
-  initialClosedCount = 0,
+  initialWorkingCount = "",
+  initialClosedCount = "",
   labelWorking = "근무일 수",
   labelClosed = "휴무일 수",
   workingErrors,
@@ -33,7 +32,7 @@ export default function WorkingdayInput({
     updateWorkingCount,
     updateClosedCount,
     isAuto,
-  } = useWorkdayCalculator({
+  } = useWorkingCalculator({
     mode,
     totalDays,
     initialWorkingCount,
@@ -49,10 +48,12 @@ export default function WorkingdayInput({
       >
         <Flex items='center' dir='row' gap={10}>
           <CustomTextInput
-            value={String(workingCount)}
+            value={workingCount === "" ? "" : String(workingCount)}
             keyboardType='numeric'
             width={250}
-            onChangeText={(v) => updateWorkingCount(Number(v))}
+            onChangeText={(v) => {
+              updateWorkingCount(v === "" ? "" : Number(v));
+            }}
             error={!!workingErrors}
           />
           <TextSize size={16} color='#364153' content='일 근무' />
@@ -66,7 +67,7 @@ export default function WorkingdayInput({
       >
         <Flex items='center' dir='row' gap={10}>
           <CustomTextInput
-            value={String(closedCount)}
+            value={closedCount === "" ? "" : String(closedCount)}
             keyboardType='numeric'
             width={250}
             editable={!isAuto}

@@ -5,8 +5,8 @@ import FormField from "@/src/components/ui/Form/FormField";
 import TextSize from "@/src/components/ui/TextSize";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
 import { useWorkingTimeAndWork } from "@/src/hooks/stepRecruitment/useWorkingTimeAndWorkList";
-import { IWorkingTimeAndWork } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
-import { StepRecruitmentFormErrors } from "@/src/types/models/stepRecruitment/StepRecruitmentFormErrors";
+import { IWorkingTimeAndWork } from "@/src/types/models/stepRecruitment/Step2Data";
+import { Step2FormErrors } from "@/src/types/models/stepRecruitment/Step2FormErrors";
 import { COLORS } from "@/src/utils/constants/colors";
 import WorkingTimeAndWork from "./WorkingTimeAndWork";
 
@@ -15,7 +15,7 @@ interface WorkingTimeAndWorkListProps {
   setWorkingTimeAndWorkList: (
     workingTimeAndWork: IWorkingTimeAndWork[]
   ) => void;
-  errors?: StepRecruitmentFormErrors;
+  errors?: Step2FormErrors;
 }
 
 export default function WorkingTimeAndWorkList({
@@ -60,7 +60,7 @@ export default function WorkingTimeAndWorkList({
           <View className='pr-1' />
           <TextSize
             size={16}
-            color='#4A5565'
+            color={COLORS.GRAY.TEXT}
             content='근무 시간 및 업무 추가'
           />
         </ViewContext>

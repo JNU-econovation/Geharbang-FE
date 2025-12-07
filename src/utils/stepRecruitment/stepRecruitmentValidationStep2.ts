@@ -1,12 +1,12 @@
-import { StepRecruitmentData } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
-import { StepRecruitmentFormErrors } from "@/src/types/models/stepRecruitment/StepRecruitmentFormErrors";
+import { Step2Data } from "@/src/types/models/stepRecruitment/Step2Data";
+import { Step2FormErrors } from "@/src/types/models/stepRecruitment/Step2FormErrors";
 
 export const stepRecruitmentValidationStep2 = (
-  data: StepRecruitmentData,
-  currentErrors: StepRecruitmentFormErrors
-): { isValid: boolean; errors: StepRecruitmentFormErrors } => {
+  data: Step2Data,
+  currentErrors: Step2FormErrors
+): { isValid: boolean; errors: Step2FormErrors } => {
   let isValid = true;
-  const newErrors: StepRecruitmentFormErrors = { ...currentErrors };
+  const newErrors: Step2FormErrors = { ...currentErrors };
 
   if (!data.workingStartDate) {
     newErrors.workingStartDate = "근무 시작일을 선택해주세요.";

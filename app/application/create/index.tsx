@@ -11,7 +11,7 @@ import FormField from "@/src/components/ui/Form/FormField";
 import ImagePicker from "@/src/components/ui/ImagePicker";
 import OptionSelector from "@/src/components/ui/OptionSelector";
 import TextSize from "@/src/components/ui/TextSize";
-import { useApplicationSlice } from "@/src/stores/slices/application/useApplicationSlice";
+import { useApplicationSlice } from "@/src/stores/application/useApplicationSlice";
 import { Gender } from "@/src/types/Gender";
 import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import { GENDER_BASIC } from "@/src/utils/constants/options";

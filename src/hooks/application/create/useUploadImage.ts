@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { uploadImage } from "@/src/services/application/uploadImage";
-import { useApplicationSlice } from "@/src/stores/slices/application/useApplicationSlice";
+import { useApplicationSlice } from "@/src/stores/application/useApplicationSlice";
 import { File } from "@/src/types/File";
 
 export const useUploadImage = () => {

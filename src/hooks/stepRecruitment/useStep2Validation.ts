@@ -1,20 +1,13 @@
 import { useFormValidation } from "@/src/hooks/common/useFormValidation";
-import { StepRecruitmentData } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
-import { StepRecruitmentFormErrors } from "@/src/types/models/stepRecruitment/StepRecruitmentFormErrors";
-import { stepRecruitmentValidationStep1 } from "@/src/utils/stepRecruitment/stepRecruitmentValidationStep1";
+import { Step2Data } from "@/src/types/models/stepRecruitment/Step2Data";
+import { Step2FormErrors } from "@/src/types/models/stepRecruitment/Step2FormErrors";
 import { stepRecruitmentValidationStep2 } from "@/src/utils/stepRecruitment/stepRecruitmentValidationStep2";
 
-export const useStepRecruitmentFormValidation = (
-  stepPostData: StepRecruitmentData,
-  step?: number
-) => {
-  return useFormValidation<StepRecruitmentData, StepRecruitmentFormErrors>({
+export const useStep2FormValidation = (stepPostData: Step2Data) => {
+  return useFormValidation<Step2Data, Step2FormErrors>({
     formData: stepPostData,
-    step,
+    step: 2,
     initialErrors: {
-      guestHouseName: "",
-      workingRegion: "",
-      location: "",
       workingStartDate: "",
       workingPeriod: "",
       workingTimeAndWork: [
@@ -31,7 +24,6 @@ export const useStepRecruitmentFormValidation = (
       gender: "",
     },
     validators: {
-      1: (data, errors) => stepRecruitmentValidationStep1(data, errors),
       2: (data, errors) => stepRecruitmentValidationStep2(data, errors),
     },
   });

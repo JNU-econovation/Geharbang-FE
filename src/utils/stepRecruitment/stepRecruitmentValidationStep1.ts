@@ -1,12 +1,12 @@
-import { StepRecruitmentData } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
-import { StepRecruitmentFormErrors } from "@/src/types/models/stepRecruitment/StepRecruitmentFormErrors";
+import { Step1Data } from "@/src/types/models/stepRecruitment/Step1Data";
+import { Step1FormErrors } from "@/src/types/models/stepRecruitment/Step1FormErrors";
 
 export const stepRecruitmentValidationStep1 = (
-  data: StepRecruitmentData,
-  currentErrors: StepRecruitmentFormErrors
-): { isValid: boolean; errors: StepRecruitmentFormErrors } => {
+  data: Step1Data,
+  currentErrors: Step1FormErrors
+): { isValid: boolean; errors: Step1FormErrors } => {
   let isValid = true;
-  const newErrors: StepRecruitmentFormErrors = { ...currentErrors };
+  const newErrors: Step1FormErrors = { ...currentErrors };
 
   if (!data.guestHouseName || data.guestHouseName.trim() === "") {
     newErrors.guestHouseName = "게스트하우스 이름을 입력해주세요.";

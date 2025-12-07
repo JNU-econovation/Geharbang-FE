@@ -6,7 +6,7 @@ import MapView, { Marker } from "react-native-maps";
 
 import ModalBtn from "@/src/components/ui/Modal/ModalBtn";
 import { useMarker } from "@/src/hooks/stepRecruitment/useMarker";
-import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/StepRecruitmentData";
+import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/Step1Data";
 
 const GOOGLE_MAPS_API_KEY = Constants.expoConfig?.extra?.googleMapsApiKey;
 Geocoder.init(GOOGLE_MAPS_API_KEY);
@@ -18,7 +18,7 @@ interface AddressMapDetailProps {
   longitudeDelta: number;
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
-  setSelectedAddress: (address: SelectedAddressProps) => void;
+  setSelectedAddress?: (address: SelectedAddressProps) => void;
   selectable?: boolean;
   pointerEvents?: "none";
 }
@@ -64,13 +64,14 @@ export default function AddressMapDetail({
         <Marker coordinate={markerPosition} draggable={selectable} />
       </MapView>
 
-      <View className='w-9/12 absolute top-12 left-5'>
-        <TextInput
-          placeholder='주소 검색'
-          value={searchKeyword}
-          onChangeText={setSearchKeyword}
-          onSubmitEditing={() => searchLocation(searchKeyword)}
-          className='
+      {selectable && (
+        <View className='w-9/12 absolute top-12 left-5'>
+          <TextInput
+            placeholder='주소 검색'
+            value={searchKeyword}
+            onChangeText={setSearchKeyword}
+            onSubmitEditing={() => searchLocation(searchKeyword)}
+            className='
       bg-white
       h-12
       px-4
@@ -78,8 +79,9 @@ export default function AddressMapDetail({
       border
       border-gray-200
       text-[15px]'
-        />
-      </View>
+          />
+        </View>
+      )}
 
       <ModalBtn
         modalVisible={modalVisible}
