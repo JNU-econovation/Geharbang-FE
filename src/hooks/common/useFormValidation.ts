@@ -4,14 +4,12 @@ export interface ValidationResult<E> {
   isValid: boolean;
   errors: E;
 }
-
 interface UseFormValidationProps<T, E> {
   formData: T;
   validators: { [key: number]: (data: T, errors: E) => ValidationResult<E> };
   initialErrors: E;
   step?: number;
 }
-
 export const useFormValidation = <T, E>({
   formData,
   validators,
@@ -20,13 +18,24 @@ export const useFormValidation = <T, E>({
 }: UseFormValidationProps<T, E>) => {
   const [errors, setErrors] = useState<E>(initialErrors);
 
-  const clearError = (field: keyof E, index?: number) => {
+  const clearError = (field: keyof E, index?: number, key?: string) => {
     if (index !== undefined && Array.isArray(errors[field])) {
       const arr = [...(errors[field] as any[])];
-      arr[index] = Object.fromEntries(
-        Object.keys(arr[index]).map((key) => [key, ""])
-      );
+      if (!arr[index]) arr[index] = {};
+
+      if (key) {
+        arr[index] = { ...arr[index], [key]: "" };
+      } else {
+        arr[index] = Object.fromEntries(
+          Object.keys(arr[index]).map((k) => [k, ""])
+        );
+      }
+
       setErrors((prev) => ({ ...prev, [field]: arr } as E));
+    } else if (key) {
+      setErrors(
+        (prev) => ({ ...prev, [field]: { ...prev[field], [key]: "" } } as E)
+      );
     } else {
       setErrors((prev) => ({ ...prev, [field]: "" } as E));
     }

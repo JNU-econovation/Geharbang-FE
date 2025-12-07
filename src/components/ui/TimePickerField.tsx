@@ -37,25 +37,36 @@ export default function TimePickerField({
         </View>
       </Pressable>
 
-      <Modal visible={open} transparent animationType='fade'>
-        <View className='flex-1 bg-black/40 justify-center px-6'>
-          <View className='bg-white rounded-xl py-5 px-3'>
-            <DateTimePicker
-              mode='time'
-              display={Platform.OS === "ios" ? "spinner" : "clock"}
-              value={time}
-              onChange={onTimeChange}
-              is24Hour={false}
-            />
+      {Platform.OS === "ios" ? (
+        <Modal visible={open} animationType='fade' transparent>
+          <View className='flex-1 bg-black/40 justify-center px-6'>
+            <View className=' bg-white rounded-xl py-5 px-3'>
+              <DateTimePicker
+                mode='time'
+                display={Platform.OS === "ios" ? "spinner" : "clock"}
+                value={time}
+                onChange={onTimeChange}
+                is24Hour={false}
+              />
 
-            {Platform.OS === "ios" && (
-              <Pressable className='py-3 items-center' onPress={closePicker}>
-                <TextSize size={16} content='완료' color='#007AFF' />
-              </Pressable>
-            )}
+              {Platform.OS === "ios" && (
+                <Pressable className='py-3 items-center' onPress={closePicker}>
+                  <TextSize size={16} content='완료' color='#007AFF' />
+                </Pressable>
+              )}
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      ) : (
+        open && (
+          <DateTimePicker
+            mode='time'
+            value={time}
+            onChange={onTimeChange}
+            is24Hour={false}
+          />
+        )
+      )}
     </>
   );
 }
