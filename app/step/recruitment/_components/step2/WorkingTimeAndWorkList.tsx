@@ -39,14 +39,13 @@ export default function WorkingTimeAndWorkList({
       }
     >
       {workingList.map((item, index) => (
-        <View key={index}>
-          <WorkingTimeAndWork
-            addedTimeAndWork={item}
-            setAddedTimeAndWork={(updated) => updateWorking(index, updated)}
-            onDelete={() => deleteWorking(index)}
-            errors={errors?.workingTimeAndWork?.[index]}
-          />
-        </View>
+        <WorkingTimeAndWork
+          key={index}
+          addedTimeAndWork={item}
+          setAddedTimeAndWork={(updated) => updateWorking(index, updated)}
+          onDelete={() => deleteWorking(index)}
+          errors={errors?.workingTimeAndWork?.[index]}
+        />
       ))}
 
       <Pressable onPress={addWorking}>

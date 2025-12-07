@@ -8,21 +8,22 @@ import { View } from "react-native";
 interface WorkdayInputProps {
   mode: "manual" | "auto";
   totalDays?: number;
-  initialWorkingCount?: number | "";
-  initialClosedCount?: number | "";
-  labelWorking?: string;
-  labelClosed?: string;
+  initialWorkingCount: number | "";
+  initialClosedCount: number | "";
+  setWorkingCount: (v: number | "") => void;
+  setClosedCount: (v: number | "") => void;
+
   workingErrors?: string;
   closedErrors?: string;
 }
 
-export default function WorkdayInput({
+export default function WorkingInput({
   mode,
   totalDays,
-  initialWorkingCount = "",
-  initialClosedCount = "",
-  labelWorking = "근무일 수",
-  labelClosed = "휴무일 수",
+  initialWorkingCount,
+  initialClosedCount,
+  setWorkingCount,
+  setClosedCount,
   workingErrors,
   closedErrors,
 }: WorkdayInputProps) {
@@ -35,20 +36,18 @@ export default function WorkdayInput({
   } = useWorkingCalculator({
     mode,
     totalDays,
-    initialWorkingCount,
-    initialClosedCount,
+    workingCount: initialWorkingCount,
+    closedCount: initialClosedCount,
+    setWorkingCount,
+    setClosedCount,
   });
 
   return (
     <View>
-      <FormField
-        label={labelWorking}
-        required={true}
-        errorMessage={workingErrors}
-      >
+      <FormField label='근무일 수' required={true} errorMessage={workingErrors}>
         <Flex items='center' dir='row' gap={10}>
           <CustomTextInput
-            value={workingCount === "" ? "" : String(workingCount)}
+            value={workingCount}
             keyboardType='numeric'
             width={250}
             onChangeText={(v) => {
@@ -60,18 +59,16 @@ export default function WorkdayInput({
         </Flex>
       </FormField>
 
-      <FormField
-        label={labelClosed}
-        required={true}
-        errorMessage={closedErrors}
-      >
+      <FormField label='휴무일 수' required={true} errorMessage={closedErrors}>
         <Flex items='center' dir='row' gap={10}>
           <CustomTextInput
-            value={closedCount === "" ? "" : String(closedCount)}
+            value={closedCount}
             keyboardType='numeric'
             width={250}
             editable={!isAuto}
-            onChangeText={(v) => updateClosedCount(Number(v))}
+            onChangeText={(v) => {
+              updateClosedCount(v === "" ? "" : Number(v));
+            }}
             error={!!closedErrors}
           />
           <TextSize size={16} color='#364153' content='일 근무' />

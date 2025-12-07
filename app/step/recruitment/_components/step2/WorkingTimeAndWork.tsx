@@ -12,7 +12,7 @@ import { PerWorkingDay } from "@/src/types/models/stepRecruitment/PerWorkingDay"
 import { IWorkingTimeAndWork } from "@/src/types/models/stepRecruitment/Step2Data";
 import { WorkingTimeAndWorkErrors } from "@/src/types/models/stepRecruitment/StepRecruitmentFormErrors";
 import { PER_WORKING_DAY } from "@/src/utils/constants/options";
-import WorkdayInput from "./WorkingInput";
+import WorkingInput from "./WorkingInput";
 
 interface WorkingTimeAndWorkProps {
   addedTimeAndWork: IWorkingTimeAndWork;
@@ -124,13 +124,25 @@ export default function WorkingTimeAndWork({
       </FormField>
 
       <View className='pt-1' />
-      <WorkdayInput
+      <WorkingInput
         mode={
           addedTimeAndWork.perWorkingDay === "_7일_기준" ? "auto" : "manual"
         }
         totalDays={7}
         initialWorkingCount={addedTimeAndWork.workingCount}
         initialClosedCount={addedTimeAndWork.closedCount}
+        setWorkingCount={(workingCount) =>
+          setAddedTimeAndWork({
+            ...addedTimeAndWork,
+            workingCount: workingCount,
+          })
+        }
+        setClosedCount={(closedCount) =>
+          setAddedTimeAndWork({
+            ...addedTimeAndWork,
+            closedCount: closedCount,
+          })
+        }
         workingErrors={errors?.workingCount}
         closedErrors={errors?.closedCount}
       />

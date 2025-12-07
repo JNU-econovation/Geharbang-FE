@@ -17,7 +17,7 @@ export default function RecruitmentStep1() {
 
   useEffect(() => {
     resetAllData();
-  }, [resetAllData]);
+  }, []);
 
   const { errors, validateForm, clearError } =
     useStep1FormValidation(step1Data);
