@@ -17,18 +17,12 @@ export function useWorkingCalculator({
   setWorkingCount: setGlobalWorking,
   setClosedCount: setGlobalClosed,
 }: UseWorkingCalculatorProps) {
-  const [localWorking, setLocalWorking] = useState<number | "">(initialWorking);
-  const [localClosed, setLocalClosed] = useState<number | "">(initialClosed);
+  const [localWorking, setLocalWorking] = useState(initialWorking);
+  const [localClosed, setLocalClosed] = useState(initialClosed);
 
   const isValidAutoRange = (value: number) => value >= 1 && value <= 7;
 
   const updateWorkingCount = (count: number | "") => {
-    if (mode === "auto" && typeof count === "number") {
-      if (!isValidAutoRange(count)) {
-        return;
-      }
-    }
-
     setLocalWorking(count);
 
     if (count === "") {
@@ -39,14 +33,17 @@ export function useWorkingCalculator({
     }
 
     if (mode === "auto") {
-      const newClosed = Math.max(totalDays - (count as number), 0);
+      if (typeof count === "number" && !isValidAutoRange(count)) return;
+
+      const newClosed = Math.max(totalDays - count, 0);
+
       setLocalClosed(newClosed);
       setGlobalWorking(count);
       setGlobalClosed(newClosed);
       return;
     }
 
-    if (typeof localClosed === "number" && localClosed > (count as number)) {
+    if (typeof localClosed === "number" && localClosed > count) {
       setLocalClosed(count);
       setGlobalClosed(count);
     }
@@ -79,12 +76,14 @@ export function useWorkingCalculator({
   };
 
   useEffect(() => {
-    setLocalWorking(initialWorking);
-  }, [initialWorking]);
+    setLocalWorking("");
+    setLocalClosed("");
+    setGlobalWorking("");
+    setGlobalClosed("");
+  }, [mode]);
 
-  useEffect(() => {
-    setLocalClosed(initialClosed);
-  }, [initialClosed]);
+  useEffect(() => setLocalWorking(initialWorking), [initialWorking]);
+  useEffect(() => setLocalClosed(initialClosed), [initialClosed]);
 
   return {
     workingCount: localWorking,
