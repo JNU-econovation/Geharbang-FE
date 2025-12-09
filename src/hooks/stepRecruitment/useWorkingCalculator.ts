@@ -23,23 +23,34 @@ export function useWorkingCalculator({
   const isValidAutoRange = (value: number) => value >= 1 && value <= 7;
 
   const updateWorkingCount = (count: number | "") => {
+    if (mode === "auto") {
+      if (count === "") {
+        setLocalWorking("");
+        setLocalClosed("");
+        setGlobalWorking("");
+        setGlobalClosed("");
+        return;
+      }
+
+      if (!isValidAutoRange(count)) {
+        return;
+      }
+
+      setLocalWorking(count);
+
+      const newClosed = Math.max(totalDays - count, 0);
+      setLocalClosed(newClosed);
+      setGlobalWorking(count);
+      setGlobalClosed(newClosed);
+      return;
+    }
+
     setLocalWorking(count);
 
     if (count === "") {
       setLocalClosed("");
       setGlobalWorking("");
       setGlobalClosed("");
-      return;
-    }
-
-    if (mode === "auto") {
-      if (typeof count === "number" && !isValidAutoRange(count)) return;
-
-      const newClosed = Math.max(totalDays - count, 0);
-
-      setLocalClosed(newClosed);
-      setGlobalWorking(count);
-      setGlobalClosed(newClosed);
       return;
     }
 

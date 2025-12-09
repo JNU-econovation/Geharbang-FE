@@ -71,7 +71,7 @@ export default function WorkingInput({
             }}
             error={!!closedErrors}
           />
-          <TextSize size={16} color='#364153' content='일 근무' />
+          <TextSize size={16} color='#364153' content='일 휴무' />
         </Flex>
       </FormField>
     </View>

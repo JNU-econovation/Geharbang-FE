@@ -49,33 +49,33 @@ export const stepRecruitmentValidationStep2 = (
 
       if (!item.workingTimeName) {
         err.workingTimeName = "근무 조 이름을 입력해주세요.";
+        isValid = false;
       }
-      isValid = false;
 
       if (item.startTime && item.endTime && item.endTime < item.startTime) {
         err.startTime = "종료 시간이 시작 시간보다 이전일 수 없습니다.";
+        isValid = false;
       }
-      isValid = false;
 
       if (!item.thatTimeWork) {
         err.thatTimeWork = "해당 시간대 업무를 입력해주세요.";
+        isValid = false;
       }
-      isValid = false;
 
       if (!item.perWorkingDay) {
         err.perWorkingDay = "근무일 기준을 선택해주세요.";
+        isValid = false;
       }
-      isValid = false;
 
       if (!item.workingCount) {
         err.workingCount = "근무일 수를 입력해주세요.";
+        isValid = false;
       }
-      isValid = false;
 
       if (!item.closedCount) {
         err.closedCount = "휴무일 수를 입력해주세요.";
+        isValid = false;
       }
-      isValid = false;
 
       return err;
     });
