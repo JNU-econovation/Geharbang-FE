@@ -2,25 +2,25 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Image, Pressable, View } from "react-native";
 
-import { useImagePicker } from "@/src/hooks/common/useImagePicker";
+import { useSingleImagePicker } from "@/src/hooks/form/useSingleImagePicker";
 import { File } from "@/src/types/File";
 import { COLORS } from "@/src/utils/constants/colors";
 
-import Flex from "../layout/Flex/Flex";
-import TextSize from "./TextSize";
+import Flex from "../../layout/Flex";
+import TextSize from "../TextSize";
 
-interface ImagePickerProps {
+interface SingleImagePickerProps {
   selectedImageFile: File;
   setSelectedImageFile: (file: File) => void;
   error?: boolean;
 }
 
-export default function ImagePicker({
+export default function SingleImagePicker({
   selectedImageFile,
   setSelectedImageFile,
   error,
-}: ImagePickerProps) {
-  const { pickImage } = useImagePicker(setSelectedImageFile);
+}: SingleImagePickerProps) {
+  const { pickImage } = useSingleImagePicker(setSelectedImageFile);
 
   return (
     <Flex items='center' justify='center' gap={10}>

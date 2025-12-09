@@ -8,11 +8,13 @@ import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
 import Button from "@/src/components/ui/Button/Button";
 import FormField from "@/src/components/ui/Form/FormField";
-import ImagePicker from "@/src/components/ui/ImagePicker";
+
+import SingleImagePicker from "@/src/components/ui/imagePicker/SingleImagePicker";
 import OptionSelector from "@/src/components/ui/OptionSelector";
 import TextSize from "@/src/components/ui/TextSize";
 import { useApplicationSlice } from "@/src/stores/application/useApplicationSlice";
 import { Gender } from "@/src/types/Gender";
+
 import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import { GENDER_BASIC } from "@/src/utils/constants/options";
 
@@ -24,10 +26,9 @@ import DateInput from "../_components/DateInput";
 
 export default function applicationCreate() {
   const {
-    applicationData,
-    setApplicationData,
-    currentStep,
-    resetApplication,
+    data,
+    setUpdate,
+    resetData,
     imageFile,
     setImageFile,
   } = useApplicationSlice();
@@ -60,7 +61,7 @@ export default function applicationCreate() {
 
         <ProgressBar
           stepTitle='기본정보'
-          currentStep={currentStep}
+currentStep={1}
           totalSteps={2}
         />
 
@@ -70,7 +71,7 @@ export default function applicationCreate() {
               {/* 대표 사진 */}
               <FormSection title='대표사진'>
                 <FormField label='' errorMessage={errors.image}>
-                  <ImagePicker
+<SingleImagePicker
                     selectedImageFile={imageFile}
                     setSelectedImageFile={(file) => {
                       setImageFile(file);
@@ -141,7 +142,8 @@ export default function applicationCreate() {
                   required={true}
                   errorMessage={errors.gender}
                 >
-                  <OptionSelector<Gender>
+<OptionSelector<Gender>
+
                     size='45%'
                     option={GENDER_BASIC}
                     selected={applicationData.gender}

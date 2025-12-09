@@ -3,7 +3,9 @@ import { create } from "zustand";
 import { File } from "@/src/types/File";
 import { ApplicationData } from "@/src/types/models/application/ApplicationData";
 
-const initialApplicationData: ApplicationData = {
+type Updater<T> = T | ((prev: T) => T);
+
+const initialData: ApplicationData = {
   name: "",
   phoneNumber: "",
   birthDate: "",
@@ -23,37 +25,44 @@ const initialImageFile: File = {
   name: "",
 };
 
-interface ApplicationSlice {
-  applicationData: ApplicationData;
-  setApplicationData: <K extends keyof ApplicationData>(
+interface ApplicationStore {
+  data: ApplicationData;
+  setUpdate: <K extends keyof ApplicationData>(
     key: K,
-    value: ApplicationData[K]
+    value: Updater<ApplicationData[K]>
   ) => void;
-
+  resetData: () => void;
   imageFile: File;
   setImageFile: (file: File) => void;
-
-  resetApplication: () => void;
 }
 
-export const useApplicationSlice = create<ApplicationSlice>((set) => ({
-  applicationData: initialApplicationData,
+export const useApplicationSlice = create<ApplicationStore>((set) => ({
+  data: initialData,
 
-  setApplicationData: (key, value) =>
-    set((state) => ({
-      applicationData: {
-        ...state.applicationData,
-        [key]: value,
-      },
-    })),
+  setUpdate: (key, value) =>
+    set((state) => {
+      const prev = state.data[key]; 
+      let newValue = value; 
+
+      if (typeof value === "function") {
+        newValue = (value as (p: typeof prev) => typeof prev)(prev);
+      }
+      
+      return {
+        data: {
+          ...state.data,
+          [key]: newValue,
+        },
+      };
+    }),
+
+  resetData: () =>
+    set({
+      data: initialData,
+      imageFile: initialImageFile,
+    }),
 
   imageFile: initialImageFile,
 
   setImageFile: (file) => set({ imageFile: file }),
-
-  resetApplication: () =>
-    set({
-      applicationData: initialApplicationData,
-      imageFile: initialImageFile,
-    }),
 }));

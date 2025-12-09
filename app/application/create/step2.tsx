@@ -21,13 +21,7 @@ import DaySelector from "../_components/DaySelector";
 import StyleSelector from "../_components/StyleSelector";
 
 export default function Step2Screen() {
-  const {
-    applicationData,
-    setApplicationData,
-    currentStep,
-    goToPrevStep,
-    imageFile,
-  } = useApplicationSlice();
+  const { data, setUpdate, imageFile } = useApplicationSlice();
 
   const { errors, clearError } = useApplicationFormValidation(
     applicationData,
@@ -44,23 +38,12 @@ export default function Step2Screen() {
       <CustomSafeAreaView pageColor='bg-white'>
         <View className='p-3'>
           <Flex justify='start' items='center' dir='row' gap={124}>
-            <BackArrow
-              color='black'
-              size={24}
-              onPress={() => {
-                goToPrevStep();
-                router.back();
-              }}
-            />
+          <BackArrow color='black' size={24} />
             <TextSize size={18} content='지원서 작성' />
           </Flex>
         </View>
 
-        <ProgressBar
-          stepTitle='자기소개'
-          currentStep={currentStep}
-          totalSteps={2}
-        />
+        <ProgressBar stepTitle='자기소개' currentStep={2} totalSteps={2} />
 
         <KeyboardAvoidingView
           style={{ flex: 1 }}
@@ -90,16 +73,9 @@ export default function Step2Screen() {
 
                   <FormField label='근무 가능 요일' required={false}>
                     <DaySelector
-                      selectedDays={applicationData.availableDayOfWeek}
-                      setSelectedDays={(action) => {
-                        if (typeof action === "function") {
-                          setApplicationData(
-                            "availableDayOfWeek",
-                            action(applicationData.availableDayOfWeek)
-                          );
-                        } else {
-                          setApplicationData("availableDayOfWeek", action);
-                        }
+                      selectedDays={data.availableDayOfWeek}
+                      setSelectedDays={(days) => {
+                        setUpdate("availableDayOfWeek", days);
                       }}
                     />
                   </FormField>
@@ -151,16 +127,9 @@ export default function Step2Screen() {
                 <FormSection title='스타일 & 소셜' gap={22}>
                   <FormField label='나의 스타일' required={false}>
                     <StyleSelector
-                      selectedStyles={applicationData.style}
-                      setSelectedStyles={(action) => {
-                        if (typeof action === "function") {
-                          setApplicationData(
-                            "style",
-                            action(applicationData.style)
-                          );
-                        } else {
-                          setApplicationData("style", action);
-                        }
+                      selectedStyles={data.style}
+                      setSelectedStyles={(styles) => {
+                        setUpdate("style", styles);
                       }}
                       size='32%'
                     />
