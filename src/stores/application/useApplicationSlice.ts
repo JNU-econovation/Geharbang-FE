@@ -1,6 +1,7 @@
+import { create } from "zustand";
+
 import { File } from "@/src/types/File";
 import { ApplicationData } from "@/src/types/models/application/ApplicationData";
-import { create } from "zustand";
 
 type Updater<T> = T | ((prev: T) => T);
 

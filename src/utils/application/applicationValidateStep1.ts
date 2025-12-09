@@ -1,18 +1,18 @@
 import { File } from "@/src/types/File";
 import { ApplicationData } from "@/src/types/models/application/ApplicationData";
-import { FormErrors } from "@/src/types/models/application/FormErrors";
+import { ApplicationFormErrors } from "@/src/types/models/application/ApplicationFormErrors";
 
 const validatePhoneNumber = (phoneNumber: string): boolean => {
   return /^010-(\d{4})-\d{4}$/.test(phoneNumber);
 };
 
-export const validateStep1 = (
+export const applicationValidateStep1 = (
   data: ApplicationData,
   imageFile: File | null,
-  currentErrors: FormErrors
-): { isValid: boolean; errors: FormErrors } => {
+  currentErrors: ApplicationFormErrors
+): { isValid: boolean; errors: ApplicationFormErrors } => {
   let isValid = true;
-  const newErrors: FormErrors = { ...currentErrors };
+  const newErrors: ApplicationFormErrors = { ...currentErrors };
 
   if (!imageFile || imageFile.uri === "") {
     newErrors.image = "대표 사진을 선택해주세요";

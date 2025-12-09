@@ -76,7 +76,7 @@ export default function Contact({
 
       <View className='pt-4' />
 
-      <ViewContext variant='owerMes'>
+      <ViewContext variant='owerMes' minHeight={74}>
         <View className='px-4 py-3'>
           <TextSize size={14} color='#973C00' content={owerMessage ?? ""} />
         </View>

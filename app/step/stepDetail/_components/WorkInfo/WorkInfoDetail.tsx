@@ -15,7 +15,7 @@ export default function WorkInfoDetail({
   children,
 }: WorkInfoDetailProps) {
   return (
-    <ViewContext variant='primary' className='px-4 py-3'>
+    <ViewContext variant='primary' minHeight={74} className='px-4 py-3'>
       <View className='flex flex-row items-center'>
         <View className='w-10 h-10 bg-[#DFF2FE] rounded-full flex items-center justify-center'>
           {icon}

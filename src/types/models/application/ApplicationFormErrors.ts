@@ -1,4 +1,4 @@
-export interface FormErrors {
+export interface ApplicationFormErrors {
   image: string;
   name: string;
   phoneNumber: string;

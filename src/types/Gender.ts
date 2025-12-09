@@ -1,1 +1,1 @@
-export type Gender = "남" | "여" | "무관";
+export type Gender = "남" | "여" | "무관" | "";

@@ -1,6 +1,7 @@
-import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
+import { router } from "expo-router";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
+import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrow from "@/src/components/ui/BackArrow";
@@ -22,11 +23,11 @@ import StyleSelector from "../_components/StyleSelector";
 export default function Step2Screen() {
   const { data, setUpdate, imageFile } = useApplicationSlice();
 
-  const { errors, clearError } = useApplicationFormValidation({
-    data,
+  const { errors, clearError } = useApplicationFormValidation(
+    applicationData,
     imageFile,
-    step: 2,
-  });
+    2
+  );
 
   usePreventHardwareBack(); // 안드로이드 하드웨어 뒤로가기 방지
 
@@ -37,7 +38,7 @@ export default function Step2Screen() {
       <CustomSafeAreaView pageColor='bg-white'>
         <View className='p-3'>
           <Flex justify='start' items='center' dir='row' gap={124}>
-            <BackArrow color='black' size={24} />
+          <BackArrow color='black' size={24} />
             <TextSize size={18} content='지원서 작성' />
           </Flex>
         </View>
@@ -60,9 +61,9 @@ export default function Step2Screen() {
                     errorMessage={errors.availableStartDate}
                   >
                     <DateInput
-                      selectedDate={data.availableStartDate}
+                      selectedDate={applicationData.availableStartDate}
                       setSelectedDate={(date) => {
-                        setUpdate("availableStartDate", date);
+                        setApplicationData("availableStartDate", date);
                         clearError("availableStartDate");
                       }}
                       minDate={String(new Date())}
@@ -88,9 +89,9 @@ export default function Step2Screen() {
                     errorMessage={errors.selfIntroduction}
                   >
                     <TextInput
-                      value={data.selfIntroduction}
+                      value={applicationData.selfIntroduction}
                       onChangeText={(text) => {
-                        setUpdate("selfIntroduction", text);
+                        setApplicationData("selfIntroduction", text);
                         clearError("selfIntroduction");
                       }}
                       placeholder={
@@ -109,9 +110,9 @@ export default function Step2Screen() {
                     errorMessage={errors.mbti}
                   >
                     <TextInput
-                      value={data.mbti}
+                      value={applicationData.mbti}
                       onChangeText={(text) => {
-                        setUpdate("mbti", formatUpperCase(text));
+                        setApplicationData("mbti", formatUpperCase(text));
                         clearError("mbti");
                       }}
                       placeholder='예: ENFP'
@@ -140,9 +141,9 @@ export default function Step2Screen() {
                     errorMessage={errors.instagramId}
                   >
                     <TextInput
-                      value={data.instagramId}
+                      value={applicationData.instagramId}
                       onChangeText={(id) => {
-                        setUpdate("instagramId", id);
+                        setApplicationData("instagramId", id);
                         clearError("instagramId");
                       }}
                       placeholder='@ username'

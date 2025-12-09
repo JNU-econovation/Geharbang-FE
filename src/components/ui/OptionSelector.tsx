@@ -1,35 +1,34 @@
 import React from "react";
 import { DimensionValue, Pressable, Text, View } from "react-native";
 
-import { Gender } from "@/src/types/Gender";
 import { Option } from "@/src/types/Option";
 import { COLORS } from "@/src/utils/constants/colors";
 
-interface GenderSelectorProps {
-  selectedGender: Gender;
-  setSelectedGender: (gender: Gender) => void;
+interface OptionSelectorProps<T> {
+  selected: T;
+  setSelected: (value: T) => void;
   size: DimensionValue;
-  option: Option<Gender>[];
+  option: Option<T>[];
   error?: boolean;
 }
 
-export default function GenderSelector({
-  selectedGender,
-  setSelectedGender,
+export default function OptionSelector<T>({
+  selected,
+  setSelected,
   size,
   option,
   error,
-}: GenderSelectorProps) {
+}: OptionSelectorProps<T>) {
   return (
-    <View>
-      <View className="flex-row flex-wrap justify-center gap-1">
+    <>
+      <View className='flex-row flex-wrap justify-center gap-1'>
         {option.map((data) => {
-          const isSelected = selectedGender === data.value;
+          const isSelected = selected === data.value;
 
           return (
             <Pressable
-              key={data.value}
-              className="w-[43%] flex-row justify-center gap-3 rounded-lg border border-border-gray items-center py-3.5"
+              key={String(data.value)}
+              className='w-[43%] flex-row justify-center gap-3 rounded-lg border border-border-gray items-center py-3.5'
               style={[
                 { width: size },
                 error
@@ -42,7 +41,7 @@ export default function GenderSelector({
                   : { borderColor: COLORS.GRAY.BORDER },
               ]}
               onPress={() => {
-                setSelectedGender(data.value);
+                setSelected(data.value);
               }}
             >
               <View
@@ -58,6 +57,6 @@ export default function GenderSelector({
           );
         })}
       </View>
-    </View>
+    </>
   );
 }
