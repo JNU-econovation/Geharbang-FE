@@ -7,7 +7,7 @@ import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
 import { useStep2FormValidation } from "@/src/hooks/stepRecruitment/useStep2Validation";
-import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecuitmentStore";
+import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
 import StepPostGender from "./_components/step2/StepRecruitmentGender";
 import WorkingPeriod from "./_components/step2/WorkingPeriod";
 import WorkingStartDate from "./_components/step2/WorkingStartDate";
