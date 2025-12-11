@@ -26,16 +26,16 @@ import DateInput from "../_components/DateInput";
 
 export default function applicationCreate() {
   const {
-    data,
-    setUpdate,
+    data: applicationData,
+    setUpdate: setApplicationData,
     resetData,
     imageFile,
     setImageFile,
   } = useApplicationSlice();
 
   useEffect(() => {
-    resetApplication();
-  }, [resetApplication]);
+    resetData();
+  }, [resetData]);
 
   const { errors, clearError, validateForm } = useApplicationFormValidation(
     applicationData,
@@ -59,11 +59,7 @@ export default function applicationCreate() {
           </Flex>
         </View>
 
-        <ProgressBar
-          stepTitle='기본정보'
-currentStep={1}
-          totalSteps={2}
-        />
+        <ProgressBar stepTitle='기본정보' currentStep={1} totalSteps={2} />
 
         <ScrollView className='bg-[#F9FAFB]'>
           <View className='pt-4 px-3 '>
@@ -71,7 +67,7 @@ currentStep={1}
               {/* 대표 사진 */}
               <FormSection title='대표사진'>
                 <FormField label='' errorMessage={errors.image}>
-<SingleImagePicker
+                  <SingleImagePicker
                     selectedImageFile={imageFile}
                     setSelectedImageFile={(file) => {
                       setImageFile(file);
@@ -142,8 +138,7 @@ currentStep={1}
                   required={true}
                   errorMessage={errors.gender}
                 >
-<OptionSelector<Gender>
-
+                  <OptionSelector<Gender>
                     size='45%'
                     option={GENDER_BASIC}
                     selected={applicationData.gender}

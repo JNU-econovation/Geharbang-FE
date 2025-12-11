@@ -21,7 +21,7 @@ import DaySelector from "../_components/DaySelector";
 import StyleSelector from "../_components/StyleSelector";
 
 export default function Step2Screen() {
-  const { data, setUpdate, imageFile } = useApplicationSlice();
+  const { data: applicationData, setUpdate: setApplicationData, imageFile } = useApplicationSlice();
 
   const { errors, clearError } = useApplicationFormValidation(
     applicationData,
@@ -73,9 +73,9 @@ export default function Step2Screen() {
 
                   <FormField label='근무 가능 요일' required={false}>
                     <DaySelector
-                      selectedDays={data.availableDayOfWeek}
+                      selectedDays={applicationData.availableDayOfWeek}
                       setSelectedDays={(days) => {
-                        setUpdate("availableDayOfWeek", days);
+                        setApplicationData("availableDayOfWeek", days);
                       }}
                     />
                   </FormField>
@@ -127,9 +127,9 @@ export default function Step2Screen() {
                 <FormSection title='스타일 & 소셜' gap={22}>
                   <FormField label='나의 스타일' required={false}>
                     <StyleSelector
-                      selectedStyles={data.style}
+                      selectedStyles={applicationData.style}
                       setSelectedStyles={(styles) => {
-                        setUpdate("style", styles);
+                        setApplicationData("style", styles);
                       }}
                       size='32%'
                     />

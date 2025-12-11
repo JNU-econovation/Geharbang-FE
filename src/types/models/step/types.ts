@@ -1,3 +1,5 @@
+import { PerWorkingDay } from "../stepRecruitment/PerWorkingDay";
+
 export interface GuestHouse {
   id: number;
   name: string;
@@ -23,6 +25,9 @@ export interface StaffRecruitmentParams {
   sort?: string;
   region?: string[];
   period?: string[];
+  workType?: PerWorkingDay;
+  workDays?: number;
+  restDays?: number;
   workScheduleType?: string[];
   gender?: string;
   pageNumber?: number;
@@ -39,11 +44,14 @@ export interface StaffRecruitmentResponse {
 export interface FilterState {
   region: string[];
   period: string[];
+  workType: PerWorkingDay;
+  workDays: number | null;
+  restDays: number | null;
   workScheduleType: string[];
   gender: string;
 }
 
-export type FilterOption = 'views' | 'likes' | 'recent';
+export type FilterOption = "views" | "likes" | "recent";
 
 // 페이지네이션 상수
 export const PAGE_SIZE = 20; // 백엔드 기본값

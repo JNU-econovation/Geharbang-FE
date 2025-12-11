@@ -1,17 +1,21 @@
 import FilterModalFooter from "@/app/step/_components/FilterModalFooter";
+import Flex from "@/src/components/layout/Flex";
 import BottomSheet from "@/src/components/ui/BottomSheet";
 import Checkbox from "@/src/components/ui/Checkbox";
 import CollapsibleSection from "@/src/components/ui/CollapsibleSection";
 import RadioButton from "@/src/components/ui/RadioButton";
+import CustomTextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
 import { useExpandableSections } from "@/src/hooks/stepList/useExpandableSections";
 import { useFilterState } from "@/src/hooks/stepList/useFilterState";
 import { FilterState } from "@/src/types/models/step/types";
+import { COLORS } from "@/src/utils/constants/colors";
 import {
   GENDER_OPTIONS,
   PERIOD_OPTIONS,
   REGION_OPTIONS,
   WORK_SCHEDULE_OPTIONS,
+  WORK_TYPES,
 } from "@/src/utils/constants/filterOptions";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
@@ -36,6 +40,8 @@ export default function BottomSheetModal({
     resetFilters,
     toggleRegion,
     togglePeriod,
+    selectWorkType,
+    setRotationDays,
     toggleWorkScheduleType,
     selectGender,
   } = useFilterState(initialFilters);
@@ -62,14 +68,14 @@ export default function BottomSheetModal({
         <FilterModalFooter onReset={resetFilters} onApply={applyFilters} />
       }
     >
-      <View className="p-4 gap-6">
+      <View className='p-4 gap-6'>
         <CollapsibleSection
-          title="근무지역"
+          title='근무지역'
           isExpanded={expandedSections.region}
           onToggle={() => toggleSection("region")}
-          className="pb-4"
+          className='pb-4'
         >
-          <View className="flex-row flex-wrap gap-2">
+          <View className='flex-row flex-wrap gap-2'>
             {REGION_OPTIONS.map((region) => (
               <TouchableOpacity
                 key={region}
@@ -81,7 +87,7 @@ export default function BottomSheetModal({
                 }`}
                 style={{ width: "48%" }}
               >
-                <Checkbox checked={filters.region.includes(region)} size="md" />
+                <Checkbox checked={filters.region.includes(region)} size='md' />
                 <TextSize size={14} content={region} />
               </TouchableOpacity>
             ))}
@@ -89,12 +95,12 @@ export default function BottomSheetModal({
         </CollapsibleSection>
 
         <CollapsibleSection
-          title="근무기간"
+          title='근무기간'
           isExpanded={expandedSections.period}
           onToggle={() => toggleSection("period")}
-          className="pb-4"
+          className='pb-4'
         >
-          <View className="gap-2">
+          <View className='gap-2'>
             {PERIOD_OPTIONS.map((period) => (
               <TouchableOpacity
                 key={period.label}
@@ -107,11 +113,11 @@ export default function BottomSheetModal({
               >
                 <Checkbox
                   checked={filters.period.includes(period.label)}
-                  size="md"
+                  size='md'
                 />
                 <View>
                   <TextSize size={14} content={period.label} />
-                  <TextSize size={12} content={period.desc} color="#6B7280" />
+                  <TextSize size={12} content={period.desc} color='#6B7280' />
                 </View>
               </TouchableOpacity>
             ))}
@@ -119,48 +125,108 @@ export default function BottomSheetModal({
         </CollapsibleSection>
 
         <CollapsibleSection
-          title="근무일 (휴일)"
+          title='근무일 (휴일)'
           isExpanded={expandedSections.workScheduleType}
           onToggle={() => toggleSection("workScheduleType")}
-          className="pb-4"
+          className='pb-4'
         >
-          <View className="gap-2">
-            {WORK_SCHEDULE_OPTIONS.map((workSchedule) => (
+          <TextSize size={14} color={COLORS.GRAY.TEXT} content='근무일 기준' />
+          <View className='flex-row gap-2 mt-3'>
+            {WORK_TYPES.map((type) => (
               <TouchableOpacity
-                key={workSchedule.label}
-                onPress={() => toggleWorkScheduleType(workSchedule.label)}
-                className={`flex-row items-center gap-3 p-3 rounded-lg border ${
-                  filters.workScheduleType.includes(workSchedule.label)
+                key={type.label}
+                onPress={() => selectWorkType(type.value)}
+                className={`flex-1 flex-row items-center justify-center gap-2 p-3 mb-4 rounded-lg border ${
+                  filters.workType === type.value
                     ? "border-primary-blue bg-blue-50"
                     : "border-gray-200"
                 }`}
               >
-                <Checkbox
-                  checked={filters.workScheduleType.includes(
-                    workSchedule.label
-                  )}
-                  size="md"
+                <RadioButton
+                  selected={filters.workType === type.value}
+                  size='md'
                 />
-                <View>
-                  <TextSize size={14} content={workSchedule.label} />
-                  <TextSize
-                    size={12}
-                    content={workSchedule.desc}
-                    color="#6B7280"
-                  />
-                </View>
+                <TextSize size={14} content={type.label} />
               </TouchableOpacity>
             ))}
           </View>
+
+          {filters.workType === "로테이션" && (
+            <View className='gap-3 px-2'>
+              <TextSize
+                size={14}
+                color={COLORS.GRAY.TEXT}
+                content='근무일 수'
+              />
+              <Flex items='center' dir='row' gap={10}>
+                <CustomTextInput
+                  value={filters.workDays ? filters.workDays : ""}
+                  keyboardType='numeric'
+                  width={300}
+                  onChangeText={(text) =>
+                    setRotationDays({ work: Number(text) || null })
+                  }
+                />
+                <TextSize size={16} color='#364153' content='일 근무' />
+              </Flex>
+              <TextSize
+                size={14}
+                color={COLORS.GRAY.TEXT}
+                content='휴무일 수'
+              />
+
+              <Flex items='center' dir='row' gap={10}>
+                <CustomTextInput
+                  value={filters.restDays ? filters.restDays : ""}
+                  keyboardType='numeric'
+                  width={300}
+                  onChangeText={(text) =>
+                    setRotationDays({ rest: Number(text) || null })
+                  }
+                />
+                <TextSize size={16} color='#364153' content='일 휴무' />
+              </Flex>
+            </View>
+          )}
+          {filters.workType === "_7일_기준" && (
+            <View className='gap-2'>
+              {WORK_SCHEDULE_OPTIONS.map((workSchedule) => (
+                <TouchableOpacity
+                  key={workSchedule.label}
+                  onPress={() => toggleWorkScheduleType(workSchedule.label)}
+                  className={`flex-row items-center gap-3 p-3 rounded-lg border ${
+                    filters.workScheduleType.includes(workSchedule.label)
+                      ? "border-primary-blue bg-blue-50"
+                      : "border-gray-200"
+                  }`}
+                >
+                  <Checkbox
+                    checked={filters.workScheduleType.includes(
+                      workSchedule.label
+                    )}
+                    size='md'
+                  />
+                  <View>
+                    <TextSize size={14} content={workSchedule.label} />
+                    <TextSize
+                      size={12}
+                      content={workSchedule.desc}
+                      color='#6B7280'
+                    />
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
         </CollapsibleSection>
 
         <CollapsibleSection
-          title="성별"
+          title='성별'
           isExpanded={expandedSections.gender}
           onToggle={() => toggleSection("gender")}
           showBorder={false}
         >
-          <View className="flex-row gap-2">
+          <View className='flex-row gap-2'>
             {GENDER_OPTIONS.map((gender) => (
               <TouchableOpacity
                 key={gender}
@@ -171,7 +237,7 @@ export default function BottomSheetModal({
                     : "border-gray-200"
                 }`}
               >
-                <RadioButton selected={filters.gender === gender} size="md" />
+                <RadioButton selected={filters.gender === gender} size='md' />
                 <TextSize size={14} content={gender} />
               </TouchableOpacity>
             ))}

@@ -16,6 +16,9 @@ export default function GuestHouseListScreen() {
   const [filters, setFilters] = useState<FilterState>({
     region: [],
     period: [],
+    workType: "",
+    workDays: null,
+    restDays: null,
     workScheduleType: [],
     gender: "",
   });
