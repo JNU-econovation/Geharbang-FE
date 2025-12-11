@@ -1,4 +1,5 @@
 import { FilterState } from "@/src/types/models/step/types";
+import { PerWorkingDay } from "@/src/types/models/stepRecruitment/PerWorkingDay";
 import { useState } from "react";
 
 interface UseFilterStateReturn {
@@ -6,6 +7,11 @@ interface UseFilterStateReturn {
   resetFilters: () => void;
   toggleRegion: (region: string) => void;
   togglePeriod: (period: string) => void;
+  selectWorkType: (type: PerWorkingDay) => void;
+  setRotationDays: (days: {
+    work?: number | null;
+    rest?: number | null;
+  }) => void;
   toggleWorkScheduleType: (workScheduleType: string) => void;
   selectGender: (gender: string) => void;
 }
@@ -19,6 +25,9 @@ export function useFilterState(
     setFilters({
       region: [],
       period: [],
+      workType: "",
+      workDays: null,
+      restDays: null,
       workScheduleType: [],
       gender: "",
     });
@@ -42,6 +51,27 @@ export function useFilterState(
     }));
   };
 
+  const selectWorkType = (type: PerWorkingDay) => {
+    setFilters((prev) => ({
+      ...prev,
+      workType: type,
+      workScheduleType: type === "로테이션" ? [] : prev.workScheduleType,
+      workDays: type === "_7일_기준" ? null : prev.workDays,
+      restDays: type === "_7일_기준" ? null : prev.restDays,
+    }));
+  };
+
+  const setRotationDays = (days: {
+    work?: number | null;
+    rest?: number | null;
+  }) => {
+    setFilters((prev) => ({
+      ...prev,
+      workDays: days.work !== undefined ? days.work : prev.workDays,
+      restDays: days.rest !== undefined ? days.rest : prev.restDays,
+    }));
+  };
+
   const toggleWorkScheduleType = (workScheduleType: string) => {
     setFilters((prev) => ({
       ...prev,
@@ -60,6 +90,8 @@ export function useFilterState(
     resetFilters,
     toggleRegion,
     togglePeriod,
+    selectWorkType,
+    setRotationDays,
     toggleWorkScheduleType,
     selectGender,
   };
