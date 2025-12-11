@@ -131,18 +131,28 @@ export default function WorkingTimeAndWork({
         totalDays={7}
         initialWorkingCount={addedTimeAndWork.workingCount}
         initialClosedCount={addedTimeAndWork.closedCount}
-        setWorkingCount={(workingCount) =>
+        setWorkingCount={(workingCount) => {
+          console.log('[WorkingTimeAndWork] setWorkingCount called:', workingCount);
           setAddedTimeAndWork({
             ...addedTimeAndWork,
             workingCount: workingCount,
-          })
-        }
-        setClosedCount={(closedCount) =>
+          });
+        }}
+        setClosedCount={(closedCount) => {
+          console.log('[WorkingTimeAndWork] setClosedCount called:', closedCount);
           setAddedTimeAndWork({
             ...addedTimeAndWork,
             closedCount: closedCount,
-          })
-        }
+          });
+        }}
+        setBothCounts={(workingCount, closedCount) => {
+          console.log('[WorkingTimeAndWork] setBothCounts called:', { workingCount, closedCount });
+          setAddedTimeAndWork({
+            ...addedTimeAndWork,
+            workingCount,
+            closedCount,
+          });
+        }}
         workingErrors={errors?.workingCount}
         closedErrors={errors?.closedCount}
       />
