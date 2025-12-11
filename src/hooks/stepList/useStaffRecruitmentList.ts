@@ -68,6 +68,9 @@ export function useStaffRecruitmentList({
           sort: SORT_OPTIONS[sort],
           region: filters.region.length > 0 ? filters.region : undefined,
           period: filters.period.length > 0 ? filters.period : undefined,
+          workType: filters.workType || undefined,
+          workDays: filters.workDays || undefined,
+          restDays: filters.restDays || undefined,
           workScheduleType:
             filters.workScheduleType.length > 0
               ? filters.workScheduleType

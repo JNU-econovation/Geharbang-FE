@@ -25,6 +25,18 @@ export const getStaffRecruitmentList = async (
     params.period.forEach((p) => queryParams.append("period", p));
   }
 
+  if (params.workType) {
+    queryParams.append("workType", params.workType);
+  }
+  
+  if (params.workDays!= null) {
+    queryParams.append("workDays", params.workDays.toString());
+  }
+
+  if (params.restDays != null) {
+    queryParams.append("restDays", params.restDays.toString());
+  }
+
   if (params.workScheduleType && params.workScheduleType.length > 0) {
     params.workScheduleType.forEach((w) =>
       queryParams.append("workScheduleType", w)
@@ -38,7 +50,6 @@ export const getStaffRecruitmentList = async (
   if (params.pageNumber !== undefined) {
     queryParams.append("pageNumber", params.pageNumber.toString());
   }
-
   const url = `/api/v1/staff-recruitment?${queryParams.toString()}`;
 
   const response = await axiosPublic.get<StaffRecruitmentResponse>(url);
