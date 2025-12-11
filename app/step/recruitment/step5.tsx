@@ -5,10 +5,9 @@ import Button from '@/src/components/ui/Button/Button';
 import { useCreateStaffRecruitment } from '@/src/hooks/stepRecruitment/useCreateStaffRecruitment';
 import { useUploadRecruitmentImages } from '@/src/hooks/stepRecruitment/useUploadRecruitmentImages';
 import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
-import { getApiErrorMessage } from '@/src/utils/api/errorHandler';
 import { createFinalRequest } from '@/src/utils/stepRecruitment/transformStoreToApi';
 import { router } from 'expo-router';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -29,7 +28,6 @@ export default function RecruitmentStep5() {
   } = storeData;
   const { questions } = step5Data;
   const scrollViewRef = useRef<ScrollView>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const uploadImagesMutation = useUploadRecruitmentImages();
   const createRecruitmentMutation = useCreateStaffRecruitment();
@@ -61,11 +59,12 @@ export default function RecruitmentStep5() {
   const canAddMore = questions.length < 5;
 
   const handleSubmit = async () => {
-    if (isSubmitting) return;
+    router.replace({
+      pathname: '/step/recruitment/result' as any,
+      params: { status: 'pending' },
+    });
 
     try {
-      setIsSubmitting(true);
-
       let mainImageUrls: string[] = [];
       if (step3Data.mainImageFiles.length > 0) {
         mainImageUrls = await uploadImagesMutation.mutateAsync(
@@ -105,27 +104,13 @@ export default function RecruitmentStep5() {
 
       console.log('공고 등록 요청 데이터:', requestData);
 
-      // 4. 공고 생성 API 호출
-      const recruitmentId = await createRecruitmentMutation.mutateAsync(
-        requestData,
-      );
+      await createRecruitmentMutation.mutateAsync(requestData);
 
-      Alert.alert('공고 등록 완료', '스텝 공고가 성공적으로 등록되었습니다.', [
-        {
-          text: '확인',
-          onPress: () => {
-            router.replace('/(tabs)');
-          },
-        },
-      ]);
+      router.setParams({ status: 'success' });
     } catch (error) {
-      const errorMessage = getApiErrorMessage(error);
-      Alert.alert(
-        '공고 등록 실패',
-        errorMessage || '공고 등록 중 오류가 발생했습니다.',
-      );
-    } finally {
-      setIsSubmitting(false);
+      console.error('공고 등록 실패:', error);
+
+      router.setParams({ status: 'error' });
     }
   };
 
@@ -156,9 +141,8 @@ export default function RecruitmentStep5() {
                 width={370}
                 height={50}
                 textColor="white"
-                content={isSubmitting ? '등록 중...' : '공고 등록하기'}
+                content="공고 등록하기"
                 onPress={handleSubmit}
-                disabled={isSubmitting}
               />
             </Flex>
           </View>
