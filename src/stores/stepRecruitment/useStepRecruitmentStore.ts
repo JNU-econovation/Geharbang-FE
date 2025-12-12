@@ -1,11 +1,11 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-import { StepRecruitmentStore } from "@/src/types/store/stepRecruitmentStore";
-import { createStep1Slice, initialStep1Data } from "./slice/createStep1Slice";
-import { createStep2Slice, initialStep2Data } from "./slice/createStep2Slice";
-import { createStep3Slice, initialStep3Data } from "./slice/createStep3Slice";
-import { createStep4Slice, initialStep4Data } from "./slice/createStep4Slice";
-import { createStep5Slice, initialStep5Data } from "./slice/createStep5Slice";
+import { StepRecruitmentStore } from '@/src/types/store/stepRecruitmentStore';
+import { createStep1Slice, initialStep1Data } from './slice/createStep1Slice';
+import { createStep2Slice, initialStep2Data } from './slice/createStep2Slice';
+import { createStep3Slice, initialStep3Data } from './slice/createStep3Slice';
+import { createStep4Slice, initialStep4Data } from './slice/createStep4Slice';
+import { createStep5Slice, initialStep5Data } from './slice/createStep5Slice';
 
 export const useStepRecruitmentStore = create<StepRecruitmentStore>()(
   (set, get, api) => ({
@@ -14,20 +14,6 @@ export const useStepRecruitmentStore = create<StepRecruitmentStore>()(
     ...createStep3Slice(set, get, api),
     ...createStep4Slice(set, get, api),
     ...createStep5Slice(set, get, api),
-
-    submitAllData: async () => {
-      const state = get();
-
-      const finalPayload = {
-        ...state.step1Data,
-        ...state.step2Data,
-        ...state.step3Data,
-        ...state.step4Data,
-        ...state.step5Data,
-      };
-
-      console.log("백엔드로 보낼 데이터:", finalPayload);
-    },
 
     resetAllData: () => {
       set(() => ({
@@ -38,5 +24,5 @@ export const useStepRecruitmentStore = create<StepRecruitmentStore>()(
         step5Data: initialStep5Data,
       }));
     },
-  })
+  }),
 );

@@ -39,7 +39,6 @@ export function useWorkingCalculator({
       }
 
       if (!isValidAutoRange(count)) {
-        console.log('[updateWorkingCount] Invalid range:', count);
         return;
       }
 
