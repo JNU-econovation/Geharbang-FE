@@ -16,7 +16,6 @@ export interface Step4Slice {
     key: K,
     value: (typeof initialStep4Data)[K]
   ) => void;
-  resetStep4: () => void;
 }
 
 export const createStep4Slice: StateCreator<AllSlices, [], [], Step4Slice> = (
@@ -30,10 +29,5 @@ export const createStep4Slice: StateCreator<AllSlices, [], [], Step4Slice> = (
         ...state.step4Data,
         [key]: value,
       },
-    })),
-
-  resetStep4: () =>
-    set(() => ({
-      step4Data: initialStep4Data,
     })),
 });

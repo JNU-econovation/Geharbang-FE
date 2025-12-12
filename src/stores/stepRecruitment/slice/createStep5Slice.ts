@@ -13,7 +13,6 @@ export interface Step5Slice {
   addStep5Question: (question: Question) => void;
   updateStep5Question: (id: string, text: string) => void;
   removeStep5Question: (id: string) => void;
-  resetStep5: () => void;
 }
 
 export const createStep5Slice: StateCreator<AllSlices, [], [], Step5Slice> = (
@@ -53,10 +52,5 @@ export const createStep5Slice: StateCreator<AllSlices, [], [], Step5Slice> = (
         ...state.step5Data,
         questions: state.step5Data.questions.filter((q) => q.id !== id),
       },
-    })),
-
-  resetStep5: () =>
-    set(() => ({
-      step5Data: initialStep5Data,
     })),
 });
