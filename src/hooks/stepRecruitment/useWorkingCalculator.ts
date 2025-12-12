@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface UseWorkingCalculatorProps {
   mode: 'manual' | 'auto';
@@ -21,6 +21,7 @@ export function useWorkingCalculator({
 }: UseWorkingCalculatorProps) {
   const [localWorking, setLocalWorking] = useState(initialWorking);
   const [localClosed, setLocalClosed] = useState(initialClosed);
+  const prevModeRef = useRef<'manual' | 'auto'>(mode);
 
   const isValidAutoRange = (value: number) => value >= 1 && value <= 7;
 
@@ -100,6 +101,22 @@ export function useWorkingCalculator({
 
   useEffect(() => setLocalWorking(initialWorking), [initialWorking]);
   useEffect(() => setLocalClosed(initialClosed), [initialClosed]);
+
+  useEffect(() => {
+    if (prevModeRef.current !== mode) {
+      setLocalWorking('');
+      setLocalClosed('');
+
+      if (setBothCounts) {
+        setBothCounts('', '');
+      } else {
+        setGlobalWorking('');
+        setGlobalClosed('');
+      }
+
+      prevModeRef.current = mode;
+    }
+  }, [mode, setBothCounts, setGlobalWorking, setGlobalClosed]);
 
   return {
     workingCount: localWorking,
