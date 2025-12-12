@@ -30,7 +30,7 @@ const formatTime = (date: Date): string => {
 
 export const transformStoreToApi = (
   store: AllSlices | StepRecruitmentData,
-): Omit<StaffRecruitmentRequest, 'representativeImageUrls'> => {
+): StaffRecruitmentRequest => {
   const { step1Data, step2Data, step3Data, step4Data, step5Data } = store;
 
   const location: LocationRequest = {
@@ -51,7 +51,7 @@ export const transformStoreToApi = (
       startTime: formatTime(work.startTime),
       endTime: formatTime(work.endTime),
       job: work.thatTimeWork,
-      standard: isRotation ? '로테이션' : '7일_기준',
+      standard: isRotation ? '로테이션' : '_7일_기준',
       workDays: isRotation
         ? typeof work.workingCount === 'number'
           ? work.workingCount
@@ -97,22 +97,12 @@ export const transformStoreToApi = (
     guestHouseName: step1Data.guestHouseName,
     region: step1Data.workingRegion,
     location,
+    representativeImageUrls: step3Data.mainImageUrls,
     workingInformation,
     feature,
     introduction,
     contact,
     ownerMessage: step4Data.ownerMessage,
     questions,
-  };
-};
-
-export const createFinalRequest = (
-  store: AllSlices | StepRecruitmentData,
-  representativeImageUrls: string[],
-): StaffRecruitmentRequest => {
-  const baseData = transformStoreToApi(store);
-  return {
-    ...baseData,
-    representativeImageUrls,
   };
 };

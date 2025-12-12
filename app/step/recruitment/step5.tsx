@@ -5,7 +5,7 @@ import Button from '@/src/components/ui/Button/Button';
 import { useCreateStaffRecruitment } from '@/src/hooks/stepRecruitment/useCreateStaffRecruitment';
 import { useUploadRecruitmentImages } from '@/src/hooks/stepRecruitment/useUploadRecruitmentImages';
 import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
-import { createFinalRequest } from '@/src/utils/stepRecruitment/transformStoreToApi';
+import { transformStoreToApi } from '@/src/utils/stepRecruitment/transformStoreToApi';
 import { router } from 'expo-router';
 import React, { useRef } from 'react';
 import {
@@ -91,16 +91,13 @@ export default function RecruitmentStep5() {
         introImageUrls,
       };
 
-      const requestData = createFinalRequest(
-        {
-          step1Data: storeData.step1Data,
-          step2Data: storeData.step2Data,
-          step3Data: updatedStep3Data,
-          step4Data: storeData.step4Data,
-          step5Data: storeData.step5Data,
-        },
-        mainImageUrls,
-      );
+      const requestData = transformStoreToApi({
+        step1Data: storeData.step1Data,
+        step2Data: storeData.step2Data,
+        step3Data: updatedStep3Data,
+        step4Data: storeData.step4Data,
+        step5Data: storeData.step5Data,
+      });
 
       console.log('공고 등록 요청 데이터:', requestData);
 

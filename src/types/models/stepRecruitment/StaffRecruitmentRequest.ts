@@ -9,7 +9,7 @@ export interface JobRequest {
   startTime: string;
   endTime: string;
   job: string;
-  standard: '로테이션' | '7일_기준';
+  standard: '로테이션' | '_7일_기준';
   workDays: number | null;
   restDays: number | null;
   weeklyWorkingDays: string | null;
