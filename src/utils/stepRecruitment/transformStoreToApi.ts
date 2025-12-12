@@ -94,7 +94,7 @@ export const transformStoreToApi = (
 
   return {
     title: step3Data.title,
-    guesthouseName: step1Data.guestHouseName,
+    guestHouseName: step1Data.guestHouseName,
     region: step1Data.workingRegion,
     location,
     workingInformation,

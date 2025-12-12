@@ -1,7 +1,7 @@
 export interface StepDetailResponse {
   representativeImages: string[];
   title: string;
-  guesthouseName: string;
+  guestHouseName: string;
   region: string;
   location: {
     address: string;

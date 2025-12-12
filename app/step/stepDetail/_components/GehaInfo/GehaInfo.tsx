@@ -1,34 +1,34 @@
-import { View } from "react-native";
+import { View } from 'react-native';
 
-import TextSize from "@/src/components/ui/TextSize";
+import TextSize from '@/src/components/ui/TextSize';
 
-import GehaLocation from "@/public/svgs/StepDetail/gehaLocation.svg";
-import GehaName from "@/public/svgs/StepDetail/gehaName.svg";
+import GehaLocation from '@/public/svgs/StepDetail/gehaLocation.svg';
+import GehaName from '@/public/svgs/StepDetail/gehaName.svg';
 
-import GehaDetailInfo from "./GehaDetailInfo";
+import GehaDetailInfo from './GehaDetailInfo';
 
 interface GehaInfpProps {
   title?: string;
-  guesthouseName?: string;
+  guestHouseName?: string;
   region?: string;
 }
 
 export default function GehaInfo({
   title,
-  guesthouseName,
+  guestHouseName,
   region,
 }: GehaInfpProps) {
   return (
     <>
-      <TextSize size={20} color='#101828' content={title} />
+      <TextSize size={20} color="#101828" content={title} />
 
-      <View className='pt-8' />
+      <View className="pt-8" />
 
       <GehaDetailInfo
         icon={<GehaName width={14} height={14} />}
-        content={guesthouseName}
+        content={guestHouseName}
       />
-      <View className='pt-2' />
+      <View className="pt-2" />
 
       <GehaDetailInfo
         icon={<GehaLocation width={14} height={14} />}

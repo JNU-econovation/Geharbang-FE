@@ -41,7 +41,7 @@ export interface ContactRequest {
 
 export interface StaffRecruitmentRequest {
   title: string;
-  guesthouseName: string;
+  guestHouseName: string;
   region: string;
   location: LocationRequest;
   representativeImageUrls: string[];
