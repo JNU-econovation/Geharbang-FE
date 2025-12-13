@@ -1,24 +1,56 @@
-import RecruitmentStepLayout from '@/app/step/recruitment/_components/RecruitmentStepLayout';
 import QuestionSection from '@/app/step/recruitment/_components/QuestionSection';
+import RecruitmentStepLayout from '@/app/step/recruitment/_components/RecruitmentStepLayout';
 import Flex from '@/src/components/layout/Flex';
 import Button from '@/src/components/ui/Button/Button';
-import { useQuestions } from '@/src/hooks/recruitment/useQuestions';
-import React from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { useHandleStepRecruitmentSubmit } from '@/src/hooks/stepRecruitment/useHandleStepRecruitmentSubmit';
+import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
+import React, { useRef } from 'react';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+} from 'react-native';
 
 export default function RecruitmentStep5() {
+  const storeData = useStepRecruitmentStore();
   const {
-    questions,
-    addQuestion,
-    deleteQuestion,
-    updateQuestion,
-    canAddMore,
-    scrollViewRef,
-  } = useQuestions();
+    step5Data,
+    addStep5Question,
+    removeStep5Question,
+    updateStep5Question,
+  } = storeData;
+  const { questions } = step5Data;
+  const scrollViewRef = useRef<ScrollView>(null);
 
-  const handleSubmit = () => {
-    console.log('제출로직', questions);
+  const { handleSubmit } = useHandleStepRecruitmentSubmit();
+
+  const addQuestion = () => {
+    if (questions.length >= 5) {
+      Alert.alert('알림', '최대 5개까지만 등록할 수 있습니다.');
+      return;
+    }
+    const newQuestion = {
+      id: Date.now().toString(),
+      text: '',
+    };
+    addStep5Question(newQuestion);
+
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
   };
+
+  const deleteQuestion = (id: string) => {
+    removeStep5Question(id);
+  };
+
+  const updateQuestion = (id: string, text: string) => {
+    updateStep5Question(id, text);
+  };
+
+  const canAddMore = questions.length < 5;
 
   return (
     <RecruitmentStepLayout currentStep={5} stepTitle="추가 질문">

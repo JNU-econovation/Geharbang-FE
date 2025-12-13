@@ -12,6 +12,7 @@ interface WorkdayInputProps {
   initialClosedCount: number | "";
   setWorkingCount: (v: number | "") => void;
   setClosedCount: (v: number | "") => void;
+  setBothCounts?: (working: number | "", closed: number | "") => void;
 
   workingErrors?: string;
   closedErrors?: string;
@@ -24,6 +25,7 @@ export default function WorkingInput({
   initialClosedCount,
   setWorkingCount,
   setClosedCount,
+  setBothCounts,
   workingErrors,
   closedErrors,
 }: WorkdayInputProps) {
@@ -40,6 +42,7 @@ export default function WorkingInput({
     closedCount: initialClosedCount,
     setWorkingCount,
     setClosedCount,
+    setBothCounts,
   });
 
   return (

@@ -5,17 +5,15 @@ import FormField from '@/src/components/ui/Form/FormField';
 import FormSection from '@/src/components/ui/Form/FormSection';
 import TextInput from '@/src/components/ui/TextInput';
 import { useRecruitmentStep4Validation } from '@/src/hooks/recruitment/useRecruitmentStep4Validation';
+import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
 import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 
 export default function RecruitmentStep4() {
-  const [instagram, setInstagram] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [website, setWebsite] = useState('');
-  const [ownerMessage, setOwnerMessage] = useState('');
+  const { step4Data, setStep4Update } = useStepRecruitmentStore();
+  const { instagram, phone, email, website, ownerMessage } = step4Data;
 
   const { errors, clearError, validateForm } = useRecruitmentStep4Validation({
     instagram,
@@ -53,7 +51,7 @@ export default function RecruitmentStep4() {
                   <TextInput
                     value={instagram}
                     onChangeText={(text) => {
-                      setInstagram(text);
+                      setStep4Update('instagram', text);
                       clearError('instagram');
                     }}
                     placeholder="예: @jeju_guesthouse"
@@ -70,7 +68,7 @@ export default function RecruitmentStep4() {
                   <TextInput
                     value={phone}
                     onChangeText={(text) => {
-                      setPhone(formatPhoneNumber(text));
+                      setStep4Update('phone', formatPhoneNumber(text));
                       clearError('phone');
                     }}
                     placeholder="예: 064-123-4567"
@@ -88,7 +86,7 @@ export default function RecruitmentStep4() {
                   <TextInput
                     value={email}
                     onChangeText={(text) => {
-                      setEmail(text);
+                      setStep4Update('email', text);
                       clearError('email');
                     }}
                     placeholder="예: owner@naver.com"
@@ -106,7 +104,7 @@ export default function RecruitmentStep4() {
                   <TextInput
                     value={website}
                     onChangeText={(text) => {
-                      setWebsite(text);
+                      setStep4Update('website', text);
                       clearError('website');
                     }}
                     placeholder="예: https://www.jejuguesthouse.com"
@@ -124,7 +122,7 @@ export default function RecruitmentStep4() {
                   <TextInput
                     value={ownerMessage}
                     onChangeText={(text) => {
-                      setOwnerMessage(text);
+                      setStep4Update('ownerMessage', text);
                       clearError('ownerMessage');
                     }}
                     placeholder="스텝들에게 전하고 싶은 메시지를 입력해주세요"

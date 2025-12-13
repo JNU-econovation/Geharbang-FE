@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 interface UseWorkingCalculatorProps {
-  mode: "manual" | "auto";
+  mode: 'manual' | 'auto';
   totalDays?: number;
-  workingCount: number | "";
-  closedCount: number | "";
-  setWorkingCount: (v: number | "") => void;
-  setClosedCount: (v: number | "") => void;
+  workingCount: number | '';
+  closedCount: number | '';
+  setWorkingCount: (v: number | '') => void;
+  setClosedCount: (v: number | '') => void;
+  setBothCounts?: (working: number | '', closed: number | '') => void;
 }
 
 export function useWorkingCalculator({
@@ -16,19 +17,25 @@ export function useWorkingCalculator({
   closedCount: initialClosed,
   setWorkingCount: setGlobalWorking,
   setClosedCount: setGlobalClosed,
+  setBothCounts,
 }: UseWorkingCalculatorProps) {
   const [localWorking, setLocalWorking] = useState(initialWorking);
   const [localClosed, setLocalClosed] = useState(initialClosed);
+  const prevModeRef = useRef<'manual' | 'auto'>(mode);
 
   const isValidAutoRange = (value: number) => value >= 1 && value <= 7;
 
-  const updateWorkingCount = (count: number | "") => {
-    if (mode === "auto") {
-      if (count === "") {
-        setLocalWorking("");
-        setLocalClosed("");
-        setGlobalWorking("");
-        setGlobalClosed("");
+  const updateWorkingCount = (count: number | '') => {
+    if (mode === 'auto') {
+      if (count === '') {
+        setLocalWorking('');
+        setLocalClosed('');
+        if (setBothCounts) {
+          setBothCounts('', '');
+        } else {
+          setGlobalWorking('');
+          setGlobalClosed('');
+        }
         return;
       }
 
@@ -40,21 +47,27 @@ export function useWorkingCalculator({
 
       const newClosed = Math.max(totalDays - count, 0);
       setLocalClosed(newClosed);
-      setGlobalWorking(count);
-      setGlobalClosed(newClosed);
+
+      if (setBothCounts) {
+        setBothCounts(count, newClosed);
+      } else {
+        setGlobalWorking(count);
+        setGlobalClosed(newClosed);
+      }
+
       return;
     }
 
     setLocalWorking(count);
 
-    if (count === "") {
-      setLocalClosed("");
-      setGlobalWorking("");
-      setGlobalClosed("");
+    if (count === '') {
+      setLocalClosed('');
+      setGlobalWorking('');
+      setGlobalClosed('');
       return;
     }
 
-    if (typeof localClosed === "number" && localClosed > count) {
+    if (typeof localClosed === 'number' && localClosed > count) {
       setLocalClosed(count);
       setGlobalClosed(count);
     }
@@ -62,22 +75,22 @@ export function useWorkingCalculator({
     setGlobalWorking(count);
   };
 
-  const updateClosedCount = (count: number | "") => {
-    if (mode !== "manual") return;
+  const updateClosedCount = (count: number | '') => {
+    if (mode !== 'manual') return;
 
     setLocalClosed(count);
 
-    if (count === "") {
-      setGlobalClosed("");
+    if (count === '') {
+      setGlobalClosed('');
       return;
     }
 
-    if (localWorking === "") {
+    if (localWorking === '') {
       setGlobalClosed(count);
       return;
     }
 
-    if (typeof localWorking === "number" && count > localWorking) {
+    if (typeof localWorking === 'number' && count > localWorking) {
       setLocalClosed(localWorking);
       setGlobalClosed(localWorking);
       return;
@@ -86,21 +99,30 @@ export function useWorkingCalculator({
     setGlobalClosed(count);
   };
 
-  useEffect(() => {
-    setLocalWorking("");
-    setLocalClosed("");
-    setGlobalWorking("");
-    setGlobalClosed("");
-  }, [mode]);
-
   useEffect(() => setLocalWorking(initialWorking), [initialWorking]);
   useEffect(() => setLocalClosed(initialClosed), [initialClosed]);
+
+  useEffect(() => {
+    if (prevModeRef.current !== mode) {
+      setLocalWorking('');
+      setLocalClosed('');
+
+      if (setBothCounts) {
+        setBothCounts('', '');
+      } else {
+        setGlobalWorking('');
+        setGlobalClosed('');
+      }
+
+      prevModeRef.current = mode;
+    }
+  }, [mode, setBothCounts, setGlobalWorking, setGlobalClosed]);
 
   return {
     workingCount: localWorking,
     closedCount: localClosed,
     updateWorkingCount,
     updateClosedCount,
-    isAuto: mode === "auto",
+    isAuto: mode === 'auto',
   };
 }

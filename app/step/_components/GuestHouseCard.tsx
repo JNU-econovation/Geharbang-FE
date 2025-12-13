@@ -5,6 +5,8 @@ import { router } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
+const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
+
 interface GuestHouseCardProps {
   item: StaffRecruitmentPost;
   onPress?: () => void;
@@ -29,7 +31,7 @@ export default function GuestHouseCard({ item, onPress }: GuestHouseCardProps) {
         <View className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 items-center justify-center">
           {item.imageUrl ? (
             <Image
-              source={{ uri: item.imageUrl }}
+              source={{ uri: `${baseURL}${item.imageUrl}` }}
               className="w-full h-full"
               resizeMode="cover"
             />
