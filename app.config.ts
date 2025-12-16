@@ -9,7 +9,7 @@ const config: ExpoConfig = {
   scheme: "geharbang",
   platforms: ["ios", "android", "web"],
   userInterfaceStyle: "automatic",
-  newArchEnabled: false,
+  newArchEnabled: true,
 
   splash: {
     resizeMode: "contain",
