@@ -9,7 +9,7 @@ const config: ExpoConfig = {
   scheme: "geharbang",
   platforms: ["ios", "android", "web"],
   userInterfaceStyle: "automatic",
-  newArchEnabled: true,
+  newArchEnabled: false,
 
   splash: {
     resizeMode: "contain",
@@ -31,7 +31,8 @@ const config: ExpoConfig = {
     adaptiveIcon: {
       backgroundColor: "#ffffff",
     },
-    edgeToEdgeEnabled: true,
+
+    // edgeToEdgeEnabled: false,
     predictiveBackGestureEnabled: false,
     package: "com.econovation.geharbang",
     config: {
