@@ -38,7 +38,6 @@ export default function StepDetail() {
   });
 
   const { data, isPending, isError, refetch } = useStepDetail();
-  console.log(data);
 
   const { isApplicationExist } = useApplicationExist();
   const [isVisible, setIsVisible] = useState(false);

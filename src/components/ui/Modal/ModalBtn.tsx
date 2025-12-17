@@ -21,7 +21,7 @@ export default function ModalBtn({
           : modalVisible
           ? "top-14 right-5"
           : "top-3 right-3"
-      } h-10 w-10 bg-white rounded-full flex items-center justify-center`}
+      } h-10 w-10 bg-white rounded-full flex items-center justify-center mt-1`}
     >
       <Ionicons
         name={
