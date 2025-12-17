@@ -8,7 +8,6 @@ import WorkBag from "@/public/svgs/StepDetail/workBag.svg";
 import TextSize from "@/src/components/ui/TextSize";
 import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
 
-import Flex from "@/src/components/layout/Flex/Flex";
 import SectionYPosition from "../SectionYPosition";
 import WorkInfoDetail from "./WorkInfoDetail";
 
@@ -46,17 +45,15 @@ export default function WorkInfo({
         icon={<Calendar width={16} height={16} />}
         workInfoTitle='근무 시작일'
       >
-        <Flex dir='row'>
-          <TextSize
-            size={15}
-            color='#101828'
-            content={workingInfomation?.startDate}
-          />
-          <View className='pr-2' />
-          {workingInfomation?.isStartDateNegotiable && (
-            <TextSize size={13} color='#4A5565' content='(협의 가능)' />
-          )}
-        </Flex>
+        <TextSize
+          size={14}
+          color='#101828'
+          content={workingInfomation?.startDate}
+        />
+        <View className='pr-2' />
+        {workingInfomation?.isStartDateNegotiable && (
+          <TextSize size={13} color='#4A5565' content='(협의 가능)' />
+        )}
       </WorkInfoDetail>
 
       <View className='pt-3' />
@@ -64,19 +61,18 @@ export default function WorkInfo({
         icon={<WorkBag width={16} height={16} />}
         workInfoTitle='근무 기간'
       >
-        <View className='flex'>
-          <TextSize
-            size={15}
-            color='#101828'
-            content={workingInfomation?.workingPeriod}
-          />
-        </View>
+        <TextSize
+          size={14}
+          color='#101828'
+          content={workingInfomation?.workingPeriod}
+        />
       </WorkInfoDetail>
 
       <View className='pt-3' />
       <WorkInfoDetail
         icon={<Clock width={16} height={16} />}
         workInfoTitle='근무 시간 및 업무'
+        workInfoTime={true}
       >
         {workingInfomation?.jobs.map((job, index) => {
           const startTime = job.startTIme.slice(0, 5);
