@@ -18,6 +18,7 @@ interface Job {
   job: string;
   workDays: number;
   restDays: number;
+  workType: string;
 }
 
 interface WorkInfoProps extends SetSectionYPositionProps {
@@ -79,14 +80,12 @@ export default function WorkInfo({
           const endTime = job.endTime.slice(0, 5);
           return (
             <React.Fragment key={index}>
-              <View className='pt-2' />
+              <View className='pt-1' />
               <TextSize
                 size={15}
                 color='#101828'
-                content={`근무 시간 : ${startTime} ~ ${endTime}`}
+                content={`${job.name} : ${startTime} ~ ${endTime}`}
               />
-              <View className='pt-2' />
-              <TextSize size={13} color='#4A5565' content={job.name} />
               <View className='pt-1' />
               <TextSize
                 size={13}
@@ -97,7 +96,11 @@ export default function WorkInfo({
               <TextSize
                 size={13}
                 color='#4A5565'
-                content={`근무일 : 주 ${job.workDays}일, 휴무 ${job.restDays}일`}
+                content={`근무일 : ${
+                  job.workType === "_7일_기준"
+                    ? `주 ${job.workDays}일 근무`
+                    : `${job.workDays}일 근무`
+                }, 휴무 ${job.restDays}일 `}
               />
               <View className='pt-4' />
             </React.Fragment>

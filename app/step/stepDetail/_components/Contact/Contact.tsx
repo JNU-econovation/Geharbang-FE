@@ -33,54 +33,67 @@ export default function Contact({
       content='연락처'
       setSectionYPositions={setSectionYPositions}
     >
-      <View className='pt-6' />
-
-      <ContactCompo
-        variant='insta'
-        icon={<Insta width={20} height={20} />}
-        title='Instagram'
-        content={`${contact?.instagramId}`}
-        iconBg='#F6339A'
-        redirect={`https://www.instagram.com/${contact?.instagramId}/`}
-      />
-
-      <View className='pt-4' />
-      <ContactCompo
-        variant='phone'
-        icon={<Phone width={20} height={20} />}
-        title='전화번호'
-        content={`${contact?.phoneNumber}`}
-        iconBg='#00C950'
-        redirect={`tel:${contact?.phoneNumber}`}
-      />
-
-      <View className='pt-4' />
-      <ContactCompo
-        variant='email'
-        icon={<Email width={20} height={20} />}
-        title='이메일'
-        content={`${contact?.email}`}
-        iconBg='#2B7FFF'
-        redirect={`mailto:${contact?.email}`}
-      />
-
-      <View className='pt-4' />
-      <ContactCompo
-        variant='webSite'
-        icon={<WebSite width={20} height={20} />}
-        title='웹사이트'
-        content={`${contact?.webSite}`}
-        iconBg='#364153'
-        redirect={contact?.webSite}
-      />
-
-      <View className='pt-4' />
-
-      <ViewContext variant='owerMes' minHeight={74}>
-        <View className='px-4 py-3'>
-          <TextSize size={14} color='#973C00' content={owerMessage ?? ""} />
+      {contact?.instagramId && (
+        <View className='pt-6'>
+          <ContactCompo
+            variant='insta'
+            icon={<Insta width={20} height={20} />}
+            title='Instagram'
+            content={`${contact?.instagramId}`}
+            iconBg='#F6339A'
+            redirect={`https://www.instagram.com/${contact?.instagramId}/`}
+          />
         </View>
-      </ViewContext>
+      )}
+
+      {contact?.phoneNumber && (
+        <View className='pt-4'>
+          <ContactCompo
+            variant='phone'
+            icon={<Phone width={20} height={20} />}
+            title='전화번호'
+            content={`${contact?.phoneNumber}`}
+            iconBg='#00C950'
+            redirect={`tel:${contact?.phoneNumber}`}
+          />
+        </View>
+      )}
+
+      {contact?.email && (
+        <View className='pt-4'>
+          <ContactCompo
+            variant='email'
+            icon={<Email width={20} height={20} />}
+            title='이메일'
+            content={`${contact?.email}`}
+            iconBg='#2B7FFF'
+            redirect={`mailto:${contact?.email}`}
+          />
+        </View>
+      )}
+
+      {contact?.webSite && (
+        <View className='pt-4'>
+          <ContactCompo
+            variant='webSite'
+            icon={<WebSite width={20} height={20} />}
+            title='웹사이트'
+            content={`${contact?.webSite}`}
+            iconBg='#364153'
+            redirect={contact?.webSite}
+          />
+        </View>
+      )}
+
+      {owerMessage && (
+        <View className='pt-4'>
+          <ViewContext variant='owerMes' minHeight={74}>
+            <View className='px-4 py-3'>
+              <TextSize size={14} color='#973C00' content={owerMessage ?? ""} />
+            </View>
+          </ViewContext>
+        </View>
+      )}
     </SectionYPosition>
   );
 }
