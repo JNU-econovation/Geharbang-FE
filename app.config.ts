@@ -11,11 +11,6 @@ const config: ExpoConfig = {
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
 
-  splash: {
-    resizeMode: "contain",
-    backgroundColor: "#ffffff",
-  },
-
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.econovation.geharbang",
