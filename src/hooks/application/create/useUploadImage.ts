@@ -5,7 +5,7 @@ import { useApplicationSlice } from "@/src/stores/application/useApplicationSlic
 import { File } from "@/src/types/File";
 
 export const useUploadImage = () => {
-  const { setApplicationData } = useApplicationSlice();
+  const { setUpdate: setApplicationData } = useApplicationSlice();
   return useMutation<string, Error, File>({
     mutationFn: uploadImage,
     onSuccess: (data) => {
