@@ -10,6 +10,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 export { ErrorBoundary } from "expo-router";
 
+import { useAuthStore } from "@/src/stores/auth/useAuthStore";
 import "../global.css";
 
 export const unstable_settings = {
@@ -19,6 +20,9 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const loadToken = useAuthStore((state) => state.loadToken);
+  const isAuthReady = useAuthStore((state) => state.isAuthReady);
+
   const [loaded, error] = useFonts({
     SpaceMono: require("../public/fonts/NotoSansKR.ttf"),
     ...FontAwesome.font,
@@ -38,6 +42,14 @@ export default function RootLayout() {
     return null;
   }
 
+  useEffect(() => {
+    loadToken();
+  }, []);
+
+  if (!loadToken || !isAuthReady) {
+    return null;
+  }
+
   return <RootLayoutNav />;
 }
 
@@ -49,17 +61,17 @@ function RootLayoutNav() {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider value={DefaultTheme}>
           <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="login" />
+            <Stack.Screen name='(tabs)' />
+            <Stack.Screen name='login' />
             <Stack.Screen
-              name="application/create"
+              name='application/create'
               options={{ gestureEnabled: false }}
             />
             <Stack.Screen
-              name="step/recruitment"
+              name='step/recruitment'
               options={{ gestureEnabled: false }}
             />
-            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+            <Stack.Screen name='modal' options={{ presentation: "modal" }} />
           </Stack>
         </ThemeProvider>
       </QueryClientProvider>
