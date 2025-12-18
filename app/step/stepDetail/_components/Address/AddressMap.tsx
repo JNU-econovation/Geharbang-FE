@@ -19,7 +19,7 @@ export default function AddressMap({ coordinates }: AddressMapProps) {
           latitudeDelta={0.0922}
           longitudeDelta={0.0421}
           modalVisible={false}
-          setModalVisible={(v) => setModalVisible(v)}
+          setModalVisible={() => setModalVisible(true)}
           pointerEvents='none'
         />
       </View>
@@ -31,7 +31,7 @@ export default function AddressMap({ coordinates }: AddressMapProps) {
           latitudeDelta={0.01}
           longitudeDelta={0.01}
           modalVisible={true}
-          setModalVisible={(v) => setModalVisible(v)}
+          setModalVisible={() => setModalVisible(false)}
         />
       </Modal>
     </View>

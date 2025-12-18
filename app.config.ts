@@ -11,11 +11,6 @@ const config: ExpoConfig = {
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
 
-  splash: {
-    resizeMode: "contain",
-    backgroundColor: "#ffffff",
-  },
-
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.econovation.geharbang",
@@ -31,7 +26,8 @@ const config: ExpoConfig = {
     adaptiveIcon: {
       backgroundColor: "#ffffff",
     },
-    edgeToEdgeEnabled: true,
+
+    // edgeToEdgeEnabled: false,
     predictiveBackGestureEnabled: false,
     package: "com.econovation.geharbang",
     config: {

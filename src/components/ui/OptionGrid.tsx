@@ -12,7 +12,6 @@ interface OptionGridProps {
   options: OptionItem[];
   selected: string;
   onSelect: (value: string) => void;
-  itemWidth?: number;
   itemHeight?: number;
   error?: boolean;
 }
@@ -21,7 +20,6 @@ export default function OptionGrid({
   options,
   selected,
   onSelect,
-  itemWidth = 104,
   itemHeight = 62,
   error,
 }: OptionGridProps) {
@@ -41,7 +39,10 @@ export default function OptionGrid({
                 ? "bg-[#0EA5E9]"
                 : "bg-[#F3F4F6]"
             }`}
-            style={{ width: itemWidth, height: itemHeight }}
+            style={{
+              flexBasis: "48%",
+              height: itemHeight,
+            }}
           >
             <TextSize
               size={16}
