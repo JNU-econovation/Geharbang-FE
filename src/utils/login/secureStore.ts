@@ -17,3 +17,11 @@ export async function getAccessToken(key: string): Promise<string | null> {
     return null;
   }
 }
+
+export async function removeAccessToken(key: string) {
+  try {
+    await SecureStore.deleteItemAsync(key);
+  } catch (error) {
+    console.error("Token 삭제 실패", error);
+  }
+}
