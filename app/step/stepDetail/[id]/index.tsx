@@ -19,6 +19,7 @@ import { useApplicationExist } from '@/src/hooks/stepDetail/useApplicationExist'
 import { useHandleSection } from '@/src/hooks/stepDetail/useHandleSection';
 import { useSectionToScroll } from '@/src/hooks/stepDetail/useSectionToScroll';
 import { useStepDetail } from '@/src/hooks/stepDetail/useStepDetail';
+import { router, useLocalSearchParams } from 'expo-router';
 
 import Address from '../_components/Address/Address';
 import Contact from '../_components/Contact/Contact';
@@ -31,6 +32,8 @@ import PressSection from '../_components/PressSection/PressSection';
 import WorkInfo from '../_components/WorkInfo/WorkInfo';
 
 export default function StepDetail() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+
   const { scrollViewRef, setSectionYPositions, sectionToScroll } =
     useSectionToScroll();
   const { selectedSection, handleSectionToScroll } = useHandleSection({
@@ -40,7 +43,13 @@ export default function StepDetail() {
   const { data, isPending, isError, refetch } = useStepDetail();
 
   const { isApplicationExist } = useApplicationExist();
+
   const [isVisible, setIsVisible] = useState(false);
+
+  const handleApply = () => {
+    setIsVisible(false);
+    router.push(`/step/stepDetail/${id}/apply`);
+  };
 
   return (
     <CustomSafeAreaView pageColor="bg-white">
@@ -146,6 +155,7 @@ export default function StepDetail() {
               <StepDetailModal
                 isVisible={isVisible}
                 onPress={() => setIsVisible(false)}
+                onApply={handleApply}
                 isApplicationExist={isApplicationExist}
               />
             </View>

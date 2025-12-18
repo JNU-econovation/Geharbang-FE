@@ -11,12 +11,14 @@ import ContactCompo from "../Contact/ContactCompo";
 interface StepDetailModalProps {
   isVisible: boolean;
   onPress: () => void;
+  onApply: () => void;
   isApplicationExist?: boolean;
 }
 
 export default function StepDetailModal({
   isVisible,
   onPress,
+  onApply,
   isApplicationExist,
 }: StepDetailModalProps) {
   return (
@@ -51,6 +53,7 @@ export default function StepDetailModal({
                 content='작성된 지원서를 바로 사용합니다'
                 iconBg='#DFF2FE'
                 isModal={true}
+                onPress={onApply}
               />
             ) : (
               <ContactCompo
@@ -60,6 +63,7 @@ export default function StepDetailModal({
                 content='새로운 지원서를 작성합니다'
                 iconBg='#DCFCE7'
                 isModal={true}
+                onPress={onApply}
               />
             )}
 
