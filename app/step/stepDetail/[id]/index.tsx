@@ -48,7 +48,12 @@ export default function StepDetail() {
 
   const handleApply = () => {
     setIsVisible(false);
-    router.push(`/step/stepDetail/${id}/apply`);
+
+    if (isApplicationExist) {
+      router.push(`/step/stepDetail/${id}/apply`);
+    } else {
+      router.push('/application/create');
+    }
   };
 
   return (
