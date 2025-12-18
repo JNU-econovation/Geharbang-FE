@@ -11,7 +11,10 @@ export const stepRecruitmentValidationStep1 = (
   if (!data.guestHouseName || data.guestHouseName.trim() === "") {
     newErrors.guestHouseName = "게스트하우스 이름을 입력해주세요.";
     isValid = false;
-  }
+  } else if (data.guestHouseName.length < 2 || data.guestHouseName.length > 30) {
+      newErrors.guestHouseName = "게스트하우스 이름은 2~30자 사이로 입력해주세요";
+      isValid = false;
+    }
 
   if (!data.workingRegion || data.workingRegion.trim() === "") {
     newErrors.workingRegion = "근무 지역을 선택해주세요.";
