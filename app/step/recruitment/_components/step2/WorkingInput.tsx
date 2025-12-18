@@ -2,6 +2,7 @@ import Flex from "@/src/components/layout/Flex";
 import FormField from "@/src/components/ui/Form/FormField";
 import CustomTextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
+import WorkScheduleSelector from "@/src/components/ui/WorkScheduleSelector";
 import { useWorkingCalculator } from "@/src/hooks/stepRecruitment/useWorkingCalculator";
 import { View } from "react-native";
 
@@ -44,6 +45,30 @@ export default function WorkingInput({
     setClosedCount,
     setBothCounts,
   });
+
+  const handleCheckboxSelect = (days: number) => {
+    const restDays = 7 - days;
+    if (setBothCounts) {
+      setBothCounts(days, restDays);
+    } else {
+      setWorkingCount(days);
+      setClosedCount(restDays);
+    }
+  };
+
+  if (isAuto) {
+    return (
+      <View>
+        <FormField label='일주일 기준 근무일' required={true} errorMessage={workingErrors}>
+          <WorkScheduleSelector
+            mode="single"
+            selectedDays={workingCount}
+            onSelect={handleCheckboxSelect}
+          />
+        </FormField>
+      </View>
+    );
+  }
 
   return (
     <View>
