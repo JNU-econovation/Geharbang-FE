@@ -6,6 +6,7 @@ import CollapsibleSection from "@/src/components/ui/CollapsibleSection";
 import RadioButton from "@/src/components/ui/RadioButton";
 import CustomTextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
+import WorkScheduleSelector from "@/src/components/ui/WorkScheduleSelector";
 import { useExpandableSections } from "@/src/hooks/stepList/useExpandableSections";
 import { useFilterState } from "@/src/hooks/stepList/useFilterState";
 import { FilterState } from "@/src/types/models/step/types";
@@ -14,7 +15,6 @@ import {
   GENDER_OPTIONS,
   PERIOD_OPTIONS,
   REGION_OPTIONS,
-  WORK_SCHEDULE_OPTIONS,
   WORK_TYPES,
 } from "@/src/utils/constants/filterOptions";
 import React from "react";
@@ -189,34 +189,11 @@ export default function BottomSheetModal({
             </View>
           )}
           {filters.workType === "_7일_기준" && (
-            <View className='gap-2'>
-              {WORK_SCHEDULE_OPTIONS.map((workSchedule) => (
-                <TouchableOpacity
-                  key={workSchedule.label}
-                  onPress={() => toggleWorkScheduleType(workSchedule.label)}
-                  className={`flex-row items-center gap-3 p-3 rounded-lg border ${
-                    filters.workScheduleType.includes(workSchedule.label)
-                      ? "border-primary-blue bg-blue-50"
-                      : "border-gray-200"
-                  }`}
-                >
-                  <Checkbox
-                    checked={filters.workScheduleType.includes(
-                      workSchedule.label
-                    )}
-                    size='md'
-                  />
-                  <View>
-                    <TextSize size={14} content={workSchedule.label} />
-                    <TextSize
-                      size={12}
-                      content={workSchedule.desc}
-                      color='#6B7280'
-                    />
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
+            <WorkScheduleSelector
+              mode="multiple"
+              selectedLabels={filters.workScheduleType}
+              onToggle={toggleWorkScheduleType}
+            />
           )}
         </CollapsibleSection>
 
