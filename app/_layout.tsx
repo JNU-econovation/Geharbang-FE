@@ -38,17 +38,14 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
-
   useEffect(() => {
     loadToken();
   }, []);
 
-  if (!loadToken || !isAuthReady) {
+  if (!loaded || !isAuthReady) {
     return null;
   }
+
 
   return <RootLayoutNav />;
 }
