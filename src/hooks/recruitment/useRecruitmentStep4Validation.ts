@@ -47,9 +47,14 @@ export function useRecruitmentStep4Validation({
     };
 
     // 인스타그램 검증 (선택 필드)
-    if (instagram && instagram.length > 30) {
-      newErrors.instagram = '인스타그램 아이디는 30자 이내로 입력해주세요';
-      isValid = false;
+    if (instagram) {
+      if (instagram.trim() === '') {
+        newErrors.instagram = '공백만 입력할 수 없습니다';
+        isValid = false;
+      } else if (instagram.length > 30) {
+        newErrors.instagram = '인스타그램 아이디는 30자 이내로 입력해주세요';
+        isValid = false;
+      }
     }
 
     // 전화번호 검증 (선택 필드)
@@ -72,15 +77,25 @@ export function useRecruitmentStep4Validation({
     }
 
     // 웹사이트 검증 (선택 필드)
-    if (website && website.length > 30) {
-      newErrors.website = '웹사이트 주소는 30자 이내로 입력해주세요';
-      isValid = false;
+    if (website) {
+      if (website.trim() === '') {
+        newErrors.website = '공백만 입력할 수 없습니다';
+        isValid = false;
+      } else if (website.length > 30) {
+        newErrors.website = '웹사이트 주소는 30자 이내로 입력해주세요';
+        isValid = false;
+      }
     }
 
     // 사장님 한마디 검증 (선택 필드)
-    if (ownerMessage && ownerMessage.length > 100) {
-      newErrors.ownerMessage = '메시지는 100자 이내로 입력해주세요';
-      isValid = false;
+    if (ownerMessage) {
+      if (ownerMessage.trim() === '') {
+        newErrors.ownerMessage = '공백만 입력할 수 없습니다';
+        isValid = false;
+      } else if (ownerMessage.length > 100) {
+        newErrors.ownerMessage = '메시지는 100자 이내로 입력해주세요';
+        isValid = false;
+      }
     }
 
     setErrors(newErrors);
