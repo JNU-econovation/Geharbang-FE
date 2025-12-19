@@ -33,7 +33,7 @@ export default function WorkingTimeAndWorkList({
       label='근무 시간 및 업무'
       required={true}
       errorMessage={
-        workingTimeAndWorkList.length === 0
+        workingList.length === 0 && errors?.workingTimeAndWork
           ? "근무 시간은 최소 1개 이상 입력해야 합니다."
           : undefined
       }
