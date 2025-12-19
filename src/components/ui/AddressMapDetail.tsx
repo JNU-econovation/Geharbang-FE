@@ -1,12 +1,13 @@
 import Constants from "expo-constants";
 import { useState } from "react";
-import { TextInput, View } from "react-native";
+import { Pressable, TextInput, View } from "react-native";
 import Geocoder from "react-native-geocoding";
 import MapView, { Marker } from "react-native-maps";
 
 import ModalBtn from "@/src/components/ui/Modal/ModalBtn";
 import { useMarker } from "@/src/hooks/stepRecruitment/useMarker";
 import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/Step1Data";
+import TextSize from "./TextSize";
 
 const GOOGLE_MAPS_API_KEY = Constants.expoConfig?.extra?.googleMapsApiKey;
 Geocoder.init(GOOGLE_MAPS_API_KEY);
@@ -65,21 +66,25 @@ export default function AddressMapDetail({
       </MapView>
 
       {selectable && (
-        <View className='w-9/12 absolute top-12 left-5'>
-          <TextInput
-            placeholder='주소 검색'
-            value={searchKeyword}
-            onChangeText={setSearchKeyword}
-            onSubmitEditing={() => searchLocation(searchKeyword)}
-            className='
-      bg-white
-      h-12
-      px-4
-      rounded-lg
-      border
-      border-gray-200
-      text-[15px]'
-          />
+        <View className='absolute top-12 left-5 w-9/12 mt-1'>
+          <View className='flex-row items-center bg-white border border-gray-200 rounded-lg h-12 px-3'>
+            <TextInput
+              placeholder='주소 검색'
+              value={searchKeyword}
+              onChangeText={setSearchKeyword}
+              onSubmitEditing={() => searchLocation(searchKeyword)}
+              className='flex-1 text-[15px]'
+            />
+
+            {searchKeyword.length !== 0 && (
+              <Pressable
+                onPress={() => searchLocation(searchKeyword)}
+                className='pl-2'
+              >
+                <TextSize content='검색' color='#101828' size={15} />
+              </Pressable>
+            )}
+          </View>
         </View>
       )}
 

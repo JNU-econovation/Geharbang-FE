@@ -6,12 +6,14 @@ import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
 interface WorkInfoDetailProps {
   icon: React.ReactNode;
   workInfoTitle: string;
+  workInfoTime?: boolean;
   children: React.ReactNode;
 }
 
 export default function WorkInfoDetail({
   icon,
   workInfoTitle,
+  workInfoTime,
   children,
 }: WorkInfoDetailProps) {
   return (
@@ -22,11 +24,17 @@ export default function WorkInfoDetail({
         </View>
         <View className='pr-5' />
 
-        <TextSize size={16} color='#364153' content={workInfoTitle} />
+        <View>
+          <TextSize size={16} color='#364153' content={workInfoTitle} />
+          {!workInfoTime && <View className='pt-1'>{children}</View>}
+        </View>
       </View>
 
-      <View className='pt-2' />
-      <View className='flex flex-col '>{children}</View>
+      {workInfoTime && (
+        <View className='pt-2'>
+          <View className='flex flex-col '>{children}</View>
+        </View>
+      )}
     </ViewContext>
   );
 }

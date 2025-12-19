@@ -26,11 +26,23 @@ export default function Feature({
       <View className='pt-6' />
       <FeatureDetail title='성별' featureDetail={feature?.gender} />
 
-      <View className='pt-6' />
-      <FeatureDetail title='우대 사항' featureDetail={feature?.advantages} />
+      {feature?.advantages.length !== 0 && (
+        <View className='pt-6'>
+          <FeatureDetail
+            title='우대 사항'
+            featureDetail={feature?.advantages}
+          />
+        </View>
+      )}
 
-      <View className='pt-6' />
-      <FeatureDetail title='복지' featureDetail={feature?.employeeBenefits} />
+      {feature?.employeeBenefits.length !== 0 && (
+        <View className='pt-6'>
+          <FeatureDetail
+            title='복지'
+            featureDetail={feature?.employeeBenefits}
+          />
+        </View>
+      )}
     </SectionYPosition>
   );
 }
