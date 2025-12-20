@@ -15,6 +15,7 @@ interface ContactCompoProps {
   iconBg: string;
   redirect?: string;
   isModal?: boolean;
+  onPress?: () => void;
 }
 
 export default function ContactCompo({
@@ -25,13 +26,10 @@ export default function ContactCompo({
   iconBg,
   redirect,
   isModal,
+  onPress,
 }: ContactCompoProps) {
-  return (
-    <ViewContext
-      variant={variant}
-      minHeight={74}
-      className='items-center flex-row'
-    >
+  const content_element = (
+    <>
       <View className='pr-3' />
       <View
         className='h-10 w-10 rounded-full flex items-center justify-center'
@@ -62,6 +60,30 @@ export default function ContactCompo({
           <ContactRedirect width={22} height={22} />
         </Pressable>
       )}
+    </>
+  );
+
+  if (isModal && onPress) {
+    return (
+      <Pressable onPress={onPress}>
+        <ViewContext
+          variant={variant}
+          minHeight={74}
+          className='items-center flex-row'
+        >
+          {content_element}
+        </ViewContext>
+      </Pressable>
+    );
+  }
+
+  return (
+    <ViewContext
+      variant={variant}
+      minHeight={74}
+      className='items-center flex-row'
+    >
+      {content_element}
     </ViewContext>
   );
 }

@@ -74,8 +74,12 @@ export const transformStoreToApi = (
 
   const feature: FeatureRequest = {
     gender: step2Data.gender,
-    Advantages: step3Data.advantages.map((adv) => adv.text),
-    EmployeeBenefits: step3Data.employeeBenefits.map((benefit) => benefit.text),
+    Advantages: step3Data.advantages
+      .map((adv) => adv.text)
+      .filter((text) => text.trim() !== ''),
+    EmployeeBenefits: step3Data.employeeBenefits
+      .map((benefit) => benefit.text)
+      .filter((text) => text.trim() !== ''),
   };
 
   const introduction: IntroductionRequest = {
@@ -84,10 +88,10 @@ export const transformStoreToApi = (
   };
 
   const contact: ContactRequest = {
-    phoneNumber: step4Data.phone || undefined,
-    instagramId: step4Data.instagram || undefined,
-    email: step4Data.email || undefined,
-    webSite: step4Data.website || undefined,
+    phoneNumber: step4Data.phone,
+    instagramId: step4Data.instagram,
+    email: step4Data.email,
+    webSite: step4Data.website,
   };
 
   const questions: string[] = step5Data.questions.map((q) => q.text);

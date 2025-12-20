@@ -4,8 +4,14 @@ import { useUploadImage } from "@/src/hooks/application/create/useUploadImage";
 import { useApplicationSlice } from "@/src/stores/application/useApplicationSlice";
 import { useCreateApplication } from "./useCreateApplication";
 
-export const useHandleCreate = (validateForm: () => boolean) => {
-  const { imageFile } = useApplicationSlice();
+export const useHandleCreate = () => {
+  const { data: applicationData, imageFile } = useApplicationSlice();
+
+  const { validateForm } = useApplicationFormValidation(
+    applicationData,
+    imageFile,
+    2
+  );
 
   const uploadMutation = useUploadImage();
   const createMutation = useCreateApplication();

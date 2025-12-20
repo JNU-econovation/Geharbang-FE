@@ -32,6 +32,8 @@ import PressSection from "../_components/PressSection/PressSection";
 import WorkInfo from "../_components/WorkInfo/WorkInfo";
 
 export default function StepDetail() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+
   const { scrollViewRef, setSectionYPositions, sectionToScroll } =
     useSectionToScroll();
   const { selectedSection, handleSectionToScroll } = useHandleSection({
@@ -41,6 +43,7 @@ export default function StepDetail() {
   const { data, isPending, isError, refetch } = useStepDetail();
 
   const { isApplicationExist } = useApplicationExist();
+
   const [isVisible, setIsVisible] = useState(false);
 
   const { requireLogin } = useRequireLogin();
@@ -149,6 +152,7 @@ export default function StepDetail() {
               <StepDetailModal
                 isVisible={isVisible}
                 onPress={() => setIsVisible(false)}
+                onApply={handleApply}
                 isApplicationExist={isApplicationExist}
               />
             </View>
