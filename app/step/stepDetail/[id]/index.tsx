@@ -15,6 +15,7 @@ import Flex from "@/src/components/layout/Flex/Flex";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
+import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
 import { useApplicationExist } from "@/src/hooks/stepDetail/useApplicationExist";
 import { useHandleSection } from "@/src/hooks/stepDetail/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/stepDetail/useSectionToScroll";
@@ -45,15 +46,7 @@ export default function StepDetail() {
 
   const [isVisible, setIsVisible] = useState(false);
 
-  const handleApply = () => {
-    setIsVisible(false);
-
-    if (isApplicationExist) {
-      router.push(`/step/stepDetail/${id}/apply`);
-    } else {
-      router.push('/application/create');
-    }
-  };
+  const { requireLogin } = useRequireLogin();
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -153,7 +146,7 @@ export default function StepDetail() {
                 height={56}
                 content='지원하기'
                 textColor='#ffffff'
-                onPress={() => setIsVisible(true)}
+                onPress={() => requireLogin(() => setIsVisible(true))}
               />
 
               <StepDetailModal

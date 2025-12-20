@@ -2,7 +2,6 @@ import { router } from "expo-router";
 
 import { useUploadImage } from "@/src/hooks/application/create/useUploadImage";
 import { useApplicationSlice } from "@/src/stores/application/useApplicationSlice";
-import { useApplicationFormValidation } from "./useApplicationFormValidation";
 import { useCreateApplication } from "./useCreateApplication";
 
 export const useHandleCreate = () => {

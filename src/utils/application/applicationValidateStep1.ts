@@ -22,7 +22,10 @@ export const applicationValidateStep1 = (
   if (!data.name || data.name.trim() === "") {
     newErrors.name = "이름을 입력해주세요";
     isValid = false;
-  }
+  } else if (data.name.length < 2 || data.name.length > 10) {
+      newErrors.name = "이름은 2~10자 사이로 입력해주세요";
+      isValid = false;
+    }
 
   if (!data.phoneNumber || data.phoneNumber.trim() === "") {
     newErrors.phoneNumber = "전화번호를 입력해주세요";

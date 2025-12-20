@@ -60,8 +60,8 @@ export const useHandleStepRecruitmentSubmit = () => {
     try {
       const { mainImageUrls, introImageUrls } = await uploadImages();
       const requestData = createRequestData(mainImageUrls, introImageUrls);
-      await createRecruitmentMutation.mutateAsync(requestData);
-      router.setParams({ status: 'success' });
+      const staffRecruitmentId = await createRecruitmentMutation.mutateAsync(requestData);
+      router.setParams({ status: 'success', recruitmentId : staffRecruitmentId.toString() });
     } catch (error) {
       console.error('공고 등록 실패:', error);
       router.setParams({ status: 'error' });

@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
@@ -21,9 +20,13 @@ import DaySelector from "../_components/DaySelector";
 import StyleSelector from "../_components/StyleSelector";
 
 export default function Step2Screen() {
-  const { data: applicationData, setUpdate: setApplicationData, imageFile } = useApplicationSlice();
+  const {
+    data: applicationData,
+    setUpdate: setApplicationData,
+    imageFile,
+  } = useApplicationSlice();
 
-  const { errors, clearError } = useApplicationFormValidation(
+  const { errors, clearError, validateForm } = useApplicationFormValidation(
     applicationData,
     imageFile,
     2
@@ -31,14 +34,14 @@ export default function Step2Screen() {
 
   usePreventHardwareBack(); // 안드로이드 하드웨어 뒤로가기 방지
 
-  const handleCreate = useHandleCreate();
+  const handleCreate = useHandleCreate(validateForm);
 
   return (
     <DismissKeyboardView>
       <CustomSafeAreaView pageColor='bg-white'>
         <View className='p-3'>
           <Flex justify='start' items='center' dir='row' gap={124}>
-          <BackArrow color='black' size={24} />
+            <BackArrow color='black' size={24} />
             <TextSize size={18} content='지원서 작성' />
           </Flex>
         </View>

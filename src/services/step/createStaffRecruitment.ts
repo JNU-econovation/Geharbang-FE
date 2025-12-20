@@ -10,5 +10,5 @@ export const createStaffRecruitment = async (
   data: StaffRecruitmentRequest
 ): Promise<number> => {
   const response = await axiosPrivate.post("/api/v1/staff-recruitment", data);
-  return response.data.recruitmentId || response.data.id;
+  return response.data.staffRecruitmentId;
 };
