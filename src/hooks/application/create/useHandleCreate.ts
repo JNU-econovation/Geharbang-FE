@@ -1,17 +1,11 @@
-import { router } from "expo-router";
+import { router } from 'expo-router';
 
-import { useUploadImage } from "@/src/hooks/application/create/useUploadImage";
-import { useApplicationSlice } from "@/src/stores/application/useApplicationSlice";
-import { useCreateApplication } from "./useCreateApplication";
+import { useUploadImage } from '@/src/hooks/application/create/useUploadImage';
+import { useApplicationSlice } from '@/src/stores/application/useApplicationSlice';
+import { useCreateApplication } from './useCreateApplication';
 
-export const useHandleCreate = () => {
-  const { data: applicationData, imageFile } = useApplicationSlice();
-
-  const { validateForm } = useApplicationFormValidation(
-    applicationData,
-    imageFile,
-    2
-  );
+export const useHandleCreate = (validateForm: () => boolean) => {
+  const { imageFile } = useApplicationSlice();
 
   const uploadMutation = useUploadImage();
   const createMutation = useCreateApplication();
@@ -19,8 +13,8 @@ export const useHandleCreate = () => {
   const handleCreate = async () => {
     if (validateForm()) {
       router.replace({
-        pathname: "/application/create/result",
-        params: { status: "pending" },
+        pathname: '/application/create/result',
+        params: { status: 'pending' },
       });
 
       try {
@@ -28,10 +22,10 @@ export const useHandleCreate = () => {
         const latestData = useApplicationSlice.getState().data;
         await createMutation.mutateAsync(latestData);
 
-        router.setParams({ status: "success" });
+        router.setParams({ status: 'success' });
       } catch (e) {
-        console.error("제출 오류:", e);
-        router.setParams({ status: "error" });
+        console.error('제출 오류:', e);
+        router.setParams({ status: 'error' });
       }
     }
   };
