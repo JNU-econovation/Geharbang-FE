@@ -50,18 +50,18 @@ export default function applicationCreate() {
   };
 
   return (
-    <DismissKeyboardView>
-      <CustomSafeAreaView pageColor='bg-white'>
-        <View className='p-3'>
-          <Flex justify='start' items='center' dir='row' gap={124}>
-            <BackArrow color='black' size={24} />
-            <TextSize size={18} content='지원서 작성' />
-          </Flex>
-        </View>
+    <CustomSafeAreaView pageColor='bg-white'>
+      <View className='p-3'>
+        <Flex justify='start' items='center' dir='row' gap={124}>
+          <BackArrow color='black' size={24} />
+          <TextSize size={18} content='지원서 작성' />
+        </Flex>
+      </View>
 
-        <ProgressBar stepTitle='기본정보' currentStep={1} totalSteps={2} />
+      <ProgressBar stepTitle='기본정보' currentStep={1} totalSteps={2} />
 
-        <ScrollView className='bg-[#F9FAFB]'>
+      <ScrollView className='bg-[#F9FAFB]'>
+        <DismissKeyboardView>
           <View className='pt-4 px-3 '>
             <Flex justify='start' items='center' gap={24}>
               {/* 대표 사진 */}
@@ -161,8 +161,8 @@ export default function applicationCreate() {
               />
             </Flex>
           </View>
-        </ScrollView>
-      </CustomSafeAreaView>
-    </DismissKeyboardView>
+        </DismissKeyboardView>
+      </ScrollView>
+    </CustomSafeAreaView>
   );
 }

@@ -37,23 +37,23 @@ export default function Step2Screen() {
   const handleCreate = useHandleCreate(validateForm);
 
   return (
-    <DismissKeyboardView>
-      <CustomSafeAreaView pageColor='bg-white'>
-        <View className='p-3'>
-          <Flex justify='start' items='center' dir='row' gap={124}>
-            <BackArrow color='black' size={24} />
-            <TextSize size={18} content='지원서 작성' />
-          </Flex>
-        </View>
+    <CustomSafeAreaView pageColor='bg-white'>
+      <View className='p-3'>
+        <Flex justify='start' items='center' dir='row' gap={124}>
+          <BackArrow color='black' size={24} />
+          <TextSize size={18} content='지원서 작성' />
+        </Flex>
+      </View>
 
-        <ProgressBar stepTitle='자기소개' currentStep={2} totalSteps={2} />
+      <ProgressBar stepTitle='자기소개' currentStep={2} totalSteps={2} />
 
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          keyboardVerticalOffset={0}
-        >
-          <ScrollView className='bg-[#F9FAFB]'>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={0}
+      >
+        <ScrollView className='bg-[#F9FAFB]'>
+          <DismissKeyboardView>
             <View className='pt-4 px-3'>
               <Flex justify='start' items='center' gap={24}>
                 {/* 근무 일정 */}
@@ -165,9 +165,9 @@ export default function Step2Screen() {
                 />
               </Flex>
             </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </CustomSafeAreaView>
-    </DismissKeyboardView>
+          </DismissKeyboardView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </CustomSafeAreaView>
   );
 }
