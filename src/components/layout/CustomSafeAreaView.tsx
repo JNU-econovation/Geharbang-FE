@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 interface CustomSafeAreaViewProps {
   children: ReactNode;
-  pageColor: "bg-gray-50" | "bg-white";
+  pageColor: "bg-gray-50" | "bg-white" | "bg-[#F9FAFB]";
   statusBarBackgroundColor?: "bg-[#0EA5E9]" | "bg-white";
   topOnly?: boolean;
 }
@@ -18,7 +18,7 @@ export default function CustomSafeAreaView({
   if (statusBarBackgroundColor) {
     return (
       <>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle='dark-content' />
         <View className={`${statusBarBackgroundColor}`}>
           <SafeAreaView edges={["top"]} />
         </View>
@@ -34,7 +34,7 @@ export default function CustomSafeAreaView({
   if (topOnly) {
     return (
       <>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle='dark-content' />
         <SafeAreaView className={`flex-1 ${pageColor}`} edges={["top"]}>
           {children}
         </SafeAreaView>
@@ -43,7 +43,7 @@ export default function CustomSafeAreaView({
   }
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle='dark-content' />
       <SafeAreaView className={`flex-1 ${pageColor}`}>{children}</SafeAreaView>
     </>
   );
