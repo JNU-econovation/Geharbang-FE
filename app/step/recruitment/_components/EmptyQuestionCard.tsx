@@ -24,7 +24,7 @@ export default function EmptyQuestionCard({ onPress }: EmptyQuestionCardProps) {
         >
           첫 번째 질문 추가하기
         </Text>
-        <Text className="text-xs" style={{ color: COLORS.GRAY.PLACEHOLDER }}>
+        <Text className="text-xs text-center" style={{ color: COLORS.GRAY.PLACEHOLDER }}>
           지원자에게 궁금한 점을 물어보세요
         </Text>
       </View>

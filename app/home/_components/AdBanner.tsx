@@ -20,9 +20,10 @@ export default function AdBanner() {
         borderWidth: 1,
         borderColor: "#BAE6FD",
         width: "90%",
+        alignSelf: "center"
       }}
     >
-      <Flex justify="center" items="center" dir="row" gap={90}>
+      <Flex justify="between" items="center" dir="row">
         <View className="gap-1 flex-1">
           <TextSize size={15} color="#0069A8" content="🌊 제주 성수기 특가" />
           <TextSize
