@@ -19,7 +19,7 @@ export default function StepRecruitmentGender({
   return (
     <FormField label='성별' required={true} errorMessage={errorMsg}>
       <OptionSelector<Gender>
-        size='32.5%'
+        size='32%'
         option={GENDER_FULL}
         selected={selectedGender}
         setSelected={setSelectedGender}

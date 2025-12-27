@@ -23,7 +23,7 @@ export default function AdBanner() {
       }}
     >
       <Flex justify="center" items="center" dir="row" gap={90}>
-        <View className="gap-1">
+        <View className="gap-1 flex-1">
           <TextSize size={15} color="#0069A8" content="🌊 제주 성수기 특가" />
           <TextSize
             size={12}

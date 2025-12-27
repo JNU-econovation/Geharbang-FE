@@ -1,4 +1,5 @@
 import React from "react";
+import { ScrollView } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import LoginBody from "./_components/LoginBody/LoginBody";
@@ -9,14 +10,15 @@ export default function Login() {
   return (
     <>
       <CustomSafeAreaView
-        pageColor='bg-gray-50'
+        pageColor='bg-white'
         statusBarBackgroundColor='bg-[#0EA5E9]'
       >
-        <LoginHeader />
-        <LoginBody />
+        <ScrollView className='flex-1'>
+          <LoginHeader />
+          <LoginBody />
+          <LoginFooter />
+        </ScrollView>
       </CustomSafeAreaView>
-
-      <LoginFooter />
     </>
   );
 }

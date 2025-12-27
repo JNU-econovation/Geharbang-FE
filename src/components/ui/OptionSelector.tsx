@@ -1,8 +1,9 @@
 import React from "react";
-import { DimensionValue, Pressable, Text, View } from "react-native";
+import { DimensionValue, Pressable, View } from "react-native";
 
 import { Option } from "@/src/types/Option";
 import { COLORS } from "@/src/utils/constants/colors";
+import TextSize from "./TextSize";
 
 interface OptionSelectorProps<T> {
   selected: T;
@@ -52,7 +53,7 @@ export default function OptionSelector<T>({
                 }`}
               ></View>
 
-              <Text>{data.label}</Text>
+              <TextSize size={16} content={data.label} />
             </Pressable>
           );
         })}
