@@ -16,6 +16,7 @@ interface TextInputFieldProps {
   autoCapitalize?: TextInputProps["autoCapitalize"];
   editable?: boolean;
   className?: string;
+  textAlignVertical?: TextInputProps["textAlignVertical"];
 }
 
 export default function CustomTextInput({
@@ -32,6 +33,7 @@ export default function CustomTextInput({
   autoCapitalize,
   editable,
   className,
+  textAlignVertical,
 }: TextInputFieldProps) {
   return (
     <View className={className}>
@@ -48,6 +50,7 @@ export default function CustomTextInput({
         multiline={multiline}
         autoCapitalize={autoCapitalize}
         editable={editable}
+        textAlignVertical={textAlignVertical}
       />
     </View>
   );
