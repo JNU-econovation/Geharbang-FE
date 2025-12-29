@@ -1,19 +1,36 @@
 import { router } from 'expo-router';
-import { ScrollView } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 
-import RecruitmentStepLayout from '@/app/step/recruitment/_components/RecruitmentStepLayout';
 import Flex from '@/src/components/layout/Flex';
 import Button from '@/src/components/ui/Button/Button';
+import FormField from '@/src/components/ui/Form/FormField';
 import FormSection from '@/src/components/ui/Form/FormSection';
-import TextSize from '@/src/components/ui/TextSize';
+import TextInput from '@/src/components/ui/TextInput';
+import { useRecruitmentStep4Validation } from '@/src/hooks/recruitment/useRecruitmentStep4Validation';
+import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
+import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
+import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
 
 export default function GuestHouseEnrollStep4() {
+  const { step4Data, setStep4Update } = useStepRecruitmentStore();
+  const { instagram, phone, email, website, ownerMessage } = step4Data;
+
+  const { errors, clearError, validateForm } = useRecruitmentStep4Validation({
+    instagram,
+    phone,
+    email,
+    website,
+    ownerMessage,
+  });
+
   const handleSubmit = () => {
-    // TODO: 제출 로직 추가
-    router.push({
-      pathname: '/guestHouse/enroll/result',
-      params: { status: 'success' },
-    });
+    if (validateForm()) {
+      // TODO: 제출 로직 추가
+      router.push({
+        pathname: '/guestHouse/enroll/result',
+        params: { status: 'success' },
+      });
+    }
   };
 
   const handlePrev = () => {
@@ -21,36 +38,132 @@ export default function GuestHouseEnrollStep4() {
   };
 
   return (
-    <RecruitmentStepLayout currentStep={4} stepTitle="최종 확인">
-      <ScrollView
-        className="bg-[#F9FAFB]"
-        style={{ paddingTop: 16, paddingHorizontal: 12 }}
+    <GuestHouseEnrollLayout currentStep={4} stepTitle="연락처 및 사장님 한마디">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
       >
-        <FormSection title="최종 확인">
-          <TextSize size={14} content="Step 4 내용을 여기에 추가하세요" />
-        </FormSection>
+        <ScrollView
+          className="flex-1"
+          contentContainerStyle={{ paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="pt-4 px-3">
+            <Flex justify="start" items="center" gap={24}>
+              <FormSection title="연락처 및 사장님 한마디">
+                <FormField
+                  label="인스타그램"
+                  required={false}
+                  errorMessage={errors.instagram}
+                >
+                  <TextInput
+                    value={instagram}
+                    onChangeText={(text) => {
+                      setStep4Update('instagram', text);
+                      clearError('instagram');
+                    }}
+                    placeholder="예: @jeju_guesthouse"
+                    error={!!errors.instagram}
+                    maxLength={30}
+                  />
+                </FormField>
 
-        <Flex items="center" dir="row" gap={8}>
-          <Button
-            variant="gray"
-            width={180}
-            height={50}
-            textColor="#000"
-            content="이전"
-            onPress={handlePrev}
-            className="mt-4"
-          />
-          <Button
-            variant="primary"
-            width={180}
-            height={50}
-            textColor="white"
-            content="제출하기"
-            onPress={handleSubmit}
-            className="mt-4"
-          />
-        </Flex>
-      </ScrollView>
-    </RecruitmentStepLayout>
+                <FormField
+                  label="전화번호"
+                  required={false}
+                  errorMessage={errors.phone}
+                >
+                  <TextInput
+                    value={phone}
+                    onChangeText={(text) => {
+                      setStep4Update('phone', formatPhoneNumber(text));
+                      clearError('phone');
+                    }}
+                    placeholder="예: 064-123-4567"
+                    keyboardType="phone-pad"
+                    error={!!errors.phone}
+                    maxLength={13}
+                  />
+                </FormField>
+
+                <FormField
+                  label="이메일"
+                  required={false}
+                  errorMessage={errors.email}
+                >
+                  <TextInput
+                    value={email}
+                    onChangeText={(text) => {
+                      setStep4Update('email', text);
+                      clearError('email');
+                    }}
+                    placeholder="예: owner@naver.com"
+                    keyboardType="email-address"
+                    error={!!errors.email}
+                    maxLength={30}
+                  />
+                </FormField>
+
+                <FormField
+                  label="웹사이트"
+                  required={false}
+                  errorMessage={errors.website}
+                >
+                  <TextInput
+                    value={website}
+                    onChangeText={(text) => {
+                      setStep4Update('website', text);
+                      clearError('website');
+                    }}
+                    placeholder="예: https://www.jejuguesthouse.com"
+                    keyboardType="url"
+                    error={!!errors.website}
+                    maxLength={30}
+                  />
+                </FormField>
+
+                <FormField
+                  label="사장님 한마디"
+                  required={false}
+                  errorMessage={errors.ownerMessage}
+                >
+                  <TextInput
+                    value={ownerMessage}
+                    onChangeText={(text) => {
+                      setStep4Update('ownerMessage', text);
+                      clearError('ownerMessage');
+                    }}
+                    placeholder="스텝들에게 전하고 싶은 메시지를 입력해주세요"
+                    multiline={true}
+                    height={120}
+                    error={!!errors.ownerMessage}
+                    maxLength={100}
+                  />
+                </FormField>
+              </FormSection>
+
+              <Flex items="center" dir="row" gap={8}>
+                <Button
+                  variant="gray"
+                  width={180}
+                  height={50}
+                  textColor="#000"
+                  content="이전"
+                  onPress={handlePrev}
+                />
+                <Button
+                  variant="primary"
+                  width={180}
+                  height={50}
+                  textColor="white"
+                  content="제출하기"
+                  onPress={handleSubmit}
+                />
+              </Flex>
+            </Flex>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </GuestHouseEnrollLayout>
   );
 }

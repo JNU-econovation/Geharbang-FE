@@ -141,6 +141,7 @@ export default function GuestHouseEnrollStep3() {
                 <TouchableOpacity
                   className="w-full h-12 bg-sky-50 rounded-xl border border-sky-500 flex-row justify-center items-center gap-2"
                   activeOpacity={0.7}
+                  onPress={() => router.push('/guestHouse/enroll/addRoomForm')}
                 >
                   <Feather name="plus-square" size={18} color="#0ea5e9" />
                   <Text className="text-sky-500 text-sm font-medium">

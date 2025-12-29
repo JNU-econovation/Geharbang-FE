@@ -20,9 +20,10 @@ export default function GuestHouseEnrollStep2() {
     useRecruitmentStep3Validation(step3Data);
 
   const handleNext = () => {
-    if (validateForm()) {
-      router.push('/guestHouse/enroll/step3');
-    }
+    // TODO: 유효성 검사 활성화
+    // if (validateForm()) {
+    router.push('/guestHouse/enroll/step3');
+    // }
   };
 
   return (
