@@ -48,6 +48,7 @@ export default function CustomTextInput({
         multiline={multiline}
         autoCapitalize={autoCapitalize}
         editable={editable}
+        allowFontScaling={false}
       />
     </View>
   );

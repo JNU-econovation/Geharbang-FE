@@ -23,8 +23,8 @@ export interface WorkingInformationRequest {
 
 export interface FeatureRequest {
   gender: string;
-  Advantages: string[];
-  EmployeeBenefits: string[];
+  advantages: string[];
+  employeeBenefits: string[];
 }
 
 export interface IntroductionRequest {
