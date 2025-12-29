@@ -45,7 +45,7 @@ export default function GuestHouseCard({ item, onPress }: GuestHouseCardProps) {
             className="text-[#1d2838] text-sm font-normal leading-[21px]"
             numberOfLines={1}
           >
-            {item.name}
+            {item.title}
           </Text>
           <Text className="text-[#495565] text-xs font-normal leading-[18px]">
             {item.region}
