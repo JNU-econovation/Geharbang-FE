@@ -13,7 +13,7 @@ export interface GuestHouse {
 
 export interface StaffRecruitmentPost {
   id: number;
-  name: string;
+  title: string;
   tags: string[];
   region: string;
   isWished: boolean;
