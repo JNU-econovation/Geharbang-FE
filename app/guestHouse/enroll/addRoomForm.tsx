@@ -1,9 +1,12 @@
 import Flex from '@/src/components/layout/Flex/Flex';
 import Button from '@/src/components/ui/Button/Button';
+import MultiImagePicker from '@/src/components/ui/imagePicker/MultiImagePicker';
+import TimePickerField from '@/src/components/ui/TimePickerField';
+import { File } from '@/src/types/File';
 import { Feather } from '@expo/vector-icons';
-import React from 'react';
+import { router } from 'expo-router';
+import React, { useState } from 'react';
 import {
-  Image,
   ScrollView,
   Text,
   TextInput,
@@ -25,31 +28,77 @@ const FormLabel = ({
   </View>
 );
 
-const SelectButton = ({ label }: { label: string }) => (
-  <TouchableOpacity className="w-full py-3 bg-white rounded-lg border border-gray-200 items-center justify-center">
-    <Text className="text-[#364153] text-sm">{label}</Text>
+type RoomType = '여성 전용 도미토리' | '남성 전용 도미토리';
+type Occupancy = '1인실' | '2인실' | '3인이상';
+
+const SelectButton = ({
+  label,
+  selected,
+  onPress,
+  showCircle,
+  circleColor,
+}: {
+  label: string;
+  selected: boolean;
+  onPress: () => void;
+  showCircle?: boolean;
+  circleColor?: string;
+}) => (
+  <TouchableOpacity
+    onPress={onPress}
+    className={`w-full py-3 rounded-lg border items-center justify-center ${
+      selected
+        ? 'bg-sky-50 border-sky-500'
+        : 'bg-white border-gray-200'
+    }`}
+  >
+    <View className="flex-row items-center gap-2">
+      {showCircle && circleColor && (
+        <View
+          className="w-2 h-2 rounded-full"
+          style={{ backgroundColor: circleColor }}
+        />
+      )}
+      <Text
+        className={`text-sm ${
+          selected ? 'text-sky-500 font-medium' : 'text-[#364153]'
+        }`}
+      >
+        {label}
+      </Text>
+    </View>
   </TouchableOpacity>
 );
 
 export default function AddRoomForm() {
+  const [roomName, setRoomName] = useState('');
+  const [roomType, setRoomType] = useState<RoomType | null>(null);
+  const [occupancy, setOccupancy] = useState<Occupancy | null>(null);
+  const [checkInTime, setCheckInTime] = useState(new Date());
+  const [checkOutTime, setCheckOutTime] = useState(new Date());
+  const [price, setPrice] = useState('');
+  const [roomImages, setRoomImages] = useState<File[]>([]);
+
+  const handleAddRoom = () => {
+    // TODO: Save room data to state management (Zustand/Context)
+    // For now, just navigate back to step3
+    router.push('/guestHouse/enroll/step3');
+  };
+
   return (
     <GuestHouseEnrollLayout currentStep={3} stepTitle="객실 타입 등록">
       <ScrollView className="bg-[#F9FAFB]" style={{ paddingHorizontal: 12 }}>
-        <View className="flex-1 bg-gray-50">
-          <ScrollView
-            contentContainerStyle={{
-              flexGrow: 1,
-              alignItems: 'center',
-              paddingVertical: 40,
-            }}
-          >
-            <View className="flex-1 bg-white rounded-xl shadow-sm p-6 gap-6">
+        <View className="py-10">
+          <View className="bg-white rounded-xl shadow-sm p-6 gap-6">
               {/* 헤더 */}
               <View className="flex-row justify-between items-center mb-2">
                 <Text className="text-[#101828] text-lg font-bold">
                   객실타입추가
                 </Text>
-                <TouchableOpacity className="p-2">
+                <TouchableOpacity
+                  className="p-2"
+                  onPress={() => router.push('/guestHouse/enroll/step3')}
+                >
                   <Feather name="x" size={24} color="#101828" />
                 </TouchableOpacity>
               </View>
@@ -61,6 +110,8 @@ export default function AddRoomForm() {
                   className="w-full h-12 px-4 rounded-lg border border-gray-200 text-sm mt-2"
                   placeholder="예: 더블룸"
                   placeholderTextColor="#99a1af"
+                  value={roomName}
+                  onChangeText={setRoomName}
                 />
               </View>
 
@@ -68,8 +119,20 @@ export default function AddRoomForm() {
               <View>
                 <FormLabel text="객실 타입" required />
                 <View className="gap-2 mt-2">
-                  <SelectButton label="여성 전용 도미토리" />
-                  <SelectButton label="남성 전용 도미토리" />
+                  <SelectButton
+                    label="여성 전용 도미토리"
+                    selected={roomType === '여성 전용 도미토리'}
+                    onPress={() => setRoomType('여성 전용 도미토리')}
+                    showCircle={true}
+                    circleColor="#fa2b36"
+                  />
+                  <SelectButton
+                    label="남성 전용 도미토리"
+                    selected={roomType === '남성 전용 도미토리'}
+                    onPress={() => setRoomType('남성 전용 도미토리')}
+                    showCircle={true}
+                    circleColor="#3b82f6"
+                  />
                 </View>
               </View>
 
@@ -77,12 +140,25 @@ export default function AddRoomForm() {
               <View>
                 <FormLabel text="객실 인원" required />
                 <View className="flex-row gap-2 mt-2">
-                  {['1인실', '2인실', '3인이상'].map((label, index) => (
+                  {(['1인실', '2인실', '3인이상'] as const).map((label) => (
                     <TouchableOpacity
-                      key={index}
-                      className="flex-1 h-11 bg-white rounded-lg border border-gray-200 justify-center items-center"
+                      key={label}
+                      onPress={() => setOccupancy(label)}
+                      className={`flex-1 h-11 rounded-lg border justify-center items-center ${
+                        occupancy === label
+                          ? 'bg-sky-50 border-sky-500'
+                          : 'bg-white border-gray-200'
+                      }`}
                     >
-                      <Text className="text-[#364153] text-sm">{label}</Text>
+                      <Text
+                        className={`text-sm ${
+                          occupancy === label
+                            ? 'text-sky-500 font-medium'
+                            : 'text-[#364153]'
+                        }`}
+                      >
+                        {label}
+                      </Text>
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -94,16 +170,18 @@ export default function AddRoomForm() {
                 <View className="flex-row items-center gap-2 mt-2">
                   <View className="flex-1 gap-1">
                     <Text className="text-[#6a7282] text-xs">입실</Text>
-                    <TouchableOpacity className="h-12 px-4 rounded-lg border border-gray-200 justify-center">
-                      <Text className="text-[#99a1af] text-sm">11:00</Text>
-                    </TouchableOpacity>
+                    <TimePickerField
+                      value={checkInTime}
+                      onChange={setCheckInTime}
+                    />
                   </View>
-                  <Text className="text-[#99a1af] text-base mt-5">~</Text>
+                  <Text className="text-[#364153] text-base mt-5">~</Text>
                   <View className="flex-1 gap-1">
                     <Text className="text-[#6a7282] text-xs">퇴실</Text>
-                    <TouchableOpacity className="h-12 px-4 rounded-lg border border-gray-200 justify-center">
-                      <Text className="text-[#99a1af] text-sm">23:00</Text>
-                    </TouchableOpacity>
+                    <TimePickerField
+                      value={checkOutTime}
+                      onChange={setCheckOutTime}
+                    />
                   </View>
                 </View>
               </View>
@@ -117,6 +195,8 @@ export default function AddRoomForm() {
                     placeholder="예 : 30000"
                     placeholderTextColor="#99a1af"
                     keyboardType="numeric"
+                    value={price}
+                    onChangeText={setPrice}
                   />
                   <Text className="text-[#6a7282] text-sm ml-2">원</Text>
                 </View>
@@ -128,40 +208,15 @@ export default function AddRoomForm() {
                 <Text className="text-[#697282] text-xs mt-1 mb-3">
                   최대 10장까지 등록할 수 있습니다
                 </Text>
-
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View className="flex-row gap-3">
-                    {/* 대표 사진 */}
-                    <View className="w-48 h-32 relative rounded-xl overflow-hidden bg-gray-100">
-                      <Image
-                        source={{
-                          uri: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&q=80&w=800',
-                        }}
-                        className="w-full h-full"
-                        resizeMode="cover"
-                      />
-                      <View className="absolute left-2 top-2 px-2 py-1 bg-sky-500 rounded-full">
-                        <Text className="text-white text-[10px]">대표</Text>
-                      </View>
-                      <TouchableOpacity className="absolute right-2 top-2 bg-black/50 p-1 rounded-full">
-                        <Feather name="x" size={12} color="white" />
-                      </TouchableOpacity>
-                    </View>
-
-                    {/* 추가 사진 슬롯 (빈 상태 예시) */}
-                    {[1, 2].map((i) => (
-                      <View
-                        key={i}
-                        className="w-48 h-32 bg-gray-100 rounded-xl justify-center items-center border border-dashed border-gray-300"
-                      >
-                        <Feather name="image" size={24} color="#9ca3af" />
-                      </View>
-                    ))}
-                  </View>
-                </ScrollView>
+                <MultiImagePicker
+                  selectedImageFiles={roomImages}
+                  setSelectedImageFiles={setRoomImages}
+                  maxCount={10}
+                  error={false}
+                  clearError={() => {}}
+                />
               </View>
-            </View>
-          </ScrollView>
+          </View>
         </View>
         <Flex items="center">
           <Button
@@ -169,7 +224,8 @@ export default function AddRoomForm() {
             width={360}
             height={50}
             textColor="white"
-            content="다음"
+            content="객실 추가"
+            onPress={handleAddRoom}
             className="mt-4"
           />
         </Flex>
