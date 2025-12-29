@@ -42,7 +42,12 @@ export default function WorkingTimeAndWorkList({
         <WorkingTimeAndWork
           key={index}
           addedTimeAndWork={item}
-          setAddedTimeAndWork={(updated) => updateWorking(index, updated)}
+          setAddedTimeAndWork={(updater) => {
+            updateWorking(
+              index,
+              typeof updater === "function" ? updater : () => updater
+            );
+          }}
           onDelete={() => deleteWorking(index)}
           errors={errors?.workingTimeAndWork?.[index]}
         />
