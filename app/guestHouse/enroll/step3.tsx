@@ -105,16 +105,8 @@ export default function GuestHouseEnrollStep3() {
   return (
     <GuestHouseEnrollLayout currentStep={3} stepTitle="객실 타입 등록">
       <ScrollView className="bg-[#F9FAFB]" style={{ paddingHorizontal: 12 }}>
-        <View className="flex-1 bg-gray-50">
-          <ScrollView
-            contentContainerStyle={{
-              flexGrow: 1,
-              alignItems: 'center',
-              paddingVertical: 40,
-            }}
-          >
-            <View className="w-full max-w-sm">
-              <View className="w-full bg-white rounded-[10px] shadow-sm p-6 gap-5">
+        <View className="pt-4">
+          <View className="bg-white rounded-[10px] shadow-sm p-6 gap-5">
                 {/* 1. 헤더 섹션 */}
                 <View>
                   <View className="flex-row items-center mb-1">
@@ -152,8 +144,6 @@ export default function GuestHouseEnrollStep3() {
                 {/* 4. 안내 박스 (노란색) */}
                 <NoticeBox />
               </View>
-            </View>
-          </ScrollView>
         </View>
         <Flex items="center">
           <Button

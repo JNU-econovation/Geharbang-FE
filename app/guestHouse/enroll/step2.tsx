@@ -10,6 +10,7 @@ import MultiImagePicker from '@/src/components/ui/imagePicker/MultiImagePicker';
 import TextInput from '@/src/components/ui/TextInput';
 import { useRecruitmentStep3Validation } from '@/src/hooks/recruitment/useRecruitmentStep3Validation';
 import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
+import AtmosphereForm from './_components/step2/Atmosphere';
 import FacilitiesForm from './_components/step2/FacilitiesForm';
 import PartyComponent from './_components/step2/PartyComponent';
 
@@ -88,6 +89,7 @@ export default function GuestHouseEnrollStep2() {
             />
           </FormField>
           <FacilitiesForm />
+          <AtmosphereForm />
         </FormSection>
 
         <PartyComponent />
