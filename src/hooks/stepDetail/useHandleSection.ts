@@ -7,7 +7,7 @@ interface useHandleSectionProps {
 export const useHandleSection = ({
   sectionToScroll,
 }: useHandleSectionProps) => {
-  const [selectedSection, setSelectedSection] = useState("address");
+  const [selectedSection, setSelectedSection] = useState("");
 
   const handleSectionToScroll = (key: string) => {
     setSelectedSection(key);

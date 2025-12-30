@@ -1,47 +1,29 @@
 import Flex from "@/src/components/layout/Flex/Flex";
+import { PressSectionItems } from "@/src/utils/constants/pressSection";
 import PressSectionToScroll from "./PressSectionToScroll";
 
 interface PressSectionProps {
+  items: PressSectionItems[];
   handleSectionToScroll: (key: string) => void;
   selectedSection: string;
 }
 
 export default function PressSection({
+  items,
   handleSectionToScroll,
   selectedSection,
 }: PressSectionProps) {
   return (
     <Flex items='center' justify='center' dir='row' gap={32}>
-      <PressSectionToScroll
-        section='address'
-        content='위치'
-        handleSectionToScroll={handleSectionToScroll}
-        isActive={selectedSection === "address"}
-      />
-      <PressSectionToScroll
-        section='workInfo'
-        content='근무 정보'
-        handleSectionToScroll={handleSectionToScroll}
-        isActive={selectedSection === "workInfo"}
-      />
-      <PressSectionToScroll
-        section='intro'
-        content='소개'
-        handleSectionToScroll={handleSectionToScroll}
-        isActive={selectedSection === "intro"}
-      />
-      <PressSectionToScroll
-        section='feature'
-        content='모집 정보'
-        handleSectionToScroll={handleSectionToScroll}
-        isActive={selectedSection === "feature"}
-      />
-      <PressSectionToScroll
-        section='contact'
-        content='연락처'
-        handleSectionToScroll={handleSectionToScroll}
-        isActive={selectedSection === "contact"}
-      />
+      {items.map(({ section, content }) => (
+        <PressSectionToScroll
+          key={section}
+          section={section}
+          content={content}
+          handleSectionToScroll={handleSectionToScroll}
+          isActive={selectedSection === section}
+        />
+      ))}
     </Flex>
   );
 }
