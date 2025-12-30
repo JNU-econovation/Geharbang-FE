@@ -5,6 +5,7 @@ import GehaImage from "@/app/step/stepDetail/_components/GehaInfo/GehaImage";
 import GehaInfo from "@/app/step/stepDetail/_components/GehaInfo/GehaInfo";
 
 import PressSection from "@/app/step/stepDetail/_components/PressSection/PressSection";
+import Address from "@/src/components/ui/Address/Address";
 import DetailPageBackArrow from "@/src/components/ui/DetailPageBackArrow";
 import { useHandleSection } from "@/src/hooks/stepDetail/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/stepDetail/useSectionToScroll";
@@ -40,6 +41,17 @@ export default function GuestHouseDetail() {
               items={GUESTHOUSE}
               handleSectionToScroll={handleSectionToScroll}
               selectedSection={selectedSection}
+            />
+          </View>
+
+          <View className='px-4'>
+            <View className='pt-10' />
+            <Address
+              setSectionYPositions={setSectionYPositions}
+              location={{
+                address: "제주시",
+                coordinates: [126.19238467, 36.28267316123],
+              }}
             />
           </View>
         </ScrollView>

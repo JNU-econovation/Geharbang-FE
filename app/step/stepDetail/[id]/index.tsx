@@ -14,7 +14,8 @@ import DetailPageBackArrow from "@/src/components/ui/DetailPageBackArrow";
 import { STEP_DETAIL } from "@/src/utils/constants/pressSection";
 import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import Address from "../_components/Address/Address";
+
+import Address from "@/src/components/ui/Address/Address";
 import Contact from "../_components/Contact/Contact";
 import Feature from "../_components/Feature/Feature";
 import GehaImage from "../_components/GehaInfo/GehaImage";
