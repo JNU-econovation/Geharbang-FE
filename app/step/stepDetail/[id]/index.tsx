@@ -16,7 +16,7 @@ import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 
 import Address from "@/src/components/ui/Address/Address";
-import Contact from "../_components/Contact/Contact";
+import Contact from "@/src/components/ui/Contact";
 import Feature from "../_components/Feature/Feature";
 import GehaImage from "../_components/GehaInfo/GehaImage";
 import GehaInfo from "../_components/GehaInfo/GehaInfo";
@@ -82,7 +82,11 @@ export default function StepDetail() {
           </View>
 
           <ScrollView ref={scrollViewRef}>
-            <GehaImage images={data?.representativeImages} />
+            <GehaImage
+              images={data?.representativeImages}
+              height={280}
+              page={true}
+            />
 
             <View className='px-4 pt-4'>
               <GehaInfo
