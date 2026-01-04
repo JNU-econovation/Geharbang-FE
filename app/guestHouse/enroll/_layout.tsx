@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import React from 'react';
 
-export default function RecruitmentLayout() {
+export default function GusetHouseEnrollLayout() {
   return (
     <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
       <Stack.Screen name="index" />
