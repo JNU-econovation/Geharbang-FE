@@ -6,16 +6,16 @@ import Button from '@/src/components/ui/Button/Button';
 import FormField from '@/src/components/ui/Form/FormField';
 import FormSection from '@/src/components/ui/Form/FormSection';
 import TextInput from '@/src/components/ui/TextInput';
-import { useRecruitmentStep4Validation } from '@/src/hooks/recruitment/useRecruitmentStep4Validation';
-import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
+import { useGuestHouseStep4Validation } from '@/src/hooks/guesthouse/useGuestHouseStep4Validation';
+import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
 import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
 
 export default function GuestHouseEnrollStep4() {
-  const { step4Data, setStep4Update } = useStepRecruitmentStore();
+  const { step4Data, setStep4Update } = useGuestHouseStore();
   const { instagram, phone, email, website, ownerMessage } = step4Data;
 
-  const { errors, clearError, validateForm } = useRecruitmentStep4Validation({
+  const { errors, clearError, validateForm } = useGuestHouseStep4Validation({
     instagram,
     phone,
     email,
@@ -142,22 +142,15 @@ export default function GuestHouseEnrollStep4() {
                 </FormField>
               </FormSection>
 
-              <Flex items="center" dir="row" gap={8}>
-                <Button
-                  variant="gray"
-                  width={180}
-                  height={50}
-                  textColor="#000"
-                  content="이전"
-                  onPress={handlePrev}
-                />
+              <Flex items="center">
                 <Button
                   variant="primary"
-                  width={180}
+                  width={360}
                   height={50}
                   textColor="white"
-                  content="제출하기"
+                  content="게스트하우스 등록하기"
                   onPress={handleSubmit}
+                  className="mt-4"
                 />
               </Flex>
             </Flex>
