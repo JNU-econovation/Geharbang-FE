@@ -18,9 +18,16 @@ export function useWorkingTimeAndWork(
     setWorkingTimeAndWorkList("workingTimeAndWork", newWorkingTimeAndWorkList);
   };
 
-  const updateWorking = (index: number, updated: IWorkingTimeAndWork) => {
+  const updateWorking = (
+    index: number,
+    updater: (prev: IWorkingTimeAndWork) => IWorkingTimeAndWork
+  ) => {
+    const prevItem = workingList[index];
+    const updatedItem = updater(prevItem);
+
     const newWorkingTimeAndWorkList = [...workingList];
-    newWorkingTimeAndWorkList[index] = updated;
+    newWorkingTimeAndWorkList[index] = updatedItem;
+
     setWorkingTimeAndWorkList("workingTimeAndWork", newWorkingTimeAndWorkList);
   };
 

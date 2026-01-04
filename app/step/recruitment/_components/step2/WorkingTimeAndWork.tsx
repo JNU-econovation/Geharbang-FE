@@ -5,6 +5,7 @@ import Flex from "@/src/components/layout/Flex";
 import FormField from "@/src/components/ui/Form/FormField";
 import OptionSelector from "@/src/components/ui/OptionSelector";
 import CustomTextInput from "@/src/components/ui/TextInput";
+import TextSize from "@/src/components/ui/TextSize";
 import TimePickerField from "@/src/components/ui/TimePickerField";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
 import { PerWorkingDay } from "@/src/types/models/stepRecruitment/PerWorkingDay";
@@ -12,11 +13,14 @@ import { IWorkingTimeAndWork } from "@/src/types/models/stepRecruitment/Step2Dat
 import { WorkingTimeAndWorkErrors } from "@/src/types/models/stepRecruitment/StepRecruitmentFormErrors";
 import { PER_WORKING_DAY } from "@/src/utils/constants/options";
 import WorkingInput from "./WorkingInput";
-import TextSize from "@/src/components/ui/TextSize";
 
 interface WorkingTimeAndWorkProps {
   addedTimeAndWork: IWorkingTimeAndWork;
-  setAddedTimeAndWork: (workingTimeAndWork: IWorkingTimeAndWork) => void;
+  setAddedTimeAndWork: (
+    updater:
+      | IWorkingTimeAndWork
+      | ((prev: IWorkingTimeAndWork) => IWorkingTimeAndWork)
+  ) => void;
   onDelete: () => void;
   errors?: WorkingTimeAndWorkErrors;
 }
@@ -60,7 +64,7 @@ export default function WorkingTimeAndWork({
         required
         errorMessage={errors?.startTime || errors?.endTime}
       >
-        <Flex items='center' justify='center' dir='row' gap={15}>
+<Flex items='center' justify='center' dir='row' gap={19}>
           <TimePickerField
             value={addedTimeAndWork.startTime}
             onChange={(date) =>
@@ -70,7 +74,7 @@ export default function WorkingTimeAndWork({
             error={!!(errors?.startTime || errors?.endTime)}
           />
 
-          <TextSize size={20} color="#99A1AF" content="~" />
+          <TextSize size={20} color='#99A1AF' content='~' />
 
           <TimePickerField
             value={addedTimeAndWork.endTime}
@@ -144,11 +148,11 @@ export default function WorkingTimeAndWork({
           });
         }}
         setBothCounts={(workingCount, closedCount) => {
-          setAddedTimeAndWork({
-            ...addedTimeAndWork,
+          setAddedTimeAndWork((prev) => ({
+            ...prev,
             workingCount,
             closedCount,
-          });
+          }));
         }}
         workingErrors={errors?.workingCount}
         closedErrors={errors?.closedCount}

@@ -1,4 +1,3 @@
-import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 
 import { googleApi, kakaoApi } from "@/src/services/login/loginUrlRequest";
@@ -6,6 +5,7 @@ import {
   loginResponse,
   OauthLoginType,
 } from "@/src/types/api/Login/loginOauthType";
+import { REDIRECTURL } from "@/src/utils/constants/redirectUrl";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -17,10 +17,7 @@ const apiMap = {
 // oauth 인증 플로우
 export const oauthAuth = {
   async login(provider: OauthLoginType): Promise<loginResponse> {
-    const redirectUrl = AuthSession.makeRedirectUri({
-      scheme: "geharbang",
-      path: `auth/${provider}/callback`,
-    });
+    const redirectUrl = REDIRECTURL;
 
     const loginUrl = await apiMap[provider].getLoginUrl();
 
