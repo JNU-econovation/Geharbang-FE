@@ -8,19 +8,19 @@ import WorkingRegion from '@/app/step/recruitment/_components/step1/WorkingRegio
 import Flex from '@/src/components/layout/Flex';
 import Button from '@/src/components/ui/Button/Button';
 import FormSection from '@/src/components/ui/Form/FormSection';
-import { useStep1FormValidation } from '@/src/hooks/stepRecruitment/useStep1Valication';
-import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
+import { useGuestHouseStep1Validation as useGuestHouse1Validation } from '@/src/hooks/guesthouse/useGuestHouseStep1Validation';
+import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
 
 export default function GuestHouseStep1() {
-  const { step1Data, setStep1Update, resetAllData } = useStepRecruitmentStore();
+  const { step1Data, setStep1Update, resetAllData } = useGuestHouseStore();
 
   useEffect(() => {
     resetAllData();
-  }, []);
+  }, [resetAllData]);
 
   const { errors, validateForm, clearError } =
-    useStep1FormValidation(step1Data);
+    useGuestHouse1Validation(step1Data);
 
   const handleNext = () => {
     if (validateForm()) {
