@@ -8,6 +8,7 @@ import React from "react";
 import { View } from "react-native";
 
 interface PostingListHeaderProps {
+  title: string;
   searchText: string;
   onSearchChange: (text: string) => void;
   selectedFilter: FilterOption;
@@ -17,6 +18,7 @@ interface PostingListHeaderProps {
 }
 
 export default function PostingListHeader({
+  title,
   searchText,
   onSearchChange,
   selectedFilter,
@@ -28,7 +30,7 @@ export default function PostingListHeader({
     <>
       <View className='pt-3 pb-1 border-b border-gray-200'>
         <View className='mb-4 px-4 '>
-          <BackArrorHeader content='스텝 공고 찾기 ' />
+          <BackArrorHeader content={title} />
         </View>
 
         <AdBanner />

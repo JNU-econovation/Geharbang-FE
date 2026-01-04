@@ -44,6 +44,7 @@ export default function GuestHouseListScreen() {
 
   const renderHeader = () => (
     <PostingListHeader
+      title='스텝 공고 찾기'
       searchText={searchText}
       onSearchChange={setSearchText}
       selectedFilter={selectedFilter}
@@ -84,7 +85,7 @@ export default function GuestHouseListScreen() {
       <BottomSheetModal
         visible={isBottomSheetVisible}
         onClose={() => setIsBottomSheetVisible(false)}
-        title="필터 옵션"
+        title='필터 옵션'
         filters={filters}
         onApply={(newFilters) => setFilters(newFilters)}
       />
