@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Text, TouchableOpacity } from 'react-native';
 
-import AppendableInputGroupContainer from '@/src/components/ui/Form/AppendableInputGroupContainer';
-import FormField from '@/src/components/ui/Form/FormField';
+import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { Feature } from '@/src/types/models/stepRecruitment/Feature';
+
+import FacilitiesSelector from './FacilitiesSelector';
 
 interface TagProps {
   label: string;
@@ -11,22 +12,32 @@ interface TagProps {
   onPress?: () => void;
 }
 
-const Tag = ({ label, selected = false, onPress }: TagProps) => (
-  <Pressable
-    onPress={onPress}
-    className={`px-4 py-2 rounded-full mr-2 mb-2 ${
-      selected ? 'bg-sky-500 shadow-sm shadow-black/10' : 'bg-gray-100'
-    }`}
-  >
-    <Text
-      className={`text-[13px] font-normal leading-5 ${
-        selected ? 'text-white' : 'text-[#364153]'
-      }`}
+const Tag = React.memo(({ label, selected = false, onPress }: TagProps) => {
+  const bgColor = selected ? 'bg-sky-500' : 'bg-gray-100';
+  const textColor = selected ? 'text-white' : 'text-[#364153]';
+
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      className={`px-4 py-2 rounded-full mr-2 mb-2 ${bgColor}`}
+      style={
+        selected
+          ? {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.1,
+              shadowRadius: 2,
+              elevation: 2,
+            }
+          : undefined
+      }
     >
-      {label}
-    </Text>
-  </Pressable>
-);
+      <Text className={`text-[13px] font-normal leading-5 ${textColor}`}>
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+});
 
 const FACILITY_OPTIONS = [
   '세탁시설',
@@ -39,86 +50,80 @@ const FACILITY_OPTIONS = [
   '에어컨',
 ];
 
-const ATMOSPHERE_OPTIONS = [
-  '조용한',
-  '활기찬',
-  '아늑한',
-  '모던한',
-  '전통적인',
-  '자유로운',
-];
+interface FacilitiesFormProps {
+  errors?: {
+    facilities?: string;
+  };
+  clearError?: (field: 'facilities') => void;
+}
 
-const FacilitiesForm = () => {
-  const [facilities, setFacilities] = useState<Feature[]>([]);
-  const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
-  const [selectedAtmospheres, setSelectedAtmospheres] = useState<string[]>([]);
+const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
+  const { step2Data, setStep2Update } = useGuestHouseStore();
+
+  const [selectedFacilities, setSelectedFacilities] = useState<string[]>(() =>
+    step2Data.facilities.filter((f) => FACILITY_OPTIONS.includes(f)),
+  );
+
+  useEffect(() => {
+    const storeFacilities = step2Data.facilities.filter((f) =>
+      FACILITY_OPTIONS.includes(f),
+    );
+    setSelectedFacilities(storeFacilities);
+  }, [step2Data.facilities]);
 
   const toggleFacility = (facility: string) => {
-    setSelectedFacilities((prev) =>
-      prev.includes(facility)
+    setSelectedFacilities((prev) => {
+      const newValue = prev.includes(facility)
         ? prev.filter((f) => f !== facility)
-        : [...prev, facility]
-    );
+        : [...prev, facility];
+
+      return newValue;
+    });
+
+    setTimeout(() => {
+      setStep2Update('facilities', (storePrev) => {
+        const currentSelected = selectedFacilities.includes(facility)
+          ? selectedFacilities.filter((f) => f !== facility)
+          : [...selectedFacilities, facility];
+        const tagFacilities = storePrev.filter(
+          (f) => !FACILITY_OPTIONS.includes(f),
+        );
+        return [...currentSelected, ...tagFacilities];
+      });
+    }, 0);
+
+    clearError?.('facilities');
   };
 
-  const toggleAtmosphere = (atmosphere: string) => {
-    if (selectedAtmospheres.includes(atmosphere)) {
-      setSelectedAtmospheres((prev) => prev.filter((a) => a !== atmosphere));
-    } else if (selectedAtmospheres.length < 2) {
-      setSelectedAtmospheres((prev) => [...prev, atmosphere]);
-    }
+  const customFacilitiesAsFeatures = useMemo(() => {
+    return step2Data.facilities
+      .filter((f: string) => !FACILITY_OPTIONS.includes(f))
+      .map((text: string, index: number) => ({
+        id: `custom-${index}`,
+        text,
+      }));
+  }, [step2Data.facilities]);
+
+  const handleCustomFacilitiesChange = (features: Feature[]) => {
+    setStep2Update('facilities', (prev) => {
+      const tagFacilities = prev.filter((f) => FACILITY_OPTIONS.includes(f));
+
+      const customTexts = features.map((f) => f.text);
+      return [...tagFacilities, ...customTexts];
+    });
   };
 
   return (
-    <View className="gap-6">
-      <FormField
-        label="제공 편의시설"
-        required={true}
-        description="최대 10개까지 등록할 수 있습니다
-        목록에 없는 시설은 직접 입력해 추가할 수 있습니다"
-      >
-        <View className="bg-white rounded-xl border border-gray-200 p-4 mb-2">
-          <View className="flex-row flex-wrap">
-            {FACILITY_OPTIONS.map((facility) => (
-              <Tag
-                key={facility}
-                label={facility}
-                selected={selectedFacilities.includes(facility)}
-                onPress={() => toggleFacility(facility)}
-              />
-            ))}
-          </View>
-        </View>
-        <AppendableInputGroupContainer
-          features={facilities}
-          setFeatures={setFacilities}
-          maxLimit={10}
-          buttonLabel="편의시설 추가"
-          placeholder="예: 공용주방, 세탁시설"
-          error={false}
-          clearError={() => {}}
-        />
-      </FormField>
-
-      <FormField
-        label="게스트하우스 분위기"
-        required={true}
-        description="최대 2개까지 선택할 수 있습니다"
-      >
-        <View className="bg-white rounded-xl border border-gray-200 p-4">
-          <View className="flex-row flex-wrap">
-            {ATMOSPHERE_OPTIONS.map((atmosphere) => (
-              <Tag
-                key={atmosphere}
-                label={atmosphere}
-                selected={selectedAtmospheres.includes(atmosphere)}
-                onPress={() => toggleAtmosphere(atmosphere)}
-              />
-            ))}
-          </View>
-        </View>
-      </FormField>
-    </View>
+    <FacilitiesSelector
+      Tag={Tag}
+      facilityOptions={FACILITY_OPTIONS}
+      selectedFacilities={selectedFacilities}
+      onToggleFacility={toggleFacility}
+      customFacilities={customFacilitiesAsFeatures}
+      onCustomFacilitiesChange={handleCustomFacilitiesChange}
+      error={errors?.facilities}
+      clearError={() => clearError?.('facilities')}
+    />
   );
 };
 
