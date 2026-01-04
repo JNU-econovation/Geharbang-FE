@@ -31,7 +31,7 @@ export default function GuestHouseParty({
       <View className='border border-[#E5E7EB] rounded-lg'>
         <GehaImage images={data.imgs} height={200} party={true} />
 
-        <View className='p-4 gap-2'>
+        <View className='p-4 gap-3'>
           <TextSize color='#101828' size={17} content='포틀럭 파티' />
 
           <View className='bg-[#F9FAFB] rounded-lg p-3'>
