@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof Ionicons>["name"];
@@ -10,6 +11,7 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
@@ -19,8 +21,8 @@ export default function TabLayout() {
           borderTopWidth: 1,
           borderTopColor: "#E5E7EB",
           paddingTop: 8,
-          paddingBottom: 20,
-          height: 80,
+          paddingBottom: insets.bottom || 20,
+          height: 65 + (insets.bottom || 20),
         },
         tabBarActiveTintColor: "#0EA5E9",
         tabBarInactiveTintColor: "#9CA3AF",
@@ -31,35 +33,35 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name='index'
         options={{
           title: "홈",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
         }}
       />
       <Tabs.Screen
-        name="location"
+        name='location'
         options={{
           title: "위치",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="location" color={color} />
+            <TabBarIcon name='location' color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="chat"
+        name='chat'
         options={{
           title: "채팅",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="chatbubble" color={color} />
+            <TabBarIcon name='chatbubble' color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name='profile'
         options={{
           title: "내정보",
-          tabBarIcon: ({ color }) => <TabBarIcon name="person" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name='person' color={color} />,
         }}
       />
     </Tabs>

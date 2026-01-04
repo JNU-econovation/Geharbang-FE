@@ -23,7 +23,7 @@ export default function PersonalInfo({
   const { animated } = useShakeAnimation({ isLoginClicked, isInfoAgreed });
 
   return (
-    <View className="pt-6">
+    <View className="py-6">
       <View className="flex-row">
         <Pressable onPress={handleIsInfoAgreed}>
           <Animated.View

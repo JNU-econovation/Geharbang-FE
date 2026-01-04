@@ -50,7 +50,7 @@ export default function CustomTextInput({
         multiline={multiline}
         autoCapitalize={autoCapitalize}
         editable={editable}
-        textAlignVertical={textAlignVertical}
+textAlignVertical={textAlignVertical}
       />
     </View>
   );

@@ -74,10 +74,10 @@ export const transformStoreToApi = (
 
   const feature: FeatureRequest = {
     gender: step2Data.gender,
-    Advantages: step3Data.advantages
+    advantages: step3Data.advantages
       .map((adv) => adv.text)
       .filter((text) => text.trim() !== ''),
-    EmployeeBenefits: step3Data.employeeBenefits
+    employeeBenefits: step3Data.employeeBenefits
       .map((benefit) => benefit.text)
       .filter((text) => text.trim() !== ''),
   };

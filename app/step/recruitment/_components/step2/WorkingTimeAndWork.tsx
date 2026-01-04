@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { Pressable, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex";
 import FormField from "@/src/components/ui/Form/FormField";
@@ -64,13 +64,13 @@ export default function WorkingTimeAndWork({
         required
         errorMessage={errors?.startTime || errors?.endTime}
       >
-        <Flex items='center' justify='center' dir='row' gap={19}>
+<Flex items='center' justify='center' dir='row' gap={19}>
           <TimePickerField
             value={addedTimeAndWork.startTime}
             onChange={(date) =>
               setAddedTimeAndWork({ ...addedTimeAndWork, startTime: date })
             }
-            width={128}
+         
             error={!!(errors?.startTime || errors?.endTime)}
           />
 
@@ -81,7 +81,7 @@ export default function WorkingTimeAndWork({
             onChange={(date) =>
               setAddedTimeAndWork({ ...addedTimeAndWork, endTime: date })
             }
-            width={128}
+         
             error={!!(errors?.startTime || errors?.endTime)}
           />
         </Flex>

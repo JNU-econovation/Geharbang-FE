@@ -30,8 +30,8 @@ export default function TimePickerField({
         <View
           className={`h-12 rounded-lg ${
             error ? "border-primary-red" : "border-gray-border"
-          } border  px-3 justify-center bg-white`}
-          style={{ width }}
+          } border px-6 justify-center bg-white`}
+          style={width ? { width } : { flex: 1 }}
         >
           <TextSize size={16} color='#364153' content={formatToAMPM(time)} />
         </View>

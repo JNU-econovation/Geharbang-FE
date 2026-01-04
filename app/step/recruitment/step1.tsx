@@ -74,7 +74,7 @@ export default function RecruitmentStep1() {
             textColor='white'
             content='다음'
             onPress={handleNext}
-            className='mt-4'
+            className='my-4'
           />
         </Flex>
       </ScrollView>

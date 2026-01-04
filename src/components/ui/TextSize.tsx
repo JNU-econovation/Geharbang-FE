@@ -14,6 +14,11 @@ export default function TextSize({
   content,
 }: TextSizeProps) {
   return (
-    <Text style={{ fontSize: size, color, fontWeight: weight }}>{content}</Text>
+    <Text
+      allowFontScaling={false}
+      style={{ fontSize: size, color, fontWeight: weight, flexShrink: 1 }}
+    >
+      {content}
+    </Text>
   );
 }
