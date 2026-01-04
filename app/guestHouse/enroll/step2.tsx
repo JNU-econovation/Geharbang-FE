@@ -8,23 +8,23 @@ import FormField from '@/src/components/ui/Form/FormField';
 import FormSection from '@/src/components/ui/Form/FormSection';
 import MultiImagePicker from '@/src/components/ui/imagePicker/MultiImagePicker';
 import TextInput from '@/src/components/ui/TextInput';
-import { useRecruitmentStep3Validation } from '@/src/hooks/recruitment/useRecruitmentStep3Validation';
-import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
-import AtmosphereForm from './_components/step2/Atmosphere';
+import { useGuestHouseStep2Validation } from '@/src/hooks/guesthouse/useGuestHouseStep2Validation';
+import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
+
+import AtmosphereSelector from './_components/step2/AtmosphereSelector';
 import FacilitiesForm from './_components/step2/FacilitiesForm';
 import PartyComponent from './_components/step2/PartyComponent';
 
 export default function GuestHouseEnrollStep2() {
-  const { step3Data, setStep3Update } = useStepRecruitmentStore();
+  const { step2Data, setStep2Update } = useGuestHouseStore();
 
   const { errors, validateForm, clearError } =
-    useRecruitmentStep3Validation(step3Data);
+    useGuestHouseStep2Validation(step2Data);
 
   const handleNext = () => {
-    // TODO: 유효성 검사 활성화
-    // if (validateForm()) {
-    router.push('/guestHouse/enroll/step3');
-    // }
+    if (validateForm()) {
+      router.push('/guestHouse/enroll/step3');
+    }
   };
 
   return (
@@ -38,36 +38,19 @@ export default function GuestHouseEnrollStep2() {
           description="우리 게스트하우스만의 특별한 이야기를 들려주세요"
         >
           <FormField
-            label="공고글 제목"
-            required={true}
-            errorMessage={errors.title}
-          >
-            <TextInput
-              value={step3Data.title}
-              onChangeText={(text) => {
-                setStep3Update('title', text);
-                clearError('title');
-              }}
-              placeholder="예: 제주 점박이 게스트하우스 스텝 모집"
-              error={!!errors.title}
-              maxLength={30}
-            />
-          </FormField>
-
-          <FormField
             label="게스트하우스 대표 사진"
             required={true}
             description="최대 10장까지 등록할 수 있습니다"
-            errorMessage={errors.mainImageFiles}
+            errorMessage={errors.mainImages}
           >
             <MultiImagePicker
-              selectedImageFiles={step3Data.mainImageFiles}
+              selectedImageFiles={step2Data.mainImages}
               setSelectedImageFiles={(files) =>
-                setStep3Update('mainImageFiles', files)
+                setStep2Update('mainImages', files)
               }
               maxCount={10}
-              error={!!errors.mainImageFiles}
-              clearError={() => clearError('mainImageFiles')}
+              error={!!errors.mainImages}
+              clearError={() => clearError('mainImages')}
             />
           </FormField>
 
@@ -77,9 +60,9 @@ export default function GuestHouseEnrollStep2() {
             errorMessage={errors.introduction}
           >
             <TextInput
-              value={step3Data.introduction}
+              value={step2Data.introduction}
               onChangeText={(text) => {
-                setStep3Update('introduction', text);
+                setStep2Update('introduction', text);
                 clearError('introduction');
               }}
               placeholder="우리 게스트하우스를 소개해주세요"
@@ -88,8 +71,14 @@ export default function GuestHouseEnrollStep2() {
               height={400}
             />
           </FormField>
-          <FacilitiesForm />
-          <AtmosphereForm />
+          <FacilitiesForm
+            errors={{ facilities: errors.facilities }}
+            clearError={() => clearError('facilities')}
+          />
+          <AtmosphereSelector
+            error={errors.atmosphere}
+            clearError={() => clearError('atmosphere')}
+          />
         </FormSection>
 
         <PartyComponent />
