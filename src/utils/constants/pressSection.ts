@@ -12,7 +12,7 @@ export const STEP_DETAIL: PressSectionItems[] = [
 ];
 
 export const GUESTHOUSE: PressSectionItems[] = [
-  { section: "location", content: "위치" },
+  { section: "address", content: "위치" },
   { section: "type", content: "객실타입" },
   { section: "intro", content: "게하소개" },
   { section: "info", content: "게하정보" },
