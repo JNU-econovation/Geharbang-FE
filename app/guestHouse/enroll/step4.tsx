@@ -6,13 +6,21 @@ import Button from '@/src/components/ui/Button/Button';
 import FormField from '@/src/components/ui/Form/FormField';
 import FormSection from '@/src/components/ui/Form/FormSection';
 import TextInput from '@/src/components/ui/TextInput';
+import { useGuestHouseEnrollment } from '@/src/hooks/guesthouse/useGuestHouseEnrollment';
 import { useGuestHouseStep4Validation } from '@/src/hooks/guesthouse/useGuestHouseStep4Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
+import {
+  BUTTON_LABELS,
+  INPUT_HEIGHTS,
+  INPUT_MAX_LENGTHS,
+  PLACEHOLDERS,
+} from '@/src/utils/constants/guestHouseEnrollment';
 import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
 
 export default function GuestHouseEnrollStep4() {
-  const { step4Data, setStep4Update } = useGuestHouseStore();
+  const { step1Data, step2Data, step3Data, step4Data, setStep4Update } =
+    useGuestHouseStore();
   const { instagram, phone, email, website, ownerMessage } = step4Data;
 
   const { errors, clearError, validateForm } = useGuestHouseStep4Validation({
@@ -23,18 +31,51 @@ export default function GuestHouseEnrollStep4() {
     ownerMessage,
   });
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      // TODO: 제출 로직 추가
-      router.push({
-        pathname: '/guestHouse/enroll/result',
-        params: { status: 'success' },
-      });
-    }
-  };
+  const {
+    isLoading,
+    error: enrollError,
+    enrollGuestHouse,
+  } = useGuestHouseEnrollment();
 
-  const handlePrev = () => {
-    router.back();
+  const handleSubmit = async () => {
+    if (validateForm()) {
+      const enrollData = {
+        guestHouseName: step1Data.guestHouseName,
+        workingRegion: step1Data.workingRegion,
+        location: step1Data.location,
+
+        mainImages: step2Data.mainImages,
+        introduction: step2Data.introduction,
+        facilities: step2Data.facilities,
+        atmosphere: step2Data.atmosphere,
+        parties: step2Data.parties,
+
+        rooms: step3Data.rooms,
+
+        instagram,
+        phone,
+        email,
+        website,
+        ownerMessage,
+      };
+
+      const guestHouseId = await enrollGuestHouse(enrollData);
+
+      if (guestHouseId) {
+        router.push({
+          pathname: '/guestHouse/enroll/result',
+          params: { status: 'success', guestHouseId: guestHouseId.toString() },
+        });
+      } else {
+        router.push({
+          pathname: '/guestHouse/enroll/result',
+          params: {
+            status: 'error',
+            error: enrollError || '등록 중 오류가 발생했습니다.',
+          },
+        });
+      }
+    }
   };
 
   return (
@@ -62,9 +103,9 @@ export default function GuestHouseEnrollStep4() {
                       setStep4Update('instagram', text);
                       clearError('instagram');
                     }}
-                    placeholder="예: @jeju_guesthouse"
+                    placeholder={PLACEHOLDERS.INSTAGRAM}
                     error={!!errors.instagram}
-                    maxLength={30}
+                    maxLength={INPUT_MAX_LENGTHS.INSTAGRAM}
                   />
                 </FormField>
 
@@ -79,10 +120,10 @@ export default function GuestHouseEnrollStep4() {
                       setStep4Update('phone', formatPhoneNumber(text));
                       clearError('phone');
                     }}
-                    placeholder="예: 064-123-4567"
+                    placeholder={PLACEHOLDERS.PHONE}
                     keyboardType="phone-pad"
                     error={!!errors.phone}
-                    maxLength={13}
+                    maxLength={INPUT_MAX_LENGTHS.PHONE}
                   />
                 </FormField>
 
@@ -97,10 +138,10 @@ export default function GuestHouseEnrollStep4() {
                       setStep4Update('email', text);
                       clearError('email');
                     }}
-                    placeholder="예: owner@naver.com"
+                    placeholder={PLACEHOLDERS.EMAIL}
                     keyboardType="email-address"
                     error={!!errors.email}
-                    maxLength={30}
+                    maxLength={INPUT_MAX_LENGTHS.EMAIL}
                   />
                 </FormField>
 
@@ -115,10 +156,10 @@ export default function GuestHouseEnrollStep4() {
                       setStep4Update('website', text);
                       clearError('website');
                     }}
-                    placeholder="예: https://www.jejuguesthouse.com"
+                    placeholder={PLACEHOLDERS.WEBSITE}
                     keyboardType="url"
                     error={!!errors.website}
-                    maxLength={30}
+                    maxLength={INPUT_MAX_LENGTHS.WEBSITE}
                   />
                 </FormField>
 
@@ -133,11 +174,11 @@ export default function GuestHouseEnrollStep4() {
                       setStep4Update('ownerMessage', text);
                       clearError('ownerMessage');
                     }}
-                    placeholder="스텝들에게 전하고 싶은 메시지를 입력해주세요"
+                    placeholder={PLACEHOLDERS.OWNER_MESSAGE}
                     multiline={true}
-                    height={120}
+                    height={INPUT_HEIGHTS.OWNER_MESSAGE}
                     error={!!errors.ownerMessage}
-                    maxLength={100}
+                    maxLength={INPUT_MAX_LENGTHS.OWNER_MESSAGE}
                   />
                 </FormField>
               </FormSection>
@@ -148,9 +189,10 @@ export default function GuestHouseEnrollStep4() {
                   width={360}
                   height={50}
                   textColor="white"
-                  content="게스트하우스 등록하기"
+                  content={isLoading ? '등록 중...' : BUTTON_LABELS.SUBMIT}
                   onPress={handleSubmit}
                   className="mt-4"
+                  disabled={isLoading}
                 />
               </Flex>
             </Flex>

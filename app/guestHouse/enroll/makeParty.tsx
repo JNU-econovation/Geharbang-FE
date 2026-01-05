@@ -17,9 +17,17 @@ import {
   toggleInArray,
   toggleSingleSelect,
 } from '@/src/utils/common/toggleUtils';
+import {
+  PARTY_TYPES,
+  DAYS_OF_WEEK_SIMPLE,
+  PLACEHOLDERS,
+  BUTTON_LABELS,
+  INPUT_HEIGHTS,
+  VALIDATION_LIMITS,
+  FORM_DESCRIPTIONS,
+} from '@/src/utils/constants/guestHouseEnrollment';
 
-const PARTY_TYPES = ['술파티', '포틀럭', '디너 파티', '클럽 파티', '기타'];
-const DAYS_OF_WEEK = ['월', '화', '수', '목', '금', '토', '일'];
+const DAYS_OF_WEEK = DAYS_OF_WEEK_SIMPLE;
 
 export default function MakeParty() {
   const { editId } = useLocalSearchParams<{ editId?: string }>();
@@ -180,7 +188,7 @@ export default function MakeParty() {
                       setOtherPartyType(text);
                       clearError('customTypeName');
                     }}
-                    placeholder="예: 테마 파티, 퀴즈 파티"
+                    placeholder={PLACEHOLDERS.PARTY_CUSTOM_TYPE}
                     error={!!errors.customTypeName}
                   />
                 </View>
@@ -190,7 +198,7 @@ export default function MakeParty() {
             <FormField
               label="파티 사진"
               required={true}
-              description="최대 10장까지 등록할 수 있습니다"
+              description={FORM_DESCRIPTIONS.MAX_10_IMAGES}
               errorMessage={errors.images}
             >
               <MultiImagePicker
@@ -199,7 +207,7 @@ export default function MakeParty() {
                   setPartyImages(files);
                   clearError('images');
                 }}
-                maxCount={10}
+                maxCount={VALIDATION_LIMITS.PARTY_IMAGES.MAX}
                 error={!!errors.images}
                 clearError={() => clearError('images')}
               />
@@ -238,7 +246,7 @@ export default function MakeParty() {
             <FormField
               label="진행일"
               required={true}
-              description="중복 선택 가능"
+              description={FORM_DESCRIPTIONS.MULTIPLE_SELECT}
               errorMessage={errors.days}
             >
               <View className="flex-row justify-between">
@@ -277,7 +285,7 @@ export default function MakeParty() {
                   setPartyLocation(text);
                   clearError('location');
                 }}
-                placeholder="예: 1층 바 라운지"
+                placeholder={PLACEHOLDERS.PARTY_LOCATION}
                 error={!!errors.location}
               />
             </FormField>
@@ -293,7 +301,7 @@ export default function MakeParty() {
                   setPartyMood(text);
                   clearError('mood');
                 }}
-                placeholder="예: 음악 / 술 / 소셜게임"
+                placeholder={PLACEHOLDERS.PARTY_MOOD}
                 error={!!errors.mood}
               />
             </FormField>
@@ -366,7 +374,7 @@ export default function MakeParty() {
                         setGuestFee(text);
                         clearError('guestFee');
                       }}
-                      placeholder="0"
+                      placeholder={PLACEHOLDERS.PARTY_FEE}
                       keyboardType="numeric"
                       className="flex-1"
                       error={!!errors.guestFee}
@@ -385,7 +393,7 @@ export default function MakeParty() {
                         setExternalFee(text);
                         clearError('externalFee');
                       }}
-                      placeholder="0"
+                      placeholder={PLACEHOLDERS.PARTY_FEE}
                       keyboardType="numeric"
                       className="flex-1"
                       error={!!errors.externalFee}
@@ -407,9 +415,9 @@ export default function MakeParty() {
                   setDescription(text);
                   clearError('description');
                 }}
-                placeholder="파티에 대해 자유롭게 소개해주세요"
+                placeholder={PLACEHOLDERS.PARTY_DESCRIPTION}
                 multiline={true}
-                height={120}
+                height={INPUT_HEIGHTS.PARTY_DESCRIPTION}
                 error={!!errors.description}
               />
             </FormField>
@@ -422,7 +430,7 @@ export default function MakeParty() {
             width={360}
             height={50}
             textColor="white"
-            content={isEditMode ? '파티 수정하기' : '파티 만들기'}
+            content={isEditMode ? BUTTON_LABELS.EDIT_PARTY : BUTTON_LABELS.MAKE_PARTY}
             onPress={handleNext}
             className="mt-4 mb-8"
           />
