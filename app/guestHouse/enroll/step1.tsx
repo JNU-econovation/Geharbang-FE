@@ -10,6 +10,7 @@ import Button from '@/src/components/ui/Button/Button';
 import FormSection from '@/src/components/ui/Form/FormSection';
 import { useGuestHouseStep1Validation as useGuestHouse1Validation } from '@/src/hooks/guesthouse/useGuestHouseStep1Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
+import { BUTTON_LABELS } from '@/src/utils/constants/guestHouseEnrollment';
 import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
 
 export default function GuestHouseStep1() {
@@ -72,7 +73,7 @@ export default function GuestHouseStep1() {
             width={370}
             height={50}
             textColor="white"
-            content="다음"
+            content={BUTTON_LABELS.NEXT}
             onPress={handleNext}
             className="mt-4"
           />
