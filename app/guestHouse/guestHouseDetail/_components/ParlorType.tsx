@@ -26,7 +26,7 @@ export default function ParlorType({
     >
       <View className='pt-6' />
       <View className='border border-[#E5E7EB] rounded-lg overflow-hidden'>
-        <GehaImage images={data.imgs} height={200} type={true} />
+        <GehaImage images={data.imgs} height={200} type={true} page={true} />
 
         <View className='p-4 gap-2'>
           <View className='flex-row items-center gap-3'>
