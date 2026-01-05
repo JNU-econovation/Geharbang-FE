@@ -16,6 +16,15 @@ import {
   View,
 } from 'react-native';
 import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
+import {
+  ROOM_TYPES,
+  OCCUPANCY_OPTIONS,
+  PLACEHOLDERS,
+  BUTTON_LABELS,
+  ROOM_TYPE_COLORS,
+  FORM_DESCRIPTIONS,
+  VALIDATION_LIMITS,
+} from '@/src/utils/constants/guestHouseEnrollment';
 
 const FormLabel = ({
   text,
@@ -162,8 +171,8 @@ export default function AddRoomForm() {
               <FormLabel text="객실명" required />
               <TextInput
                 className="w-full h-12 px-4 rounded-lg border border-gray-200 text-sm mt-2"
-                placeholder="예: 더블룸"
-                placeholderTextColor="#99a1af"
+                placeholder={PLACEHOLDERS.ROOM_NAME}
+                placeholderTextColor={ROOM_TYPE_COLORS.PLACEHOLDER}
                 value={roomName}
                 onChangeText={(text) => {
                   setRoomName(text);
@@ -175,33 +184,26 @@ export default function AddRoomForm() {
             <View>
               <FormLabel text="객실 타입" required />
               <View className="gap-2 mt-2">
-                <SelectButton
-                  label="여성 전용 도미토리"
-                  selected={roomType === '여성 전용 도미토리'}
-                  onPress={() => {
-                    setRoomType('여성 전용 도미토리');
-                    setError('');
-                  }}
-                  showCircle={true}
-                  circleColor="#fa2b36"
-                />
-                <SelectButton
-                  label="남성 전용 도미토리"
-                  selected={roomType === '남성 전용 도미토리'}
-                  onPress={() => {
-                    setRoomType('남성 전용 도미토리');
-                    setError('');
-                  }}
-                  showCircle={true}
-                  circleColor="#3b82f6"
-                />
+                {ROOM_TYPES.map((roomTypeOption) => (
+                  <SelectButton
+                    key={roomTypeOption.value}
+                    label={roomTypeOption.label}
+                    selected={roomType === roomTypeOption.value}
+                    onPress={() => {
+                      setRoomType(roomTypeOption.value as RoomType);
+                      setError('');
+                    }}
+                    showCircle={true}
+                    circleColor={roomTypeOption.color}
+                  />
+                ))}
               </View>
             </View>
 
             <View>
               <FormLabel text="객실 인원" required />
               <View className="flex-row gap-2 mt-2">
-                {(['1인실', '2인실', '3인이상'] as const).map((label) => (
+                {OCCUPANCY_OPTIONS.map((label) => (
                   <TouchableOpacity
                     key={label}
                     onPress={() => {
@@ -260,8 +262,8 @@ export default function AddRoomForm() {
               <View className="flex-row items-center w-full h-12 px-4 rounded-lg border border-gray-200 mt-2">
                 <TextInput
                   className="flex-1 text-sm text-[#101828]"
-                  placeholder="예 : 30000"
-                  placeholderTextColor="#99a1af"
+                  placeholder={PLACEHOLDERS.ROOM_PRICE}
+                  placeholderTextColor={ROOM_TYPE_COLORS.PLACEHOLDER}
                   keyboardType="numeric"
                   value={price}
                   onChangeText={(text) => {
@@ -276,7 +278,7 @@ export default function AddRoomForm() {
             <View>
               <FormLabel text="객실 사진" required />
               <Text className="text-[#697282] text-xs mt-1 mb-3">
-                최대 10장까지 등록할 수 있습니다
+                {FORM_DESCRIPTIONS.MAX_10_IMAGES}
               </Text>
               <MultiImagePicker
                 selectedImageFiles={roomImages}
@@ -284,7 +286,7 @@ export default function AddRoomForm() {
                   setRoomImages(files);
                   setError('');
                 }}
-                maxCount={10}
+                maxCount={VALIDATION_LIMITS.ROOM_IMAGES.MAX}
                 error={false}
                 clearError={() => setError('')}
               />
@@ -297,7 +299,7 @@ export default function AddRoomForm() {
             width={360}
             height={50}
             textColor="white"
-            content={isEditMode ? '객실 수정' : '객실 추가'}
+            content={isEditMode ? BUTTON_LABELS.EDIT_ROOM : BUTTON_LABELS.ADD_ROOM_SUBMIT}
             onPress={handleAddRoom}
             className="mt-4"
           />

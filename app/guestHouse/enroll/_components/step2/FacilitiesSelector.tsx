@@ -4,6 +4,12 @@ import { View } from 'react-native';
 import AppendableInputGroupContainer from '@/src/components/ui/Form/AppendableInputGroupContainer';
 import FormField from '@/src/components/ui/Form/FormField';
 import { Feature } from '@/src/types/models/stepRecruitment/Feature';
+import {
+  PLACEHOLDERS,
+  BUTTON_LABELS,
+  FORM_DESCRIPTIONS,
+  MAX_ITEMS,
+} from '@/src/utils/constants/guestHouseEnrollment';
 
 interface FacilitiesSelectorProps {
   Tag: React.ComponentType<{ label: string; selected: boolean; onPress: () => void }>;
@@ -30,8 +36,8 @@ const FacilitiesSelector = ({
     <FormField
       label="제공 편의시설"
       required={true}
-      description="최대 10개까지 등록할 수 있습니다
-        목록에 없는 시설은 직접 입력해 추가할 수 있습니다"
+      description={`${FORM_DESCRIPTIONS.MAX_10_ITEMS}
+        ${FORM_DESCRIPTIONS.CUSTOM_FACILITY_INFO}`}
       errorMessage={error}
     >
       <View className="bg-white rounded-xl border border-gray-200 p-4 mb-2">
@@ -58,9 +64,9 @@ const FacilitiesSelector = ({
           onCustomFacilitiesChange(newFeatures);
           clearError?.();
         }}
-        maxLimit={10}
-        buttonLabel="편의시설 추가"
-        placeholder="예: 공용주방, 세탁시설"
+        maxLimit={MAX_ITEMS.FACILITIES}
+        buttonLabel={BUTTON_LABELS.ADD_FACILITY}
+        placeholder={PLACEHOLDERS.FACILITY_CUSTOM}
         error={!!error}
         clearError={clearError}
       />
