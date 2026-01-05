@@ -3,6 +3,7 @@ import { Text, TouchableOpacity } from 'react-native';
 
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { Feature } from '@/src/types/models/stepRecruitment/Feature';
+import { FACILITY_OPTIONS } from '@/src/utils/constants/guestHouseEnrollment';
 
 import FacilitiesSelector from './FacilitiesSelector';
 
@@ -38,17 +39,6 @@ const Tag = React.memo(({ label, selected = false, onPress }: TagProps) => {
     </TouchableOpacity>
   );
 });
-
-const FACILITY_OPTIONS = [
-  '세탁시설',
-  '개별 화장실',
-  '조식제공',
-  'CCTV',
-  '주차장',
-  '공용주방',
-  'Wi-Fi',
-  '에어컨',
-];
 
 interface FacilitiesFormProps {
   errors?: {
@@ -116,7 +106,7 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
   return (
     <FacilitiesSelector
       Tag={Tag}
-      facilityOptions={FACILITY_OPTIONS}
+      facilityOptions={[...FACILITY_OPTIONS]}
       selectedFacilities={selectedFacilities}
       onToggleFacility={toggleFacility}
       customFacilities={customFacilitiesAsFeatures}

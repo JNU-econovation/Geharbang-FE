@@ -3,6 +3,10 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 import FormField from '@/src/components/ui/Form/FormField';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
+import {
+  ATMOSPHERE_OPTIONS,
+  VALIDATION_LIMITS,
+} from '@/src/utils/constants/guestHouseEnrollment';
 
 interface TagProps {
   label: string;
@@ -37,15 +41,6 @@ const Tag = React.memo(({ label, selected = false, onPress }: TagProps) => {
   );
 });
 
-const ATMOSPHERE_OPTIONS = [
-  '조용한',
-  '활기찬',
-  '아늑한',
-  '모던한',
-  '전통적인',
-  '자유로운',
-];
-
 interface AtmosphereSelectorProps {
   error?: string;
   clearError?: () => void;
@@ -55,7 +50,7 @@ interface AtmosphereSelectorProps {
 const AtmosphereSelector = ({
   error,
   clearError,
-  maxSelections = 2,
+  maxSelections = VALIDATION_LIMITS.ATMOSPHERE.MAX,
 }: AtmosphereSelectorProps) => {
   const { step2Data, setStep2Update } = useGuestHouseStore();
 
