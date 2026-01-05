@@ -10,6 +10,13 @@ import MultiImagePicker from '@/src/components/ui/imagePicker/MultiImagePicker';
 import TextInput from '@/src/components/ui/TextInput';
 import { useGuestHouseStep2Validation } from '@/src/hooks/guesthouse/useGuestHouseStep2Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
+import {
+  PLACEHOLDERS,
+  BUTTON_LABELS,
+  INPUT_HEIGHTS,
+  VALIDATION_LIMITS,
+  FORM_DESCRIPTIONS,
+} from '@/src/utils/constants/guestHouseEnrollment';
 
 import AtmosphereSelector from './_components/step2/AtmosphereSelector';
 import FacilitiesForm from './_components/step2/FacilitiesForm';
@@ -35,12 +42,12 @@ export default function GuestHouseEnrollStep2() {
       >
         <FormSection
           title="게스트하우스 소개"
-          description="우리 게스트하우스만의 특별한 이야기를 들려주세요"
+          description={FORM_DESCRIPTIONS.GUESTHOUSE_INTRO}
         >
           <FormField
             label="게스트하우스 대표 사진"
             required={true}
-            description="최대 10장까지 등록할 수 있습니다"
+            description={FORM_DESCRIPTIONS.MAX_10_IMAGES}
             errorMessage={errors.mainImages}
           >
             <MultiImagePicker
@@ -48,7 +55,7 @@ export default function GuestHouseEnrollStep2() {
               setSelectedImageFiles={(files) =>
                 setStep2Update('mainImages', files)
               }
-              maxCount={10}
+              maxCount={VALIDATION_LIMITS.MAIN_IMAGES.MAX}
               error={!!errors.mainImages}
               clearError={() => clearError('mainImages')}
             />
@@ -65,10 +72,10 @@ export default function GuestHouseEnrollStep2() {
                 setStep2Update('introduction', text);
                 clearError('introduction');
               }}
-              placeholder="우리 게스트하우스를 소개해주세요"
+              placeholder={PLACEHOLDERS.INTRODUCTION}
               error={!!errors.introduction}
               multiline={true}
-              height={400}
+              height={INPUT_HEIGHTS.INTRODUCTION}
             />
           </FormField>
           <FacilitiesForm
@@ -89,7 +96,7 @@ export default function GuestHouseEnrollStep2() {
             width={360}
             height={50}
             textColor="white"
-            content="다음"
+            content={BUTTON_LABELS.NEXT}
             onPress={handleNext}
             className="mt-4"
           />

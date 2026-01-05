@@ -6,6 +6,11 @@ import Flex from '@/src/components/layout/Flex';
 import Button from '@/src/components/ui/Button/Button';
 import { useGuestHouseStep3Validation } from '@/src/hooks/guesthouse/useGuestHouseStep3Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
+import {
+  BUTTON_LABELS,
+  FORM_DESCRIPTIONS,
+  MAX_ITEMS,
+} from '@/src/utils/constants/guestHouseEnrollment';
 
 import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
 import NoticeBox from './_components/step3/NoticeBox';
@@ -35,7 +40,7 @@ export default function GuestHouseEnrollStep3() {
                 <Text className="text-[#fa2b36] text-lg font-bold">*</Text>
               </View>
               <Text className="text-[#6a7282] text-xs">
-                최대 10개까지 등록할 수 있습니다
+                {FORM_DESCRIPTIONS.MAX_10_ITEMS}
               </Text>
             </View>
 
@@ -53,7 +58,7 @@ export default function GuestHouseEnrollStep3() {
               >
                 <Feather name="plus-square" size={32} color="#0ea5e9" />
                 <Text className="text-sky-600 text-sm font-medium">
-                  객실 타입 추가
+                  {BUTTON_LABELS.ADD_ROOM}
                 </Text>
               </TouchableOpacity>
             ) : (
@@ -80,7 +85,7 @@ export default function GuestHouseEnrollStep3() {
                 >
                   <Feather name="plus-square" size={18} color="#0ea5e9" />
                   <Text className="text-sky-500 text-sm font-medium">
-                    객실 타입 추가
+                    {BUTTON_LABELS.ADD_ROOM}
                   </Text>
                 </TouchableOpacity>
               </>
@@ -95,7 +100,7 @@ export default function GuestHouseEnrollStep3() {
             width={360}
             height={50}
             textColor="white"
-            content="다음"
+            content={BUTTON_LABELS.NEXT}
             onPress={handleNext}
             className="mt-4"
           />
