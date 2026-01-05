@@ -12,7 +12,7 @@ export interface GuestHousePostParams {
   keyword?: string;
   sort?: string;
   region?: string[];
-  lowestRoomPrices?: number;
+  lowestRoomPrice?: number;
   highestRoomPrice?: number;
   moods?: string[];
   partyType?: string[];
