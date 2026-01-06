@@ -47,6 +47,7 @@ export interface ContactRequest {
 // 전체 게스트하우스 등록 요청
 export interface GuestHouseEnrollRequest {
   guestHouseName: string;
+  imageUrls: string[];
   region: string;
   location: LocationRequest;
   introduction: string;

@@ -31,50 +31,54 @@ export default function GuestHouseEnrollStep4() {
     ownerMessage,
   });
 
-  const {
-    isLoading,
-    error: enrollError,
-    enrollGuestHouse,
-  } = useGuestHouseEnrollment();
+  const { mutateAsync: enrollGuestHouse } = useGuestHouseEnrollment();
 
   const handleSubmit = async () => {
-    if (validateForm()) {
-      const enrollData = {
-        guestHouseName: step1Data.guestHouseName,
-        workingRegion: step1Data.workingRegion,
-        location: step1Data.location,
+    if (!validateForm()) return;
 
-        mainImages: step2Data.mainImages,
-        introduction: step2Data.introduction,
-        facilities: step2Data.facilities,
-        atmosphere: step2Data.atmosphere,
-        parties: step2Data.parties,
+    router.push({
+      pathname: '/guestHouse/enroll/result',
+      params: { status: 'pending' },
+    });
 
-        rooms: step3Data.rooms,
+    const enrollData = {
+      guestHouseName: step1Data.guestHouseName,
+      workingRegion: step1Data.workingRegion,
+      location: step1Data.location,
 
-        instagram,
-        phone,
-        email,
-        website,
-        ownerMessage,
-      };
+      mainImages: step2Data.mainImages,
+      introduction: step2Data.introduction,
+      facilities: step2Data.facilities,
+      atmosphere: step2Data.atmosphere,
+      parties: step2Data.parties,
 
+      rooms: step3Data.rooms,
+
+      instagram,
+      phone,
+      email,
+      website,
+      ownerMessage,
+    };
+
+    try {
       const guestHouseId = await enrollGuestHouse(enrollData);
 
       if (guestHouseId) {
-        router.push({
+        router.replace({
           pathname: '/guestHouse/enroll/result',
           params: { status: 'success', guestHouseId: guestHouseId.toString() },
         });
-      } else {
-        router.push({
-          pathname: '/guestHouse/enroll/result',
-          params: {
-            status: 'error',
-            error: enrollError || '등록 중 오류가 발생했습니다.',
-          },
-        });
       }
+    } catch (error: any) {
+      console.error('Enrollment Failed', error);
+      router.replace({
+        pathname: '/guestHouse/enroll/result',
+        params: {
+          status: 'error',
+          error: error?.message || '등록 중 오류가 발생했습니다.',
+        },
+      });
     }
   };
 
@@ -189,10 +193,9 @@ export default function GuestHouseEnrollStep4() {
                   width={360}
                   height={50}
                   textColor="white"
-                  content={isLoading ? '등록 중...' : BUTTON_LABELS.SUBMIT}
+                  content={BUTTON_LABELS.SUBMIT}
                   onPress={handleSubmit}
                   className="mt-4"
-                  disabled={isLoading}
                 />
               </Flex>
             </Flex>
