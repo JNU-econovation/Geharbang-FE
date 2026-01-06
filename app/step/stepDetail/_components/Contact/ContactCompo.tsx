@@ -5,7 +5,7 @@ import Arrow from "@/public/svgs/StepDetail/modal/arrow.svg";
 
 import TextSize from "@/src/components/ui/TextSize";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
-import { handleOpenURL } from "@/src/utils/\bstepDetail/openURL";
+import { handleOpenURL } from "@/src/utils/stepDetail/openURL";
 
 interface ContactCompoProps {
   variant: "insta" | "phone" | "email" | "webSite" | "modalApply";
