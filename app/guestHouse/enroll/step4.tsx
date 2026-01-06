@@ -21,12 +21,11 @@ import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
 export default function GuestHouseEnrollStep4() {
   const { step1Data, step2Data, step3Data, step4Data, setStep4Update } =
     useGuestHouseStore();
-  const { instagram, phone, email, website, ownerMessage } = step4Data;
+  const { instagram, phone, website, ownerMessage } = step4Data;
 
   const { errors, clearError, validateForm } = useGuestHouseStep4Validation({
     instagram,
     phone,
-    email,
     website,
     ownerMessage,
   });
@@ -56,7 +55,6 @@ export default function GuestHouseEnrollStep4() {
 
       instagram,
       phone,
-      email,
       website,
       ownerMessage,
     };
@@ -128,24 +126,6 @@ export default function GuestHouseEnrollStep4() {
                     keyboardType="phone-pad"
                     error={!!errors.phone}
                     maxLength={INPUT_MAX_LENGTHS.PHONE}
-                  />
-                </FormField>
-
-                <FormField
-                  label="이메일"
-                  required={false}
-                  errorMessage={errors.email}
-                >
-                  <TextInput
-                    value={email}
-                    onChangeText={(text) => {
-                      setStep4Update('email', text);
-                      clearError('email');
-                    }}
-                    placeholder={PLACEHOLDERS.EMAIL}
-                    keyboardType="email-address"
-                    error={!!errors.email}
-                    maxLength={INPUT_MAX_LENGTHS.EMAIL}
                   />
                 </FormField>
 
