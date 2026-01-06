@@ -106,6 +106,7 @@ export const transformEnrollDataToRequest = (
 ): GuestHouseEnrollRequest => {
   return {
     guestHouseName: data.guestHouseName,
+    imageUrls: transformImagesToUrls(data.mainImages),
     region: data.workingRegion,
     location: transformLocation(data.location),
     introduction: data.introduction,

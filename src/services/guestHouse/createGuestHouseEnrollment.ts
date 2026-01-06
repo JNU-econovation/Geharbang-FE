@@ -15,9 +15,25 @@ import {
 export const createGuestHouseEnrollment = async (
   data: GuestHouseEnrollRequest
 ): Promise<number> => {
-  const response = await axiosPrivate.post<GuestHouseEnrollResponse>(
-    '/api/v1/guest-houses',
-    data
-  );
-  return response.data.guestHouseId;
+  try {
+    console.log('===== 게스트하우스 등록 요청 데이터 =====');
+    console.log(JSON.stringify(data, null, 2));
+
+    const response = await axiosPrivate.post<GuestHouseEnrollResponse>(
+      '/api/v1/guest-houses',
+      data
+    );
+
+    console.log('===== 게스트하우스 등록 성공 =====');
+    console.log('guestHouseId:', response.data.guestHouseId);
+
+    return response.data.guestHouseId;
+  } catch (error: any) {
+    console.error('===== 게스트하우스 등록 실패 =====');
+    console.error('Error:', error);
+    console.error('Response:', error.response?.data);
+    console.error('Status:', error.response?.status);
+    console.error('Message:', error.message);
+    throw error;
+  }
 };
