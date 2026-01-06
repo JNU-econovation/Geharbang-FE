@@ -24,7 +24,7 @@ const PartyComponent = () => {
           <View className="w-full bg-white rounded-[12px] shadow-sm p-6 mb-4">
             <View className="flex-row items-center mb-1">
               <Text className="text-[#101828] text-xl font-medium">파티 </Text>
-              <Text className="text-[#fb2c36] text-xl font-bold">*</Text>
+              <Text className="text-primary-red text-xl font-bold">*</Text>
             </View>
 
             <Text className="text-[#697282] text-xs font-normal mb-3">

@@ -58,7 +58,7 @@ const RoomCard = ({
             className="w-7 h-7 bg-white/90 rounded-[10px] justify-center items-center shadow-sm"
             onPress={onRemove}
           >
-            <Feather name="trash-2" size={14} color="#fa2b36" />
+            <Feather name="trash-2" size={14} color="rgb(251, 44, 54)" />
           </TouchableOpacity>
         </View>
       </View>
@@ -86,8 +86,8 @@ const RoomCard = ({
         </View>
 
         <View className="flex-row items-center gap-2">
-          <Feather name="clock" size={14} color="#4a5565" />
-          <Text className="text-[#4a5565] text-xs">
+          <Feather name="clock" size={14} color="rgb(74, 85, 101)" />
+          <Text className="text-gray-text text-xs">
             입실 {formatTime(room.checkInTime)} - 퇴실{' '}
             {formatTime(room.checkOutTime)}
           </Text>

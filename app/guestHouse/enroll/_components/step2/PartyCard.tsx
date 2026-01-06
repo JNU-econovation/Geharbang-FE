@@ -76,7 +76,7 @@ const PartyCard = ({
         </Text>
 
         <View className="w-full p-3 bg-gray-50 rounded-lg">
-          <Text className="text-[#4a5565] text-xs leading-5">
+          <Text className="text-gray-text text-xs leading-5">
             {party.description}
           </Text>
         </View>
