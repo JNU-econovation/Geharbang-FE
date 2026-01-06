@@ -49,7 +49,6 @@ export interface Step3Data {
 export interface Step4Data {
   instagram: string;
   phone: string;
-  email: string;
   website: string;
   ownerMessage: string;
 }
@@ -72,7 +71,6 @@ export interface GuestHouseEnrollData {
   // Step 4: 연락처 및 기타
   instagram: string;
   phone: string;
-  email: string;
   website: string;
   ownerMessage: string;
 }
@@ -97,7 +95,6 @@ export const initialGuestHouseEnrollData: GuestHouseEnrollData = {
   // Step 4
   instagram: '',
   phone: '',
-  email: '',
   website: '',
   ownerMessage: '',
 };

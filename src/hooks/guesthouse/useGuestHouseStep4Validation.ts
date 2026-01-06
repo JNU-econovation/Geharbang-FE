@@ -1,14 +1,10 @@
 import { Step4Data } from '@/src/types/models/guestHouse/enroll';
-import {
-  validateEmail,
-  validatePhoneNumber,
-} from '@/src/utils/common/validation';
+import { validatePhoneNumber } from '@/src/utils/common/validation';
 import { useState } from 'react';
 
 interface FormErrors {
   instagram: string;
   phone: string;
-  email: string;
   website: string;
   ownerMessage: string;
 }
@@ -17,7 +13,6 @@ export function useGuestHouseStep4Validation(step4Data: Step4Data) {
   const [errors, setErrors] = useState<FormErrors>({
     instagram: '',
     phone: '',
-    email: '',
     website: '',
     ownerMessage: '',
   });
@@ -31,12 +26,11 @@ export function useGuestHouseStep4Validation(step4Data: Step4Data) {
     const newErrors: FormErrors = {
       instagram: '',
       phone: '',
-      email: '',
       website: '',
       ownerMessage: '',
     };
 
-    const { instagram, phone, email, website, ownerMessage } = step4Data;
+    const { instagram, phone, website, ownerMessage } = step4Data;
 
     if (instagram) {
       if (instagram.trim() === '') {
@@ -54,19 +48,6 @@ export function useGuestHouseStep4Validation(step4Data: Step4Data) {
         isValid = false;
       } else if (!validatePhoneNumber(phone)) {
         newErrors.phone = '전화번호 길이가 올바르지 않습니다';
-        isValid = false;
-      }
-    }
-
-    if (email) {
-      if (email.trim() === '') {
-        newErrors.email = '공백만 입력할 수 없습니다';
-        isValid = false;
-      } else if (email.length > 30) {
-        newErrors.email = '이메일은 30자 이내로 입력해주세요';
-        isValid = false;
-      } else if (!validateEmail(email)) {
-        newErrors.email = '올바른 이메일 형식이 아닙니다';
         isValid = false;
       }
     }
