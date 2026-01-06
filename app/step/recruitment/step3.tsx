@@ -5,13 +5,13 @@ import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
+import AppendableInputGroupContainer from "@/src/components/ui/Form/AppendableInputGroupContainer";
 import FormField from "@/src/components/ui/Form/FormField";
 import FormSection from "@/src/components/ui/Form/FormSection";
 import MultiImagePicker from "@/src/components/ui/imagePicker/MultiImagePicker";
 import TextInput from "@/src/components/ui/TextInput";
 import { useRecruitmentStep3Validation } from "@/src/hooks/recruitment/useRecruitmentStep3Validation";
 import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
-import AppendableInputGroupContainer from "@/src/components/ui/Form/AppendableInputGroupContainer";
 
 export default function RecruitmentStep3() {
   const { step3Data, setStep3Update } = useStepRecruitmentStore();
@@ -93,6 +93,7 @@ export default function RecruitmentStep3() {
                     error={!!errors.introduction}
                     multiline={true}
                     height={400}
+                    textAlignVertical='top'
                   />
                 </FormField>
 

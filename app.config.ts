@@ -16,6 +16,12 @@ const config: ExpoConfig = {
     bundleIdentifier: "com.econovation.geharbang",
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
+
+      CFBundleURLTypes: [
+        {
+          CFBundleURLSchemes: ["geharbang"],
+        },
+      ],
     },
     config: {
       googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
@@ -30,6 +36,18 @@ const config: ExpoConfig = {
     // edgeToEdgeEnabled: false,
     predictiveBackGestureEnabled: false,
     package: "com.econovation.geharbang",
+    intentFilters: [
+      {
+        action: "VIEW",
+        data: [
+          {
+            scheme: "geharbang",
+            host: "oauth-callback",
+          },
+        ],
+        category: ["BROWSABLE", "DEFAULT"],
+      },
+    ],
     config: {
       googleMaps: {
         apiKey: process.env.GOOGLE_MAPS_API_KEY,

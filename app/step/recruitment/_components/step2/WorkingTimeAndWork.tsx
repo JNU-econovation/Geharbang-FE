@@ -16,7 +16,11 @@ import WorkingInput from "./WorkingInput";
 
 interface WorkingTimeAndWorkProps {
   addedTimeAndWork: IWorkingTimeAndWork;
-  setAddedTimeAndWork: (workingTimeAndWork: IWorkingTimeAndWork) => void;
+  setAddedTimeAndWork: (
+    updater:
+      | IWorkingTimeAndWork
+      | ((prev: IWorkingTimeAndWork) => IWorkingTimeAndWork)
+  ) => void;
   onDelete: () => void;
   errors?: WorkingTimeAndWorkErrors;
 }
@@ -60,7 +64,7 @@ export default function WorkingTimeAndWork({
         required
         errorMessage={errors?.startTime || errors?.endTime}
       >
-        <Flex items='center' justify='center' dir='row' gap={15}>
+<Flex items='center' justify='center' dir='row' gap={19}>
           <TimePickerField
             value={addedTimeAndWork.startTime}
             onChange={(date) =>
@@ -142,11 +146,11 @@ export default function WorkingTimeAndWork({
           });
         }}
         setBothCounts={(workingCount, closedCount) => {
-          setAddedTimeAndWork({
-            ...addedTimeAndWork,
+          setAddedTimeAndWork((prev) => ({
+            ...prev,
             workingCount,
             closedCount,
-          });
+          }));
         }}
         workingErrors={errors?.workingCount}
         closedErrors={errors?.closedCount}
