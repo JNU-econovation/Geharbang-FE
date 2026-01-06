@@ -21,87 +21,67 @@ export function useWorkingCalculator({
   setClosedCount: setGlobalClosed,
   setBothCounts,
 }: UseWorkingCalculatorProps) {
-  const [localWorking, setLocalWorking] = useState<Count>(initialWorking);
-  const [localClosed, setLocalClosed] = useState<Count>(initialClosed);
+const [localWorking, setLocalWorking] = useState<number | "">(initialWorking);
+  const [localClosed, setLocalClosed] = useState<number | "">(initialClosed);
+
   const prevModeRef = useRef<"manual" | "auto">(mode);
+  const isAuto = mode === "auto";
 
-  const normalizeCount = (v: unknown): Count | undefined => {
-    if (v === "") return "";
-    if (typeof v !== "number") return undefined;
-    if (!Number.isFinite(v)) return undefined;
-    if (Number.isNaN(v)) return undefined;
-
-    return v;
-  };
-
-  const isValidAutoRange = (value: number) => value >= 1 && value <= totalDays;
-
-  const resetBoth = () => {
-    setLocalWorking("");
-    setLocalClosed("");
+  const syncToParent = (working: number | "", closed: number | "") => {
     if (setBothCounts) {
-      setBothCounts("", "");
+      setBothCounts(working, closed);
     } else {
-      setGlobalWorking("");
-      setGlobalClosed("");
+      setGlobalWorking(working);
+      setGlobalClosed(closed);
     }
   };
 
-  const updateWorkingCount = (raw: Count) => {
-    const count = normalizeCount(raw);
-    if (count === undefined) return;
-
-    if (mode === "auto") {
+  const updateWorkingCount = (count: number | "") => {
+    if (isAuto) {
       if (count === "") {
-        resetBoth();
+        setLocalWorking("");
+        setLocalClosed("");
+        syncToParent("", "");
         return;
       }
 
-      if (!isValidAutoRange(count)) return;
-
-      const newClosed = Math.max(totalDays - count, 0);
-
+      const nextClosed = Math.max(totalDays - count, 0);
       setLocalWorking(count);
-      setLocalClosed(newClosed);
-
-      if (setBothCounts) {
-        setBothCounts(count, newClosed);
-      } else {
-        setGlobalWorking(count);
-        setGlobalClosed(newClosed);
-      }
+      setLocalClosed(nextClosed);
+      syncToParent(count, nextClosed);develop
       return;
     }
 
     setLocalWorking(count);
-    setGlobalWorking(count);
+syncToParent(count, localClosed);
   };
 
-  const updateClosedCount = (raw: Count) => {
-    if (mode !== "manual") return;
-
-    const count = normalizeCount(raw);
-    if (count === undefined) return;
+  const updateClosedCount = (count: number | "") => {
+    if (isAuto) return;
 
     setLocalClosed(count);
-    setGlobalClosed(count);
+    syncToParent(localWorking, count);
   };
-
-  useEffect(() => setLocalWorking(initialWorking), [initialWorking]);
-  useEffect(() => setLocalClosed(initialClosed), [initialClosed]);
 
   useEffect(() => {
     if (prevModeRef.current !== mode) {
-      resetBoth();
+setLocalWorking("");
+      setLocalClosed("");
+      syncToParent("", "");
       prevModeRef.current = mode;
     }
-  }, [mode, setBothCounts, setGlobalWorking, setGlobalClosed]);
+  }, [mode]);
+
+  useEffect(() => {
+    setLocalWorking(initialWorking);
+    setLocalClosed(initialClosed);
+  }, [initialWorking, initialClosed]);
 
   return {
     workingCount: localWorking,
     closedCount: localClosed,
     updateWorkingCount,
     updateClosedCount,
-    isAuto: mode === "auto",
+isAuto, develop
   };
 }

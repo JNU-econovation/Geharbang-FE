@@ -3,7 +3,7 @@ import { View } from "react-native";
 import TextSize from "@/src/components/ui/TextSize";
 import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
 
-import SectionYPosition from "../SectionYPosition";
+import SectionYPosition from "@/app/step/stepDetail/_components/SectionYPosition";
 import AddressMap from "./AddressMap";
 
 interface AddressProps extends SetSectionYPositionProps {

@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex";
 import FormField from "@/src/components/ui/Form/FormField";
@@ -70,7 +70,6 @@ export default function WorkingTimeAndWork({
             onChange={(date) =>
               setAddedTimeAndWork({ ...addedTimeAndWork, startTime: date })
             }
-         
             error={!!(errors?.startTime || errors?.endTime)}
           />
 
@@ -81,7 +80,6 @@ export default function WorkingTimeAndWork({
             onChange={(date) =>
               setAddedTimeAndWork({ ...addedTimeAndWork, endTime: date })
             }
-         
             error={!!(errors?.startTime || errors?.endTime)}
           />
         </Flex>
@@ -138,13 +136,13 @@ export default function WorkingTimeAndWork({
         setWorkingCount={(workingCount) => {
           setAddedTimeAndWork({
             ...addedTimeAndWork,
-            workingCount: workingCount,
+            workingCount,
           });
         }}
         setClosedCount={(closedCount) => {
           setAddedTimeAndWork({
             ...addedTimeAndWork,
-            closedCount: closedCount,
+            closedCount,
           });
         }}
         setBothCounts={(workingCount, closedCount) => {
