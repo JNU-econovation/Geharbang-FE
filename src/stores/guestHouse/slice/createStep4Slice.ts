@@ -5,7 +5,6 @@ import { AllSlices, Step4Slice } from "@/src/types/store/guestHouseStore";
 export const initialStep4Data: Step4Data = {
   instagram: "",
   phone: "",
-  email: "",
   website: "",
   ownerMessage: "",
 };
