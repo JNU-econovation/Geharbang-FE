@@ -39,9 +39,9 @@ export interface RoomRequest {
 
 // 연락처 정보
 export interface ContactRequest {
-  phoneNumber: string;
-  instagramId: string;
-  webSite: string;
+  phoneNumber: string | null;
+  instagramId: string | null;
+  webSite: string | null;
 }
 
 // 전체 게스트하우스 등록 요청
@@ -56,7 +56,7 @@ export interface GuestHouseEnrollRequest {
   parties: PartyRequest[];
   rooms: RoomRequest[];
   contact: ContactRequest;
-  ownerMessage: string;
+  ownerMessage: string | null;
 }
 
 // API 응답 타입

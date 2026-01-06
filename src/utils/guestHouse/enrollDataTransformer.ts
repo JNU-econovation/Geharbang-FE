@@ -95,9 +95,9 @@ const transformLocation = (
 
 const transformContact = (data: GuestHouseEnrollData): ContactRequest => {
   return {
-    phoneNumber: data.phone || '',
-    instagramId: data.instagram || '',
-    webSite: data.website || '',
+    phoneNumber: data.phone || null,
+    instagramId: data.instagram || null,
+    webSite: data.website || null,
   };
 };
 
@@ -115,6 +115,6 @@ export const transformEnrollDataToRequest = (
     parties: data.parties.map(transformParty),
     rooms: data.rooms.map(transformRoom),
     contact: transformContact(data),
-    ownerMessage: data.ownerMessage,
+    ownerMessage: data.ownerMessage || null,
   };
 };

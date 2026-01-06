@@ -24,12 +24,14 @@ export const FACILITY_OPTIONS = [
  * 분위기 옵션
  */
 export const ATMOSPHERE_OPTIONS = [
+  '감성',
   '조용한',
-  '활기찬',
-  '아늑한',
-  '모던한',
-  '전통적인',
-  '자유로운',
+  '휴식',
+  '활발한',
+  '사교적',
+  '힐링',
+  '사색',
+  '잔잔한',
 ] as const;
 
 /**
