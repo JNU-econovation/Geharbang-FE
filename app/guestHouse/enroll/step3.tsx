@@ -37,7 +37,7 @@ export default function GuestHouseEnrollStep3() {
                 <Text className="text-[#101828] text-lg font-bold">
                   객실 타입{' '}
                 </Text>
-                <Text className="text-[#fa2b36] text-lg font-bold">*</Text>
+                <Text className="text-primary-red text-lg font-bold">*</Text>
               </View>
               <Text className="text-[#6a7282] text-xs">
                 {FORM_DESCRIPTIONS.MAX_10_ITEMS}

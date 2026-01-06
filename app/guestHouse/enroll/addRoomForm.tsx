@@ -34,8 +34,8 @@ const FormLabel = ({
   required?: boolean;
 }) => (
   <View className="flex-row items-center">
-    <Text className="text-[#4a5565] text-[13px] font-medium">{text}</Text>
-    {required && <Text className="text-[#fa2b36] text-[13px] ml-1">*</Text>}
+    <Text className="text-gray-text text-[13px] font-medium">{text}</Text>
+    {required && <Text className="text-primary-red text-[13px] ml-1">*</Text>}
   </View>
 );
 
