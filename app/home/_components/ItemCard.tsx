@@ -4,29 +4,32 @@ import Flex from "@/src/components/layout//Flex/Flex";
 import Tag from "@/src/components/ui/Tag/Tag";
 import TextSize from "@/src/components/ui/TextSize";
 import { useCardPress } from "@/src/hooks/home/useCardPress";
-import { GuestHouseCard } from "@/src/types/models/home/GuestHouseCard";
+import {
+  guestHouseRecommendationCard,
+  StepRecommendationCard,
+} from "@/src/types/models/home/GuestHouseCard";
 import { COLORS } from "@/src/utils/constants/colors";
 
-interface GuesthouseCardProps extends GuestHouseCard {
+interface ItemCardProps {
+  item: StepRecommendationCard | guestHouseRecommendationCard;
   type: "guestHouse" | "stepNotice";
 }
 
 const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
-export function ItemCard({
-  id,
-  name,
-  imageUrl,
-  tags,
-  type,
-}: GuesthouseCardProps) {
+export function ItemCard({ item, type }: ItemCardProps) {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const CARD_WIDTH = SCREEN_WIDTH * 0.4;
-  const handleCardPress = useCardPress(type, id);
+  const handleCardPress = useCardPress(type, item.id);
+
+  const isGuestHouse = type === "guestHouse";
+  const displayName = isGuestHouse
+    ? (item as guestHouseRecommendationCard).guestHouseName
+    : (item as StepRecommendationCard).name;
 
   return (
     <View
-      className="rounded-2xl border border-gray-border bg-white"
+      className='rounded-2xl border border-gray-border bg-white'
       style={{
         width: CARD_WIDTH,
         shadowColor: "#000",
@@ -36,29 +39,29 @@ export function ItemCard({
       }}
     >
       <Pressable
-        className="rounded-2xl overflow-hidden"
+        className='rounded-2xl overflow-hidden'
         onPress={handleCardPress}
       >
         <Image
-          source={{ uri: `${baseURL}${imageUrl}` }}
-          className="w-full h-36"
+          source={{ uri: `${baseURL}${item.imageUrl}` }}
+          className='w-full h-36'
         />
-        <View className="p-3 gap-2">
+        <View className='p-3 gap-2'>
           <TextSize
             size={16}
             color={COLORS.GRAY.TEXT}
-            content={name}
-            weight="semibold"
+            content={displayName}
+            weight='semibold'
           />
 
-          <Flex justify="start" items="center" dir="row" gap={3} wrap="wrap">
-            {tags.map((tag, index) => (
+          <Flex justify='start' items='center' dir='row' gap={3} wrap='wrap'>
+            {item.tags.map((tag, index) => (
               <Tag
                 key={index}
                 label={tag}
-                variant="info"
-                size="md"
-                prefix="#"
+                variant='info'
+                size='md'
+                prefix='#'
               />
             ))}
           </Flex>

@@ -3,7 +3,10 @@ import React, { ReactNode } from "react";
 import { ActivityIndicator, View } from "react-native";
 
 import TextSize from "@/src/components/ui/TextSize";
-import { GuestHouseCard } from "@/src/types/models/home/GuestHouseCard";
+import {
+  guestHouseRecommendationCard,
+  StepRecommendationCard,
+} from "@/src/types/models/home/GuestHouseCard";
 import { COLORS } from "@/src/utils/constants/colors";
 import { regions } from "@/src/utils/constants/regions";
 import HorizontalSlider from "./HorizontalSlider";
@@ -12,11 +15,11 @@ import { ListLinkButton } from "./ListLinkButton";
 import MoreCard from "./MoreCard";
 import RegionTab from "./RegionTab";
 
-interface SlideSectionLayoutProps {
+interface SlideSectionLayoutProps<T> {
   itemType: "stepNotice" | "guestHouse";
   title: string;
   icon: ReactNode;
-  data: GuestHouseCard[];
+  data: T[];
   linkPath: Href;
   selectedRegion: string;
   setSelectedRegion: (region: string) => void;
@@ -24,7 +27,9 @@ interface SlideSectionLayoutProps {
   error?: boolean;
 }
 
-export function SlideSectionLayout({
+export function SlideSectionLayout<
+  T extends guestHouseRecommendationCard | StepRecommendationCard
+>({
   title,
   icon,
   data,
@@ -34,9 +39,9 @@ export function SlideSectionLayout({
   setSelectedRegion,
   loading,
   error,
-}: SlideSectionLayoutProps) {
+}: SlideSectionLayoutProps<T>) {
   return (
-    <View className="w-full items-center gap-3">
+    <View className='w-full items-center gap-3'>
       <ListLinkButton
         label={title}
         icon={icon}
@@ -54,23 +59,23 @@ export function SlideSectionLayout({
         )}
       />
       {loading ? (
-        <View className="pt-2 h-64">
+        <View className='pt-2 h-64'>
           <ActivityIndicator size={80} color={COLORS.PRIMARY.BLUE} />
         </View>
       ) : error ? (
-        <View className="py-2">
+        <View className='py-2'>
           <TextSize
             size={14}
             color={COLORS.GRAY.TEXT}
-            content="잠시 오류가 발생했어요"
+            content='잠시 오류가 발생했어요'
           />
         </View>
       ) : data.length === 0 ? (
-        <View className="py-2">
+        <View className='py-2'>
           <TextSize
             size={14}
             color={COLORS.GRAY.TEXT}
-            content="해당 지역에 올라온 게시물이 없어요"
+            content='해당 지역에 올라온 게시물이 없어요'
           />
         </View>
       ) : (
@@ -78,7 +83,7 @@ export function SlideSectionLayout({
           key={selectedRegion}
           data={data}
           renderItem={(item) => (
-            <ItemCard key={item.id} {...item} type={itemType} />
+            <ItemCard key={item.id} item={item} type={itemType} />
           )}
           renderMoreCard={<MoreCard onPress={() => router.push(linkPath)} />}
         />
