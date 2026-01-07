@@ -1,9 +1,10 @@
-import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
+import ItemListContainer from '@/src/components/ui/ItemListContainer';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
+import { MAX_ITEMS } from '@/src/utils/constants/guestHouseEnrollment';
 import PartyCard from './PartyCard';
 
 const PartyComponent = () => {
@@ -21,57 +22,28 @@ const PartyComponent = () => {
         }}
       >
         <View className="w-full max-w-sm">
-          <View className="w-full bg-white rounded-[12px] shadow-sm p-6 mb-4">
-            <View className="flex-row items-center mb-1">
-              <Text className="text-[#101828] text-xl font-medium">파티 </Text>
-              <Text className="text-primary-red text-xl font-bold">*</Text>
-            </View>
-
-            <Text className="text-[#697282] text-xs font-normal mb-3">
-              최대 10개까지 등록할 수 있습니다
-            </Text>
-
-            {parties.length === 0 ? (
-              <TouchableOpacity
-                className="w-full h-48 bg-sky-50 rounded-xl border-2 border-dashed border-sky-200 flex justify-center items-center gap-3"
-                activeOpacity={0.7}
-                onPress={() => router.push('/guestHouse/enroll/makeParty')}
-              >
-                <Feather name="plus" size={32} color="#0ea5e9" />
-                <Text className="text-sky-600 text-sm font-medium">
-                  파티 추가
-                </Text>
-              </TouchableOpacity>
-            ) : (
-              <>
-                {parties.map((party, index) => (
-                  <PartyCard
-                    key={party.id}
-                    party={party}
-                    isRepresentative={index === 0}
-                    onEdit={() => {
-                      router.push({
-                        pathname: '/guestHouse/enroll/makeParty',
-                        params: { editId: party.id },
-                      });
-                    }}
-                    onDelete={() => removeParty(party.id)}
-                  />
-                ))}
-
-                <TouchableOpacity
-                  className="w-full h-12 mt-4 bg-sky-50 rounded-xl border border-sky-200 flex-row justify-center items-center gap-2"
-                  activeOpacity={0.7}
-                  onPress={() => router.push('/guestHouse/enroll/makeParty')}
-                >
-                  <Feather name="plus" size={18} color="#0ea5e9" />
-                  <Text className="text-sky-600 text-sm font-medium">
-                    파티 추가
-                  </Text>
-                </TouchableOpacity>
-              </>
+          <ItemListContainer
+            title="파티"
+            description="최대 10개까지 등록할 수 있습니다"
+            items={parties}
+            addButtonLabel="파티 추가"
+            onAddPress={() => router.push('/guestHouse/enroll/makeParty')}
+            maxItems={MAX_ITEMS.PARTIES}
+            renderItem={(party, index) => (
+              <PartyCard
+                key={party.id}
+                party={party}
+                isRepresentative={index === 0}
+                onEdit={() => {
+                  router.push({
+                    pathname: '/guestHouse/enroll/makeParty',
+                    params: { editId: party.id },
+                  });
+                }}
+                onDelete={() => removeParty(party.id)}
+              />
             )}
-          </View>
+          />
         </View>
       </ScrollView>
     </View>

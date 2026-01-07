@@ -68,13 +68,15 @@ export default function GuestHouseEnrollStep4() {
           params: { status: 'success', guestHouseId: guestHouseId.toString() },
         });
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Enrollment Failed', error);
+      const errorMessage =
+        error instanceof Error ? error.message : '등록 중 오류가 발생했습니다.';
       router.replace({
         pathname: '/guestHouse/enroll/result',
         params: {
           status: 'error',
-          error: error?.message || '등록 중 오류가 발생했습니다.',
+          error: errorMessage,
         },
       });
     }

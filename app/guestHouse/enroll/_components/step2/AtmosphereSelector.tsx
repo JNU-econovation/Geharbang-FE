@@ -1,45 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 
 import FormField from '@/src/components/ui/Form/FormField';
+import SelectableTag from '@/src/components/ui/SelectableTag';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import {
   ATMOSPHERE_OPTIONS,
   VALIDATION_LIMITS,
 } from '@/src/utils/constants/guestHouseEnrollment';
-
-interface TagProps {
-  label: string;
-  selected?: boolean;
-  onPress?: () => void;
-}
-
-const Tag = React.memo(({ label, selected = false, onPress }: TagProps) => {
-  const bgColor = selected ? 'bg-sky-500' : 'bg-gray-100';
-  const textColor = selected ? 'text-white' : 'text-[#364153]';
-
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      className={`px-4 py-2 rounded-full mr-2 mb-2 ${bgColor}`}
-      style={
-        selected
-          ? {
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.1,
-              shadowRadius: 2,
-              elevation: 2,
-            }
-          : undefined
-      }
-    >
-      <Text className={`text-[13px] font-normal leading-5 ${textColor}`}>
-        {label}
-      </Text>
-    </TouchableOpacity>
-  );
-});
 
 interface AtmosphereSelectorProps {
   error?: string;
@@ -94,7 +62,7 @@ const AtmosphereSelector = ({
             const isSelected =
               selectedAtmosphere.indexOf(atmosphereOption) !== -1;
             return (
-              <Tag
+              <SelectableTag
                 key={atmosphereOption}
                 label={atmosphereOption}
                 selected={isSelected}
