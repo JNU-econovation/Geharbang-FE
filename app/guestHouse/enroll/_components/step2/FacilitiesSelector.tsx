@@ -13,7 +13,7 @@ import {
 } from '@/src/utils/constants/guestHouseEnrollment';
 
 interface FacilitiesSelectorProps {
-  facilityOptions: string[];
+  facilityOptions: readonly string[];
   selectedFacilities: string[];
   onToggleFacility: (facility: string) => void;
   customFacilities: Feature[];
