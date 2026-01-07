@@ -19,7 +19,7 @@ export const uploadGuestHouseImages = async (
   const formData = new FormData();
 
   files.forEach((file) => {
-    formData.append('images', file as any);
+    formData.append('images', file as unknown as Blob);
   });
 
   const response = await axiosPrivate.post<{ imageUrl: string[] }>(
