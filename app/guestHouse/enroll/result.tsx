@@ -5,11 +5,11 @@ import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import ResultLayout from '@/src/components/layout/ResultLayout';
 import TextSize from '@/src/components/ui/TextSize';
 
-type ResultStatus = 'pending' | 'success' | 'error';
+type ResultStatus = 'success' | 'error';
 
 export default function GuestHouseEnrollResult() {
   const {
-    status = 'pending',
+    status = 'success',
     guestHouseId,
     error,
   } = useLocalSearchParams<{
@@ -33,20 +33,11 @@ export default function GuestHouseEnrollResult() {
       </View>
 
       <View className="h-full px-3 pt-8 bg-[#F9FAFB]">
-        {status === 'pending' && (
-          <ResultLayout
-            status="pending"
-            title="등록 중..."
-            description="게스트하우스를 등록하고 있습니다"
-            primary={{ label: '등록 중...' }}
-          />
-        )}
-
         {status === 'success' && (
           <ResultLayout
             status="success"
             title="게하 등록 완료!"
-            description="관리자 승인 후 게하 정보가 공개됩니다.승인까지 보통 1-3일 소요됩니다."
+            description="관리자 승인 후 게하 정보가 공개됩니다. 승인까지 보통 1-3일 소요됩니다."
             primary={{
               label: '홈으로 돌아가기',
               onPress: goHome,
