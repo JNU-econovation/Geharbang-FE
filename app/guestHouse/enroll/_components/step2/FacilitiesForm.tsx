@@ -47,13 +47,14 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
   };
 
   const customFacilitiesAsFeatures = useMemo(() => {
-    return step2Data.facilities
-      .filter((f: string) => !FACILITY_OPTIONS.includes(f))
-      .map((text: string, index: number) => ({
-        id: `custom-${index}`,
-        text,
-      }));
-  }, [step2Data.facilities]);
+    const customFacilities = step2Data.facilities.filter(
+      (f: string) => !FACILITY_OPTIONS.includes(f),
+    );
+    return customFacilities.map((text: string, index: number) => ({
+      id: `custom-${index}`,
+      text,
+    }));
+  }, [step2Data.facilities.filter((f) => !FACILITY_OPTIONS.includes(f)).join(',')]);
 
   const handleCustomFacilitiesChange = (features: Feature[]) => {
     setStep2Update('facilities', (prev) => {
@@ -66,7 +67,7 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
 
   return (
     <FacilitiesSelector
-      facilityOptions={[...FACILITY_OPTIONS]}
+      facilityOptions={FACILITY_OPTIONS}
       selectedFacilities={selectedFacilities}
       onToggleFacility={toggleFacility}
       customFacilities={customFacilitiesAsFeatures}
