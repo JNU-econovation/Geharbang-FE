@@ -9,18 +9,32 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 interface GuestHouseCardProps {
+  type: "stepRecruitment" | "guestHouse";
   item: StaffRecruitmentPost | GuestHousePost;
   onPress?: () => void;
 }
 
-export default function GuestHouseCard({ item, onPress }: GuestHouseCardProps) {
-  const displayTitle = "title" in item ? item.title : item.guestHouseName;
+export default function GuestHouseCard({
+  type,
+  item,
+  onPress,
+}: GuestHouseCardProps) {
+  const isStepRecruitment = type === "stepRecruitment";
+
+  const displayTitle = isStepRecruitment
+    ? (item as StaffRecruitmentPost).title
+    : (item as GuestHousePost).guestHouseName;
 
   const handlePress = () => {
     if (onPress) {
       onPress();
-    } else {
+      return;
+    }
+
+    if (isStepRecruitment) {
       router.push(`/step/stepDetail/${item.id}`);
+    } else {
+      router.push(`/guestHouse/guestHouseDetail/${item.id}`);
     }
   };
 
@@ -34,7 +48,7 @@ export default function GuestHouseCard({ item, onPress }: GuestHouseCardProps) {
         <View className='w-16 h-16 rounded-lg overflow-hidden bg-gray-100 items-center justify-center'>
           {item.imageUrl ? (
             <Image
-              source={{ uri: `${item.imageUrl}` }} // 임시로 baseUrl지움
+              source={{ uri: `${baseURL}${item.imageUrl}` }}
               className='w-full h-full'
               resizeMode='cover'
             />
