@@ -8,7 +8,11 @@ import TextSize from '@/src/components/ui/TextSize';
 type ResultStatus = 'pending' | 'success' | 'error';
 
 export default function GuestHouseEnrollResult() {
-  const { status = 'pending', guestHouseId, error } = useLocalSearchParams<{
+  const {
+    status = 'pending',
+    guestHouseId,
+    error,
+  } = useLocalSearchParams<{
     status?: ResultStatus;
     guestHouseId?: string;
     error?: string;
@@ -42,7 +46,7 @@ export default function GuestHouseEnrollResult() {
           <ResultLayout
             status="success"
             title="게하 등록 완료!"
-            description="관리자 승인 후 게하 정보가 공개됩니다.\n승인까지 보통 1-3일 소요됩니다."
+            description="관리자 승인 후 게하 정보가 공개됩니다.승인까지 보통 1-3일 소요됩니다."
             primary={{
               label: '홈으로 돌아가기',
               onPress: goHome,
@@ -61,7 +65,7 @@ export default function GuestHouseEnrollResult() {
             title="등록 실패"
             description={
               error ||
-              '게하 등록 중 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.'
+              '게하 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
             }
             primary={{
               label: '다시 시도',

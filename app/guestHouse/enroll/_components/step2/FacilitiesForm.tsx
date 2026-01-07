@@ -30,19 +30,17 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
   }, [step2Data.facilities]);
 
   const toggleFacility = (facility: string) => {
-    setSelectedFacilities((prev) => {
-      const newValue = prev.includes(facility)
-        ? prev.filter((f) => f !== facility)
-        : [...prev, facility];
+    const newValue = selectedFacilities.includes(facility)
+      ? selectedFacilities.filter((f) => f !== facility)
+      : [...selectedFacilities, facility];
 
-      setStep2Update('facilities', (storePrev) => {
-        const tagFacilities = storePrev.filter(
-          (f) => !(FACILITY_OPTIONS as readonly string[]).includes(f),
-        );
-        return [...newValue, ...tagFacilities];
-      });
+    setSelectedFacilities(newValue);
 
-      return newValue;
+    setStep2Update('facilities', (storePrev) => {
+      const tagFacilities = storePrev.filter(
+        (f) => !(FACILITY_OPTIONS as readonly string[]).includes(f),
+      );
+      return [...newValue, ...tagFacilities];
     });
 
     clearError?.('facilities');
