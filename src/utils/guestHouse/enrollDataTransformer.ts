@@ -50,6 +50,17 @@ const transformImagesToUrls = (files: Array<{ uri: string }>): string[] => {
   });
 };
 
+const transformPrice = (priceStr: string, fieldName: string): number => {
+  const price = parseInt(priceStr, 10);
+  if (isNaN(price)) {
+    throw new Error(`${fieldName}는 유효한 숫자여야 합니다.`);
+  }
+  if (price < 0) {
+    throw new Error(`${fieldName}는 0 이상이어야 합니다.`);
+  }
+  return price;
+};
+
 const transformParty = (party: Party): PartyRequest => {
   return {
     type: transformPartyType(party.type),
@@ -60,8 +71,8 @@ const transformParty = (party: Party): PartyRequest => {
     place: party.location,
     moods: party.mood ? [party.mood] : [],
     isExternalGuestAllowed: party.allowExternal,
-    guestFee: parseInt(party.guestFee, 10) || 0,
-    externalGuestFee: parseInt(party.externalFee, 10) || 0,
+    guestFee: transformPrice(party.guestFee, '게스트 참가비'),
+    externalGuestFee: transformPrice(party.externalFee, '외부인 참가비'),
     imageUrls: transformImagesToUrls(party.images),
     information: party.description,
   };
@@ -74,7 +85,7 @@ const transformRoom = (room: Room): RoomRequest => {
     headCountType: transformOccupancy(room.occupancy),
     checkInTime: formatTime(room.checkInTime),
     checkOutTime: formatTime(room.checkOutTime),
-    pricePerNight: parseInt(room.price, 10) || 0,
+    pricePerNight: transformPrice(room.price, '1박 가격'),
     imageUrls: transformImagesToUrls(room.images),
   };
 };
@@ -89,7 +100,7 @@ const transformLocation = (
   return {
     lotNumberAddress: location.jibunAddress || '',
     roadNameAddress: location.roadAddress || '',
-    coordinates: [location.longitude || 0, location.latitude || 0],
+    coordinates: [location.longitude ?? 0, location.latitude ?? 0],
   };
 };
 

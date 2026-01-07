@@ -7,6 +7,7 @@ import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { File } from '@/src/types/File';
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
+import { nanoid } from 'nanoid';
 import React, { useEffect, useState } from 'react';
 import {
   ScrollView,
@@ -131,7 +132,7 @@ export default function AddRoomForm() {
 
     const roomPayload = {
       ...roomData,
-      id: isEditMode ? editId : Date.now().toString(),
+      id: isEditMode ? editId : nanoid(),
     };
 
     if (isEditMode && editId) {

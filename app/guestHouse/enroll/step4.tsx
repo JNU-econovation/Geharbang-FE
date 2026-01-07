@@ -30,15 +30,11 @@ export default function GuestHouseEnrollStep4() {
     ownerMessage,
   });
 
-  const { mutateAsync: enrollGuestHouse } = useGuestHouseEnrollment();
+  const { mutateAsync: enrollGuestHouse, isPending } =
+    useGuestHouseEnrollment();
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
-
-    router.push({
-      pathname: '/guestHouse/enroll/result',
-      params: { status: 'pending' },
-    });
 
     const enrollData = {
       guestHouseName: step1Data.guestHouseName,
@@ -63,7 +59,7 @@ export default function GuestHouseEnrollStep4() {
       const guestHouseId = await enrollGuestHouse(enrollData);
 
       if (guestHouseId) {
-        router.replace({
+        router.push({
           pathname: '/guestHouse/enroll/result',
           params: { status: 'success', guestHouseId: guestHouseId.toString() },
         });
@@ -72,7 +68,7 @@ export default function GuestHouseEnrollStep4() {
       console.error('Enrollment Failed', error);
       const errorMessage =
         error instanceof Error ? error.message : '등록 중 오류가 발생했습니다.';
-      router.replace({
+      router.push({
         pathname: '/guestHouse/enroll/result',
         params: {
           status: 'error',
@@ -172,11 +168,12 @@ export default function GuestHouseEnrollStep4() {
               <Flex items="center">
                 <Button
                   variant="primary"
-                  width={360}
+                  width={370}
                   height={50}
                   textColor="white"
-                  content={BUTTON_LABELS.SUBMIT}
+                  content={isPending ? '등록 중...' : BUTTON_LABELS.SUBMIT}
                   onPress={handleSubmit}
+                  disabled={isPending}
                   className="mt-4"
                 />
               </Flex>
