@@ -5,19 +5,18 @@ import Insta from "@/public/svgs/StepDetail/contactIcon/insta.svg";
 import Phone from "@/public/svgs/StepDetail/contactIcon/phone.svg";
 import WebSite from "@/public/svgs/StepDetail/contactIcon/webSite.svg";
 
+import ContactCompo from "@/app/step/stepDetail/_components/Contact/ContactCompo";
+import SectionYPosition from "@/app/step/stepDetail/_components/SectionYPosition";
 import TextSize from "@/src/components/ui/TextSize";
 import ViewContext from "@/src/components/ui/ViewContext/ViewContext";
 import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
 
-import SectionYPosition from "../SectionYPosition";
-import ContactCompo from "./ContactCompo";
-
 interface ContactProps extends SetSectionYPositionProps {
   contact?: {
-    email: string;
-    instagramId: string;
-    phoneNumber: string;
-    webSite: string;
+    email?: string;
+    instagramId?: string;
+    phoneNumber?: string;
+    webSite?: string;
   };
   owerMessage?: string;
 }

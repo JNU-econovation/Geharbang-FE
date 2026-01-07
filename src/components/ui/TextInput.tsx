@@ -18,6 +18,7 @@ interface CustomTextInputProps {
   editable?: boolean;
   className?: string;
   suffix?: string;
+  textAlignVertical?: TextInputProps["textAlignVertical"];
 }
 
 export default function CustomTextInput({
@@ -35,6 +36,7 @@ export default function CustomTextInput({
   editable,
   className,
   suffix,
+  textAlignVertical,
 }: CustomTextInputProps) {
   return (
     <View className={`flex-row items-center ${className}`}>
@@ -51,7 +53,7 @@ export default function CustomTextInput({
         multiline={multiline}
         autoCapitalize={autoCapitalize}
         editable={editable}
-        allowFontScaling={false}
+textAlignVertical={textAlignVertical}
       />
       {suffix && (
         <View className='ml-2'>

@@ -1,15 +1,26 @@
 import { Image, Pressable, View } from "react-native";
 import Swiper from "react-native-swiper";
 
+import Bed from "@/public/svgs/GuestHouse/bed.svg";
 import ModalImage from "@/src/components/ui/Modal/ModalImage";
 import TextSize from "@/src/components/ui/TextSize";
 import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
 
 interface GehaImageProps {
   images?: string[];
+  height?: number;
+  page?: boolean;
+  type?: boolean;
+  party?: boolean;
 }
 
-export default function GehaImage({ images }: GehaImageProps) {
+export default function GehaImage({
+  images,
+  height,
+  page,
+  type,
+  party,
+}: GehaImageProps) {
   const {
     modalVisible,
     imageIdx,
@@ -24,7 +35,16 @@ export default function GehaImage({ images }: GehaImageProps) {
   }
 
   return (
-    <View className='w-full h-72'>
+    <View className='w-full' style={{ height }}>
+      {type && (
+        <View className='absolute top-3 right-3 z-10'>
+          <View className='rounded-xl py-2 px-3 bg-black/70 flex-row gap-1'>
+            <Bed width={16} height={16} />
+            <TextSize color='#ffffff' size={14} content='1인' />
+          </View>
+        </View>
+      )}
+
       <Swiper
         loop={false}
         onIndexChanged={(idx) => setImageIdx(idx)}
@@ -40,22 +60,24 @@ export default function GehaImage({ images }: GehaImageProps) {
           >
             <Image
               source={{ uri: `${process.env.EXPO_PUBLIC_BASE_URL}${img}` }}
-              className='w-full h-full'
-              resizeMode='contain'
+              className={`w-full h-full ${(party || type) && "rounded-t-lg"}`}
+              resizeMode='cover'
             />
           </Pressable>
         ))}
       </Swiper>
 
-      <View className='absolute bottom-3 right-3'>
-        <View className='rounded-2xl py-2 px-3 bg-black/70'>
-          <TextSize
-            color='#ffffff'
-            size={12}
-            content={`${imageIdx + 1} / ${images?.length} `}
-          />
+      {page && (
+        <View className='absolute bottom-3 right-3'>
+          <View className='rounded-2xl py-2 px-3 bg-black/70'>
+            <TextSize
+              color='#ffffff'
+              size={12}
+              content={`${imageIdx + 1} / ${images?.length} `}
+            />
+          </View>
         </View>
-      </View>
+      )}
 
       <ModalImage
         modalVisible={modalVisible}

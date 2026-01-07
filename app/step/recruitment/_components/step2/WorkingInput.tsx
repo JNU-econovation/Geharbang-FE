@@ -59,9 +59,13 @@ export default function WorkingInput({
   if (isAuto) {
     return (
       <View>
-        <FormField label='일주일 기준 근무일' required={true} errorMessage={workingErrors}>
+        <FormField
+          label='일주일 기준 근무일'
+          required={true}
+          errorMessage={workingErrors}
+        >
           <WorkScheduleSelector
-            mode="single"
+            mode='single'
             selectedDays={workingCount}
             onSelect={handleCheckboxSelect}
           />
