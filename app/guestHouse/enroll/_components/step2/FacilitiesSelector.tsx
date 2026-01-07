@@ -3,6 +3,7 @@ import { View } from 'react-native';
 
 import AppendableInputGroupContainer from '@/src/components/ui/Form/AppendableInputGroupContainer';
 import FormField from '@/src/components/ui/Form/FormField';
+import SelectableTag from '@/src/components/ui/SelectableTag';
 import { Feature } from '@/src/types/models/stepRecruitment/Feature';
 import {
   PLACEHOLDERS,
@@ -12,7 +13,6 @@ import {
 } from '@/src/utils/constants/guestHouseEnrollment';
 
 interface FacilitiesSelectorProps {
-  Tag: React.ComponentType<{ label: string; selected: boolean; onPress: () => void }>;
   facilityOptions: string[];
   selectedFacilities: string[];
   onToggleFacility: (facility: string) => void;
@@ -23,7 +23,6 @@ interface FacilitiesSelectorProps {
 }
 
 const FacilitiesSelector = ({
-  Tag,
   facilityOptions,
   selectedFacilities,
   onToggleFacility,
@@ -45,7 +44,7 @@ const FacilitiesSelector = ({
           {facilityOptions.map((facility) => {
             const isSelected = selectedFacilities.indexOf(facility) !== -1;
             return (
-              <Tag
+              <SelectableTag
                 key={facility}
                 label={facility}
                 selected={isSelected}

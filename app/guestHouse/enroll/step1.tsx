@@ -70,7 +70,7 @@ export default function GuestHouseStep1() {
         <Flex items="center">
           <Button
             variant="primary"
-            width={370}
+            width={360}
             height={50}
             textColor="white"
             content={BUTTON_LABELS.NEXT}
