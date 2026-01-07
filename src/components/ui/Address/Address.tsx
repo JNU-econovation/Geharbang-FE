@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 import TextSize from "@/src/components/ui/TextSize";
 import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
@@ -8,7 +8,9 @@ import AddressMap from "./AddressMap";
 
 interface AddressProps extends SetSectionYPositionProps {
   location?: {
-    address: string;
+    address?: string;
+    lotNumberAddress?: string;
+    roadNameAddress?: string;
     coordinates: number[];
   };
 }
@@ -27,7 +29,23 @@ export default function Address({
       <AddressMap coordinates={location?.coordinates} />
 
       <View className='pt-4' />
-      <TextSize size={14} color='#364153' content={location?.address} />
+      {location?.address ? (
+        <TextSize size={14} color='#364153' content={location?.address} />
+      ) : (
+        <Text>
+          <TextSize
+            size={14}
+            color='#364153'
+            content={location?.roadNameAddress}
+          />
+          {"  "}
+          <TextSize
+            size={14}
+            color='#364153'
+            content={`(${location?.lotNumberAddress})`}
+          />
+        </Text>
+      )}
     </SectionYPosition>
   );
 }
