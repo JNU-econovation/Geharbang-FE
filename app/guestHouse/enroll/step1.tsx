@@ -1,6 +1,6 @@
-import { router } from 'expo-router';
-import { useEffect } from 'react';
-import { ScrollView } from 'react-native';
+import { router, useFocusEffect } from 'expo-router';
+import { useCallback, useEffect } from 'react';
+import { Alert, BackHandler, ScrollView } from 'react-native';
 
 import GuestHouseLocation from '@/app/step/recruitment/_components/step1/GuestHouseLocation';
 import GuestHouseName from '@/app/step/recruitment/_components/step1/GuestHouseName';
@@ -18,7 +18,40 @@ export default function GuestHouseStep1() {
 
   useEffect(() => {
     resetAllData();
-  }, [resetAllData]);
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert(
+          '등록 취소',
+          '게스트하우스 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.',
+          [
+            {
+              text: '계속 작성',
+              style: 'cancel',
+            },
+            {
+              text: '취소',
+              style: 'destructive',
+              onPress: () => {
+                resetAllData();
+                router.back();
+              },
+            },
+          ],
+        );
+        return true;
+      };
+
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      );
+
+      return () => subscription.remove();
+    }, [resetAllData]),
+  );
 
   const { errors, validateForm, clearError } =
     useGuestHouse1Validation(step1Data);

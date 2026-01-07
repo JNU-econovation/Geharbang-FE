@@ -16,8 +16,12 @@ interface FacilitiesFormProps {
 const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
   const { step2Data, setStep2Update } = useGuestHouseStore();
 
-  const selectedFacilities = step2Data.facilities.filter((f) =>
-    (FACILITY_OPTIONS as readonly string[]).includes(f),
+  const selectedFacilities = useMemo(
+    () =>
+      step2Data.facilities.filter((f) =>
+        (FACILITY_OPTIONS as readonly string[]).includes(f),
+      ),
+    [step2Data.facilities],
   );
 
   const toggleFacility = (facility: string) => {
