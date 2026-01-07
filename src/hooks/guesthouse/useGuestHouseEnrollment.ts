@@ -68,7 +68,7 @@ export const useGuestHouseEnrollment = () => {
 
       return guestHouseId;
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('게스트하우스 등록 에러:', error);
     },
   });
