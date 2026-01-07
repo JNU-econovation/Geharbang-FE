@@ -33,20 +33,15 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
         ? prev.filter((f) => f !== facility)
         : [...prev, facility];
 
-      return newValue;
-    });
-
-    setTimeout(() => {
       setStep2Update('facilities', (storePrev) => {
-        const currentSelected = selectedFacilities.includes(facility)
-          ? selectedFacilities.filter((f) => f !== facility)
-          : [...selectedFacilities, facility];
         const tagFacilities = storePrev.filter(
           (f) => !FACILITY_OPTIONS.includes(f),
         );
-        return [...currentSelected, ...tagFacilities];
+        return [...newValue, ...tagFacilities];
       });
-    }, 0);
+
+      return newValue;
+    });
 
     clearError?.('facilities');
   };

@@ -41,10 +41,7 @@ const AtmosphereSelector = ({
         return prev;
       }
 
-      setTimeout(() => {
-        setStep2Update('atmosphere', newValue);
-      }, 0);
-
+      setStep2Update('atmosphere', newValue);
       return newValue;
     });
     clearError?.();
