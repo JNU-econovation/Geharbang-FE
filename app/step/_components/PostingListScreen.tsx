@@ -65,7 +65,7 @@ export default function GuestHouseListScreen() {
 
   const renderItem: ListRenderItem<(typeof staffRecruitmentPosts)[0]> = ({
     item,
-  }) => <GuestHouseCard item={item} />;
+  }) => <GuestHouseCard type='stepRecruitment' item={item} />;
 
   return (
     <DismissKeyboardView>
