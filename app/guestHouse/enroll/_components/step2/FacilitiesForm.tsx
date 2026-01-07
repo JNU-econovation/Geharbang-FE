@@ -17,12 +17,14 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
   const { step2Data, setStep2Update } = useGuestHouseStore();
 
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>(() =>
-    step2Data.facilities.filter((f) => FACILITY_OPTIONS.includes(f)),
+    step2Data.facilities.filter((f) =>
+      (FACILITY_OPTIONS as readonly string[]).includes(f),
+    ),
   );
 
   useEffect(() => {
     const storeFacilities = step2Data.facilities.filter((f) =>
-      FACILITY_OPTIONS.includes(f),
+      (FACILITY_OPTIONS as readonly string[]).includes(f),
     );
     setSelectedFacilities(storeFacilities);
   }, [step2Data.facilities]);
@@ -35,7 +37,7 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
 
       setStep2Update('facilities', (storePrev) => {
         const tagFacilities = storePrev.filter(
-          (f) => !FACILITY_OPTIONS.includes(f),
+          (f) => !(FACILITY_OPTIONS as readonly string[]).includes(f),
         );
         return [...newValue, ...tagFacilities];
       });
@@ -48,17 +50,23 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
 
   const customFacilitiesAsFeatures = useMemo(() => {
     const customFacilities = step2Data.facilities.filter(
-      (f: string) => !FACILITY_OPTIONS.includes(f),
+      (f: string) => !(FACILITY_OPTIONS as readonly string[]).includes(f),
     );
     return customFacilities.map((text: string, index: number) => ({
       id: `custom-${index}`,
       text,
     }));
-  }, [step2Data.facilities.filter((f) => !FACILITY_OPTIONS.includes(f)).join(',')]);
+  }, [
+    step2Data.facilities
+      .filter((f) => !(FACILITY_OPTIONS as readonly string[]).includes(f))
+      .join(','),
+  ]);
 
   const handleCustomFacilitiesChange = (features: Feature[]) => {
     setStep2Update('facilities', (prev) => {
-      const tagFacilities = prev.filter((f) => FACILITY_OPTIONS.includes(f));
+      const tagFacilities = prev.filter((f) =>
+        (FACILITY_OPTIONS as readonly string[]).includes(f),
+      );
 
       const customTexts = features.map((f) => f.text);
       return [...tagFacilities, ...customTexts];
