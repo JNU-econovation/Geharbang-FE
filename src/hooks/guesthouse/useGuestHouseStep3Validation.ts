@@ -41,6 +41,19 @@ export function useGuestHouseStep3Validation(step3Data: Step3Data) {
       return '1박 가격을 입력해주세요';
     }
 
+    const priceNumber = parseInt(room.price.replace(/[^0-9]/g, ''), 10);
+    if (isNaN(priceNumber)) {
+      return '유효한 가격을 입력해주세요';
+    }
+
+    if (priceNumber <= 0) {
+      return '가격은 0원보다 커야 합니다';
+    }
+
+    if (priceNumber > 10000000) {
+      return '가격이 너무 높습니다 (최대 10,000,000원)';
+    }
+
     if (!room.images || room.images.length === 0) {
       return '객실 사진을 최소 1장 이상 등록해주세요';
     }
