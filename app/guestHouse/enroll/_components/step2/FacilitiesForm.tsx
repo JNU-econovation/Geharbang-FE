@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { Feature } from '@/src/types/models/stepRecruitment/Feature';
@@ -16,33 +16,24 @@ interface FacilitiesFormProps {
 const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
   const { step2Data, setStep2Update } = useGuestHouseStore();
 
-  const [selectedFacilities, setSelectedFacilities] = useState<string[]>(() =>
-    step2Data.facilities.filter((f) =>
-      (FACILITY_OPTIONS as readonly string[]).includes(f),
-    ),
+  const selectedFacilities = step2Data.facilities.filter((f) =>
+    (FACILITY_OPTIONS as readonly string[]).includes(f),
   );
 
-  useEffect(() => {
-    const storeFacilities = step2Data.facilities.filter((f) =>
-      (FACILITY_OPTIONS as readonly string[]).includes(f),
-    );
-    setSelectedFacilities(storeFacilities);
-  }, [step2Data.facilities]);
-
   const toggleFacility = (facility: string) => {
-    const newValue = selectedFacilities.includes(facility)
-      ? selectedFacilities.filter((f) => f !== facility)
-      : [...selectedFacilities, facility];
+    const current = step2Data.facilities;
+    const customFacilities = current.filter(
+      (f) => !(FACILITY_OPTIONS as readonly string[]).includes(f),
+    );
 
-    setSelectedFacilities(newValue);
+    let newSelectedFacilities: string[];
+    if (selectedFacilities.includes(facility)) {
+      newSelectedFacilities = selectedFacilities.filter((f) => f !== facility);
+    } else {
+      newSelectedFacilities = [...selectedFacilities, facility];
+    }
 
-    setStep2Update('facilities', (storePrev) => {
-      const tagFacilities = storePrev.filter(
-        (f) => !(FACILITY_OPTIONS as readonly string[]).includes(f),
-      );
-      return [...newValue, ...tagFacilities];
-    });
-
+    setStep2Update('facilities', [...newSelectedFacilities, ...customFacilities]);
     clearError?.('facilities');
   };
 

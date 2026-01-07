@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 
 import FormField from '@/src/components/ui/Form/FormField';
@@ -22,28 +22,19 @@ const AtmosphereSelector = ({
 }: AtmosphereSelectorProps) => {
   const { step2Data, setStep2Update } = useGuestHouseStore();
 
-  const [selectedAtmosphere, setSelectedAtmosphere] = useState<string[]>(
-    () => step2Data.atmosphere,
-  );
-
-  useEffect(() => {
-    setSelectedAtmosphere(step2Data.atmosphere);
-  }, [step2Data.atmosphere]);
-
   const toggleAtmosphere = (atmosphereOption: string) => {
-    setSelectedAtmosphere((prev) => {
-      let newValue: string[];
-      if (prev.includes(atmosphereOption)) {
-        newValue = prev.filter((a) => a !== atmosphereOption);
-      } else if (prev.length < maxSelections) {
-        newValue = [...prev, atmosphereOption];
-      } else {
-        return prev;
-      }
+    const current = step2Data.atmosphere;
+    let newValue: string[];
 
-      setStep2Update('atmosphere', newValue);
-      return newValue;
-    });
+    if (current.includes(atmosphereOption)) {
+      newValue = current.filter((a) => a !== atmosphereOption);
+    } else if (current.length < maxSelections) {
+      newValue = [...current, atmosphereOption];
+    } else {
+      return;
+    }
+
+    setStep2Update('atmosphere', newValue);
     clearError?.();
   };
   return (
@@ -56,8 +47,7 @@ const AtmosphereSelector = ({
       <View className="bg-white rounded-xl border border-gray-200 p-4">
         <View className="flex-row flex-wrap">
           {ATMOSPHERE_OPTIONS.map((atmosphereOption) => {
-            const isSelected =
-              selectedAtmosphere.indexOf(atmosphereOption) !== -1;
+            const isSelected = step2Data.atmosphere.includes(atmosphereOption);
             return (
               <SelectableTag
                 key={atmosphereOption}
