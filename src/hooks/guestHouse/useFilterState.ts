@@ -15,16 +15,7 @@ export function useFilterState(
   const [filters, setFilters] = useState(initialFilters);
 
   const resetFilters = () => {
-    setFilters({
-      region: [],
-      lowestRoomPrice: null,
-      highestRoomPrice: null,
-      moods: [],
-      partyType: [],
-      roomType: [],
-      headCountType: [],
-      amenities: [],
-    });
+    setFilters({ ...initialFilters });
   };
 
   // 공통 토글 함수
