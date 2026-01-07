@@ -25,13 +25,27 @@ export const useGuestHouseEnrollment = () => {
     });
 
     if (needsUpload.length > 0) {
-      const uploadedUrls = await uploadGuestHouseImages(needsUpload);
-      const uploadedFiles = uploadedUrls.map((uri, index) => ({
-        uri,
-        type: needsUpload[index]?.type || 'image/jpeg',
-        name: needsUpload[index]?.name || `image-${index}.jpg`,
-      }));
-      return [...alreadyUploaded, ...uploadedFiles];
+      try {
+        const uploadedUrls = await uploadGuestHouseImages(needsUpload);
+
+        if (uploadedUrls.length !== needsUpload.length) {
+          throw new Error(
+            `이미지 업로드 실패: ${needsUpload.length}개 중 ${uploadedUrls.length}개만 업로드되었습니다.`,
+          );
+        }
+
+        const uploadedFiles = uploadedUrls.map((uri, index) => ({
+          uri,
+          type: needsUpload[index]?.type || 'image/jpeg',
+          name: needsUpload[index]?.name || `image-${index}.jpg`,
+        }));
+        return [...alreadyUploaded, ...uploadedFiles];
+      } catch (error) {
+        console.error('이미지 업로드 에러:', error);
+        throw new Error(
+          '이미지 업로드 중 오류가 발생했습니다. 네트워크 연결을 확인하고 다시 시도해주세요.',
+        );
+      }
     }
 
     return alreadyUploaded;
