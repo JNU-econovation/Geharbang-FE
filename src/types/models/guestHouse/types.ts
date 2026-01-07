@@ -23,7 +23,7 @@ export interface GuestHousePostParams {
 }
 
 export interface GuestHousePostResponse {
-  GuestHousePosts: GuestHousePost[];
+  guestHousePosts: GuestHousePost[];
   hasNext?: boolean;
   totalPages?: number;
   pageSize?: number;
@@ -39,3 +39,7 @@ export interface FilterState {
   headCountType: string[];
   amenities: string[];
 }
+
+export type FilterOption = "views" | "likes" | "recent";
+
+export const PAGE_SIZE = 20;
