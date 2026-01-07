@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
+import { nanoid } from 'nanoid';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
@@ -99,7 +100,7 @@ export default function MakeParty() {
   const handleNext = () => {
     if (validateForm()) {
       const partyPayload = {
-        id: isEditMode ? editId : Date.now().toString(),
+        id: isEditMode ? editId : nanoid(),
         type: selectedPartyType,
         customTypeName: otherPartyType,
         images: partyImages,
