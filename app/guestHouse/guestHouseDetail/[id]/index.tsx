@@ -1,12 +1,15 @@
-import { ScrollView, View } from "react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 
 import GehaImage from "@/app/step/stepDetail/_components/GehaInfo/GehaImage";
 import GehaInfo from "@/app/step/stepDetail/_components/GehaInfo/GehaInfo";
 import PressSection from "@/app/step/stepDetail/_components/PressSection/PressSection";
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import Address from "@/src/components/ui/Address/Address";
+import Button from "@/src/components/ui/Button/Button";
 import Contact from "@/src/components/ui/Contact";
 import DetailPageBackArrow from "@/src/components/ui/DetailPageBackArrow";
+import TextSize from "@/src/components/ui/TextSize";
+import { useGuestHouseDetail } from "@/src/hooks/guestHouseDetail/useGuestHouseDetail";
 import { useHandleSection } from "@/src/hooks/stepDetail/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/stepDetail/useSectionToScroll";
 import { GUESTHOUSE } from "@/src/utils/constants/pressSection";
@@ -22,73 +25,94 @@ export default function GuestHouseDetail() {
     sectionToScroll,
   });
 
-  const data = {
-    imgs: [
-      require("@/public/images/test2.png"),
-      require("@/public/images/test2.png"),
-    ],
-  };
+  const { data, isPending, isError, refetch } = useGuestHouseDetail();
+
   return (
     <CustomSafeAreaView pageColor='bg-white'>
-      <>
-        <View className='px-4 pt-3 pb-6'>
-          <DetailPageBackArrow
-            content='게스트하우스 상세'
-            shareTitle='게스트하우스 공유하기'
-            shareMessage='게스트하우스를 공유해보세요!'
+      {isPending ? (
+        <View className='flex-1 items-center justify-center'>
+          <ActivityIndicator size='large' color='#000' />
+        </View>
+      ) : isError ? (
+        <View className='flex-1 items-center justify-center'>
+          <TextSize size={18} content='데이터를 불러오는데 실패했습니다.' />
+          <View className='pt-4' />
+          <Button
+            variant='gray'
+            height={56}
+            width={320}
+            content='다시 시도'
+            textColor='#000'
+            onPress={() => refetch()}
           />
         </View>
-
-        <ScrollView ref={scrollViewRef}>
-          <GehaImage images={data.imgs} height={280} page={true} />
-
-          <View className='px-4 pt-4'>
-            <GehaInfo title='제주 바다뷰 게스트하우스' region='제주시' />
-          </View>
-
-          <View className='pt-8'>
-            <PressSection
-              items={GUESTHOUSE}
-              handleSectionToScroll={handleSectionToScroll}
-              selectedSection={selectedSection}
+      ) : (
+        <>
+          <View className='px-4 pt-3 pb-6'>
+            <DetailPageBackArrow
+              content='게스트하우스 상세'
+              shareTitle='게스트하우스 공유하기'
+              shareMessage='게스트하우스를 공유해보세요!'
             />
           </View>
 
-          <View className='px-4'>
-            <View className='pt-10' />
-            <Address
-              setSectionYPositions={setSectionYPositions}
-              location={{
-                address: "제주시",
-                coordinates: [126.19238467, 36.28267316123],
-              }}
-            />
+          <ScrollView ref={scrollViewRef}>
+            <GehaImage images={data?.imageUrls} height={280} page={true} />
 
-            <View className='pt-10' />
-            <ParlorType setSectionYPositions={setSectionYPositions} />
+            <View className='px-4 pt-4'>
+              <GehaInfo title={data?.guestHouseName} region={data?.region} />
+            </View>
 
-            <View className='pt-10' />
-            <GuestHouseIntro setSectionYPositions={setSectionYPositions} />
+            <View className='pt-8'>
+              <PressSection
+                items={GUESTHOUSE}
+                handleSectionToScroll={handleSectionToScroll}
+                selectedSection={selectedSection}
+              />
+            </View>
 
-            <View className='pt-10' />
-            <GuestHouseInfo setSectionYPositions={setSectionYPositions} />
+            <View className='px-4'>
+              <View className='pt-10' />
+              <Address
+                setSectionYPositions={setSectionYPositions}
+                location={data?.location}
+              />
 
-            <View className='pt-10' />
-            <GuestHouseParty setSectionYPositions={setSectionYPositions} />
+              <View className='pt-10' />
+              <ParlorType
+                setSectionYPositions={setSectionYPositions}
+                parlorType={data?.rooms}
+              />
 
-            <View className='pt-6' />
-            <Contact
-              setSectionYPositions={setSectionYPositions}
-              contact={{
-                instagramId: "인스타아이디",
-                phoneNumber: "010-1111-1111",
-                webSite: "웹사이트 주소",
-              }}
-              owerMessage='안녕하세요?'
-            />
-          </View>
-        </ScrollView>
-      </>
+              <View className='pt-10' />
+              <GuestHouseIntro
+                setSectionYPositions={setSectionYPositions}
+                introduction={data?.introduction}
+              />
+
+              <View className='pt-10' />
+              <GuestHouseInfo
+                setSectionYPositions={setSectionYPositions}
+                amenities={data?.amenities}
+                moods={data?.moods}
+              />
+
+              <View className='pt-10' />
+              <GuestHouseParty
+                setSectionYPositions={setSectionYPositions}
+                parties={data?.parties}
+              />
+
+              <View className='pt-6' />
+              <Contact
+                setSectionYPositions={setSectionYPositions}
+                contact={data?.contact}
+                owerMessage={data?.ownerMessage}
+              />
+            </View>
+          </ScrollView>
+        </>
+      )}
     </CustomSafeAreaView>
   );
 }
