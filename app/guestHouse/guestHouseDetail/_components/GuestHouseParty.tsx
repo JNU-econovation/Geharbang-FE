@@ -44,10 +44,7 @@ export default function GuestHouseParty({
                 <TextSize
                   color='#4A5565'
                   size={14}
-                  content='각자 음식을 준비해 와서 나누어 먹는 파티입니다 
-술게임과 담소를 나누며 다양한 게스트들과 
-친해질 수 있는 좋은 기회입니다. 
-라이브 공연이 있는 날도 있습니다.'
+                  content={`${party.information}`}
                 />
               </View>
 
