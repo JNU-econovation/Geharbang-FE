@@ -15,9 +15,6 @@ export const FACILITY_OPTIONS = [
   '조식제공',
   'CCTV',
   '주차장',
-  '공용주방',
-  'Wi-Fi',
-  '에어컨',
 ] as const;
 
 /**
