@@ -1,8 +1,8 @@
 import { getStaffRecruitmentList } from "@/src/services/step/staffRecruitment";
 import {
-  FilterOption,
   FilterState,
   PAGE_SIZE,
+  SortOptionKey,
   StaffRecruitmentPost,
 } from "@/src/types/models/step/types";
 import { getApiErrorMessage } from "@/src/utils/api/errorHandler";
@@ -12,7 +12,7 @@ import { useDebounce } from "../useDebounce";
 
 interface UseStaffRecruitmentListParams {
   keyword: string;
-  sort: FilterOption;
+  sort: SortOptionKey;
   filters: FilterState;
 }
 
@@ -65,7 +65,7 @@ export function useStaffRecruitmentList({
       try {
         const params = {
           keyword: debouncedKeyword || undefined,
-          sort: SORT_OPTIONS[sort],
+          sort: SORT_OPTIONS.find((option) => option.key === sort)?.value,
           region: filters.region.length > 0 ? filters.region : undefined,
           period: filters.period.length > 0 ? filters.period : undefined,
           workType: filters.workType || undefined,

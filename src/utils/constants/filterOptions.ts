@@ -8,11 +8,11 @@ export const REGION_OPTIONS = [
   "중문_대정",
 ] as const;
 
-export const SORT_OPTIONS = {
-  views: "조회순",
-  likes: "찜_많은순",
-  recent: "최신순",
-} as const;
+export const SORT_OPTIONS = [
+  { key: "views", label: "조회순", value: "조회순" },
+  { key: "likes", label: "찜 많은순", value: "찜_많은순" },
+  { key: "recent", label: "최신순", value: "최신순" },
+];
 
 // 스텝 공고 목록
 export const PERIOD_OPTIONS = [
@@ -46,7 +46,7 @@ export const MOOD_OPTIONS = [
   { label: "#잔잔한", value: "잔잔한" },
   { label: "#감성", value: "감성" },
   { label: "#휴식", value: "휴식" },
-]
+];
 
 export const ROOM_PRICE_OPTIONS = [
   { label: "2만원 이하", min: null, max: 20000 },
