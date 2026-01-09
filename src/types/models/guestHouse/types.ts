@@ -1,3 +1,4 @@
+import { SORT_OPTIONS } from "@/src/utils/constants/filterOptions";
 
 export interface GuestHousePost {
   id: number;
@@ -40,6 +41,7 @@ export interface FilterState {
   amenities: string[];
 }
 
-export type FilterOption = "views" | "likes" | "recent";
+export type SortOption = (typeof SORT_OPTIONS)[number];
+export type SortOptionKey = SortOption["key"];
 
 export const PAGE_SIZE = 20;

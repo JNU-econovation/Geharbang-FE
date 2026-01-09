@@ -8,12 +8,15 @@ import PostingListHeader from "@/app/step/_components/PostingList/PostingListHea
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import { useGuestHouseList } from "@/src/hooks/guestHouse/useGuestHousePostList";
-import { FilterState } from "@/src/types/models/guestHouse/types";
-import { FilterOption } from "@/src/types/models/step/types";
+import {
+  FilterState,
+  SortOptionKey,
+} from "@/src/types/models/guestHouse/types";
+import { SORT_OPTIONS } from "@/src/utils/constants/filterOptions";
 import BottomSheetModal from "./_components/BottomSheetModal";
 
 export default function GuestHouse() {
-  const [selectedFilter, setSelectedFilter] = useState<FilterOption>("recent");
+  const [selectedFilter, setSelectedFilter] = useState<SortOptionKey>("recent");
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [filters, setFilters] = useState<FilterState>({
@@ -26,12 +29,6 @@ export default function GuestHouse() {
     headCountType: [],
     amenities: [],
   });
-
-  const filterOptions: Array<{ key: FilterOption; label: string }> = [
-    { key: "views", label: "조회수" },
-    { key: "likes", label: "찜" },
-    { key: "recent", label: "최신순" },
-  ];
 
   const {
     data: guestHousePosts,
@@ -53,7 +50,7 @@ export default function GuestHouse() {
       onSearchChange={setSearchText}
       selectedFilter={selectedFilter}
       onFilterChange={setSelectedFilter}
-      filterOptions={filterOptions}
+      filterOptions={SORT_OPTIONS}
       onAdvancedFilterPress={() => setIsBottomSheetVisible(true)}
     />
   );

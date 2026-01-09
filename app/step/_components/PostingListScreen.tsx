@@ -1,3 +1,6 @@
+import React, { useState } from "react";
+import { FlatList, ListRenderItem } from "react-native";
+
 import BottomSheetModal from "@/app/step/_components/BottomSheetModal";
 import GuestHouseCard from "@/app/step/_components/GuestHouseCard";
 import PostingListEmpty from "@/app/step/_components/PostingList/PostingListEmpty";
@@ -5,12 +8,11 @@ import PostingListFooter from "@/app/step/_components/PostingList/PostingListFoo
 import PostingListHeader from "@/app/step/_components/PostingList/PostingListHeader";
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
 import { useStaffRecruitmentList } from "@/src/hooks/stepList/useStaffRecruitmentList";
-import { FilterOption, FilterState } from "@/src/types/models/step/types";
-import React, { useState } from "react";
-import { FlatList, ListRenderItem } from "react-native";
+import { FilterState, SortOptionKey } from "@/src/types/models/step/types";
+import { SORT_OPTIONS } from "@/src/utils/constants/filterOptions";
 
 export default function GuestHouseListScreen() {
-  const [selectedFilter, setSelectedFilter] = useState<FilterOption>("recent");
+  const [selectedFilter, setSelectedFilter] = useState<SortOptionKey>("recent");
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [filters, setFilters] = useState<FilterState>({
@@ -22,12 +24,6 @@ export default function GuestHouseListScreen() {
     workScheduleType: [],
     gender: "",
   });
-
-  const filterOptions: Array<{ key: FilterOption; label: string }> = [
-    { key: "views", label: "조회수" },
-    { key: "likes", label: "찜" },
-    { key: "recent", label: "최신순" },
-  ];
 
   const {
     data: staffRecruitmentPosts,
@@ -49,7 +45,7 @@ export default function GuestHouseListScreen() {
       onSearchChange={setSearchText}
       selectedFilter={selectedFilter}
       onFilterChange={setSelectedFilter}
-      filterOptions={filterOptions}
+      filterOptions={SORT_OPTIONS}
       onAdvancedFilterPress={() => setIsBottomSheetVisible(true)}
     />
   );
