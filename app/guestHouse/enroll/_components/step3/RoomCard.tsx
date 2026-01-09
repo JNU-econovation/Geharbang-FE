@@ -94,7 +94,7 @@ const RoomCard = ({
         </View>
 
         <View className="mt-1">
-          <Text className="text-[#101828] text-xl font-bold">
+          <Text className="text-[#101828] text-xl font-medium">
             {room.price}원
           </Text>
         </View>
