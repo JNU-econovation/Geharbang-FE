@@ -203,6 +203,11 @@ export default function MakeParty() {
                     placeholder={PLACEHOLDERS.PARTY_CUSTOM_TYPE}
                     error={!!errors.customTypeName}
                   />
+                  {errors.customTypeName && (
+                    <Text className="text-red-500 text-xs mt-1">
+                      {errors.customTypeName}
+                    </Text>
+                  )}
                 </View>
               )}
             </FormField>
@@ -372,7 +377,6 @@ export default function MakeParty() {
             <FormField
               label="파티비"
               required={true}
-              errorMessage={errors.guestFee || errors.externalFee}
             >
               <View className="gap-3">
                 <View>
@@ -393,26 +397,38 @@ export default function MakeParty() {
                     />
                     <Text className="ml-2 text-[#6a7282] text-sm">원</Text>
                   </View>
+                  {errors.guestFee && (
+                    <Text className="text-red-500 text-xs mt-1">
+                      {errors.guestFee}
+                    </Text>
+                  )}
                 </View>
-                <View>
-                  <Text className="text-[#6a7282] text-xs mb-2">
-                    외부인 파티비
-                  </Text>
-                  <View className="flex-row items-center">
-                    <TextInput
-                      value={externalFee}
-                      onChangeText={(text) => {
-                        setExternalFee(text);
-                        clearError('externalFee');
-                      }}
-                      placeholder={PLACEHOLDERS.PARTY_FEE}
-                      keyboardType="numeric"
-                      className="flex-1"
-                      error={!!errors.externalFee}
-                    />
-                    <Text className="ml-2 text-[#6a7282] text-sm">원</Text>
+                {allowExternal === true && (
+                  <View>
+                    <Text className="text-[#6a7282] text-xs mb-2">
+                      외부인 파티비
+                    </Text>
+                    <View className="flex-row items-center">
+                      <TextInput
+                        value={externalFee}
+                        onChangeText={(text) => {
+                          setExternalFee(text);
+                          clearError('externalFee');
+                        }}
+                        placeholder={PLACEHOLDERS.PARTY_FEE}
+                        keyboardType="numeric"
+                        className="flex-1"
+                        error={!!errors.externalFee}
+                      />
+                      <Text className="ml-2 text-[#6a7282] text-sm">원</Text>
+                    </View>
+                    {errors.externalFee && (
+                      <Text className="text-red-500 text-xs mt-1">
+                        {errors.externalFee}
+                      </Text>
+                    )}
                   </View>
-                </View>
+                )}
               </View>
             </FormField>
 

@@ -159,7 +159,7 @@ export const PLACEHOLDERS = {
   PARTY_CUSTOM_TYPE: '예: 테마 파티, 퀴즈 파티',
   PARTY_LOCATION: '예: 1층 바 라운지',
   PARTY_MOOD: '예: 음악 / 술 / 소셜게임',
-  PARTY_FEE: '0',
+  PARTY_FEE: '0 (무료인 경우 0 입력)',
   PARTY_DESCRIPTION: '파티에 대해 자유롭게 소개해주세요',
 
   // Step 3 - Room
