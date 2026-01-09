@@ -35,11 +35,23 @@ export default function MakeParty() {
 
   const { addParty, updateParty, step2Data } = useGuestHouseStore();
 
+  const getDefaultStartTime = () => {
+    const date = new Date();
+    date.setHours(19, 0, 0, 0); // 오후 7시
+    return date;
+  };
+
+  const getDefaultEndTime = () => {
+    const date = new Date();
+    date.setHours(22, 0, 0, 0); // 오후 10시
+    return date;
+  };
+
   const [selectedPartyType, setSelectedPartyType] = useState<string>('');
   const [otherPartyType, setOtherPartyType] = useState<string>('');
   const [partyImages, setPartyImages] = useState<File[]>([]);
-  const [startTime, setStartTime] = useState<Date>(new Date());
-  const [endTime, setEndTime] = useState<Date>(new Date());
+  const [startTime, setStartTime] = useState<Date>(getDefaultStartTime());
+  const [endTime, setEndTime] = useState<Date>(getDefaultEndTime());
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [partyLocation, setPartyLocation] = useState<string>('');
   const [partyMood, setPartyMood] = useState<string>('');

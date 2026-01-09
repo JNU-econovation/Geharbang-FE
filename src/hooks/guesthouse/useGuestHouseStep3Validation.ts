@@ -33,9 +33,6 @@ export function useGuestHouseStep3Validation(step3Data: Step3Data) {
     if (!room.checkInTime || !room.checkOutTime) {
       return '입실/퇴실 시간을 입력해주세요';
     }
-    if (room.checkInTime >= room.checkOutTime) {
-      return '퇴실 시간은 입실 시간보다 늦어야 합니다';
-    }
 
     if (!room.price || room.price.trim() === '') {
       return '1박 가격을 입력해주세요';

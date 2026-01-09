@@ -85,11 +85,23 @@ export default function AddRoomForm() {
 
   const { addRoom, updateRoom, step3Data } = useGuestHouseStore();
 
+  const getDefaultCheckInTime = () => {
+    const date = new Date();
+    date.setHours(15, 0, 0, 0); // 오후 3시
+    return date;
+  };
+
+  const getDefaultCheckOutTime = () => {
+    const date = new Date();
+    date.setHours(11, 0, 0, 0); // 오전 11시
+    return date;
+  };
+
   const [roomName, setRoomName] = useState('');
   const [roomType, setRoomType] = useState<RoomType | null>(null);
   const [occupancy, setOccupancy] = useState<Occupancy | null>(null);
-  const [checkInTime, setCheckInTime] = useState(new Date());
-  const [checkOutTime, setCheckOutTime] = useState(new Date());
+  const [checkInTime, setCheckInTime] = useState(getDefaultCheckInTime());
+  const [checkOutTime, setCheckOutTime] = useState(getDefaultCheckOutTime());
   const [price, setPrice] = useState('');
   const [roomImages, setRoomImages] = useState<File[]>([]);
 
