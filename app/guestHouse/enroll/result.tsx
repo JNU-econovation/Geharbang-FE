@@ -1,9 +1,11 @@
 import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect } from 'react';
 import { View } from 'react-native';
 
 import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import ResultLayout from '@/src/components/layout/ResultLayout';
 import TextSize from '@/src/components/ui/TextSize';
+import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 
 type ResultStatus = 'success' | 'error';
 
@@ -17,6 +19,15 @@ export default function GuestHouseEnrollResult() {
     guestHouseId?: string;
     error?: string;
   }>();
+
+  const { resetAllData } = useGuestHouseStore();
+
+  // 성공 시 store 초기화
+  useEffect(() => {
+    if (status === 'success') {
+      resetAllData();
+    }
+  }, [status, resetAllData]);
 
   const goHome = () => {
     router.replace('/(tabs)');
