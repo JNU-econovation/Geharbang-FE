@@ -1,5 +1,5 @@
 import { router, useFocusEffect } from 'expo-router';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { Alert, BackHandler, ScrollView } from 'react-native';
 
 import GuestHouseLocation from '@/app/step/recruitment/_components/step1/GuestHouseLocation';
@@ -15,10 +15,6 @@ import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
 
 export default function GuestHouseStep1() {
   const { step1Data, setStep1Update, resetAllData } = useGuestHouseStore();
-
-  useEffect(() => {
-    resetAllData();
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
