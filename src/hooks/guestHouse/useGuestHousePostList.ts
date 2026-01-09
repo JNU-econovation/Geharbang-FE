@@ -1,6 +1,6 @@
 import { getGuestHousePostList } from "@/src/services/guestHouse/guestHouseList";
 import {
-  FilterOption,
+  SortOptionKey,
   FilterState,
   GuestHousePost,
   GuestHousePostParams,
@@ -13,7 +13,7 @@ import { useDebounce } from "../useDebounce";
 
 interface UseGuestHouseListParams {
   keyword: string;
-  sort: FilterOption;
+  sort: SortOptionKey;
   filters: FilterState;
 }
 
@@ -65,7 +65,7 @@ export function useGuestHouseList({
       try {
         const params: GuestHousePostParams = {
           keyword: debouncedKeyword || undefined,
-          sort: SORT_OPTIONS[sort],
+          sort: SORT_OPTIONS.find((option) => option.key === sort)?.value,
           region: filters.region.length > 0 ? filters.region : undefined,
           lowestRoomPrice: filters.lowestRoomPrice || undefined,
           highestRoomPrice: filters.highestRoomPrice || undefined,
