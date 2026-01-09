@@ -22,8 +22,16 @@ export default function GuestHouseEnrollResult() {
     router.replace('/(tabs)');
   };
 
+  const goToDetail = () => {
+    if (guestHouseId) {
+      router.replace(`/guestHouse/${guestHouseId}` as any);
+    } else {
+      goHome();
+    }
+  };
+
   const handleRetry = () => {
-    router.replace('/guestHouse/enroll/step1');
+    router.replace('/guestHouse/enroll/step4');
   };
 
   return (
@@ -43,8 +51,8 @@ export default function GuestHouseEnrollResult() {
               onPress: goHome,
             }}
             tertiary={{
-              label: '확인',
-              onPress: goHome,
+              label: '내 게스트하우스 확인',
+              onPress: goToDetail,
               icon: 'home-outline',
             }}
           />
