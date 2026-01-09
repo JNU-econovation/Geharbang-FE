@@ -33,7 +33,7 @@ const SelectableTag = React.memo(
         </Text>
       </TouchableOpacity>
     );
-  }
+  },
 );
 
 SelectableTag.displayName = 'SelectableTag';
