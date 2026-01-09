@@ -58,9 +58,11 @@ const FacilitiesSelector = ({
       <AppendableInputGroupContainer
         features={customFacilities}
         setFeatures={(value) => {
-          const newFeatures =
-            typeof value === 'function' ? value(customFacilities) : value;
-          onCustomFacilitiesChange(newFeatures);
+          if (typeof value === 'function') {
+            onCustomFacilitiesChange(value(customFacilities));
+          } else {
+            onCustomFacilitiesChange(value);
+          }
           clearError?.();
         }}
         maxLimit={MAX_ITEMS.FACILITIES}
