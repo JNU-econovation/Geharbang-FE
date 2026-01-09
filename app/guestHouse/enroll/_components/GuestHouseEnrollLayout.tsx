@@ -8,18 +8,20 @@ interface GuestHouseEnrollLayoutProps {
   currentStep: number;
   stepTitle: string;
   children?: ReactNode;
+  onBackPress?: () => void;
 }
 
 export default function GuestHouseEnrollLayout({
   currentStep,
   stepTitle,
   children,
+  onBackPress,
 }: GuestHouseEnrollLayoutProps) {
   return (
     <>
       <CustomSafeAreaView pageColor="bg-white">
         <View className="p-3">
-          <BackArrowHeader content="게스트 하우스 올리기" />
+          <BackArrowHeader content="게스트 하우스 올리기" onPress={onBackPress} />
         </View>
 
         <ProgressBar
