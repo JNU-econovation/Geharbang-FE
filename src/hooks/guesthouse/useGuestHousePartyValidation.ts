@@ -111,10 +111,6 @@ export function useGuestHousePartyValidation(partyData: PartyFormData) {
       newErrors.endTime = '종료 시간을 입력해주세요';
       isValid = false;
     }
-    if (startTime && endTime && startTime >= endTime) {
-      newErrors.endTime = '종료 시간은 시작 시간보다 늦어야 합니다';
-      isValid = false;
-    }
 
     if (!days || days.length === 0) {
       newErrors.days = '파티 진행 요일을 선택해주세요';
