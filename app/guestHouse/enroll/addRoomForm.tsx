@@ -143,8 +143,20 @@ export default function AddRoomForm() {
     router.push('/guestHouse/enroll/step3');
   };
 
+  const handleBackPress = () => {
+    router.push('/guestHouse/enroll/step2');
+  };
+
+  const handleClose = () => {
+    router.push('/guestHouse/enroll/step3');
+  };
+
   return (
-    <GuestHouseEnrollLayout currentStep={3} stepTitle="객실 타입 등록">
+    <GuestHouseEnrollLayout
+      currentStep={3}
+      stepTitle="객실 타입 등록"
+      onBackPress={handleBackPress}
+    >
       <ScrollView className="bg-[#F9FAFB]" style={{ paddingHorizontal: 12 }}>
         <View className="pt-4">
           <View className="bg-white rounded-xl shadow-sm p-6 gap-6">
@@ -155,7 +167,7 @@ export default function AddRoomForm() {
               </Text>
               <TouchableOpacity
                 className="p-2"
-                onPress={() => router.push('/guestHouse/enroll/step3')}
+                onPress={handleClose}
               >
                 <Feather name="x" size={24} color="#101828" />
               </TouchableOpacity>

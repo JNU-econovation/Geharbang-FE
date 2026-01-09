@@ -124,8 +124,20 @@ export default function MakeParty() {
     }
   };
 
+  const handleBackPress = () => {
+    router.push('/guestHouse/enroll/step1');
+  };
+
+  const handleClose = () => {
+    router.push('/guestHouse/enroll/step2');
+  };
+
   return (
-    <GuestHouseEnrollLayout currentStep={2} stepTitle="파티 정보">
+    <GuestHouseEnrollLayout
+      currentStep={2}
+      stepTitle="파티 정보"
+      onBackPress={handleBackPress}
+    >
       <ScrollView
         className="bg-[#F9FAFB]"
         style={{ paddingTop: 16, paddingHorizontal: 12 }}
@@ -143,7 +155,7 @@ export default function MakeParty() {
             <Text className="text-[#101828] text-[17px] font-bold">
               파티 정보
             </Text>
-            <TouchableOpacity className="p-2" onPress={() => router.back()}>
+            <TouchableOpacity className="p-2" onPress={handleClose}>
               <Feather name="x" size={24} color="#101828" />
             </TouchableOpacity>
           </View>

@@ -1,5 +1,6 @@
-import { router } from 'expo-router';
-import { ScrollView, View } from 'react-native';
+import { router, useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
+import { BackHandler, ScrollView, View } from 'react-native';
 
 import Flex from '@/src/components/layout/Flex';
 import Button from '@/src/components/ui/Button/Button';
@@ -27,8 +28,28 @@ export default function GuestHouseEnrollStep3() {
     }
   };
 
+  const handleBackPress = useCallback(() => {
+    router.push('/guestHouse/enroll/step2');
+    return true;
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        handleBackPress,
+      );
+
+      return () => subscription.remove();
+    }, [handleBackPress]),
+  );
+
   return (
-    <GuestHouseEnrollLayout currentStep={3} stepTitle="객실 타입 등록">
+    <GuestHouseEnrollLayout
+      currentStep={3}
+      stepTitle="객실 타입 등록"
+      onBackPress={handleBackPress}
+    >
       <ScrollView className="bg-[#F9FAFB]" style={{ paddingHorizontal: 12 }}>
         <View className="pt-4">
           <View className="gap-5">
