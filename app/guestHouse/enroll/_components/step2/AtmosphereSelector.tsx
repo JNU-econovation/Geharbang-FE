@@ -51,7 +51,7 @@ const AtmosphereSelector = ({
             return (
               <SelectableTag
                 key={atmosphereOption}
-                label={atmosphereOption}
+                label={`#${atmosphereOption}`}
                 selected={isSelected}
                 onPress={() => toggleAtmosphere(atmosphereOption)}
               />
