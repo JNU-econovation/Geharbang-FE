@@ -12,11 +12,11 @@ import TextInput from '@/src/components/ui/TextInput';
 import { useGuestHouseStep2Validation } from '@/src/hooks/guesthouse/useGuestHouseStep2Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import {
-  PLACEHOLDERS,
   BUTTON_LABELS,
-  INPUT_HEIGHTS,
-  VALIDATION_LIMITS,
   FORM_DESCRIPTIONS,
+  INPUT_HEIGHTS,
+  PLACEHOLDERS,
+  VALIDATION_LIMITS,
 } from '@/src/utils/constants/guestHouseEnrollment';
 
 import AtmosphereSelector from './_components/step2/AtmosphereSelector';
@@ -54,7 +54,7 @@ export default function GuestHouseEnrollStep2() {
   return (
     <GuestHouseEnrollLayout
       currentStep={2}
-      stepTitle="게하 정보"
+      stepTitle="게스트하우스 소개"
       onBackPress={handleBackPress}
     >
       <ScrollView
