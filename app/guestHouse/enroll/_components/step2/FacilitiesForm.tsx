@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { Feature } from '@/src/types/models/stepRecruitment/Feature';
@@ -16,6 +16,25 @@ interface FacilitiesFormProps {
 const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
   const { step2Data, setStep2Update } = useGuestHouseStore();
 
+  const [localCustomFacilities, setLocalCustomFacilities] = useState<Feature[]>(
+    [],
+  );
+
+  useEffect(() => {
+    const customFacilities = step2Data.facilities.filter(
+      (f: string) => !(FACILITY_OPTIONS as readonly string[]).includes(f),
+    );
+    const features = customFacilities.map((text: string, index: number) => ({
+      id: `custom-${index}`,
+      text,
+    }));
+    setLocalCustomFacilities(features);
+  }, [
+    step2Data.facilities
+      .filter((f) => !(FACILITY_OPTIONS as readonly string[]).includes(f))
+      .join(','),
+  ]);
+
   const selectedFacilities = useMemo(
     () =>
       step2Data.facilities.filter((f) =>
@@ -26,9 +45,9 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
 
   const toggleFacility = (facility: string) => {
     const current = step2Data.facilities;
-    const customFacilities = current.filter(
-      (f) => !(FACILITY_OPTIONS as readonly string[]).includes(f),
-    );
+    const customTexts = localCustomFacilities
+      .map((f) => f.text)
+      .filter((text) => text.trim() !== '');
 
     let newSelectedFacilities: string[];
     if (selectedFacilities.includes(facility)) {
@@ -37,33 +56,24 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
       newSelectedFacilities = [...selectedFacilities, facility];
     }
 
-    setStep2Update('facilities', [...newSelectedFacilities, ...customFacilities]);
+    setStep2Update('facilities', [...newSelectedFacilities, ...customTexts]);
     clearError?.('facilities');
   };
 
-  const customFacilitiesAsFeatures = useMemo(() => {
-    const customFacilities = step2Data.facilities.filter(
-      (f: string) => !(FACILITY_OPTIONS as readonly string[]).includes(f),
-    );
-    return customFacilities.map((text: string, index: number) => ({
-      id: `custom-${index}`,
-      text,
-    }));
-  }, [
-    step2Data.facilities
-      .filter((f) => !(FACILITY_OPTIONS as readonly string[]).includes(f))
-      .join(','),
-  ]);
-
   const handleCustomFacilitiesChange = (features: Feature[]) => {
+    setLocalCustomFacilities(features);
+
     setStep2Update('facilities', (prev) => {
       const tagFacilities = prev.filter((f) =>
         (FACILITY_OPTIONS as readonly string[]).includes(f),
       );
 
-      const customTexts = features.map((f) => f.text);
+      const customTexts = features
+        .map((f) => f.text)
+        .filter((text) => text.trim() !== '');
       return [...tagFacilities, ...customTexts];
     });
+    clearError?.('facilities');
   };
 
   return (
@@ -71,7 +81,7 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
       facilityOptions={FACILITY_OPTIONS}
       selectedFacilities={selectedFacilities}
       onToggleFacility={toggleFacility}
-      customFacilities={customFacilitiesAsFeatures}
+      customFacilities={localCustomFacilities}
       onCustomFacilitiesChange={handleCustomFacilitiesChange}
       error={errors?.facilities}
       clearError={() => clearError?.('facilities')}
