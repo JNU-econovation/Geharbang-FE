@@ -26,6 +26,15 @@ export default function Contact({
   contact,
   owerMessage,
 }: ContactProps) {
+  const isShowContact =
+    !!contact?.email &&
+    !!contact?.instagramId &&
+    !!contact?.phoneNumber &&
+    !!contact?.webSite &&
+    !!owerMessage;
+
+  if (!isShowContact) return null;
+
   return (
     <SectionYPosition
       section='contact'
