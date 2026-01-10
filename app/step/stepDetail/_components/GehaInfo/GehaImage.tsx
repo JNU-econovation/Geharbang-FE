@@ -41,6 +41,14 @@ export default function GehaImage({
     return `${process.env.EXPO_PUBLIC_BASE_URL}${uri}`;
   };
 
+  if (headCountType === "_1인실") {
+    headCountType = "1인실";
+  } else if (headCountType === "_2인실") {
+    headCountType = "2인실";
+  } else if (headCountType === "_3인이상") {
+    headCountType = "3인이상";
+  }
+
   return (
     <View className='w-full' style={{ height }}>
       {type && (
