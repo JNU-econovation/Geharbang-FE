@@ -11,6 +11,7 @@ import SectionYPosition from "@/app/step/stepDetail/_components/SectionYPosition
 import TextSize from "@/src/components/ui/TextSize";
 import { PartiesInfo } from "@/src/types/guestHouseDetail/GuestHouseDetailResponse";
 import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
+import { PARTY_TYPE_LABEL } from "@/src/utils/constants/partyData";
 
 interface GuestHousePartyProps extends SetSectionYPositionProps {
   parties?: PartiesInfo[];
@@ -20,6 +21,11 @@ export default function GuestHouseParty({
   setSectionYPositions,
   parties,
 }: GuestHousePartyProps) {
+  const transformedParties = parties?.map((party) => ({
+    ...party,
+    type: PARTY_TYPE_LABEL[party.type] ?? party.type,
+  }));
+
   return (
     <SectionYPosition
       section='party'
@@ -27,8 +33,8 @@ export default function GuestHouseParty({
       setSectionYPositions={setSectionYPositions}
     >
       <View className='pt-6' />
-      {parties &&
-        parties.map((party, i) => (
+      {transformedParties &&
+        transformedParties.map((party, i) => (
           <View key={i} className='border border-[#E5E7EB] rounded-lg'>
             <GehaImage
               images={party.imageUrls}
