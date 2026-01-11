@@ -16,37 +16,41 @@ import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
 export default function GuestHouseStep1() {
   const { step1Data, setStep1Update, resetAllData } = useGuestHouseStore();
 
+  const handleBackPress = useCallback(() => {
+    Alert.alert(
+      '등록 취소',
+      '게스트하우스 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.',
+      [
+        {
+          text: '계속 작성',
+          style: 'cancel',
+        },
+        {
+          text: '취소',
+          style: 'destructive',
+          onPress: () => {
+            resetAllData();
+            router.back();
+          },
+        },
+      ],
+    );
+  }, [resetAllData]);
+
   useFocusEffect(
     useCallback(() => {
-      const onBackPress = () => {
-        Alert.alert(
-          '등록 취소',
-          '게스트하우스 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.',
-          [
-            {
-              text: '계속 작성',
-              style: 'cancel',
-            },
-            {
-              text: '취소',
-              style: 'destructive',
-              onPress: () => {
-                resetAllData();
-                router.back();
-              },
-            },
-          ],
-        );
+      const onHardwareBackPress = () => {
+        handleBackPress();
         return true;
       };
 
       const subscription = BackHandler.addEventListener(
         'hardwareBackPress',
-        onBackPress,
+        onHardwareBackPress,
       );
 
       return () => subscription.remove();
-    }, [resetAllData]),
+    }, [handleBackPress]),
   );
 
   const { errors, validateForm, clearError } =
@@ -59,7 +63,11 @@ export default function GuestHouseStep1() {
   };
 
   return (
-    <GuestHouseEnrollLayout currentStep={1} stepTitle="기본 정보">
+    <GuestHouseEnrollLayout
+      currentStep={1}
+      stepTitle="기본 정보"
+      onBackPress={handleBackPress}
+    >
       <ScrollView
         className="bg-[#F9FAFB]"
         style={{ paddingTop: 16, paddingHorizontal: 12 }}

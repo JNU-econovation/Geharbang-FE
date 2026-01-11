@@ -44,7 +44,6 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
   );
 
   const toggleFacility = (facility: string) => {
-    const current = step2Data.facilities;
     const customTexts = localCustomFacilities
       .map((f) => f.text)
       .filter((text) => text.trim() !== '');
@@ -73,6 +72,7 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
         .filter((text) => text.trim() !== '');
       return [...tagFacilities, ...customTexts];
     });
+
     clearError?.('facilities');
   };
 

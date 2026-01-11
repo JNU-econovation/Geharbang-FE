@@ -136,11 +136,32 @@ export default function MakeParty() {
     }
   };
 
+  const resetForm = () => {
+    setSelectedPartyType('');
+    setOtherPartyType('');
+    setPartyImages([]);
+    setStartTime(getDefaultStartTime());
+    setEndTime(getDefaultEndTime());
+    setSelectedDays([]);
+    setPartyLocation('');
+    setPartyMood('');
+    setAllowExternal(null);
+    setGuestFee('');
+    setExternalFee('');
+    setDescription('');
+  };
+
   const handleBackPress = () => {
+    if (!isEditMode) {
+      resetForm();
+    }
     router.push('/guestHouse/enroll/step1');
   };
 
   const handleClose = () => {
+    if (!isEditMode) {
+      resetForm();
+    }
     router.push('/guestHouse/enroll/step2');
   };
 
