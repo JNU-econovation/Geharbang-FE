@@ -177,11 +177,36 @@ export default function AddRoomForm() {
     router.push('/guestHouse/enroll/step3');
   };
 
+  const resetForm = () => {
+    setRoomName('');
+    setRoomType(null);
+    setOccupancy(null);
+    setCheckInTime(getDefaultCheckInTime());
+    setCheckOutTime(getDefaultCheckOutTime());
+    setPrice('');
+    setRoomImages([]);
+    setFieldErrors({
+      name: '',
+      type: '',
+      occupancy: '',
+      checkInTime: '',
+      checkOutTime: '',
+      price: '',
+      images: '',
+    });
+  };
+
   const handleBackPress = () => {
+    if (!isEditMode) {
+      resetForm();
+    }
     router.push('/guestHouse/enroll/step2');
   };
 
   const handleClose = () => {
+    if (!isEditMode) {
+      resetForm();
+    }
     router.push('/guestHouse/enroll/step3');
   };
 
