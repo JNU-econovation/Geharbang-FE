@@ -57,12 +57,19 @@ export default function AppendableInputGroupContainer({
       return;
     }
 
+
+    const hasEmptyItem = features.some((f) => f.text.trim() === '');
+    if (hasEmptyItem) {
+      Alert.alert("알림", "내용을 입력하거나 빈 항목을 삭제해주세요.");
+      return;
+    }
+
     addFeatures();
 
     setTimeout(() => {
       scrollViewRef?.current?.scrollToEnd({ animated: true });
     }, 100);
-  }, [addFeatures, canAddMore, maxLimit, scrollViewRef]);
+  }, [addFeatures, canAddMore, maxLimit, scrollViewRef, features]);
 
   return (
     <AppendableInputGroup

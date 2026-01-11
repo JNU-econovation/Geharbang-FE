@@ -23,6 +23,10 @@ export function useGuestHouseStep2Validation(step2Data: Step2Data) {
     setErrors((prev) => ({ ...prev, [field]: '' }));
   };
 
+  const setError = (field: keyof FormErrors, message: string) => {
+    setErrors((prev) => ({ ...prev, [field]: message }));
+  };
+
   const validateForm = (): boolean => {
     let isValid = true;
     const newErrors: FormErrors = {
@@ -86,6 +90,7 @@ export function useGuestHouseStep2Validation(step2Data: Step2Data) {
   return {
     errors,
     clearError,
+    setError,
     validateForm,
   };
 }
