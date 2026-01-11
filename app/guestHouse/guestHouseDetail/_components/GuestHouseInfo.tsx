@@ -8,9 +8,16 @@ import TextSize from "@/src/components/ui/TextSize";
 import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
 import { COLORS } from "@/src/utils/constants/colors";
 
+interface GuestHouseInfoProps extends SetSectionYPositionProps {
+  amenities?: string[];
+  moods?: string[];
+}
+
 export default function GuestHouseInfo({
   setSectionYPositions,
-}: SetSectionYPositionProps) {
+  amenities,
+  moods,
+}: GuestHouseInfoProps) {
   return (
     <SectionYPosition
       section='info'
@@ -25,11 +32,13 @@ export default function GuestHouseInfo({
           <Coffee width={16} height={16} />
           <TextSize size={17} color='#101828' content='제공 편의시설' />
         </View>
-
-        <View className='flex-row items-center gap-3'>
-          <CheckMark width={16} height={16} />
-          <TextSize size={14} color='#4A5565' content='무료 조식 제공' />
-        </View>
+        {amenities &&
+          amenities.map((amenity, i) => (
+            <View key={i} className='flex-row items-center gap-3'>
+              <CheckMark width={16} height={16} />
+              <TextSize size={14} color='#4A5565' content={amenity} />
+            </View>
+          ))}
 
         <View className='pt-1' />
         <View className='flex-row items-center gap-3'>
@@ -38,24 +47,19 @@ export default function GuestHouseInfo({
         </View>
 
         <View className='flex-row gap-2'>
-          <View
-            className={`self-start px-3 py-2 rounded-2xl bg-[${COLORS.PRIMARY.BLUE}]/10`}
-          >
-            <TextSize
-              color={`${COLORS.PRIMARY.BLUE}`}
-              size={14}
-              content='#조용한'
-            />
-          </View>
-          <View
-            className={`self-start px-3 py-2 rounded-2xl bg-[${COLORS.PRIMARY.BLUE}]/10`}
-          >
-            <TextSize
-              color={`${COLORS.PRIMARY.BLUE}`}
-              size={14}
-              content='#조용한'
-            />
-          </View>
+          {moods?.map((mood, i) => (
+            <View
+              key={i}
+              className={`self-start px-3 py-2 rounded-2xl`}
+              style={{ backgroundColor: `${COLORS.PRIMARY.BLUE}1A` }}
+            >
+              <TextSize
+                color={`${COLORS.PRIMARY.BLUE}`}
+                size={14}
+                content={`#${mood}`}
+              />
+            </View>
+          ))}
         </View>
       </View>
     </SectionYPosition>
