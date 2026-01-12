@@ -9,7 +9,7 @@ export default function OperatorLayout() {
       }}
     >
       <Stack.Screen name="verify" />
-      <Stack.Screen name="result" />
+      <Stack.Screen name="management" />
     </Stack>
   );
 }
