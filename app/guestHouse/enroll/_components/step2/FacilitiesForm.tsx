@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { Feature } from '@/src/types/models/stepRecruitment/Feature';
@@ -20,21 +20,6 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
     [],
   );
 
-  useEffect(() => {
-    const customFacilities = step2Data.facilities.filter(
-      (f: string) => !(FACILITY_OPTIONS as readonly string[]).includes(f),
-    );
-    const features = customFacilities.map((text: string, index: number) => ({
-      id: `custom-${index}`,
-      text,
-    }));
-    setLocalCustomFacilities(features);
-  }, [
-    step2Data.facilities
-      .filter((f) => !(FACILITY_OPTIONS as readonly string[]).includes(f))
-      .join(','),
-  ]);
-
   const selectedFacilities = useMemo(
     () =>
       step2Data.facilities.filter((f) =>
@@ -44,16 +29,16 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
   );
 
   const toggleFacility = (facility: string) => {
-    const customTexts = localCustomFacilities
-      .map((f) => f.text)
-      .filter((text) => text.trim() !== '');
-
     let newSelectedFacilities: string[];
     if (selectedFacilities.includes(facility)) {
       newSelectedFacilities = selectedFacilities.filter((f) => f !== facility);
     } else {
       newSelectedFacilities = [...selectedFacilities, facility];
     }
+
+    const customTexts = localCustomFacilities
+      .map((f) => f.text)
+      .filter((text) => text.trim() !== '');
 
     setStep2Update('facilities', [...newSelectedFacilities, ...customTexts]);
     clearError?.('facilities');
