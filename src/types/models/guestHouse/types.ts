@@ -44,4 +44,4 @@ export interface FilterState {
 export type SortOption = (typeof SORT_OPTIONS)[number];
 export type SortOptionKey = SortOption["key"];
 
-export const PAGE_SIZE = 20;
+export const PAGE_SIZE = 10;
