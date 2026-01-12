@@ -1,8 +1,9 @@
 import { TextInput, TextInputProps, View } from "react-native";
 
 import { COLORS } from "@/src/utils/constants/colors";
+import TextSize from "./TextSize";
 
-interface TextInputFieldProps {
+interface CustomTextInputProps {
   value?: string | number;
   onChangeText?: (text: string) => void;
   placeholder?: string;
@@ -16,6 +17,7 @@ interface TextInputFieldProps {
   autoCapitalize?: TextInputProps["autoCapitalize"];
   editable?: boolean;
   className?: string;
+  suffix?: string;
   textAlignVertical?: TextInputProps["textAlignVertical"];
 }
 
@@ -33,10 +35,11 @@ export default function CustomTextInput({
   autoCapitalize,
   editable,
   className,
+  suffix,
   textAlignVertical,
-}: TextInputFieldProps) {
+}: CustomTextInputProps) {
   return (
-    <View className={className}>
+    <View className={`flex-row items-center ${className}`}>
       <TextInput
         value={String(value)}
         onChangeText={onChangeText}
@@ -52,6 +55,11 @@ export default function CustomTextInput({
         editable={editable}
 textAlignVertical={textAlignVertical}
       />
+      {suffix && (
+        <View className='ml-2'>
+          <TextSize size={14} content={suffix} color={COLORS.GRAY.TEXT} />
+        </View>
+      )}
     </View>
   );
 }

@@ -1,23 +1,24 @@
-import { getStaffRecruitmentList } from "@/src/services/step/staffRecruitment";
+import { getGuestHousePostList } from "@/src/services/guestHouse/guestHouseList";
 import {
-  FilterState,
-  PAGE_SIZE,
   SortOptionKey,
-  StaffRecruitmentPost,
-} from "@/src/types/models/step/types";
+  FilterState,
+  GuestHousePost,
+  GuestHousePostParams,
+  PAGE_SIZE,
+} from "@/src/types/models/guestHouse/types";
 import { getApiErrorMessage } from "@/src/utils/api/errorHandler";
 import { SORT_OPTIONS } from "@/src/utils/constants/filterOptions";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebounce } from "../useDebounce";
 
-interface UseStaffRecruitmentListParams {
+interface UseGuestHouseListParams {
   keyword: string;
   sort: SortOptionKey;
   filters: FilterState;
 }
 
-interface UseStaffRecruitmentListReturn {
-  data: StaffRecruitmentPost[];
+interface UseGuestHouseListReturn {
+  data: GuestHousePost[];
   isLoading: boolean;
   isLoadingMore: boolean;
   error: string | null;
@@ -26,19 +27,18 @@ interface UseStaffRecruitmentListReturn {
   refetch: () => void;
 }
 
-export function useStaffRecruitmentList({
+export function useGuestHouseList({
   keyword,
   sort,
   filters,
-}: UseStaffRecruitmentListParams): UseStaffRecruitmentListReturn {
-  const [data, setData] = useState<StaffRecruitmentPost[]>([]);
+}: UseGuestHouseListParams): UseGuestHouseListReturn {
+  const [data, setData] = useState<GuestHousePost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
   const abortControllerRef = useRef<AbortController | null>(null);
-
   const debouncedKeyword = useDebounce(keyword, 300);
 
   useEffect(() => {
@@ -63,35 +63,37 @@ export function useStaffRecruitmentList({
       setError(null);
 
       try {
-        const params = {
+        const params: GuestHousePostParams = {
           keyword: debouncedKeyword || undefined,
           sort: SORT_OPTIONS.find((option) => option.key === sort)?.value,
           region: filters.region.length > 0 ? filters.region : undefined,
-          period: filters.period.length > 0 ? filters.period : undefined,
-          workType: filters.workType || undefined,
-          workDays: filters.workDays || undefined,
-          restDays: filters.restDays || undefined,
-          workScheduleType:
-            filters.workScheduleType.length > 0
-              ? filters.workScheduleType
+          lowestRoomPrice: filters.lowestRoomPrice || undefined,
+          highestRoomPrice: filters.highestRoomPrice || undefined,
+          moods: filters.moods.length > 0 ? filters.moods : undefined,
+          partyType:
+            filters.partyType.length > 0 ? filters.partyType : undefined,
+          roomType: filters.roomType.length > 0 ? filters.roomType : undefined,
+          headCountType:
+            filters.headCountType.length > 0
+              ? filters.headCountType
               : undefined,
-          gender: filters.gender || undefined,
+          amenities:
+            filters.amenities.length > 0 ? filters.amenities : undefined,
           pageNumber,
         };
 
-        const response = await getStaffRecruitmentList(params);
+        const response = await getGuestHousePostList(params);
 
         if (isLoadMore) {
-          setData((prev) => [...prev, ...response.staffRecruitmentPosts]);
+          setData((prev) => [...prev, ...response.guestHousePosts]);
         } else {
-          setData(response.staffRecruitmentPosts);
+          setData(response.guestHousePosts);
         }
 
-        // 배열 길이로 hasMore 판단
         if (response.hasNext !== undefined) {
           setHasMore(response.hasNext);
         } else {
-          setHasMore(response.staffRecruitmentPosts.length === PAGE_SIZE);
+          setHasMore(response.guestHousePosts.length === PAGE_SIZE);
         }
       } catch (err: any) {
         if (err.name === "AbortError" || err.name === "CanceledError") {
@@ -124,8 +126,7 @@ export function useStaffRecruitmentList({
     }
     const nextPage = page + 1;
     setPage(nextPage);
-    fetchData(nextPage, true);
-  }, [hasMore, isLoading, isLoadingMore, page, fetchData]);
+  }, [hasMore, isLoading, isLoadingMore, page]);
 
   const refetch = useCallback(() => {
     setPage(0);

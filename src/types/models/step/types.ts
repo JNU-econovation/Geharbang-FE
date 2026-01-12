@@ -1,3 +1,4 @@
+import { SORT_OPTIONS } from "@/src/utils/constants/filterOptions";
 import { PerWorkingDay } from "../stepRecruitment/PerWorkingDay";
 
 export interface GuestHouse {
@@ -13,7 +14,7 @@ export interface GuestHouse {
 
 export interface StaffRecruitmentPost {
   id: number;
-  name: string;
+  title: string;
   tags: string[];
   region: string;
   isWished: boolean;
@@ -51,7 +52,8 @@ export interface FilterState {
   gender: string;
 }
 
-export type FilterOption = "views" | "likes" | "recent";
+export type SortOption = (typeof SORT_OPTIONS)[number];
+export type SortOptionKey = SortOption["key"];
 
 // 페이지네이션 상수
 export const PAGE_SIZE = 20; // 백엔드 기본값
