@@ -40,8 +40,21 @@ const FacilitiesSelector = ({
       errorMessage={error}
     >
       <View className="bg-white rounded-xl border border-gray-200 p-4 mb-2">
+        <View className="flex-row flex-wrap mb-2">
+          {facilityOptions.slice(0, 2).map((facility) => {
+            const isSelected = selectedFacilities.indexOf(facility) !== -1;
+            return (
+              <SelectableTag
+                key={facility}
+                label={facility}
+                selected={isSelected}
+                onPress={() => onToggleFacility(facility)}
+              />
+            );
+          })}
+        </View>
         <View className="flex-row flex-wrap">
-          {facilityOptions.map((facility) => {
+          {facilityOptions.slice(2).map((facility) => {
             const isSelected = selectedFacilities.indexOf(facility) !== -1;
             return (
               <SelectableTag
