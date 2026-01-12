@@ -51,6 +51,13 @@ export default function ChatScreen() {
           <Pressable onPress={() => router.push('/operator/verify')}>
             <TextSize size={16} color="deepskyblue" content="운영자 인증" />
           </Pressable>
+          <Pressable onPress={() => router.push('/operator/management')}>
+            <TextSize
+              size={16}
+              color="deepskyblue"
+              content="운영자 인증 관리"
+            />
+          </Pressable>
 
           <Pressable
             onPress={() =>
