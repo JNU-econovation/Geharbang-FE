@@ -30,7 +30,7 @@ export default function GuestHouseStep1() {
           style: 'destructive',
           onPress: () => {
             resetAllData();
-            router.back();
+            router.replace('/');
           },
         },
       ],
