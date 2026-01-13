@@ -132,111 +132,99 @@ export default function OperatorAuthScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View className="w-full px-4 pt-4 flex-col justify-start items-center gap-4">
-          <View className="w-full h-[115.96px] px-[16.75px] pt-[16.75px] pb-[0.75px] bg-sky-50 rounded-[14px] border border-[#b8e6fe] flex-col justify-start items-start">
-            <View className="w-full h-[82.46px] flex-row justify-start items-start gap-3">
+          <View className="w-full px-4 py-4 bg-sky-50 rounded-[14px] border border-[#b8e6fe] flex-col justify-start items-start">
+            <View className="w-full flex-row justify-start items-start gap-3">
               <SvgUri
                 width={20}
                 height={20}
                 uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-af309ae3-0cae-4192-942d-d276f6895bfa.svg"
               />
-              <View className="flex-1 h-[82.46px] flex-col justify-start items-start gap-1">
-                <View className="h-5 justify-start items-center flex-row">
-                  <Text className="text-[#024a70] text-sm font-normal leading-5">
-                    운영자 인증이 필요합니다
-                  </Text>
-                </View>
-                <View className="h-[58.47px] justify-start items-center flex-row">
-                  <Text className="text-[#0068a8] text-xs font-normal leading-5">
-                    사업자등록증 또는 관광숙박업 신고증을 제출하시면, 관리자
-                    검토 후 승인됩니다.{'\n'}(평균 1-2일 소요)
-                  </Text>
-                </View>
+              <View className="flex-1 flex-col justify-start items-start gap-1">
+                <Text className="text-[#024a70] text-sm font-normal leading-5">
+                  운영자 인증이 필요합니다
+                </Text>
+                <Text className="text-[#0068a8] text-xs font-normal leading-5">
+                  사업자등록증 또는 관광숙박업 신고증을 제출하시면,{'\n'}
+                  관리자 검토 후 승인됩니다.
+                  {'\n'}(평균 1-2일 소요)
+                </Text>
               </View>
             </View>
           </View>
 
-          {/* 증빙 서류 종류 선택 */}
-          <View className="w-full h-[160.97px] px-4 pt-4 bg-white rounded-[14px] flex-col justify-start items-start gap-3">
-            <View className="h-[29.99px] justify-start items-start gap-1 flex-row">
-              <Text className="text-[#101727] text-base font-normal leading-[30px]">
+          <View className="w-full px-4 py-4 bg-white rounded-[14px] flex-col justify-start items-start gap-3">
+            <View className="flex-row items-center gap-1">
+              <Text className="text-[#101727] text-base font-normal">
                 증빙 서류 종류
               </Text>
-              <Text className="text-[#fa2b36] text-xl font-normal leading-[30px]">
-                *
-              </Text>
+              <Text className="text-[#fa2b36] text-xl font-normal">*</Text>
             </View>
 
-            <View className="w-full h-[86.99px] flex-row justify-start gap-3">
+            <View className="w-full flex-row justify-start gap-3">
               <TouchableOpacity
-                className={`flex-1 h-[86.99px] p-[1.51px] rounded-[10px] border-2 justify-center items-center ${
+                className={`flex-1 py-4 px-2 rounded-[10px] border-2 justify-center items-center ${
                   documentType === 'business'
                     ? 'bg-sky-50 border-[#00a6f4]'
                     : 'bg-white border-gray-200'
                 }`}
                 onPress={() => handleDocumentTypeSelect('business')}
               >
-                <View className="w-full h-[83.98px] justify-center items-center gap-2">
+                <View className="w-full justify-center items-center gap-2">
                   <SvgUri
                     width={24}
                     height={24}
                     uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-8772f5e1-6fb9-40ed-bb6f-924d77d12ec1.svg"
                   />
-                  <View className="h-5 justify-center items-center">
-                    <Text
-                      className={`text-center text-sm font-normal leading-5 ${
-                        documentType === 'business'
-                          ? 'text-[#024a70]'
-                          : 'text-[#364153]'
-                      }`}
-                    >
-                      사업자등록증
-                    </Text>
-                  </View>
+                  <Text
+                    className={`text-center text-sm font-normal ${
+                      documentType === 'business'
+                        ? 'text-[#024a70]'
+                        : 'text-[#364153]'
+                    }`}
+                  >
+                    영업신고증
+                  </Text>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity
-                className={`flex-1 h-[86.99px] p-[1.51px] rounded-[10px] border-2 justify-center items-center ${
+                className={`flex-1 py-4 px-2 rounded-[10px] border-2 justify-center items-center ${
                   documentType === 'tourism'
                     ? 'bg-sky-50 border-[#00a6f4]'
                     : 'bg-white border-gray-200'
                 }`}
                 onPress={() => handleDocumentTypeSelect('tourism')}
               >
-                <View className="w-full h-[83.98px] justify-center items-center gap-2">
+                <View className="w-full justify-center items-center gap-2">
                   <SvgUri
                     width={24}
                     height={24}
                     uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-610d2f86-5ff4-4b16-b673-e4a497e592ec.svg"
                   />
-                  <View className="h-5 justify-center items-center">
-                    <Text
-                      className={`text-center text-sm font-normal leading-5 ${
-                        documentType === 'tourism'
-                          ? 'text-[#024a70]'
-                          : 'text-[#364153]'
-                      }`}
-                    >
-                      관광숙박업 신고증
-                    </Text>
-                  </View>
+                  <Text
+                    className={`text-center text-sm font-normal ${
+                      documentType === 'tourism'
+                        ? 'text-[#024a70]'
+                        : 'text-[#364153]'
+                    }`}
+                  >
+                    관광사업등록증
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>
           </View>
 
-          <View className="w-full px-4 pt-4 bg-white rounded-[14px] flex-col justify-start items-start gap-3 pb-4">
-            <View className="h-6 justify-start items-start gap-1 flex-row">
-              <Text className="text-[#101727] text-base font-normal leading-6">
+          <View className="w-full px-4 py-4 bg-white rounded-[14px] flex-col justify-start items-start gap-3">
+            <View className="flex-row items-center gap-1">
+              <Text className="text-[#101727] text-base font-normal">
                 서류 업로드
               </Text>
-              <Text className="text-[#fa2b36] text-base font-normal leading-6">
-                *
-              </Text>
+              <Text className="text-[#fa2b36] text-base font-normal">*</Text>
             </View>
 
             <TouchableOpacity
-              className={`w-full h-[140.99px] rounded-[10px] border-2 justify-center items-center ${
+              className={`w-full min-h-[140px] py-6 rounded-[10px] border-2 justify-center items-center ${
                 errors.uploadedFile
                   ? 'bg-gray-50 border-red-500'
                   : uploadedFile
@@ -247,65 +235,47 @@ export default function OperatorAuthScreen() {
             >
               {uploadedFile ? (
                 <>
-                  <View className="mb-2">
-                    <SvgUri
-                      width={32}
-                      height={32}
-                      uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-18b4a31f-e3f7-405f-a834-2a21c0db2e7c.svg"
-                    />
-                  </View>
-                  <View className="h-5 justify-center items-center mb-1">
-                    <Text className="text-[#101727] text-sm font-normal leading-5">
-                      {uploadedFile.name}
-                    </Text>
-                  </View>
-                  <View className="h-4 justify-start items-start">
-                    <Text className="text-[#697282] text-xs font-normal leading-4">
-                      클릭하여 다시 선택
-                    </Text>
-                  </View>
+                  <SvgUri
+                    width={32}
+                    height={32}
+                    uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-18b4a31f-e3f7-405f-a834-2a21c0db2e7c.svg"
+                  />
+                  <Text className="text-[#101727] text-sm font-normal mt-2">
+                    {uploadedFile.name}
+                  </Text>
+                  <Text className="text-[#697282] text-xs font-normal mt-1">
+                    클릭하여 다시 선택
+                  </Text>
                 </>
               ) : (
                 <>
                   {documentType === 'business' ? (
                     <>
-                      <View className="mb-2">
-                        <SvgUri
-                          width={32}
-                          height={32}
-                          uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-18b4a31f-e3f7-405f-a834-2a21c0db2e7c.svg"
-                        />
-                      </View>
-                      <View className="h-5 justify-center items-center mb-1">
-                        <Text className="text-[#697282] text-sm font-normal leading-5">
-                          PDF 파일을 선택해주세요
-                        </Text>
-                      </View>
-                      <View className="h-4 justify-start items-start">
-                        <Text className="text-[#99a1af] text-xs font-normal leading-4">
-                          PDF (최대 10MB)
-                        </Text>
-                      </View>
+                      <SvgUri
+                        width={32}
+                        height={32}
+                        uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-18b4a31f-e3f7-405f-a834-2a21c0db2e7c.svg"
+                      />
+                      <Text className="text-[#697282] text-sm font-normal mt-2">
+                        첨부 1. 영업신고증.pdf
+                      </Text>
+                      <Text className="text-[#99a1af] text-xs font-normal mt-1">
+                        클릭하여 다시 선택
+                      </Text>
                     </>
                   ) : (
                     <>
-                      <View className="mb-2">
-                        <SvgUri
-                          width={32}
-                          height={32}
-                          uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-18b4a31f-e3f7-405f-a834-2a21c0db2e7c.svg"
-                        />
-                      </View>
-                      <View className="h-5 justify-center items-center mb-1">
-                        <Text className="text-[#697282] text-sm font-normal leading-5">
-                          파일을 선택하거나 드래그하세요
-                        </Text>
-                      </View>
-                      <View className="h-4 justify-start items-start">
-                        <Text className="text-[#99a1af] text-xs font-normal leading-4">
-                          JPG, PNG, PDF (최대 10MB)
-                        </Text>
-                      </View>
+                      <SvgUri
+                        width={32}
+                        height={32}
+                        uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-18b4a31f-e3f7-405f-a834-2a21c0db2e7c.svg"
+                      />
+                      <Text className="text-[#697282] text-sm font-normal mt-2">
+                        파일을 선택하거나 드래그하세요
+                      </Text>
+                      <Text className="text-[#99a1af] text-xs font-normal mt-1">
+                        JPG, PNG, PDF (최대 10MB)
+                      </Text>
                     </>
                   )}
                 </>
@@ -318,25 +288,20 @@ export default function OperatorAuthScreen() {
             )}
           </View>
 
-          <View className="w-full px-4 pt-4 pb-4 bg-white rounded-[14px] flex-col justify-start items-start gap-4 mb-8">
-            <View className="h-6 justify-start items-center flex-row">
-              <Text className="text-[#101727] text-base font-normal leading-6">
-                사업자 정보
-              </Text>
-            </View>
+          <View className="w-full px-4 py-4 bg-white rounded-[14px] flex-col justify-start items-start gap-4 mb-8">
+            <Text className="text-[#101727] text-base font-normal">
+              사업자 정보
+            </Text>
 
             <View className="w-full flex-col justify-start items-start gap-2">
-              <View className="h-5 flex-row items-center">
-                <Text className="text-[#354152] text-sm font-normal leading-5">
+              <View className="flex-row items-center gap-1">
+                <Text className="text-[#354152] text-sm font-normal">
                   게스트하우스 이름
                 </Text>
-                <Text className="text-[#fb2c36] text-sm font-normal leading-5">
-                  *
-                </Text>
+                <Text className="text-[#fb2c36] text-sm font-normal">*</Text>
               </View>
               <CustomTextInput
                 placeholder="예 : 제주 푸른 게스트하우스"
-                height={45.49}
                 value={guestHouseName}
                 onChangeText={setGuestHouseName}
                 error={!!errors.guestHouseName}
@@ -350,17 +315,14 @@ export default function OperatorAuthScreen() {
             </View>
 
             <View className="w-full flex-col justify-start items-start gap-2">
-              <View className="h-5 flex-row items-center">
-                <Text className="text-[#354152] text-sm font-normal leading-5">
+              <View className="flex-row items-center gap-1">
+                <Text className="text-[#354152] text-sm font-normal">
                   대표자명
                 </Text>
-                <Text className="text-[#fb2c36] text-sm font-normal leading-5">
-                  *
-                </Text>
+                <Text className="text-[#fb2c36] text-sm font-normal">*</Text>
               </View>
               <CustomTextInput
                 placeholder="예 : 홍길동"
-                height={45.49}
                 value={representativeName}
                 onChangeText={setRepresentativeName}
                 error={!!errors.representativeName}
@@ -374,18 +336,15 @@ export default function OperatorAuthScreen() {
             </View>
 
             <View className="w-full flex-col justify-start items-start gap-2">
-              <View className="h-5 flex-row items-center">
-                <Text className="text-[#354152] text-sm font-normal leading-5">
+              <View className="flex-row items-center gap-1">
+                <Text className="text-[#354152] text-sm font-normal">
                   연락처
                 </Text>
-                <Text className="text-[#fb2c36] text-sm font-normal leading-5">
-                  *
-                </Text>
+                <Text className="text-[#fb2c36] text-sm font-normal">*</Text>
               </View>
               <CustomTextInput
                 placeholder="예 : 010-1234-5678"
                 keyboardType="phone-pad"
-                height={45.49}
                 value={phoneNumber}
                 onChangeText={setPhoneNumber}
                 error={!!errors.phoneNumber}
