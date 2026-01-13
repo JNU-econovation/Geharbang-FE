@@ -91,13 +91,13 @@ export default function OperatorManagementScreen() {
         <BackArrowHeader content="운영자 인증 관리" onPress={handleBackPress} />
       </View>
 
-      <View className="w-full h-[42px] flex-row bg-white border-b border-gray-200">
+      <View className="w-full flex-row bg-white border-b border-gray-200">
         <TouchableOpacity
-          className="flex-1 relative justify-center items-center h-full"
+          className="flex-1 relative justify-center items-center py-3"
           onPress={() => setActiveTab('pending')}
         >
           <Text
-            className={`text-center text-xs font-normal leading-[18.70px] ${
+            className={`text-center text-sm font-normal ${
               activeTab === 'pending' ? 'text-sky-500' : 'text-[#99a1af]'
             }`}
           >
@@ -109,11 +109,11 @@ export default function OperatorManagementScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          className="flex-1 justify-center items-center h-full"
+          className="flex-1 relative justify-center items-center py-3"
           onPress={() => setActiveTab('approved')}
         >
           <Text
-            className={`text-center text-xs font-normal leading-[18.70px] ${
+            className={`text-center text-sm font-normal ${
               activeTab === 'approved' ? 'text-sky-500' : 'text-[#99a1af]'
             }`}
           >
@@ -125,11 +125,11 @@ export default function OperatorManagementScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          className="flex-1 justify-center items-center h-full"
+          className="flex-1 relative justify-center items-center py-3"
           onPress={() => setActiveTab('rejected')}
         >
           <Text
-            className={`text-center text-xs font-normal leading-[18.70px] ${
+            className={`text-center text-sm font-normal ${
               activeTab === 'rejected' ? 'text-sky-500' : 'text-[#99a1af]'
             }`}
           >
@@ -163,19 +163,17 @@ export default function OperatorManagementScreen() {
                 onTouchStart={() => router.push(`/operator/detail/${card.id}`)}
               >
                 <View className="flex-col gap-1">
-                  <Text className="text-[#101828] text-sm font-normal leading-5">
+                  <Text className="text-[#101828] text-sm font-normal">
                     {card.guestHouseName}
                   </Text>
-                  <Text className="text-[#6a7282] text-xs font-normal leading-[17.40px]">
+                  <Text className="text-[#6a7282] text-xs font-normal">
                     {card.representativeName}
                   </Text>
                 </View>
                 <View
                   className={`px-3 py-1 rounded-full border justify-center items-center ${statusStyle.container}`}
                 >
-                  <Text
-                    className={`text-[10.63px] font-normal leading-4 ${statusStyle.text}`}
-                  >
+                  <Text className={`text-xs font-normal ${statusStyle.text}`}>
                     {statusStyle.label}
                   </Text>
                 </View>
@@ -188,7 +186,7 @@ export default function OperatorManagementScreen() {
                     height={14}
                     uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-0b6e52c1-89ea-4f7a-ac7e-894c67f5c700.svg"
                   />
-                  <Text className="text-[#99a1af] text-[10.63px] font-normal leading-4">
+                  <Text className="text-[#99a1af] text-xs font-normal">
                     {card.documentType}
                   </Text>
                 </View>
@@ -198,7 +196,7 @@ export default function OperatorManagementScreen() {
                     height={14}
                     uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-e185f3ff-eea4-47cc-8d3e-cacb3be28876.svg"
                   />
-                  <Text className="text-[#99a1af] text-[10.63px] font-normal leading-4">
+                  <Text className="text-[#99a1af] text-xs font-normal">
                     {card.submittedAt}
                   </Text>
                 </View>
