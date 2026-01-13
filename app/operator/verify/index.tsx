@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
-import DocumentTypeSelector from '@/app/operator/_components/DocumentTypeSelector';
-import SubmitSuccessModal from '@/app/operator/_components/SubmitSuccessModal';
+import DocumentTypeSelector from '@/app/operator/verify/_components/DocumentTypeSelector';
+import SubmitSuccessModal from '@/app/operator/verify/_components/SubmitSuccessModal';
 import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
 import Button from '@/src/components/ui/Button/Button';
