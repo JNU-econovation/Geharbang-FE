@@ -1,15 +1,17 @@
-import * as DocumentPicker from 'expo-document-picker';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
+import DocumentTypeSelector from '@/app/operator/_components/DocumentTypeSelector';
 import SubmitSuccessModal from '@/app/operator/_components/SubmitSuccessModal';
 import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
 import Button from '@/src/components/ui/Button/Button';
 import CustomTextInput from '@/src/components/ui/TextInput';
 import { File } from '@/src/types/File';
+import { uploadDocument } from '@/src/utils/operator/documentUpload';
+import { validateOperatorVerify } from '@/src/utils/operator/operatorVerifyValidation';
 
 type DocumentType = 'business' | 'tourism';
 
@@ -22,6 +24,7 @@ export default function OperatorAuthScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [errors, setErrors] = useState({
+    documentType: '',
     guestHouseName: '',
     representativeName: '',
     phoneNumber: '',
@@ -34,80 +37,36 @@ export default function OperatorAuthScreen() {
 
   const handleDocumentTypeSelect = (type: DocumentType) => {
     setDocumentType(type);
-    setUploadedFile(null);
   };
 
   const handleFileUpload = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type:
-          documentType === 'business'
-            ? 'application/pdf'
-            : ['application/pdf', 'image/jpeg', 'image/png'],
-        copyToCacheDirectory: true,
-      });
-
-      if (result.canceled) return;
-
-      const file = result.assets[0];
-
-      const maxSize = 10 * 1024 * 1024;
-      if (file.size && file.size > maxSize) {
-        Alert.alert('오류', '파일 크기는 최대 10MB까지 업로드 가능합니다.');
-        return;
-      }
-
-      const uploadedFileData: File = {
-        uri: file.uri,
-        type: file.mimeType || 'application/pdf',
-        name: file.name,
-      };
-
-      setUploadedFile(uploadedFileData);
-    } catch (error) {
-      Alert.alert('오류', '파일 업로드 중 오류가 발생했습니다.');
+    const file = await uploadDocument(documentType);
+    if (file) {
+      setUploadedFile(file);
     }
   };
 
   const handleSubmit = () => {
-    const newErrors = {
-      guestHouseName: '',
-      representativeName: '',
-      phoneNumber: '',
-      uploadedFile: '',
-    };
+    const { isValid, errors: validationErrors } = validateOperatorVerify({
+      documentType,
+      guestHouseName,
+      representativeName,
+      phoneNumber,
+      uploadedFile,
+    });
 
-    let hasError = false;
+    setErrors(validationErrors);
 
-    if (!guestHouseName.trim()) {
-      newErrors.guestHouseName = '게스트하우스 이름을 입력해주세요.';
-      hasError = true;
-    }
-    if (!representativeName.trim()) {
-      newErrors.representativeName = '대표자명을 입력해주세요.';
-      hasError = true;
-    }
-    if (!phoneNumber.trim()) {
-      newErrors.phoneNumber = '연락처를 입력해주세요.';
-      hasError = true;
-    }
-    // if (!uploadedFile) {
-    //   newErrors.uploadedFile = '서류를 업로드해주세요.';
-    //   hasError = true;
-    // }
-
-    setErrors(newErrors);
-
-    if (hasError) {
+    if (!isValid) {
       return;
     }
 
     // TODO: API 호출
     console.log({
+      documentType,
       guestHouseName,
       representativeName,
       phoneNumber,
-      documentType,
       uploadedFile,
     });
 
@@ -115,6 +74,7 @@ export default function OperatorAuthScreen() {
   };
 
   const handleModalClose = () => {
+    // TODO: API 호출후 상태에 따라 모달닫기
     setIsModalVisible(false);
 
     router.replace('/');
@@ -160,59 +120,16 @@ export default function OperatorAuthScreen() {
               <Text className="text-[#fa2b36] text-xl font-normal">*</Text>
             </View>
 
-            <View className="w-full flex-row justify-start gap-3">
-              <TouchableOpacity
-                className={`flex-1 py-4 px-2 rounded-[10px] border-2 justify-center items-center ${
-                  documentType === 'business'
-                    ? 'bg-sky-50 border-[#00a6f4]'
-                    : 'bg-white border-gray-200'
-                }`}
-                onPress={() => handleDocumentTypeSelect('business')}
-              >
-                <View className="w-full justify-center items-center gap-2">
-                  <SvgUri
-                    width={24}
-                    height={24}
-                    uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-8772f5e1-6fb9-40ed-bb6f-924d77d12ec1.svg"
-                  />
-                  <Text
-                    className={`text-center text-sm font-normal ${
-                      documentType === 'business'
-                        ? 'text-[#024a70]'
-                        : 'text-[#364153]'
-                    }`}
-                  >
-                    영업신고증
-                  </Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                className={`flex-1 py-4 px-2 rounded-[10px] border-2 justify-center items-center ${
-                  documentType === 'tourism'
-                    ? 'bg-sky-50 border-[#00a6f4]'
-                    : 'bg-white border-gray-200'
-                }`}
-                onPress={() => handleDocumentTypeSelect('tourism')}
-              >
-                <View className="w-full justify-center items-center gap-2">
-                  <SvgUri
-                    width={24}
-                    height={24}
-                    uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-610d2f86-5ff4-4b16-b673-e4a497e592ec.svg"
-                  />
-                  <Text
-                    className={`text-center text-sm font-normal ${
-                      documentType === 'tourism'
-                        ? 'text-[#024a70]'
-                        : 'text-[#364153]'
-                    }`}
-                  >
-                    관광사업등록증
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+            <DocumentTypeSelector
+              selectedType={documentType}
+              onSelect={handleDocumentTypeSelect}
+              error={!!errors.documentType}
+            />
+            {errors.documentType && (
+              <Text className="text-red-500 text-xs mt-1">
+                {errors.documentType}
+              </Text>
+            )}
           </View>
 
           <View className="w-full px-4 py-4 bg-white rounded-[14px] flex-col justify-start items-start gap-3">
@@ -224,12 +141,12 @@ export default function OperatorAuthScreen() {
             </View>
 
             <TouchableOpacity
-              className={`w-full min-h-[140px] py-6 rounded-[10px] border-2 justify-center items-center ${
+              className={`w-full min-h-[140px] py-6 px-4 rounded-[10px] border-2 justify-center items-center ${
                 errors.uploadedFile
                   ? 'bg-gray-50 border-red-500'
                   : uploadedFile
                   ? 'bg-sky-50 border-[#00a6f4]'
-                  : 'bg-gray-50 border-gray-300 border-dashed'
+                  : 'bg-gray-50 border-gray-300'
               }`}
               onPress={handleFileUpload}
             >
@@ -240,44 +157,30 @@ export default function OperatorAuthScreen() {
                     height={32}
                     uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-18b4a31f-e3f7-405f-a834-2a21c0db2e7c.svg"
                   />
-                  <Text className="text-[#101727] text-sm font-normal mt-2">
+                  <Text
+                    className="text-[#101727] text-sm font-normal mt-2 text-center"
+                    numberOfLines={1}
+                    ellipsizeMode="middle"
+                  >
                     {uploadedFile.name}
                   </Text>
-                  <Text className="text-[#697282] text-xs font-normal mt-1">
+                  <Text className="text-[#697282] text-xs font-normal mt-1 text-center">
                     클릭하여 다시 선택
                   </Text>
                 </>
               ) : (
                 <>
-                  {documentType === 'business' ? (
-                    <>
-                      <SvgUri
-                        width={32}
-                        height={32}
-                        uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-18b4a31f-e3f7-405f-a834-2a21c0db2e7c.svg"
-                      />
-                      <Text className="text-[#697282] text-sm font-normal mt-2">
-                        첨부 1. 영업신고증.pdf
-                      </Text>
-                      <Text className="text-[#99a1af] text-xs font-normal mt-1">
-                        클릭하여 다시 선택
-                      </Text>
-                    </>
-                  ) : (
-                    <>
-                      <SvgUri
-                        width={32}
-                        height={32}
-                        uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-18b4a31f-e3f7-405f-a834-2a21c0db2e7c.svg"
-                      />
-                      <Text className="text-[#697282] text-sm font-normal mt-2">
-                        파일을 선택하거나 드래그하세요
-                      </Text>
-                      <Text className="text-[#99a1af] text-xs font-normal mt-1">
-                        JPG, PNG, PDF (최대 10MB)
-                      </Text>
-                    </>
-                  )}
+                  <SvgUri
+                    width={32}
+                    height={32}
+                    uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-18b4a31f-e3f7-405f-a834-2a21c0db2e7c.svg"
+                  />
+                  <Text className="text-[#697282] text-sm font-normal mt-2 text-center">
+                    PDF 파일을 선택해주세요
+                  </Text>
+                  <Text className="text-[#99a1af] text-xs font-normal mt-1 text-center">
+                    PDF (최대 10MB)
+                  </Text>
                 </>
               )}
             </TouchableOpacity>
