@@ -153,7 +153,7 @@ export const PLACEHOLDERS = {
 
   // Step 2
   INTRODUCTION: '우리 게스트하우스를 소개해주세요',
-  FACILITY_CUSTOM: '예: 공용주방, 세탁시설',
+  FACILITY_CUSTOM: '예: 공용주방',
 
   // Step 2 - Party
   PARTY_CUSTOM_TYPE: '예: 테마 파티, 퀴즈 파티',
