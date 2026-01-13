@@ -6,10 +6,10 @@ import FormField from '@/src/components/ui/Form/FormField';
 import SelectableTag from '@/src/components/ui/SelectableTag';
 import { Feature } from '@/src/types/models/stepRecruitment/Feature';
 import {
-  PLACEHOLDERS,
   BUTTON_LABELS,
   FORM_DESCRIPTIONS,
   MAX_ITEMS,
+  PLACEHOLDERS,
 } from '@/src/utils/constants/guestHouseEnrollment';
 
 interface FacilitiesSelectorProps {
@@ -35,8 +35,8 @@ const FacilitiesSelector = ({
     <FormField
       label="제공 편의시설"
       required={true}
-      description={`${FORM_DESCRIPTIONS.MAX_10_ITEMS}
-        ${FORM_DESCRIPTIONS.CUSTOM_FACILITY_INFO}`}
+      description={`${FORM_DESCRIPTIONS.MAX_10_ITEMS} 
+${FORM_DESCRIPTIONS.CUSTOM_FACILITY_INFO}`}
       errorMessage={error}
     >
       <View className="bg-white rounded-xl border border-gray-200 p-4 mb-2">
