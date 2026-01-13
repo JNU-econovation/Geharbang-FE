@@ -8,8 +8,9 @@ export default function OperatorLayout() {
         gestureEnabled: false,
       }}
     >
-      <Stack.Screen name="verify" />
-      <Stack.Screen name="management" />
+      <Stack.Screen name="verify/index" />
+      <Stack.Screen name="management/index" />
+      <Stack.Screen name="detail/[id]/index" />
     </Stack>
   );
 }
