@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
+import SubmitSuccessModal from '@/app/operator/_components/SubmitSuccessModal';
 import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
 import Button from '@/src/components/ui/Button/Button';
@@ -18,6 +19,14 @@ export default function OperatorAuthScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [documentType, setDocumentType] = useState<DocumentType>('business');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [errors, setErrors] = useState({
+    guestHouseName: '',
+    representativeName: '',
+    phoneNumber: '',
+    uploadedFile: '',
+  });
 
   const handleBackPress = () => {
     router.back();
@@ -61,20 +70,35 @@ export default function OperatorAuthScreen() {
   };
 
   const handleSubmit = () => {
+    const newErrors = {
+      guestHouseName: '',
+      representativeName: '',
+      phoneNumber: '',
+      uploadedFile: '',
+    };
+
+    let hasError = false;
+
     if (!guestHouseName.trim()) {
-      Alert.alert('알림', '게스트하우스 이름을 입력해주세요.');
-      return;
+      newErrors.guestHouseName = '게스트하우스 이름을 입력해주세요.';
+      hasError = true;
     }
     if (!representativeName.trim()) {
-      Alert.alert('알림', '대표자명을 입력해주세요.');
-      return;
+      newErrors.representativeName = '대표자명을 입력해주세요.';
+      hasError = true;
     }
     if (!phoneNumber.trim()) {
-      Alert.alert('알림', '연락처를 입력해주세요.');
-      return;
+      newErrors.phoneNumber = '연락처를 입력해주세요.';
+      hasError = true;
     }
-    if (!uploadedFile) {
-      Alert.alert('알림', '서류를 업로드해주세요.');
+    // if (!uploadedFile) {
+    //   newErrors.uploadedFile = '서류를 업로드해주세요.';
+    //   hasError = true;
+    // }
+
+    setErrors(newErrors);
+
+    if (hasError) {
       return;
     }
 
@@ -87,7 +111,13 @@ export default function OperatorAuthScreen() {
       uploadedFile,
     });
 
-    router.push('/operator/result' as any);
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+
+    router.replace('/');
   };
 
   return (
@@ -207,7 +237,9 @@ export default function OperatorAuthScreen() {
 
             <TouchableOpacity
               className={`w-full h-[140.99px] rounded-[10px] border-2 justify-center items-center ${
-                uploadedFile
+                errors.uploadedFile
+                  ? 'bg-gray-50 border-red-500'
+                  : uploadedFile
                   ? 'bg-sky-50 border-[#00a6f4]'
                   : 'bg-gray-50 border-gray-300 border-dashed'
               }`}
@@ -279,6 +311,11 @@ export default function OperatorAuthScreen() {
                 </>
               )}
             </TouchableOpacity>
+            {errors.uploadedFile && (
+              <Text className="text-red-500 text-xs mt-1">
+                {errors.uploadedFile}
+              </Text>
+            )}
           </View>
 
           <View className="w-full px-4 pt-4 pb-4 bg-white rounded-[14px] flex-col justify-start items-start gap-4 mb-8">
@@ -302,7 +339,14 @@ export default function OperatorAuthScreen() {
                 height={45.49}
                 value={guestHouseName}
                 onChangeText={setGuestHouseName}
+                error={!!errors.guestHouseName}
+                className="w-full"
               />
+              {errors.guestHouseName && (
+                <Text className="text-red-500 text-xs mt-1">
+                  {errors.guestHouseName}
+                </Text>
+              )}
             </View>
 
             <View className="w-full flex-col justify-start items-start gap-2">
@@ -319,7 +363,14 @@ export default function OperatorAuthScreen() {
                 height={45.49}
                 value={representativeName}
                 onChangeText={setRepresentativeName}
+                error={!!errors.representativeName}
+                className="w-full"
               />
+              {errors.representativeName && (
+                <Text className="text-red-500 text-xs mt-1">
+                  {errors.representativeName}
+                </Text>
+              )}
             </View>
 
             <View className="w-full flex-col justify-start items-start gap-2">
@@ -337,7 +388,14 @@ export default function OperatorAuthScreen() {
                 height={45.49}
                 value={phoneNumber}
                 onChangeText={setPhoneNumber}
+                error={!!errors.phoneNumber}
+                className="w-full"
               />
+              {errors.phoneNumber && (
+                <Text className="text-red-500 text-xs mt-1">
+                  {errors.phoneNumber}
+                </Text>
+              )}
             </View>
           </View>
         </View>
@@ -353,6 +411,9 @@ export default function OperatorAuthScreen() {
           className="w-full"
         />
       </View>
+
+      {/* 제출 성공 모달 */}
+      <SubmitSuccessModal visible={isModalVisible} onClose={handleModalClose} />
     </CustomSafeAreaView>
   );
 }
