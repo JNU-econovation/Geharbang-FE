@@ -11,15 +11,15 @@ export const useFeatures = ({ features, setFeatures }: useFeaturesProps) => {
       id: Date.now().toString(),
       text: "",
     };
-    setFeatures([...features, newFeature]);
+    setFeatures((prev) => [...prev, newFeature]);
   };
 
   const deleteFeature = (id: string) => {
-    setFeatures(features.filter((f) => f.id !== id));
+    setFeatures((prev) => prev.filter((f) => f.id !== id));
   };
 
   const updateFeature = (id: string, text: string) => {
-    setFeatures(features.map((f) => (f.id === id ? { ...f, text } : f)));
+    setFeatures((prev) => prev.map((f) => (f.id === id ? { ...f, text } : f)));
   };
 
   return {
