@@ -1,14 +1,44 @@
 import { router } from 'expo-router';
-import React from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
 import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
+import { downloadFile, previewFile } from '@/src/utils/operator/fileOperations';
 
 export default function AuthDetailScreen() {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState(0);
+
   const handleBackPress = () => {
     router.back();
+  };
+
+  // TODO: API에서 실제 파일 URL받아오기
+  const fileUrl = 'https://example.com/documents/business-license.pdf';
+  const fileName = '영업신고증.pdf';
+
+  const handlePreview = async () => {
+    await previewFile(fileUrl, fileName);
+  };
+
+  const handleDownload = async () => {
+    setIsDownloading(true);
+    setDownloadProgress(0);
+
+    await downloadFile(fileUrl, fileName, (progress) => {
+      setDownloadProgress(progress);
+    });
+
+    setIsDownloading(false);
+    setDownloadProgress(0);
   };
 
   return (
@@ -60,7 +90,6 @@ export default function AuthDetailScreen() {
             제출 서류
           </Text>
 
-          {/* 서류 종류 */}
           <View className="flex-col gap-2">
             <Text className="text-gray-500 text-sm font-normal">서류 종류</Text>
             <View className="self-start px-3 py-1.5 bg-sky-50 rounded-lg border border-sky-500">
@@ -93,7 +122,11 @@ export default function AuthDetailScreen() {
                 </View>
 
                 <View className="flex-row gap-3 w-full mt-2">
-                  <TouchableOpacity className="flex-1 flex-row items-center justify-center h-[36px] bg-white rounded-lg border border-gray-300 gap-2">
+                  <TouchableOpacity
+                    className="flex-1 flex-row items-center justify-center h-[36px] bg-white rounded-lg border border-gray-300 gap-2"
+                    onPress={handlePreview}
+                    disabled={isDownloading}
+                  >
                     <SvgUri
                       width={14}
                       height={14}
@@ -104,15 +137,30 @@ export default function AuthDetailScreen() {
                     </Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity className="flex-1 flex-row items-center justify-center h-[36px] bg-sky-500 rounded-lg gap-2">
-                    <SvgUri
-                      width={14}
-                      height={14}
-                      uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-c4663120-0d4f-49a2-9485-2705f50f65f0.svg"
-                    />
-                    <Text className="text-white text-sm font-normal">
-                      다운로드
-                    </Text>
+                  <TouchableOpacity
+                    className="flex-1 flex-row items-center justify-center h-[36px] bg-sky-500 rounded-lg gap-2"
+                    onPress={handleDownload}
+                    disabled={isDownloading}
+                  >
+                    {isDownloading ? (
+                      <>
+                        <ActivityIndicator size="small" color="white" />
+                        <Text className="text-white text-sm font-normal">
+                          {Math.round(downloadProgress * 100)}%
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <SvgUri
+                          width={14}
+                          height={14}
+                          uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-c4663120-0d4f-49a2-9485-2705f50f65f0.svg"
+                        />
+                        <Text className="text-white text-sm font-normal">
+                          다운로드
+                        </Text>
+                      </>
+                    )}
                   </TouchableOpacity>
                 </View>
               </View>
