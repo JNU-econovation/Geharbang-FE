@@ -51,13 +51,18 @@ export default function ChatScreen() {
               content='스텝 공고 올리기'
             />
           </Pressable>
-          <Pressable
-            onPress={() => router.push("/guestHouse/guestHouseDetail/1")}
-          >
+          <Pressable onPress={() => router.push("/my/guestHouse")}>
             <TextSize
               size={16}
               color='deepskyblue'
-              content='게스트하우스 상세보기'
+              content='사장님 게하 보기'
+            />
+          </Pressable>
+          <Pressable onPress={() => router.push("/my/stepRecruitment")}>
+            <TextSize
+              size={16}
+              color='deepskyblue'
+              content='사장님 스텝 공고 보기'
             />
           </Pressable>
         </View>
