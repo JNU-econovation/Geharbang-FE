@@ -9,7 +9,11 @@ import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
 import Button from '@/src/components/ui/Button/Button';
 import CustomTextInput from '@/src/components/ui/TextInput';
+import { useSubmitCertificate } from '@/src/hooks/operator/useSubmitCertificate';
+import { useUploadCertificateFile } from '@/src/hooks/operator/useUploadCertificateFile';
 import { File } from '@/src/types/File';
+import { mapCertificateTypeToApi } from '@/src/types/operator';
+import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
 import { uploadDocument } from '@/src/utils/operator/documentUpload';
 import { validateOperatorVerify } from '@/src/utils/operator/operatorVerifyValidation';
 
@@ -31,6 +35,9 @@ export default function OperatorAuthScreen() {
     uploadedFile: '',
   });
 
+  const uploadFileMutation = useUploadCertificateFile();
+  const submitCertificateMutation = useSubmitCertificate();
+
   const handleBackPress = () => {
     router.back();
   };
@@ -46,7 +53,12 @@ export default function OperatorAuthScreen() {
     }
   };
 
-  const handleSubmit = () => {
+  const handlePhoneNumberChange = (text: string) => {
+    const formatted = formatPhoneNumber(text);
+    setPhoneNumber(formatted);
+  };
+
+  const handleSubmit = async () => {
     const { isValid, errors: validationErrors } = validateOperatorVerify({
       documentType,
       guestHouseName,
@@ -57,26 +69,34 @@ export default function OperatorAuthScreen() {
 
     setErrors(validationErrors);
 
-    if (!isValid) {
+    if (!isValid || !uploadedFile) {
       return;
     }
 
-    // TODO: API 호출
-    console.log({
-      documentType,
-      guestHouseName,
-      representativeName,
-      phoneNumber,
-      uploadedFile,
-    });
+    try {
+      const fileExtension = uploadedFile.name.split('.').pop() || 'pdf';
+      const uploadResult = await uploadFileMutation.mutateAsync({
+        file: uploadedFile,
+        fileType: fileExtension,
+        fileName: uploadedFile.name,
+      });
 
-    setIsModalVisible(true);
+      await submitCertificateMutation.mutateAsync({
+        certificateType: mapCertificateTypeToApi(documentType),
+        guestHouseName,
+        ownerName: representativeName,
+        phoneNumber,
+        fileUrl: uploadResult.fileUrl,
+      });
+
+      setIsModalVisible(true);
+    } catch (error) {
+      console.error('인증서 제출 실패:', error);
+    }
   };
 
   const handleModalClose = () => {
-    // TODO: API 호출후 상태에 따라 모달닫기
     setIsModalVisible(false);
-
     router.replace('/');
   };
 
@@ -104,7 +124,7 @@ export default function OperatorAuthScreen() {
                   운영자 인증이 필요합니다
                 </Text>
                 <Text className="text-[#0068a8] text-xs font-normal leading-5">
-                  사업자등록증 또는 관광숙박업 신고증을 제출하시면,{'\n'}
+                  영업신고증 또는 관광숙박업 신고증을 제출하시면,{'\n'}
                   관리자 검토 후 승인됩니다.
                   {'\n'}(평균 1-2일 소요)
                 </Text>
@@ -249,7 +269,7 @@ export default function OperatorAuthScreen() {
                 placeholder="예 : 010-1234-5678"
                 keyboardType="phone-pad"
                 value={phoneNumber}
-                onChangeText={setPhoneNumber}
+                onChangeText={handlePhoneNumberChange}
                 error={!!errors.phoneNumber}
                 className="w-full"
               />
@@ -268,9 +288,16 @@ export default function OperatorAuthScreen() {
           variant="primary"
           height={52}
           textColor="white"
-          content="운영자 인증하기"
+          content={
+            uploadFileMutation.isPending || submitCertificateMutation.isPending
+              ? '제출 중...'
+              : '운영자 인증하기'
+          }
           onPress={handleSubmit}
           className="w-full"
+          disabled={
+            uploadFileMutation.isPending || submitCertificateMutation.isPending
+          }
         />
       </View>
 
