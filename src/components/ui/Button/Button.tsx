@@ -12,7 +12,7 @@ import TextSize from "@/src/components/ui/TextSize";
 import { button } from "./button.variants";
 
 interface ButtonProps extends PressableProps {
-  variant: "primary" | "kakao" | "google" | "white" | "gray";
+  variant?: "primary" | "kakao" | "google" | "white" | "gray" | "red" | "blue" | "green";
   width?: number;
   height: number;
   content: string;
