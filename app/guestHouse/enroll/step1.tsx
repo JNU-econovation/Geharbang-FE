@@ -8,7 +8,7 @@ import WorkingRegion from '@/app/step/recruitment/_components/step1/WorkingRegio
 import Flex from '@/src/components/layout/Flex';
 import Button from '@/src/components/ui/Button/Button';
 import FormSection from '@/src/components/ui/Form/FormSection';
-import { useGuestHouseStep1Validation as useGuestHouse1Validation } from '@/src/hooks/guesthouse/useGuestHouseStep1Validation';
+import { useGuestHouseStep1Validation } from '@/src/hooks/guestHouse/useGuestHouseStep1Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { BUTTON_LABELS } from '@/src/utils/constants/guestHouseEnrollment';
 import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
@@ -54,7 +54,7 @@ export default function GuestHouseStep1() {
   );
 
   const { errors, validateForm, clearError } =
-    useGuestHouse1Validation(step1Data);
+    useGuestHouseStep1Validation(step1Data);
 
   const handleNext = () => {
     if (validateForm()) {
