@@ -1,12 +1,18 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 
 import ManagementTabs from '@/app/operator/management/_components/ManagementTabs';
 import OperatorCard from '@/app/operator/management/_components/OperatorCard';
 import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
-import { OperatorCardData, TabType } from '@/src/types/operator';
+import { useCertificates } from '@/src/hooks/operator/useCertificates';
+import { useUpdateCertificateStatus } from '@/src/hooks/operator/useUpdateCertificateStatus';
+import {
+  OperatorCardData,
+  TabType,
+  convertCertificateToCardData,
+} from '@/src/types/operator';
 // 연동후 없앨게용
 const mockData: OperatorCardData[] = [
   {
@@ -46,20 +52,32 @@ const mockData: OperatorCardData[] = [
 export default function OperatorManagementScreen() {
   const [activeTab, setActiveTab] = useState<TabType>('pending');
 
+  // API 훅
+  const { data: apiData, isLoading, isError } = useCertificates();
+  const updateStatusMutation = useUpdateCertificateStatus();
+
   const handleBackPress = () => {
     router.back();
   };
 
-  const filteredData = mockData.filter((card) => card.status === activeTab);
+  const certificatesData = useMemo(() => {
+    // API 에러가 발생하거나 데이터가 없으면 목데이터 사용
+    if (isError || !apiData || apiData.length === 0) {
+      return mockData;
+    }
+    return apiData.map(convertCertificateToCardData);
+  }, [apiData, isError]);
+
+  const filteredData = certificatesData.filter(
+    (card) => card.status === activeTab,
+  );
 
   const handleApprove = (id: string) => {
-    // TODO: API 호출 - 승인 처리
-    console.log('Approve:', id);
+    updateStatusMutation.mutate({ id, approved: true });
   };
 
   const handleReject = (id: string) => {
-    // TODO: API 호출 - 거부 처리
-    console.log('Reject:', id);
+    updateStatusMutation.mutate({ id, approved: false });
   };
 
   return (
@@ -80,14 +98,31 @@ export default function OperatorManagementScreen() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        {filteredData.map((card) => (
-          <OperatorCard
-            key={card.id}
-            card={card}
-            onApprove={handleApprove}
-            onReject={handleReject}
-          />
-        ))}
+        {isLoading ? (
+          <View className="flex-1 justify-center items-center py-20">
+            <ActivityIndicator size="large" color="#0ea5e9" />
+            <Text className="text-gray-500 text-sm mt-4">로딩 중...</Text>
+          </View>
+        ) : filteredData.length === 0 ? (
+          <View className="flex-1 justify-center items-center py-20">
+            <Text className="text-gray-500 text-sm">
+              {activeTab === 'pending'
+                ? '검토 대기 중인 신청이 없습니다.'
+                : activeTab === 'approved'
+                ? '승인된 신청이 없습니다.'
+                : '거부된 신청이 없습니다.'}
+            </Text>
+          </View>
+        ) : (
+          filteredData.map((card) => (
+            <OperatorCard
+              key={card.id}
+              card={card}
+              onApprove={handleApprove}
+              onReject={handleReject}
+            />
+          ))
+        )}
       </ScrollView>
     </CustomSafeAreaView>
   );

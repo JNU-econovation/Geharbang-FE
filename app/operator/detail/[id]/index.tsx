@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
@@ -11,29 +11,40 @@ import { SvgUri } from 'react-native-svg';
 
 import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
+import { useCertificateDetail } from '@/src/hooks/operator/useCertificateDetail';
 import { downloadFile, previewFile } from '@/src/utils/operator/fileOperations';
 
 export default function AuthDetailScreen() {
+  const { id } = useLocalSearchParams();
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
+
+  // API 훅
+  const { data, isLoading, isError } = useCertificateDetail(String(id));
 
   const handleBackPress = () => {
     router.back();
   };
 
-  // TODO: API에서 실제 파일 URL받아오기
-  const fileUrl = 'https://example.com/documents/business-license.pdf';
-  const fileName = '영업신고증.pdf';
+  // API 데이터 또는 기본값 사용
+  const certificateData = data || {
+    guestHouseName: '바다뷰 게스트하우스',
+    ownerName: '김제주',
+    phoneNumber: '010-1234-5678',
+    certificateType: '영업신고증',
+    fileUrl: 'https://example.com/documents/business-license.pdf',
+    fileName: '영업신고증.pdf',
+  };
 
   const handlePreview = async () => {
-    await previewFile(fileUrl, fileName);
+    await previewFile(certificateData.fileUrl, certificateData.fileName);
   };
 
   const handleDownload = async () => {
     setIsDownloading(true);
     setDownloadProgress(0);
 
-    await downloadFile(fileUrl, fileName, (progress) => {
+    await downloadFile(certificateData.fileUrl, certificateData.fileName, (progress) => {
       setDownloadProgress(progress);
     });
 
@@ -47,43 +58,49 @@ export default function AuthDetailScreen() {
         <BackArrowHeader content="인증 신청 상세" onPress={handleBackPress} />
       </View>
 
-      <ScrollView
-        className="flex-1 bg-white"
-        contentContainerStyle={{ padding: 20, gap: 24 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <View className="w-full p-5 bg-white rounded-xl border border-gray-200 flex-col gap-4">
-          <Text className="text-[#101828] text-base font-normal">
-            기본 정보
-          </Text>
+      {isLoading ? (
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#0ea5e9" />
+          <Text className="text-gray-500 text-sm mt-4">로딩 중...</Text>
+        </View>
+      ) : (
+        <ScrollView
+          className="flex-1 bg-white"
+          contentContainerStyle={{ padding: 20, gap: 24 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="w-full p-5 bg-white rounded-xl border border-gray-200 flex-col gap-4">
+            <Text className="text-[#101828] text-base font-normal">
+              기본 정보
+            </Text>
 
-          <View className="flex-col gap-4">
-            <View className="flex-col gap-1">
-              <Text className="text-gray-500 text-sm font-normal">
-                게스트하우스명
-              </Text>
-              <Text className="text-[#101828] text-base font-normal">
-                바다뷰 게스트하우스
-              </Text>
-            </View>
+            <View className="flex-col gap-4">
+              <View className="flex-col gap-1">
+                <Text className="text-gray-500 text-sm font-normal">
+                  게스트하우스명
+                </Text>
+                <Text className="text-[#101828] text-base font-normal">
+                  {certificateData.guestHouseName}
+                </Text>
+              </View>
 
-            <View className="flex-col gap-1">
-              <Text className="text-gray-500 text-sm font-normal">
-                대표자명
-              </Text>
-              <Text className="text-[#101828] text-base font-normal">
-                김제주
-              </Text>
-            </View>
+              <View className="flex-col gap-1">
+                <Text className="text-gray-500 text-sm font-normal">
+                  대표자명
+                </Text>
+                <Text className="text-[#101828] text-base font-normal">
+                  {certificateData.ownerName}
+                </Text>
+              </View>
 
-            <View className="flex-col gap-1">
-              <Text className="text-gray-500 text-sm font-normal">연락처</Text>
-              <Text className="text-[#101828] text-base font-normal">
-                010-1234-5678
-              </Text>
+              <View className="flex-col gap-1">
+                <Text className="text-gray-500 text-sm font-normal">연락처</Text>
+                <Text className="text-[#101828] text-base font-normal">
+                  {certificateData.phoneNumber}
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
 
         <View className="w-full p-5 bg-white rounded-xl border border-gray-200 flex-col gap-4">
           <Text className="text-[#101828] text-base font-normal">
@@ -94,7 +111,7 @@ export default function AuthDetailScreen() {
             <Text className="text-gray-500 text-sm font-normal">서류 종류</Text>
             <View className="self-start px-3 py-1.5 bg-sky-50 rounded-lg border border-sky-500">
               <Text className="text-sky-600 text-sm font-normal">
-                영업신고증
+                {certificateData.certificateType}
               </Text>
             </View>
           </View>
@@ -114,7 +131,7 @@ export default function AuthDetailScreen() {
 
                 <View className="items-center">
                   <Text className="text-[#101828] text-base font-normal mb-1">
-                    영업신고증
+                    {certificateData.fileName}
                   </Text>
                   <Text className="text-gray-500 text-sm font-normal">
                     PDF 파일
@@ -167,7 +184,8 @@ export default function AuthDetailScreen() {
             </View>
           </View>
         </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </CustomSafeAreaView>
   );
 }
