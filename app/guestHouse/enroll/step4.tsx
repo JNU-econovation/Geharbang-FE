@@ -6,8 +6,8 @@ import Button from '@/src/components/ui/Button/Button';
 import FormField from '@/src/components/ui/Form/FormField';
 import FormSection from '@/src/components/ui/Form/FormSection';
 import TextInput from '@/src/components/ui/TextInput';
-import { useGuestHouseEnrollment } from '@/src/hooks/guesthouse/useGuestHouseEnrollment';
-import { useGuestHouseStep4Validation } from '@/src/hooks/guesthouse/useGuestHouseStep4Validation';
+import { useGuestHouseEnrollment } from '@/src/hooks/guestHouse/useGuestHouseEnrollment';
+import { useGuestHouseStep4Validation } from '@/src/hooks/guestHouse/useGuestHouseStep4Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
 import {
