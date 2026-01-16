@@ -407,10 +407,7 @@ export default function MakeParty() {
               </Flex>
             </FormField>
 
-            <FormField
-              label="파티비"
-              required={true}
-            >
+            <FormField label="파티비" required={true}>
               <View className="gap-3">
                 <View>
                   <Text className="text-[#6a7282] text-xs mb-2">
@@ -491,7 +488,9 @@ export default function MakeParty() {
             width={360}
             height={50}
             textColor="white"
-            content={isEditMode ? BUTTON_LABELS.EDIT_PARTY : BUTTON_LABELS.MAKE_PARTY}
+            content={
+              isEditMode ? BUTTON_LABELS.EDIT_PARTY : BUTTON_LABELS.MAKE_PARTY
+            }
             onPress={handleNext}
             className="mt-4 mb-8"
           />
