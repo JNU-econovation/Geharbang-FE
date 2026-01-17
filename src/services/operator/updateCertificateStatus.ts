@@ -14,5 +14,5 @@ export const updateCertificateStatus = async (
   id: string,
   data: UpdateCertificateStatusData,
 ): Promise<void> => {
-  await axiosPrivate.post(`/api/v1/certificate/${id}/status`, data);
+  await axiosPrivate.post(`/api/v1/certificate/${id}`, data);
 };
