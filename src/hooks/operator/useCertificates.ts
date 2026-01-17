@@ -9,8 +9,10 @@ import {
  * 인증서 목록 조회 훅
  */
 export const useCertificates = () => {
-  return useQuery<Certificate[], Error>({
+  const query = useQuery<Certificate[], Error>({
     queryKey: ['certificates'],
     queryFn: getCertificates,
   });
+
+  return query;
 };
