@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 
 import ManagementTabs from '@/app/operator/management/_components/ManagementTabs';
@@ -13,60 +13,34 @@ import {
   TabType,
   convertCertificateToCardData,
 } from '@/src/types/operator';
-// 연동후 없앨게용
-const mockData: OperatorCardData[] = [
-  {
-    id: '1',
-    guestHouseName: '바다뷰 게스트하우스',
-    representativeName: '김제주',
-    documentType: '영업신고증',
-    submittedAt: '2024-01-15 14:30',
-    status: 'pending',
-  },
-  {
-    id: '2',
-    guestHouseName: '제주 힐링 하우스',
-    representativeName: '박서귀',
-    documentType: '관광숙박업 신고증',
-    submittedAt: '2024-01-16 09:15',
-    status: 'pending',
-  },
-  {
-    id: '3',
-    guestHouseName: '제주 오션뷰',
-    representativeName: '이제주',
-    documentType: '영업신고증',
-    submittedAt: '2024-01-14 11:20',
-    status: 'approved',
-  },
-  {
-    id: '4',
-    guestHouseName: '한라산 게스트하우스',
-    representativeName: '최제주',
-    documentType: '관광숙박업 신고증',
-    submittedAt: '2024-01-13 16:45',
-    status: 'rejected',
-  },
-];
 
 export default function OperatorManagementScreen() {
   const [activeTab, setActiveTab] = useState<TabType>('pending');
 
   // API 훅
-  const { data: apiData, isLoading, isError } = useCertificates();
+  const { data: apiData, isLoading, isError, error } = useCertificates();
   const updateStatusMutation = useUpdateCertificateStatus();
+
+  useEffect(() => {
+    if (isError) {
+      console.error('========== 인증서 목록 조회 실패 ==========');
+      console.error('에러:', error);
+      console.error('에러 메시지:', error?.message);
+      console.error('에러 전체 객체:', JSON.stringify(error, null, 2));
+      console.error('====================================');
+    }
+  }, [isError, error]);
 
   const handleBackPress = () => {
     router.back();
   };
 
   const certificatesData = useMemo(() => {
-    // API 에러가 발생하거나 데이터가 없으면 목데이터 사용
-    if (isError || !apiData || apiData.length === 0) {
-      return mockData;
+    if (!apiData) {
+      return [];
     }
     return apiData.map(convertCertificateToCardData);
-  }, [apiData, isError]);
+  }, [apiData]);
 
   const filteredData = certificatesData.filter(
     (card) => card.status === activeTab,

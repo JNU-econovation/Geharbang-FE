@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
 import {
-  getCertificates,
   Certificate,
+  getCertificates,
 } from '@/src/services/operator/getCertificates';
 
 /**

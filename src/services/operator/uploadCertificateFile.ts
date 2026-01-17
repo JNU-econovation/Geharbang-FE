@@ -1,5 +1,5 @@
-import { axiosPrivate } from '../api/customAxios';
 import { File } from '@/src/types/File';
+import { axiosPrivate } from '../api/customAxios';
 
 export interface UploadCertificateFileParams {
   file: File;

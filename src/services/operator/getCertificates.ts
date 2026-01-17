@@ -19,7 +19,7 @@ export interface GetCertificatesResponse {
  */
 export const getCertificates = async (): Promise<Certificate[]> => {
   const response = await axiosPrivate.get<GetCertificatesResponse>(
-    '/api/v1/certificates',
+    '/api/v1/certificate',
   );
 
   return response.data.certificates;
