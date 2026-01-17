@@ -21,7 +21,7 @@ export function useWorkingCalculator({
   setClosedCount: setGlobalClosed,
   setBothCounts,
 }: UseWorkingCalculatorProps) {
-const [localWorking, setLocalWorking] = useState<number | "">(initialWorking);
+  const [localWorking, setLocalWorking] = useState<number | "">(initialWorking);
   const [localClosed, setLocalClosed] = useState<number | "">(initialClosed);
 
   const prevModeRef = useRef<"manual" | "auto">(mode);
@@ -48,12 +48,12 @@ const [localWorking, setLocalWorking] = useState<number | "">(initialWorking);
       const nextClosed = Math.max(totalDays - count, 0);
       setLocalWorking(count);
       setLocalClosed(nextClosed);
-      syncToParent(count, nextClosed);develop
+      syncToParent(count, nextClosed);
       return;
     }
 
     setLocalWorking(count);
-syncToParent(count, localClosed);
+    syncToParent(count, localClosed);
   };
 
   const updateClosedCount = (count: number | "") => {
@@ -65,7 +65,7 @@ syncToParent(count, localClosed);
 
   useEffect(() => {
     if (prevModeRef.current !== mode) {
-setLocalWorking("");
+      setLocalWorking("");
       setLocalClosed("");
       syncToParent("", "");
       prevModeRef.current = mode;
@@ -82,6 +82,6 @@ setLocalWorking("");
     closedCount: localClosed,
     updateWorkingCount,
     updateClosedCount,
-isAuto, develop
+    isAuto,
   };
 }
