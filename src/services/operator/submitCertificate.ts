@@ -16,5 +16,6 @@ export interface SubmitCertificateData {
 export const submitCertificate = async (
   data: SubmitCertificateData,
 ): Promise<void> => {
-  await axiosPrivate.post('/api/v1/certificate', data);
+  const response = await axiosPrivate.post('/api/v1/certificate/owner', data);
+  return response.data;
 };
