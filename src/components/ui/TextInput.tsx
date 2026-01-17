@@ -45,9 +45,9 @@ export default function CustomTextInput({
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={COLORS.GRAY.PLACEHOLDER}
-        className={`border rounded-lg p-3 
+        className={`border rounded-lg p-3
                   ${error ? "border-primary-red" : "border-gray-border"}`}
-        style={{ height: height, width: width, lineHeight: lineHeight }}
+        style={{ height: height, width: width || "100%", lineHeight: lineHeight }}
         keyboardType={keyboardType}
         maxLength={maxLength}
         multiline={multiline}
