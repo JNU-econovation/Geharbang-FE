@@ -8,11 +8,7 @@ import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
 import { useCertificates } from '@/src/hooks/operator/useCertificates';
 import { useUpdateCertificateStatus } from '@/src/hooks/operator/useUpdateCertificateStatus';
-import {
-  OperatorCardData,
-  TabType,
-  convertCertificateToCardData,
-} from '@/src/types/operator';
+import { TabType, convertCertificateToCardData } from '@/src/types/operator';
 
 export default function OperatorManagementScreen() {
   const [activeTab, setActiveTab] = useState<TabType>('pending');
@@ -39,12 +35,19 @@ export default function OperatorManagementScreen() {
     if (!apiData) {
       return [];
     }
-    return apiData.map(convertCertificateToCardData);
+
+    const converted = apiData.map(convertCertificateToCardData);
+
+    return converted;
   }, [apiData]);
 
-  const filteredData = certificatesData.filter(
-    (card) => card.status === activeTab,
-  );
+  const filteredData = useMemo(() => {
+    const filtered = certificatesData.filter(
+      (card) => card.status === activeTab,
+    );
+
+    return filtered;
+  }, [certificatesData, activeTab]);
 
   const handleApprove = (id: string) => {
     updateStatusMutation.mutate({ id, approved: true });
@@ -83,8 +86,8 @@ export default function OperatorManagementScreen() {
               {activeTab === 'pending'
                 ? '검토 대기 중인 신청이 없습니다.'
                 : activeTab === 'approved'
-                ? '승인된 신청이 없습니다.'
-                : '거부된 신청이 없습니다.'}
+                  ? '승인된 신청이 없습니다.'
+                  : '거부된 신청이 없습니다.'}
             </Text>
           </View>
         ) : (
