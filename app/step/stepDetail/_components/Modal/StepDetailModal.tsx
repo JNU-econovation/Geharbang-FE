@@ -21,7 +21,6 @@ export default function StepDetailModal({
   onApply,
   isApplicationExist,
 }: StepDetailModalProps) {
-  console.log('isApplicationExist', isApplicationExist);
   return (
     <Modal transparent visible={isVisible}>
       <Pressable

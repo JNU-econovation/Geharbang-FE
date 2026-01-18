@@ -1,4 +1,4 @@
-import { GuestHouseCard } from "@/src/types/models/home/GuestHouseCard";
+import { guestHouseRecommendationCard } from "@/src/types/models/home/GuestHouseCard";
 import { axiosPrivate } from "../api/customAxios";
 
 interface ProfileInfo {
@@ -12,7 +12,7 @@ interface Question {
 }
 
 interface ApiResponse {
-  guesthouse: GuestHouseCard;
+  guesthouse: guestHouseRecommendationCard;
   profile: ProfileInfo;
   questions: Question[];
 }

@@ -1,8 +1,8 @@
-import { GuestHouseCard } from "@/src/types/models/home/GuestHouseCard";
+import { guestHouseRecommendationCard } from "@/src/types/models/home/GuestHouseCard";
 import { axiosPublic } from "../api/customAxios";
 
 type StepRecruitmentResponse = {
-  staffRecruitmentPosts: GuestHouseCard[];
+  staffRecruitmentPosts: guestHouseRecommendationCard[];
 };
 
 export const getStepRecruitment = async (region: string) => {
