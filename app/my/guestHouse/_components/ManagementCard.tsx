@@ -53,7 +53,7 @@ export default function ManagementCard({
           resizeMode='cover'
         />
 
-        <StatusBadge isClosed={isClosed} />
+        <StatusBadge type={type} isClosed={isClosed} />
 
         <Pressable
           className='absolute top-3 right-3 bg-primary-red p-2 rounded-full'
