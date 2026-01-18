@@ -17,6 +17,7 @@ interface CustomTextInputProps {
   autoCapitalize?: TextInputProps["autoCapitalize"];
   editable?: boolean;
   className?: string;
+  suffix?: string;
   textAlignVertical?: TextInputProps["textAlignVertical"];
   suffix?: string;
 }
@@ -35,8 +36,8 @@ export default function CustomTextInput({
   autoCapitalize,
   editable,
   className,
-  textAlignVertical,
   suffix,
+  textAlignVertical,
 }: CustomTextInputProps) {
   return (
     <View className={`flex-row items-center ${className}`}>
