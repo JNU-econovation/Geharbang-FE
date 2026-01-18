@@ -1,7 +1,7 @@
-import { TextInput, TextInputProps, View } from "react-native";
+import { TextInput, TextInputProps, View } from 'react-native';
 
-import { COLORS } from "@/src/utils/constants/colors";
-import TextSize from "./TextSize";
+import { COLORS } from '@/src/utils/constants/colors';
+import TextSize from './TextSize';
 
 interface CustomTextInputProps {
   value?: string | number;
@@ -11,15 +11,14 @@ interface CustomTextInputProps {
   lineHeight?: number;
   width?: number;
   height?: number;
-  keyboardType?: TextInputProps["keyboardType"];
+  keyboardType?: TextInputProps['keyboardType'];
   maxLength?: number;
   multiline?: boolean;
-  autoCapitalize?: TextInputProps["autoCapitalize"];
+  autoCapitalize?: TextInputProps['autoCapitalize'];
   editable?: boolean;
   className?: string;
   suffix?: string;
-  textAlignVertical?: TextInputProps["textAlignVertical"];
-  suffix?: string;
+  textAlignVertical?: TextInputProps['textAlignVertical'];
 }
 
 export default function CustomTextInput({
@@ -47,8 +46,12 @@ export default function CustomTextInput({
         placeholder={placeholder}
         placeholderTextColor={COLORS.GRAY.PLACEHOLDER}
         className={`border rounded-lg p-3
-                  ${error ? "border-primary-red" : "border-gray-border"}`}
-        style={{ height: height, width: width || "100%", lineHeight: lineHeight }}
+                  ${error ? 'border-primary-red' : 'border-gray-border'}`}
+        style={{
+          height: height,
+          width: width || '100%',
+          lineHeight: lineHeight,
+        }}
         keyboardType={keyboardType}
         maxLength={maxLength}
         multiline={multiline}
@@ -57,7 +60,7 @@ export default function CustomTextInput({
         textAlignVertical={textAlignVertical}
       />
       {suffix && (
-        <View className='ml-2'>
+        <View className="ml-2">
           <TextSize size={14} content={suffix} color={COLORS.GRAY.TEXT} />
         </View>
       )}
