@@ -1,5 +1,5 @@
 import { router, useFocusEffect } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { BackHandler, ScrollView } from 'react-native';
 
 import GuestHouseEnrollLayout from '@/app/guestHouse/enroll/_components/GuestHouseEnrollLayout';
@@ -9,7 +9,7 @@ import FormField from '@/src/components/ui/Form/FormField';
 import FormSection from '@/src/components/ui/Form/FormSection';
 import MultiImagePicker from '@/src/components/ui/imagePicker/MultiImagePicker';
 import TextInput from '@/src/components/ui/TextInput';
-import { useGuestHouseStep2Validation } from '@/src/hooks/guesthouse/useGuestHouseStep2Validation';
+import { useGuestHouseStep2Validation } from '@/src/hooks/guestHouse/useGuestHouseStep2Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import {
   BUTTON_LABELS,
