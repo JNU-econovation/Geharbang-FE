@@ -6,8 +6,8 @@ import Button from '@/src/components/ui/Button/Button';
 import FormField from '@/src/components/ui/Form/FormField';
 import FormSection from '@/src/components/ui/Form/FormSection';
 import TextInput from '@/src/components/ui/TextInput';
-import { useGuestHouseEnrollment } from '@/src/hooks/guesthouse/useGuestHouseEnrollment';
-import { useGuestHouseStep4Validation } from '@/src/hooks/guesthouse/useGuestHouseStep4Validation';
+import { useGuestHouseEnrollment } from '@/src/hooks/guestHouse/useGuestHouseEnrollment';
+import { useGuestHouseStep4Validation } from '@/src/hooks/guestHouse/useGuestHouseStep4Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
 import {
@@ -73,12 +73,12 @@ export default function GuestHouseEnrollStep4() {
         if (error.message.includes('이미지')) {
           userFriendlyMessage = error.message;
         } else if (error.message.includes('네트워크')) {
-          userFriendlyMessage =
-            '네트워크 연결을 확인하고 다시 시도해주세요.';
+          userFriendlyMessage = '네트워크 연결을 확인하고 다시 시도해주세요.';
         } else if (error.message.includes('유효한 숫자')) {
           userFriendlyMessage = '입력 정보를 다시 확인해주세요.';
         } else {
-          userFriendlyMessage = '등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+          userFriendlyMessage =
+            '등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
         }
       }
 

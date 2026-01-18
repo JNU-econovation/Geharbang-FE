@@ -5,7 +5,7 @@ import { BackHandler, ScrollView, View } from 'react-native';
 import Flex from '@/src/components/layout/Flex';
 import Button from '@/src/components/ui/Button/Button';
 import ItemListContainer from '@/src/components/ui/ItemListContainer';
-import { useGuestHouseStep3Validation } from '@/src/hooks/guesthouse/useGuestHouseStep3Validation';
+import { useGuestHouseStep3Validation } from '@/src/hooks/guestHouse/useGuestHouseStep3Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import {
   BUTTON_LABELS,

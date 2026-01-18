@@ -10,7 +10,7 @@ import FormField from '@/src/components/ui/Form/FormField';
 import MultiImagePicker from '@/src/components/ui/imagePicker/MultiImagePicker';
 import TextInput from '@/src/components/ui/TextInput';
 import TimePickerField from '@/src/components/ui/TimePickerField';
-import { useGuestHousePartyValidation } from '@/src/hooks/guesthouse/useGuestHousePartyValidation';
+import { useGuestHousePartyValidation } from '@/src/hooks/guestHouse/useGuestHousePartyValidation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { File } from '@/src/types/File';
 import {
@@ -18,13 +18,13 @@ import {
   toggleSingleSelect,
 } from '@/src/utils/common/toggleUtils';
 import {
-  PARTY_TYPES,
-  DAYS_OF_WEEK_SIMPLE,
-  PLACEHOLDERS,
   BUTTON_LABELS,
-  INPUT_HEIGHTS,
-  VALIDATION_LIMITS,
+  DAYS_OF_WEEK_SIMPLE,
   FORM_DESCRIPTIONS,
+  INPUT_HEIGHTS,
+  PARTY_TYPES,
+  PLACEHOLDERS,
+  VALIDATION_LIMITS,
 } from '@/src/utils/constants/guestHouseEnrollment';
 
 const DAYS_OF_WEEK = DAYS_OF_WEEK_SIMPLE;
@@ -407,10 +407,7 @@ export default function MakeParty() {
               </Flex>
             </FormField>
 
-            <FormField
-              label="파티비"
-              required={true}
-            >
+            <FormField label="파티비" required={true}>
               <View className="gap-3">
                 <View>
                   <Text className="text-[#6a7282] text-xs mb-2">
@@ -491,7 +488,9 @@ export default function MakeParty() {
             width={360}
             height={50}
             textColor="white"
-            content={isEditMode ? BUTTON_LABELS.EDIT_PARTY : BUTTON_LABELS.MAKE_PARTY}
+            content={
+              isEditMode ? BUTTON_LABELS.EDIT_PARTY : BUTTON_LABELS.MAKE_PARTY
+            }
             onPress={handleNext}
             className="mt-4 mb-8"
           />
