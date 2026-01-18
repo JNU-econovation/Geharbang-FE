@@ -35,7 +35,7 @@ export default function GuestHouseEnrollResult() {
 
   const goToDetail = () => {
     if (guestHouseId) {
-      router.replace(`/guestHouse/${guestHouseId}` as any);
+      router.replace(`/guestHouse/guestHouseDetail/${guestHouseId}` as any);
     } else {
       goHome();
     }

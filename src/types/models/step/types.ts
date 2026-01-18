@@ -56,4 +56,4 @@ export type SortOption = (typeof SORT_OPTIONS)[number];
 export type SortOptionKey = SortOption["key"];
 
 // 페이지네이션 상수
-export const PAGE_SIZE = 20; // 백엔드 기본값
+export const PAGE_SIZE = 10; // 백엔드 기본값

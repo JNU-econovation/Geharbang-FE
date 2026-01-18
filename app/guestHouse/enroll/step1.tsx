@@ -54,7 +54,7 @@ export default function GuestHouseStep1() {
   );
 
   const { errors, validateForm, clearError } =
-    useGuestHouse1Validation(step1Data);
+    useGuestHouseStep1Validation(step1Data);
 
   const handleNext = () => {
     if (validateForm()) {

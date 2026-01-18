@@ -5,6 +5,7 @@ interface TextSizeProps {
   color?: string;
   content?: string;
   weight?: TextStyle["fontWeight"];
+  align?: TextStyle["textAlign"];
 }
 
 export default function TextSize({
@@ -12,11 +13,18 @@ export default function TextSize({
   color,
   weight,
   content,
+  align= 'left',
 }: TextSizeProps) {
   return (
     <Text
       allowFontScaling={false}
-      style={{ fontSize: size, color, fontWeight: weight, flexShrink: 1 }}
+      style={{
+        fontSize: size,
+        color,
+        fontWeight: weight,
+        flexShrink: 1,
+        textAlign: align,
+      }}
     >
       {content}
     </Text>

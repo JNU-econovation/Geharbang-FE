@@ -9,6 +9,9 @@ export const button = tv({
       google: "border border-google",
       white: "bg-white border border-gray-border",
       gray: "bg-gray-button border border-gray-border",
+      red: "bg-primary-red",
+      blue: "bg-blue-bg border border-primary-blue",
+      green: "bg-green-bg border border-green-text"
     },
   },
   defaultVariants: {
