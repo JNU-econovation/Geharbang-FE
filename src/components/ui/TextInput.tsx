@@ -19,6 +19,7 @@ interface CustomTextInputProps {
   className?: string;
   suffix?: string;
   textAlignVertical?: TextInputProps["textAlignVertical"];
+  suffix?: string;
 }
 
 export default function CustomTextInput({

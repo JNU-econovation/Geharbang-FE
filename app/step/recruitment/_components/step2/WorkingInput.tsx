@@ -1,9 +1,10 @@
+import { useWorkingCalculator } from "@/src/hooks/stepRecruitment/useWorkingCalculator";
+
 import Flex from "@/src/components/layout/Flex";
 import FormField from "@/src/components/ui/Form/FormField";
 import CustomTextInput from "@/src/components/ui/TextInput";
 import TextSize from "@/src/components/ui/TextSize";
 import WorkScheduleSelector from "@/src/components/ui/WorkScheduleSelector";
-import { useWorkingCalculator } from "@/src/hooks/stepRecruitment/useWorkingCalculator";
 import { View } from "react-native";
 
 interface WorkdayInputProps {
