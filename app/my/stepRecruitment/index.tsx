@@ -1,31 +1,23 @@
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import Flex from "@/src/components/layout/Flex";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
+import Button from "@/src/components/ui/Button/Button";
+import ErrorMessage from "@/src/components/ui/ErrorMessage";
+import LoadingSkeleton from "@/src/components/ui/LoadingSkeleton";
 import ConfirmModal from "@/src/components/ui/Modal/ConfirmModal";
-import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import TextSize from "@/src/components/ui/TextSize";
+import {
+  useDeleteMyStepRecruitment,
+  useGetMyStepRecruitment,
+  usePatchMyStepRecruitmentStatus,
+} from "@/src/hooks/myStepRecruitment/useMyStepRecruitment";
+import { COLORS } from "@/src/utils/constants/colors";
 import ManagementCard from "../guestHouse/_components/ManagementCard";
-
-const staffRecruitmentPosts = [
-  {
-    id: 1,
-    title: "공고 제목입니다.",
-    roadNameAddress: "도로명 주소",
-    imageUrl: "/images/application/1768205585402_1_IMG_0002.jpeg",
-    isClosed: true,
-  },
-  {
-    id: 2,
-    title: "공고 제목입니다.",
-    roadNameAddress: "도로명 주소",
-
-    imageUrl: "/images/application/1768205585402_1_IMG_0002.jpeg",
-    isClosed: false,
-  },
-];
 
 export default function MyStepRecruitment() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -34,9 +26,38 @@ export default function MyStepRecruitment() {
     name: string;
   } | null>(null);
 
+  const {
+    data: myStepRecruitment,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetMyStepRecruitment();
+  console.log(myStepRecruitment);
+
+  const { mutate: deletePost } = useDeleteMyStepRecruitment();
+  const { mutate: updateStatus } = usePatchMyStepRecruitmentStatus();
+
   const handleDeletePress = (id: number, name: string) => {
     setSelectedPost({ id, name });
     setIsModalVisible(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedPost) {
+      deletePost(selectedPost.id, {
+        onSuccess: () => {
+          setIsModalVisible(false);
+        },
+      });
+    }
+  };
+
+  const handleToggleStatus = (id: number, isClosed: boolean) => {
+    const nextStatus = isClosed ? "ACTIVE" : "INACTIVE";
+    updateStatus({
+      id,
+      status: nextStatus,
+    });
   };
 
   return (
@@ -52,30 +73,55 @@ export default function MyStepRecruitment() {
         />
       </View>
 
-      <ScrollView className='bg-[#F9FAFB] pt-4 px-3'>
-        <Flex justify='start' items='center' gap={20}>
-          {staffRecruitmentPosts.map((post) => (
-            <ManagementCard
-              key={post.id}
-              id={post.id}
-              type='stepRecruitment'
-              title={post.title}
-              roadNameAddress={post.roadNameAddress}
-              imageUrl={post.imageUrl}
-              isClosed={post.isClosed}
-              onDelete={() => handleDeletePress(post.id, post.title)}
-              onToggleActive={() => console.log(`${post.id} 상태 변경`)}
+      <ScrollView className='bg-[#F9FAFB] pt-4 '>
+        {isLoading ? (
+          <LoadingSkeleton />
+        ) : isError ? (
+          <ErrorMessage onRetry={refetch} />
+        ) : myStepRecruitment?.length === 0 ? (
+          <View className='py-2  items-center gap-4'>
+            <TextSize
+              size={14}
+              color={COLORS.GRAY.TEXT}
+              content={`등록된 구인 공고가 없습니다.\n지금 바로 스텝 모집을 시작해 보세요!`}
+              align='center'
             />
-          ))}
-        </Flex>
+            <Button
+              variant='primary'
+              height={40}
+              width={180}
+              textColor='white'
+              onPress={() => router.push("/step/recruitment/step1")}
+              content='스텝 공고 올리기'
+            />
+          </View>
+        ) : (
+          <View className='px-3'>
+            <Flex justify='start' items='center' gap={20}>
+              {myStepRecruitment?.map((post) => (
+                <ManagementCard
+                  key={post.id}
+                  id={post.id}
+                  type='stepRecruitment'
+                  title={post.title}
+                  roadNameAddress={post.roadNameAddress}
+                  imageUrl={post.imageUrl}
+                  isClosed={post.isClosed}
+                  onDelete={() => handleDeletePress(post.id, post.title)}
+                  onToggleActive={() =>
+                    handleToggleStatus(post.id, post.isClosed)
+                  }
+                />
+              ))}
+            </Flex>
+          </View>
+        )}
       </ScrollView>
+
       <ConfirmModal
         visible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
-        onConfirm={() => {
-          console.log(`${selectedPost?.id}번 스텝 공고 삭제 로직 실행`);
-          setIsModalVisible(false);
-        }}
+        onConfirm={handleConfirmDelete}
         title='구인 공고 삭제'
         confirmText='삭제하기'
         confirmBtnColor='primary-red'
