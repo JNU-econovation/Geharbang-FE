@@ -11,6 +11,8 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 export { ErrorBoundary } from 'expo-router';
 
 import { useAuthStore } from '@/src/stores/auth/useAuthStore';
+import { TOKEN_KEYS } from '@/src/utils/constants/TokenKeys';
+import { setAccessToken } from '@/src/utils/login/secureStore';
 import '../global.css';
 
 export const unstable_settings = {
@@ -39,7 +41,16 @@ export default function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
-    loadToken();
+    const setDevToken = async () => {
+      const DEV_TOKEN =
+        'eyJhbGciOiJIUzM4NCIsInR5cCI6Imp3dCJ9.eyJ1c2VySWQiOiIxIiwic3ViIjoiQVQiLCJpYXQiOjE3Njg3MDU3MTUsImV4cCI6MTQwODEwMTgwMjd9.tQ936ESVYoKtGgdLHJvSSmzEbtvndZ-IJsw3IQkH68wOYhIM9HKHK0QpdMG3beXn';
+
+      await setAccessToken(TOKEN_KEYS.ACCESS_TOKEN, DEV_TOKEN);
+    };
+
+    setDevToken().then(() => {
+      loadToken();
+    });
   }, []);
 
   if (!loaded || !isAuthReady) {
