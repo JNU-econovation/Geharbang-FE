@@ -10,7 +10,7 @@ import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/Step1Da
 import TextSize from "./TextSize";
 
 const GOOGLE_MAPS_API_KEY = Constants.expoConfig?.extra?.googleMapsApiKey;
-Geocoder.init(GOOGLE_MAPS_API_KEY);
+Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'ko' });
 
 interface AddressMapDetailProps {
   latitude: number;
