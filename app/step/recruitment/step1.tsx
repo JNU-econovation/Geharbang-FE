@@ -1,6 +1,6 @@
-import { router } from "expo-router";
-import { useEffect } from "react";
-import { ScrollView } from "react-native";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useEffect } from "react";
+import { Alert, BackHandler, ScrollView } from "react-native";
 
 import RecruitmentStepLayout from "@/app/step/recruitment/_components/RecruitmentStepLayout";
 import Flex from "@/src/components/layout/Flex";
@@ -19,6 +19,43 @@ export default function RecruitmentStep1() {
     resetAllData();
   }, []);
 
+  const handleBackPress = useCallback(() => {
+    Alert.alert(
+      '등록 취소',
+      '스텝 모집 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.',
+      [
+        {
+          text: '계속 작성',
+          style: 'cancel',
+        },
+        {
+          text: '취소',
+          style: 'destructive',
+          onPress: () => {
+            resetAllData();
+            router.replace('/');
+          },
+        },
+      ],
+    );
+  }, [resetAllData]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onHardwareBackPress = () => {
+        handleBackPress();
+        return true;
+      };
+
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onHardwareBackPress,
+      );
+
+      return () => subscription.remove();
+    }, [handleBackPress]),
+  );
+
   const { errors, validateForm, clearError } =
     useStep1FormValidation(step1Data);
 
@@ -29,7 +66,7 @@ export default function RecruitmentStep1() {
   };
 
   return (
-    <RecruitmentStepLayout currentStep={1} stepTitle='기본 정보'>
+    <RecruitmentStepLayout currentStep={1} stepTitle='기본 정보' onBackPress={handleBackPress}>
       <ScrollView
         className='bg-[#F9FAFB]'
         style={{ paddingTop: 16, paddingHorizontal: 12 }}
