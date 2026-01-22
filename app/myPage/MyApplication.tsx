@@ -100,19 +100,22 @@ export default function MyApplication() {
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='근무 일정' />
 
-              <View className='pt-5' />
-              <MyApplicationCompoLayout
-                icon={<CalenderIconGreen width={18} height={18} />}
-                bgColor='#DCFCE7'
-                titleContent='근무 시작 가능일'
-                chidren={
-                  <TextSize
-                    color='#101828'
-                    size={16}
-                    content={data?.availableStartDate}
+              {data?.availableStartDate && (
+                <View className='pt-5'>
+                  <MyApplicationCompoLayout
+                    icon={<CalenderIconGreen width={18} height={18} />}
+                    bgColor='#DCFCE7'
+                    titleContent='근무 시작 가능일'
+                    chidren={
+                      <TextSize
+                        color='#101828'
+                        size={16}
+                        content={data?.availableStartDate}
+                      />
+                    }
                   />
-                }
-              />
+                </View>
+              )}
 
               <View className='pt-4' />
               {Array.isArray(data?.availableDayOfWeek) &&

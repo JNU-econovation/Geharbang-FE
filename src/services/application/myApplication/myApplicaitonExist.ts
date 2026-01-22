@@ -6,7 +6,7 @@ interface MyApplicationExist {
 
 export const getMyApplicationExist = async () => {
   const response = await axiosPrivate.get<MyApplicationExist>(
-    "/api/v1/application/my"
+    "/api/v1/application/my/exist"
   );
 
   return response.data;
