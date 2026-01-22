@@ -22,6 +22,7 @@ export const usePatchMyGuestHouseStatus = () => {
       patchMyGuestHouseStatus(id, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["myGuestHouse"] });
+      queryClient.invalidateQueries({ queryKey: ["guestHouseRecommendation"] });
     },
     onError: (err) => {
       console.error(err);
@@ -36,6 +37,7 @@ export const useDeleteMyGuestHouse = () => {
     mutationFn: (id: number) => deleteMyGuestHouse(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["myGuestHouse"] });
+      queryClient.invalidateQueries({ queryKey: ["guestHouseRecommendation"] });
     },
     onError: (err) => {
       console.error(err);

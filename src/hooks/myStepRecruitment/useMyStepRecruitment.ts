@@ -21,8 +21,8 @@ export const usePatchMyStepRecruitmentStatus = () => {
     mutationFn: ({ id, status }: { id: number; status: Status }) =>
       patchMyStepRecruitmentStatus(id, status),
     onSuccess: () => {
-      console.log("활성화/비활성화 성공");
       queryClient.invalidateQueries({ queryKey: ["myStepRecruitment"] });
+      queryClient.invalidateQueries({ queryKey: ["stepRecommendation"] });
     },
     onError: (err) => {
       console.error(err);
@@ -36,8 +36,8 @@ export const useDeleteMyStepRecruitment = () => {
   return useMutation({
     mutationFn: (id: number) => deleteMyStepRecruitment(id),
     onSuccess: () => {
-      console.log("삭제 성공");
       queryClient.invalidateQueries({ queryKey: ["myStepRecruitment"] });
+      queryClient.invalidateQueries({ queryKey: ["stepRecommendation"] });
     },
     onError: (err) => {
       console.error(err);
