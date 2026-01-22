@@ -1,54 +1,26 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
+import * as WebBrowser from 'expo-web-browser';
 import { Alert, Platform } from 'react-native';
 
 /**
- * 파일 미리보기
- * @param fileUrl - 파일 URL (로컬 또는 원격)
- * @param fileName - 파일 이름
+ * 파일 미리보기 (브라우저에서 열기)
+ * @param fileUrl - 서버가 제공한 파일 경로 (예: "/files/certificate.pdf")
+ * @param _fileName - 파일 이름 (사용하지 않음)
  * @returns 성공 여부
  */
 export const previewFile = async (
   fileUrl: string,
-  fileName: string,
+  _fileName: string,
 ): Promise<boolean> => {
   try {
-    const isAvailable = await Sharing.isAvailableAsync();
-    if (!isAvailable) {
-      Alert.alert('오류', '이 기기에서는 파일 공유 기능을 사용할 수 없습니다.');
-      return false;
-    }
+    // 서버 URL로 직접 브라우저에서 열기 (이미지처럼)
+    const fullUrl = `${process.env.EXPO_PUBLIC_BASE_URL}${fileUrl}`;
 
-    let fileUri = fileUrl;
-
-    if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
-      // iOS는 documentDirectory, Android는 cacheDirectory 사용
-      const directory = Platform.OS === 'ios'
-        ? FileSystem.documentDirectory
-        : FileSystem.cacheDirectory;
-      const localUri = `${directory}${fileName}`;
-
-      // 파일이 이미 존재하는지 확인
-      const fileInfo = await FileSystem.getInfoAsync(localUri);
-      if (!fileInfo.exists) {
-        // 파일 다운로드
-        const downloadResult = await FileSystem.downloadAsync(fileUrl, localUri);
-        fileUri = downloadResult.uri;
-      } else {
-        fileUri = localUri;
-      }
-    }
-
-    // Android에서는 content URI로 변환 필요
-    let shareUri = fileUri;
-    if (Platform.OS === 'android') {
-      shareUri = await FileSystem.getContentUriAsync(fileUri);
-    }
-
-    await Sharing.shareAsync(shareUri, {
-      UTI: 'application/pdf',
-      mimeType: 'application/pdf',
-      dialogTitle: '파일 미리보기',
+    await WebBrowser.openBrowserAsync(fullUrl, {
+      presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
+      controlsColor: '#00A6F4',
+      toolbarColor: '#FFFFFF',
     });
 
     return true;
@@ -61,7 +33,7 @@ export const previewFile = async (
 
 /**
  * 파일 다운로드
- * @param fileUrl - 파일 URL (원격)
+ * @param fileUrl - 서버가 제공한 파일 경로 (예: "/files/certificate.pdf")
  * @param fileName - 저장할 파일 이름
  * @param _onProgress - (사용되지 않음) 다운로드 진행률 콜백
  * @returns 다운로드된 파일 URI 또는 null
@@ -78,14 +50,15 @@ export const downloadFile = async (
       return null;
     }
 
-    // iOS는 documentDirectory, Android는 cacheDirectory 사용
-    const directory = Platform.OS === 'ios'
-      ? FileSystem.documentDirectory
-      : FileSystem.cacheDirectory;
+    const fullUrl = `${process.env.EXPO_PUBLIC_BASE_URL}${fileUrl}`;
+
+    const directory =
+      Platform.OS === 'ios'
+        ? FileSystem.documentDirectory
+        : FileSystem.cacheDirectory;
     const localUri = `${directory}${fileName}`;
 
-    // 파일 다운로드
-    const downloadResult = await FileSystem.downloadAsync(fileUrl, localUri);
+    const downloadResult = await FileSystem.downloadAsync(fullUrl, localUri);
 
     // 파일 크기 확인
     const fileInfo = await FileSystem.getInfoAsync(downloadResult.uri);
@@ -124,10 +97,10 @@ export const downloadFile = async (
  */
 export const deleteLocalFile = async (fileName: string): Promise<boolean> => {
   try {
-    // iOS는 documentDirectory, Android는 cacheDirectory 사용
-    const directory = Platform.OS === 'ios'
-      ? FileSystem.documentDirectory
-      : FileSystem.cacheDirectory;
+    const directory =
+      Platform.OS === 'ios'
+        ? FileSystem.documentDirectory
+        : FileSystem.cacheDirectory;
     const fileUri = `${directory}${fileName}`;
     const fileInfo = await FileSystem.getInfoAsync(fileUri);
 
