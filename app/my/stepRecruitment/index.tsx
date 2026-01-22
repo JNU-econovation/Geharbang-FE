@@ -32,7 +32,6 @@ export default function MyStepRecruitment() {
     isError,
     refetch,
   } = useGetMyStepRecruitment();
-  console.log(myStepRecruitment);
 
   const { mutate: deletePost } = useDeleteMyStepRecruitment();
   const { mutate: updateStatus } = usePatchMyStepRecruitmentStatus();
@@ -73,7 +72,7 @@ export default function MyStepRecruitment() {
         />
       </View>
 
-      <ScrollView className='bg-[#F9FAFB] pt-4 '>
+      <ScrollView className='bg-[#F9FAFB] py-4 '>
         {isLoading ? (
           <LoadingSkeleton />
         ) : isError ? (

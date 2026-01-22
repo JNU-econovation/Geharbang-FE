@@ -71,7 +71,7 @@ export default function MyGuestHouse() {
         />
       </View>
 
-      <ScrollView className='bg-[#F9FAFB] pt-4'>
+      <ScrollView className='bg-[#F9FAFB] py-4'>
         {isLoading ? (
           <LoadingSkeleton />
         ) : isError ? (
