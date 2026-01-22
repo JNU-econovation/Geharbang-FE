@@ -1,7 +1,14 @@
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import GuestHouseEnrollLayout from '@/app/guestHouse/enroll/_components/GuestHouseEnrollLayout';
 import Flex from '@/src/components/layout/Flex';
@@ -171,10 +178,15 @@ export default function MakeParty() {
       stepTitle="파티 정보"
       onBackPress={handleBackPress}
     >
-      <ScrollView
-        className="bg-[#F9FAFB]"
-        style={{ paddingTop: 16, paddingHorizontal: 12 }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
       >
+        <ScrollView
+          className="bg-[#F9FAFB]"
+          style={{ paddingTop: 16, paddingHorizontal: 12 }}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
         <View
           className="bg-white p-4 w-full rounded-lg"
           style={{
@@ -496,6 +508,7 @@ export default function MakeParty() {
           />
         </Flex>
       </ScrollView>
+      </KeyboardAvoidingView>
     </GuestHouseEnrollLayout>
   );
 }

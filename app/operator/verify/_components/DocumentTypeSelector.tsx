@@ -2,11 +2,11 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
-type DocumentType = 'business' | 'tourism';
+type DocumentType = 'business' | 'tourism' | null;
 
 interface DocumentTypeSelectorProps {
   selectedType: DocumentType;
-  onSelect: (type: DocumentType) => void;
+  onSelect: (type: 'business' | 'tourism') => void;
   error?: boolean;
 }
 

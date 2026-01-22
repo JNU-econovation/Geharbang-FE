@@ -1,6 +1,6 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
 /**
  * 파일 미리보기
@@ -22,21 +22,30 @@ export const previewFile = async (
     let fileUri = fileUrl;
 
     if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
-      const localUri = `${FileSystem.documentDirectory}${fileName}`;
+      // iOS는 documentDirectory, Android는 cacheDirectory 사용
+      const directory = Platform.OS === 'ios'
+        ? FileSystem.documentDirectory
+        : FileSystem.cacheDirectory;
+      const localUri = `${directory}${fileName}`;
 
+      // 파일이 이미 존재하는지 확인
       const fileInfo = await FileSystem.getInfoAsync(localUri);
       if (!fileInfo.exists) {
-        const downloadResult = await FileSystem.downloadAsync(
-          fileUrl,
-          localUri,
-        );
+        // 파일 다운로드
+        const downloadResult = await FileSystem.downloadAsync(fileUrl, localUri);
         fileUri = downloadResult.uri;
       } else {
         fileUri = localUri;
       }
     }
 
-    await Sharing.shareAsync(fileUri, {
+    // Android에서는 content URI로 변환 필요
+    let shareUri = fileUri;
+    if (Platform.OS === 'android') {
+      shareUri = await FileSystem.getContentUriAsync(fileUri);
+    }
+
+    await Sharing.shareAsync(shareUri, {
       UTI: 'application/pdf',
       mimeType: 'application/pdf',
       dialogTitle: '파일 미리보기',
@@ -54,13 +63,13 @@ export const previewFile = async (
  * 파일 다운로드
  * @param fileUrl - 파일 URL (원격)
  * @param fileName - 저장할 파일 이름
- * @param onProgress - 다운로드 진행률 콜백 (0-1 사이의 값)
+ * @param _onProgress - (사용되지 않음) 다운로드 진행률 콜백
  * @returns 다운로드된 파일 URI 또는 null
  */
 export const downloadFile = async (
   fileUrl: string,
   fileName: string,
-  onProgress?: (progress: number) => void,
+  _onProgress?: (progress: number) => void,
 ): Promise<string | null> => {
   try {
     const isAvailable = await Sharing.isAvailableAsync();
@@ -69,45 +78,38 @@ export const downloadFile = async (
       return null;
     }
 
-    const localUri = `${FileSystem.documentDirectory}${fileName}`;
+    // iOS는 documentDirectory, Android는 cacheDirectory 사용
+    const directory = Platform.OS === 'ios'
+      ? FileSystem.documentDirectory
+      : FileSystem.cacheDirectory;
+    const localUri = `${directory}${fileName}`;
 
+    // 파일 다운로드
+    const downloadResult = await FileSystem.downloadAsync(fileUrl, localUri);
+
+    // 파일 크기 확인
+    const fileInfo = await FileSystem.getInfoAsync(downloadResult.uri);
     const maxSize = 10 * 1024 * 1024;
 
-    const downloadResumable = FileSystem.createDownloadResumable(
-      fileUrl,
-      localUri,
-      {},
-      (downloadProgress) => {
-        const progress =
-          downloadProgress.totalBytesWritten /
-          downloadProgress.totalBytesExpectedToWrite;
-
-        if (downloadProgress.totalBytesExpectedToWrite > maxSize) {
-          downloadResumable.pauseAsync();
-          Alert.alert('오류', '파일 크기는 최대 10MB까지 다운로드 가능합니다.');
-          return;
-        }
-
-        if (onProgress) {
-          onProgress(progress);
-        }
-      },
-    );
-
-    const result = await downloadResumable.downloadAsync();
-
-    if (!result) {
-      Alert.alert('오류', '파일 다운로드에 실패했습니다.');
+    if (fileInfo.exists && fileInfo.size > maxSize) {
+      await FileSystem.deleteAsync(downloadResult.uri);
+      Alert.alert('오류', '파일 크기는 최대 10MB까지 다운로드 가능합니다.');
       return null;
     }
 
-    await Sharing.shareAsync(result.uri, {
+    // Android에서는 content URI로 변환 필요
+    let shareUri = downloadResult.uri;
+    if (Platform.OS === 'android') {
+      shareUri = await FileSystem.getContentUriAsync(downloadResult.uri);
+    }
+
+    await Sharing.shareAsync(shareUri, {
       UTI: 'application/pdf',
       mimeType: 'application/pdf',
       dialogTitle: '파일 저장',
     });
 
-    return result.uri;
+    return downloadResult.uri;
   } catch (error) {
     console.error('파일 다운로드 오류:', error);
     Alert.alert('오류', '파일 다운로드 중 오류가 발생했습니다.');
@@ -122,7 +124,11 @@ export const downloadFile = async (
  */
 export const deleteLocalFile = async (fileName: string): Promise<boolean> => {
   try {
-    const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+    // iOS는 documentDirectory, Android는 cacheDirectory 사용
+    const directory = Platform.OS === 'ios'
+      ? FileSystem.documentDirectory
+      : FileSystem.cacheDirectory;
+    const fileUri = `${directory}${fileName}`;
     const fileInfo = await FileSystem.getInfoAsync(fileUri);
 
     if (fileInfo.exists) {

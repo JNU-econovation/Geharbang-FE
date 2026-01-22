@@ -17,13 +17,13 @@ import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
 import { uploadDocument } from '@/src/utils/operator/documentUpload';
 import { validateOperatorVerify } from '@/src/utils/operator/operatorVerifyValidation';
 
-type DocumentType = 'business' | 'tourism';
+type DocumentType = 'business' | 'tourism' | null;
 
 export default function OperatorAuthScreen() {
   const [guestHouseName, setGuestHouseName] = useState('');
   const [representativeName, setRepresentativeName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [documentType, setDocumentType] = useState<DocumentType>('business');
+  const [documentType, setDocumentType] = useState<DocumentType>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -42,11 +42,12 @@ export default function OperatorAuthScreen() {
     router.back();
   };
 
-  const handleDocumentTypeSelect = (type: DocumentType) => {
+  const handleDocumentTypeSelect = (type: 'business' | 'tourism') => {
     setDocumentType(type);
   };
 
   const handleFileUpload = async () => {
+    if (!documentType) return;
     const file = await uploadDocument(documentType);
     if (file) {
       setUploadedFile(file);
@@ -69,7 +70,7 @@ export default function OperatorAuthScreen() {
 
     setErrors(validationErrors);
 
-    if (!isValid || !uploadedFile) {
+    if (!isValid || !uploadedFile || !documentType) {
       return;
     }
 

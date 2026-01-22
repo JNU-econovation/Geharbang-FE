@@ -1,5 +1,5 @@
 import { router, useFocusEffect } from 'expo-router';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { BackHandler, ScrollView } from 'react-native';
 
 import GuestHouseEnrollLayout from '@/app/guestHouse/enroll/_components/GuestHouseEnrollLayout';
@@ -25,6 +25,9 @@ import PartyComponent from './_components/step2/PartyComponent';
 
 export default function GuestHouseEnrollStep2() {
   const { step2Data, setStep2Update } = useGuestHouseStore();
+  const scrollViewRef = useRef<ScrollView>(null);
+  const partyComponentRef = useRef<any>(null);
+  const previousPartyCount = useRef(step2Data.parties.length);
 
   const { errors, validateForm, clearError } =
     useGuestHouseStep2Validation(step2Data);
@@ -51,6 +54,18 @@ export default function GuestHouseEnrollStep2() {
     }, [handleBackPress]),
   );
 
+  useFocusEffect(
+    useCallback(() => {
+      // 파티가 추가되었을 때만 스크롤
+      if (step2Data.parties.length > previousPartyCount.current) {
+        setTimeout(() => {
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+        }, 100);
+      }
+      previousPartyCount.current = step2Data.parties.length;
+    }, [step2Data.parties.length]),
+  );
+
   return (
     <GuestHouseEnrollLayout
       currentStep={2}
@@ -58,8 +73,10 @@ export default function GuestHouseEnrollStep2() {
       onBackPress={handleBackPress}
     >
       <ScrollView
+        ref={scrollViewRef}
         className="bg-[#F9FAFB]"
         style={{ paddingTop: 16, paddingHorizontal: 12 }}
+        contentContainerStyle={{ paddingBottom: 100 }}
       >
         <FormSection
           title="게스트하우스 소개"

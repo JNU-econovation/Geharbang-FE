@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GuestHouseStore } from "@/src/types/store/guestHouseStore";
 import {
   createStep1Slice,
@@ -17,18 +19,26 @@ import {
   initialStep4Data,
 } from "./slice/createStep4Slice";
 
-export const useGuestHouseStore = create<GuestHouseStore>()((set, get, api) => ({
-  ...createStep1Slice(set, get, api),
-  ...createStep2Slice(set, get, api),
-  ...createStep3Slice(set, get, api),
-  ...createStep4Slice(set, get, api),
+export const useGuestHouseStore = create<GuestHouseStore>()(
+  persist(
+    (set, get, api) => ({
+      ...createStep1Slice(set, get, api),
+      ...createStep2Slice(set, get, api),
+      ...createStep3Slice(set, get, api),
+      ...createStep4Slice(set, get, api),
 
-  resetAllData: () => {
-    set(() => ({
-      step1Data: initialStep1Data,
-      step2Data: initialStep2Data,
-      step3Data: initialStep3Data,
-      step4Data: initialStep4Data,
-    }));
-  },
-}));
+      resetAllData: () => {
+        set(() => ({
+          step1Data: initialStep1Data,
+          step2Data: initialStep2Data,
+          step3Data: initialStep3Data,
+          step4Data: initialStep4Data,
+        }));
+      },
+    }),
+    {
+      name: "guesthouse-enrollment-storage",
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);

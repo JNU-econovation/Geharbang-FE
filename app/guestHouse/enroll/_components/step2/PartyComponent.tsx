@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 
 import ItemListContainer from '@/src/components/ui/ItemListContainer';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
@@ -12,11 +12,10 @@ const PartyComponent = () => {
   const { parties } = step2Data;
 
   return (
-    <View className="flex-1 ">
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          justifyContent: 'center',
+    <View className="flex-1">
+      <View
+        style={{
+          width: '100%',
           alignItems: 'center',
           paddingVertical: 40,
         }}
@@ -45,7 +44,7 @@ const PartyComponent = () => {
             )}
           />
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 };
