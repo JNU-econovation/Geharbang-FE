@@ -1,0 +1,152 @@
+import { useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  View,
+} from "react-native";
+
+import Location from "@/public/svgs/GuestHouse/location.svg";
+import Calender from "@/public/svgs/MyPage/calender.svg";
+
+import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
+import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
+import Button from "@/src/components/ui/Button/Button";
+import TextSize from "@/src/components/ui/TextSize";
+import { useMyApplicationStatus } from "@/src/hooks/application/myApplication/useMyApplicationStatus";
+import { COLORS } from "@/src/utils/constants/colors";
+
+type FilterType = "ALL" | "ACCEPTED";
+
+export default function MyApplicationStatus() {
+  const [filter, setFilter] = useState<FilterType>("ALL");
+
+  const { data, isLoading, isError, refetch } = useMyApplicationStatus(filter);
+
+  const filteredApplicationStatus =
+    filter === "ACCEPTED"
+      ? data?.applicationRecords.filter((item) => item.isAccepted)
+      : data?.applicationRecords;
+
+  return (
+    <CustomSafeAreaView pageColor='bg-[#F9FAFB]'>
+      <View
+        className='px-3 pt-3 pb-4 border-b-[1px] border-[#E5E5E5]'
+        style={{
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 4,
+          elevation: 4,
+        }}
+      >
+        <BackArrorHeader content='지원 현황' />
+      </View>
+      <View className='p-4 flex-row gap-4 bg-white'>
+        <Pressable onPress={() => setFilter("ALL")}>
+          <View
+            className={`px-8 py-3 rounded-lg ${
+              filter === "ALL" ? "bg-[#0EA5E9]" : "bg-[#F3F4F6]"
+            }`}
+          >
+            <TextSize
+              color={filter === "ALL" ? "#FFFFFF" : "#4A5565"}
+              size={16}
+              content='전체'
+            />
+          </View>
+        </Pressable>
+        <Pressable onPress={() => setFilter("ACCEPTED")}>
+          <View
+            className={`px-8 py-3 rounded-lg ${
+              filter === "ACCEPTED" ? "bg-[#0EA5E9]" : "bg-[#F3F4F6]"
+            }`}
+          >
+            <TextSize
+              color={filter === "ACCEPTED" ? "#FFFFFF" : "#4A5565"}
+              size={16}
+              content='합격'
+            />
+          </View>
+        </Pressable>
+      </View>
+
+      {isLoading ? (
+        <View className='pt-2 h-64'>
+          <ActivityIndicator size={80} color={COLORS.PRIMARY.BLUE} />
+        </View>
+      ) : isError ? (
+        <View className='py-8 items-center'>
+          <TextSize
+            size={18}
+            color={COLORS.GRAY.TEXT}
+            content='잠시 오류가 발생했어요'
+          />
+          <View className='pt-4' />
+          <Button
+            variant='gray'
+            height={56}
+            width={320}
+            content='다시 시도'
+            textColor='#000'
+            onPress={() => refetch()}
+          />
+        </View>
+      ) : (
+        <ScrollView>
+          {filteredApplicationStatus?.map((applicationStatus) => (
+            <View
+              key={applicationStatus.id}
+              className='mt-4 mx-4 p-4 bg-white rounded-lg'
+            >
+              <View className='flex-row  gap-3'>
+                <View className='flex-row items-center gap-4'>
+                  <Image
+                    source={{
+                      uri: `${process.env.EXPO_PUBLIC_BASE_URL}${applicationStatus.imageUrl}`,
+                    }}
+                    style={{ width: 70, height: 70, borderRadius: 100 }}
+                    resizeMode='cover'
+                  />
+
+                  <View className='flex gap-3'>
+                    <TextSize
+                      color='#101828'
+                      size={16}
+                      content={applicationStatus.title}
+                    />
+                    <View className='flex-row gap-2'>
+                      <Location width={14} height={14} />
+                      <TextSize
+                        color='#6A7282'
+                        size={13}
+                        content={applicationStatus.region}
+                      />
+                    </View>
+                  </View>
+                </View>
+
+                {applicationStatus.isAccepted && (
+                  <View className='p-2 bg-[#D1FAE5] rounded-lg self-start ml-auto'>
+                    <TextSize color='#065F46' size={13} content='합격' />
+                  </View>
+                )}
+              </View>
+
+              <View className='h-5 border-b-[1px] border-[#F3F4F6]' />
+              <View className='pt-3 flex-row gap-4'>
+                <Calender width={14} height={14} />
+                <TextSize
+                  color='#6A7282'
+                  size={13}
+                  content={applicationStatus.appliedAt}
+                />
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      )}
+    </CustomSafeAreaView>
+  );
+}
