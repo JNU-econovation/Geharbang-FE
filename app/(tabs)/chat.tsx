@@ -4,11 +4,13 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 
 import TextSize from "@/src/components/ui/TextSize";
+import { useCheckApplication } from "@/src/hooks/common/useCheckApplication";
 import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
 
 export default function ChatScreen() {
   const handleLogout = useLogout();
   const { requireLogin } = useRequireLogin();
+  const { checkApplication } = useCheckApplication();
   return (
     <View className='flex-1 bg-gray-50'>
       <View className='flex-1 items-center justify-center'>
@@ -27,7 +29,9 @@ export default function ChatScreen() {
           <Pressable
             onPress={() =>
               requireLogin(() => {
-                router.push("/application/create");
+                checkApplication(() => {
+                  router.push("/application/create");
+                });
               })
             }
           >
