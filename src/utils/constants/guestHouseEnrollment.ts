@@ -117,7 +117,7 @@ export const INPUT_MAX_LENGTHS = {
  * 입력 필드 높이
  */
 export const INPUT_HEIGHTS = {
-  INTRODUCTION: 400,
+  INTRODUCTION: 600,
   PARTY_DESCRIPTION: 120,
   OWNER_MESSAGE: 120,
 } as const;
@@ -131,7 +131,7 @@ export const INPUT_HEIGHTS = {
  */
 export const VALIDATION_LIMITS = {
   MAIN_IMAGES: { MIN: 1, MAX: 10 },
-  INTRODUCTION: { MIN: 10, MAX: 500 },
+  INTRODUCTION: { MIN: 10, MAX: 20000 },
   FACILITIES: { MAX: 10, ITEM_MAX_LENGTH: 20 },
   ATMOSPHERE: { MAX: 2 },
   GUEST_HOUSE_NAME: { MIN: 2, MAX: 30 },

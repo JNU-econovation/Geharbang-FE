@@ -72,7 +72,9 @@ const transformParty = (party: Party): PartyRequest => {
     moods: party.mood ? [party.mood] : [],
     isExternalGuestAllowed: party.allowExternal,
     guestFee: transformPrice(party.guestFee, '게스트 참가비'),
-    externalGuestFee: transformPrice(party.externalFee, '외부인 참가비'),
+    externalGuestFee: party.allowExternal
+      ? transformPrice(party.externalFee, '외부인 참가비')
+      : 0,
     imageUrls: transformImagesToUrls(party.images),
     information: party.description,
   };

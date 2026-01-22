@@ -40,20 +40,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='location'
+        name='guestHouseEnroll'
         options={{
-          title: "위치",
+          title: "게하등록",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name='location' color={color} />
+            <TabBarIcon name='home-outline' color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name='chat'
+        name='stepRecruitment'
         options={{
-          title: "채팅",
+          title: "스텝모집",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name='chatbubble' color={color} />
+            <TabBarIcon name='people-outline' color={color} />
           ),
         }}
       />
