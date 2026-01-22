@@ -29,7 +29,7 @@ export default function Step2Screen() {
   const { errors, clearError, validateForm } = useApplicationFormValidation(
     applicationData,
     imageFile,
-    2
+    2,
   );
 
   usePreventHardwareBack(); // 안드로이드 하드웨어 뒤로가기 방지
@@ -104,6 +104,7 @@ export default function Step2Screen() {
                       lineHeight={22}
                       height={150}
                       error={!!errors.selfIntroduction}
+                      textAlignVertical='top'
                     />
                   </FormField>
 
