@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -12,12 +12,10 @@ import { SvgUri } from 'react-native-svg';
 import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
 import { useCertificateDetail } from '@/src/hooks/operator/useCertificateDetail';
-import { downloadFile, previewFile } from '@/src/utils/operator/fileOperations';
+import { downloadFile } from '@/src/utils/operator/fileOperations';
 
 export default function AuthDetailScreen() {
   const { id } = useLocalSearchParams();
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [downloadProgress, setDownloadProgress] = useState(0);
 
   // API 훅
   const { data, isLoading, isError } = useCertificateDetail(String(id));
@@ -36,20 +34,8 @@ export default function AuthDetailScreen() {
     fileName: '영업신고증.pdf',
   };
 
-  const handlePreview = async () => {
-    await previewFile(certificateData.fileUrl, certificateData.fileName);
-  };
-
   const handleDownload = async () => {
-    setIsDownloading(true);
-    setDownloadProgress(0);
-
-    await downloadFile(certificateData.fileUrl, certificateData.fileName, (progress) => {
-      setDownloadProgress(progress);
-    });
-
-    setIsDownloading(false);
-    setDownloadProgress(0);
+    await downloadFile(certificateData.fileUrl, certificateData.fileName);
   };
 
   return (
@@ -138,48 +124,19 @@ export default function AuthDetailScreen() {
                   </Text>
                 </View>
 
-                <View className="flex-row gap-3 w-full mt-2">
-                  <TouchableOpacity
-                    className="flex-1 flex-row items-center justify-center h-[36px] bg-white rounded-lg border border-gray-300 gap-2"
-                    onPress={handlePreview}
-                    disabled={isDownloading}
-                  >
-                    <SvgUri
-                      width={14}
-                      height={14}
-                      uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-5c21c137-34de-4ef1-866c-4c4d96ee8653.svg"
-                    />
-                    <Text className="text-gray-700 text-sm font-normal">
-                      미리보기
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    className="flex-1 flex-row items-center justify-center h-[36px] bg-sky-500 rounded-lg gap-2"
-                    onPress={handleDownload}
-                    disabled={isDownloading}
-                  >
-                    {isDownloading ? (
-                      <>
-                        <ActivityIndicator size="small" color="white" />
-                        <Text className="text-white text-sm font-normal">
-                          {Math.round(downloadProgress * 100)}%
-                        </Text>
-                      </>
-                    ) : (
-                      <>
-                        <SvgUri
-                          width={14}
-                          height={14}
-                          uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-c4663120-0d4f-49a2-9485-2705f50f65f0.svg"
-                        />
-                        <Text className="text-white text-sm font-normal">
-                          다운로드
-                        </Text>
-                      </>
-                    )}
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  className="w-full flex-row items-center justify-center h-[44px] bg-sky-500 rounded-lg gap-2 mt-2"
+                  onPress={handleDownload}
+                >
+                  <SvgUri
+                    width={14}
+                    height={14}
+                    uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-c4663120-0d4f-49a2-9485-2705f50f65f0.svg"
+                  />
+                  <Text className="text-white text-sm font-normal">
+                    다운로드
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
