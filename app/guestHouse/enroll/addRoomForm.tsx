@@ -2,7 +2,7 @@ import Flex from '@/src/components/layout/Flex/Flex';
 import Button from '@/src/components/ui/Button/Button';
 import MultiImagePicker from '@/src/components/ui/imagePicker/MultiImagePicker';
 import TimePickerField from '@/src/components/ui/TimePickerField';
-import { useGuestHouseStep3Validation } from '@/src/hooks/guesthouse/useGuestHouseStep3Validation';
+import { useGuestHouseStep3Validation } from '@/src/hooks/guestHouse/useGuestHouseStep3Validation';
 import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
 import { File } from '@/src/types/File';
 import {

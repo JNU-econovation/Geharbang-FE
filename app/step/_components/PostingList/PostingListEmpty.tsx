@@ -1,7 +1,7 @@
-import ErrorMessage from '@/src/components/ui/ErrorMessage';
-import LoadingSkeleton from '@/src/components/ui/LoadingSkeleton';
-import React from 'react';
-import { Text, View } from 'react-native';
+import ErrorMessage from "@/src/components/ui/ErrorMessage";
+import LoadingSkeleton from "@/src/components/ui/LoadingSkeleton";
+import React from "react";
+import { Text, View } from "react-native";
 
 interface PostingListEmptyProps {
   isLoading: boolean;
@@ -15,7 +15,7 @@ export default function PostingListEmpty({
   onRetry,
 }: PostingListEmptyProps) {
   if (isLoading) {
-    return <LoadingSkeleton count={5} />;
+    return <LoadingSkeleton variant='card' count={5} />;
   }
 
   if (error) {
@@ -23,8 +23,8 @@ export default function PostingListEmpty({
   }
 
   return (
-    <View className="flex-1 items-center justify-center py-20">
-      <Text className="text-gray-500 text-base">검색 결과가 없습니다</Text>
+    <View className='flex-1 items-center justify-center py-20'>
+      <Text className='text-gray-500 text-base'>검색 결과가 없습니다</Text>
     </View>
   );
 }

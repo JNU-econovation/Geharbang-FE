@@ -22,6 +22,17 @@ module.exports = {
           placeholder: COLORS.GRAY.PLACEHOLDER,
           button: COLORS.GRAY.BUTTON,
         },
+        green: {
+          text: COLORS.GREEN.TEXT,
+          bg: COLORS.GREEN.BG,
+        },
+        blue: {
+          bg: COLORS.BLUE.BG,
+        },
+        purple: {
+          text: COLORS.PURPLE.TEXT,
+          bg: COLORS.PURPLE.BG,
+        },
         kakao: COLORS.KAKAO,
         google: COLORS.GOOGLE,
       },

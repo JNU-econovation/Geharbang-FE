@@ -4,7 +4,7 @@ import { MBTI } from "../constants/mbti";
 
 export const applicationValidateStep2 = (
   data: ApplicationData,
-  currentErrors: ApplicationFormErrors
+  currentErrors: ApplicationFormErrors,
 ): { isValid: boolean; errors: ApplicationFormErrors } => {
   let isValid = true;
   const newErrors: ApplicationFormErrors = { ...currentErrors };
@@ -26,19 +26,17 @@ export const applicationValidateStep2 = (
   }
 
   if (!data.mbti || data.mbti.trim() === "") {
-  newErrors.mbti = "MBTI를 입력해주세요";
-  isValid = false;
-} else {
-  
-  
-  if (!MBTI.includes(data.mbti)) {
-    newErrors.mbti = "올바른 MBTI 형식이 아닙니다 (예: ENFP)";
+    newErrors.mbti = "MBTI를 입력해주세요";
     isValid = false;
+  } else {
+    if (!MBTI.includes(data.mbti)) {
+      newErrors.mbti = "올바른 MBTI 형식이 아닙니다 (예: ENFP)";
+      isValid = false;
+    }
   }
-}
 
   if (data.instagramId && data.instagramId.trim() !== "") {
-    const instagramRegex = /^[a-zA-Z0-9_]+$/;
+    const instagramRegex = /^[a-zA-Z0-9_.]+$/;
     if (!instagramRegex.test(data.instagramId)) {
       newErrors.instagramId = "영문, 숫자, 밑줄만 입력 가능합니다";
       isValid = false;

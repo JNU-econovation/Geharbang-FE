@@ -115,7 +115,7 @@ export function useStaffRecruitmentList({
   );
 
   useEffect(() => {
-    fetchData(page, false);
+    fetchData(page, page > 0);
   }, [fetchData, page]);
 
   const loadMore = useCallback(() => {
