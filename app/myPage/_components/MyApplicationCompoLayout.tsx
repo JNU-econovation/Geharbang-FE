@@ -27,7 +27,7 @@ export default function MyApplicationCompoLayout({
       <View>
         <TextSize color='#4A5565' size={16} content={titleContent} />
         <View className='pt-1' />
-        {chidren}
+        <View className='flex-row flex-wrap gap-2'>{chidren}</View>
       </View>
     </View>
   );

@@ -1,22 +1,22 @@
-import { router } from 'expo-router';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { router } from "expo-router";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
-import Flex from '@/src/components/layout/Flex';
-import Button from '@/src/components/ui/Button/Button';
-import FormField from '@/src/components/ui/Form/FormField';
-import FormSection from '@/src/components/ui/Form/FormSection';
-import TextInput from '@/src/components/ui/TextInput';
-import { useGuestHouseEnrollment } from '@/src/hooks/guestHouse/useGuestHouseEnrollment';
-import { useGuestHouseStep4Validation } from '@/src/hooks/guestHouse/useGuestHouseStep4Validation';
-import { useGuestHouseStore } from '@/src/stores/guestHouse/useGuestHouseStore';
-import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
+import Flex from "@/src/components/layout/Flex";
+import Button from "@/src/components/ui/Button/Button";
+import FormField from "@/src/components/ui/Form/FormField";
+import FormSection from "@/src/components/ui/Form/FormSection";
+import TextInput from "@/src/components/ui/TextInput";
+import { useGuestHouseEnrollment } from "@/src/hooks/guestHouse/useGuestHouseEnrollment";
+import { useGuestHouseStep4Validation } from "@/src/hooks/guestHouse/useGuestHouseStep4Validation";
+import { useGuestHouseStore } from "@/src/stores/guestHouse/useGuestHouseStore";
+import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import {
   BUTTON_LABELS,
   INPUT_HEIGHTS,
   INPUT_MAX_LENGTHS,
   PLACEHOLDERS,
-} from '@/src/utils/constants/guestHouseEnrollment';
-import GuestHouseEnrollLayout from './_components/GuestHouseEnrollLayout';
+} from "@/src/utils/constants/guestHouseEnrollment";
+import GuestHouseEnrollLayout from "./_components/GuestHouseEnrollLayout";
 
 export default function GuestHouseEnrollStep4() {
   const { step1Data, step2Data, step3Data, step4Data, setStep4Update } =
@@ -60,32 +60,32 @@ export default function GuestHouseEnrollStep4() {
 
       if (guestHouseId) {
         router.push({
-          pathname: '/guestHouse/enroll/result',
-          params: { status: 'success', guestHouseId: guestHouseId.toString() },
+          pathname: "/guestHouse/enroll/result",
+          params: { status: "success", guestHouseId: guestHouseId.toString() },
         });
       }
     } catch (error) {
-      console.error('Enrollment Failed', error);
+      console.error("Enrollment Failed", error);
 
-      let userFriendlyMessage = '등록 중 오류가 발생했습니다.';
+      let userFriendlyMessage = "등록 중 오류가 발생했습니다.";
 
       if (error instanceof Error) {
-        if (error.message.includes('이미지')) {
+        if (error.message.includes("이미지")) {
           userFriendlyMessage = error.message;
-        } else if (error.message.includes('네트워크')) {
-          userFriendlyMessage = '네트워크 연결을 확인하고 다시 시도해주세요.';
-        } else if (error.message.includes('유효한 숫자')) {
-          userFriendlyMessage = '입력 정보를 다시 확인해주세요.';
+        } else if (error.message.includes("네트워크")) {
+          userFriendlyMessage = "네트워크 연결을 확인하고 다시 시도해주세요.";
+        } else if (error.message.includes("유효한 숫자")) {
+          userFriendlyMessage = "입력 정보를 다시 확인해주세요.";
         } else {
           userFriendlyMessage =
-            '등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            "등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
         }
       }
 
       router.push({
-        pathname: '/guestHouse/enroll/result',
+        pathname: "/guestHouse/enroll/result",
         params: {
-          status: 'error',
+          status: "error",
           error: userFriendlyMessage,
         },
       });
@@ -93,29 +93,29 @@ export default function GuestHouseEnrollStep4() {
   };
 
   return (
-    <GuestHouseEnrollLayout currentStep={4} stepTitle="연락처 및 사장님 한마디">
+    <GuestHouseEnrollLayout currentStep={4} stepTitle='연락처 및 사장님 한마디'>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className='flex-1'
       >
         <ScrollView
-          className="flex-1"
+          className='flex-1'
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="pt-4 px-3">
-            <Flex justify="start" items="center" gap={24}>
-              <FormSection title="연락처 및 사장님 한마디">
+          <View className='pt-4 px-3'>
+            <Flex justify='start' items='center' gap={24}>
+              <FormSection title='연락처 및 사장님 한마디'>
                 <FormField
-                  label="인스타그램"
+                  label='인스타그램'
                   required={false}
                   errorMessage={errors.instagram}
                 >
                   <TextInput
                     value={instagram}
                     onChangeText={(text) => {
-                      setStep4Update('instagram', text);
-                      clearError('instagram');
+                      setStep4Update("instagram", text);
+                      clearError("instagram");
                     }}
                     placeholder={PLACEHOLDERS.INSTAGRAM}
                     error={!!errors.instagram}
@@ -124,51 +124,51 @@ export default function GuestHouseEnrollStep4() {
                 </FormField>
 
                 <FormField
-                  label="전화번호"
+                  label='전화번호'
                   required={false}
                   errorMessage={errors.phone}
                 >
                   <TextInput
                     value={phone}
                     onChangeText={(text) => {
-                      setStep4Update('phone', formatPhoneNumber(text));
-                      clearError('phone');
+                      setStep4Update("phone", formatPhoneNumber(text));
+                      clearError("phone");
                     }}
                     placeholder={PLACEHOLDERS.PHONE}
-                    keyboardType="phone-pad"
+                    keyboardType='phone-pad'
                     error={!!errors.phone}
                     maxLength={INPUT_MAX_LENGTHS.PHONE}
                   />
                 </FormField>
 
                 <FormField
-                  label="웹사이트"
+                  label='웹사이트'
                   required={false}
                   errorMessage={errors.website}
                 >
                   <TextInput
                     value={website}
                     onChangeText={(text) => {
-                      setStep4Update('website', text);
-                      clearError('website');
+                      setStep4Update("website", text);
+                      clearError("website");
                     }}
                     placeholder={PLACEHOLDERS.WEBSITE}
-                    keyboardType="url"
+                    keyboardType='url'
                     error={!!errors.website}
                     maxLength={INPUT_MAX_LENGTHS.WEBSITE}
                   />
                 </FormField>
 
                 <FormField
-                  label="사장님 한마디"
+                  label='사장님 한마디'
                   required={false}
                   errorMessage={errors.ownerMessage}
                 >
                   <TextInput
                     value={ownerMessage}
                     onChangeText={(text) => {
-                      setStep4Update('ownerMessage', text);
-                      clearError('ownerMessage');
+                      setStep4Update("ownerMessage", text);
+                      clearError("ownerMessage");
                     }}
                     placeholder={PLACEHOLDERS.OWNER_MESSAGE}
                     multiline={true}
@@ -179,16 +179,16 @@ export default function GuestHouseEnrollStep4() {
                 </FormField>
               </FormSection>
 
-              <Flex items="center">
+              <Flex items='center'>
                 <Button
-                  variant="primary"
+                  variant='primary'
                   width={370}
                   height={50}
-                  textColor="white"
-                  content={isPending ? '등록 중...' : BUTTON_LABELS.SUBMIT}
+                  textColor='white'
+                  content={isPending ? "등록 중..." : BUTTON_LABELS.SUBMIT}
                   onPress={handleSubmit}
                   disabled={isPending}
-                  className="mt-4"
+                  className='mt-4'
                 />
               </Flex>
             </Flex>

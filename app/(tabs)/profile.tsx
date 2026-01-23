@@ -23,6 +23,7 @@ import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
+import { useMyApplicationExist } from "@/src/hooks/application/myApplication/useMyApplicationExist";
 import { useMyInfomation } from "@/src/hooks/application/myApplication/useMyInfomation";
 import { useLogout } from "@/src/hooks/login/useLogout";
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
@@ -34,7 +35,12 @@ export default function ProfileScreen() {
 
   const isLogined = useAuthStore((state) => state.accessToken);
 
-  const { data, isLoading, isError, refetch } = useMyInfomation();
+  const { data: isExist } = useMyApplicationExist();
+
+  const myApplicationExist = isExist?.isExist ?? false;
+
+  const { data, isLoading, isError, refetch } =
+    useMyInfomation(myApplicationExist);
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -68,14 +74,32 @@ export default function ProfileScreen() {
           <ScrollView className='px-4'>
             <View className='px-6 py-4 mt-6 bg-[#E0F2FE] rounded-lg '>
               <View className='flex-row items-center gap-5'>
-                <Image
-                  source={{
-                    uri: `${process.env.EXPO_PUBLIC_BASE_URL}${data?.imageUrl}`,
-                  }}
-                  style={{ width: 100, height: 100, borderRadius: 100 }}
-                  resizeMode='cover'
-                />
-                <TextSize color='#101828' size={16} content={data?.name} />
+                {isExist?.isExist ? (
+                  <View className='flex-row items-center gap-5'>
+                    <Image
+                      source={{
+                        uri: `${process.env.EXPO_PUBLIC_BASE_URL}${data?.imageUrl}`,
+                      }}
+                      style={{ width: 80, height: 80, borderRadius: 100 }}
+                      resizeMode='cover'
+                    />
+                    <TextSize color='#101828' size={16} content={data?.name} />
+                  </View>
+                ) : (
+                  <View className='flex-row items-center gap-5'>
+                    <View className='w-12 h-12 bg-white rounded-full flex items-center justify-center'>
+                      <MyPageIcon width={22} height={22} />
+                    </View>
+                    <View className='flex-col gap-1'>
+                      <TextSize color='#101828' size={16} content='게하르방' />
+                      <TextSize
+                        color='#4A5565'
+                        size={14}
+                        content='지원서 작성 후, 프로필이 등록됩니다.'
+                      />
+                    </View>
+                  </View>
+                )}
                 {data?.isOwer && (
                   <View className='-ml-2 px-2 py-1 bg-[#0EA5E9] rounded-xl'>
                     <TextSize color='#FFFFFF' size={12} content='인증 사장님' />
@@ -113,55 +137,56 @@ export default function ProfileScreen() {
             </View>
 
             <View className='pt-8'>
-              <TextSize color='#6A7282' size={18} content='사장님 기능' />
-              <View className='mt-5 px-6 py-4 bg-[#F9FAFB] rounded-lg flex-row items-center'>
-                <View className='p-2 rounded-full bg-white'>
-                  <PresidentIcon width={18} height={18} />
-                </View>
-                <View className='flex-1 ml-3'>
-                  <TextSize
-                    color='#101828'
-                    size={16}
-                    content='운영자이신가요?'
-                  />
-                  <View className='pt-2' />
-                  <TextSize
-                    color='#4A5565'
-                    size={14}
-                    content={`인증 후 게스트하우스를 \n등록하고 관리할 수 있어요`}
-                  />
-                </View>
-                <ArrowRoute width={22} height={22} />
-              </View>
+              <TextSize color='#6A7282' size={18} content='운영자 기능' />
 
-              {data?.inReview && (
+              {data?.inReview ? (
                 <View>
-                  <Pressable
-                    onPress={() => router.push("/myPage/MyApplicationStatus")}
-                  >
+                  <Pressable onPress={() => router.push("/my/guestHouse")}>
                     <MyActivity
                       content='내 게스트하우스 관리'
                       icon={<MyGuestHouseIcon width={18} height={18} />}
                     />
                   </Pressable>
-                  <Pressable
-                    onPress={() => router.push("/myPage/MyApplicationStatus")}
-                  >
+                  <Pressable onPress={() => router.push("/my/stepRecruitment")}>
                     <MyActivity
                       content='구인 공고 관리'
                       icon={<RecruitmentIcon width={18} height={18} />}
                     />
                   </Pressable>
                 </View>
+              ) : (
+                <Pressable onPress={() => router.push("/operator/verify")}>
+                  <View className='mt-5 px-6 py-4 bg-[#F9FAFB] rounded-lg flex-row items-center'>
+                    <View className='p-2 rounded-full bg-white'>
+                      <PresidentIcon width={18} height={18} />
+                    </View>
+                    <View className='flex-1 ml-3'>
+                      <TextSize
+                        color='#101828'
+                        size={16}
+                        content='운영자이신가요?'
+                      />
+                      <View className='pt-2' />
+                      <TextSize
+                        color='#4A5565'
+                        size={14}
+                        content={`인증 후 게스트하우스를 \n등록하고 관리할 수 있어요`}
+                      />
+                    </View>
+                    <ArrowRoute width={22} height={22} />
+                  </View>
+                </Pressable>
               )}
             </View>
 
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='설정' />
-              <MyActivity
-                content='운영자 기능'
-                icon={<DangerIcon width={18} height={18} />}
-              />
+              <Pressable onPress={() => router.push("/operator/management")}>
+                <MyActivity
+                  content='운영자 기능'
+                  icon={<DangerIcon width={18} height={18} />}
+                />
+              </Pressable>
               <Pressable
                 onPress={handleLogout}
                 className='pt-10 flex-row gap-3'

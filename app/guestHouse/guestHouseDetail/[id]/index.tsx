@@ -13,7 +13,6 @@ import { useGuestHouseDetail } from "@/src/hooks/guestHouseDetail/useGuestHouseD
 import { useHandleSection } from "@/src/hooks/stepDetail/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/stepDetail/useSectionToScroll";
 import { GUESTHOUSE } from "@/src/utils/constants/pressSection";
-import GuestHouseInfo from "../_components/GuestHouseInfo";
 import GuestHouseIntro from "../_components/GuestHouseIntro";
 import GuestHouseParty from "../_components/GuestHouseParty";
 import ParlorType from "../_components/ParlorType";
@@ -29,6 +28,13 @@ export default function GuestHouseDetail() {
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
+      <View className='px-4 pt-3 pb-6'>
+        <DetailPageBackArrow
+          content='게스트하우스 상세'
+          shareTitle='게스트하우스 공유하기'
+          shareMessage='게스트하우스를 공유해보세요!'
+        />
+      </View>
       {isPending ? (
         <View className='flex-1 items-center justify-center'>
           <ActivityIndicator size='large' color='#000' />
@@ -48,14 +54,6 @@ export default function GuestHouseDetail() {
         </View>
       ) : (
         <>
-          <View className='px-4 pt-3 pb-6'>
-            <DetailPageBackArrow
-              content='게스트하우스 상세'
-              shareTitle='게스트하우스 공유하기'
-              shareMessage='게스트하우스를 공유해보세요!'
-            />
-          </View>
-
           <ScrollView ref={scrollViewRef}>
             <GehaImage images={data?.imageUrls} height={280} page={true} />
 
@@ -90,12 +88,15 @@ export default function GuestHouseDetail() {
                 introduction={data?.introduction}
               />
 
-              <View className='pt-10' />
-              <GuestHouseInfo
-                setSectionYPositions={setSectionYPositions}
-                amenities={data?.amenities}
-                moods={data?.moods}
-              />
+              {data?.parties && data.parties.length > 0 && (
+                <View>
+                  <View className='pt-10' />
+                  <GuestHouseParty
+                    setSectionYPositions={setSectionYPositions}
+                    parties={data.parties}
+                  />
+                </View>
+              )}
 
               <View className='pt-10' />
               <GuestHouseParty

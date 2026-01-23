@@ -16,6 +16,7 @@ import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 import { useMyApplicationStatus } from "@/src/hooks/application/myApplication/useMyApplicationStatus";
 import { COLORS } from "@/src/utils/constants/colors";
+import { router } from "expo-router";
 
 type FilterType = "ALL" | "ACCEPTED";
 
@@ -96,54 +97,66 @@ export default function MyApplicationStatus() {
       ) : (
         <ScrollView>
           {filteredApplicationStatus?.map((applicationStatus) => (
-            <View
-              key={applicationStatus.id}
-              className='mt-4 mx-4 p-4 bg-white rounded-lg'
+            <Pressable
+              onPress={() =>
+                router.push(
+                  `/step/stepDetail/${applicationStatus.staffRecruitmentId}`
+                )
+              }
             >
-              <View className='flex-row  gap-3'>
-                <View className='flex-row items-center gap-4'>
-                  <Image
-                    source={{
-                      uri: `${process.env.EXPO_PUBLIC_BASE_URL}${applicationStatus.imageUrl}`,
-                    }}
-                    style={{ width: 70, height: 70, borderRadius: 100 }}
-                    resizeMode='cover'
-                  />
-
-                  <View className='flex gap-3'>
-                    <TextSize
-                      color='#101828'
-                      size={16}
-                      content={applicationStatus.title}
+              <View
+                key={applicationStatus.id}
+                className='mt-4 mx-4 p-4 bg-white rounded-lg'
+              >
+                <View className='flex-row  gap-3'>
+                  <View className='flex-row items-center gap-4'>
+                    <Image
+                      source={{
+                        uri: `${process.env.EXPO_PUBLIC_BASE_URL}${applicationStatus.imageUrl}`,
+                      }}
+                      style={{ width: 70, height: 70, borderRadius: 100 }}
+                      resizeMode='cover'
                     />
-                    <View className='flex-row gap-2'>
-                      <Location width={14} height={14} />
+
+                    <View className='flex gap-3'>
                       <TextSize
-                        color='#6A7282'
-                        size={13}
-                        content={applicationStatus.region}
+                        color='#101828'
+                        size={16}
+                        content={applicationStatus.title}
                       />
+                      <View className='flex-row gap-2'>
+                        <Location width={14} height={14} />
+                        <TextSize
+                          color='#6A7282'
+                          size={13}
+                          content={applicationStatus.region}
+                        />
+                      </View>
                     </View>
                   </View>
+
+                  {applicationStatus.isAccepted ? (
+                    <View className='p-2 bg-[#D1FAE5] rounded-lg self-start ml-auto'>
+                      <TextSize color='#065F46' size={13} content='합격' />
+                    </View>
+                  ) : (
+                    <View className='p-2 bg-[#FFFBEB] rounded-lg self-start ml-auto'>
+                      <TextSize color='#BB4D00' size={13} content='대기중' />
+                    </View>
+                  )}
                 </View>
 
-                {applicationStatus.isAccepted && (
-                  <View className='p-2 bg-[#D1FAE5] rounded-lg self-start ml-auto'>
-                    <TextSize color='#065F46' size={13} content='합격' />
-                  </View>
-                )}
+                <View className='h-5 border-b-[1px] border-[#F3F4F6]' />
+                <View className='pt-3 flex-row gap-4'>
+                  <Calender width={14} height={14} />
+                  <TextSize
+                    color='#6A7282'
+                    size={13}
+                    content={applicationStatus.appliedAt}
+                  />
+                </View>
               </View>
-
-              <View className='h-5 border-b-[1px] border-[#F3F4F6]' />
-              <View className='pt-3 flex-row gap-4'>
-                <Calender width={14} height={14} />
-                <TextSize
-                  color='#6A7282'
-                  size={13}
-                  content={applicationStatus.appliedAt}
-                />
-              </View>
-            </View>
+            </Pressable>
           ))}
         </ScrollView>
       )}

@@ -1,9 +1,9 @@
-import { createGuestHouseEnrollment } from '@/src/services/guestHouse/createGuestHouseEnrollment';
-import { uploadGuestHouseImages } from '@/src/services/guestHouse/uploadGuestHouseImages';
-import { File } from '@/src/types/File';
-import { GuestHouseEnrollData } from '@/src/types/models/guestHouse/enroll';
-import { transformEnrollDataToRequest } from '@/src/utils/guestHouse/enrollDataTransformer';
-import { useMutation } from '@tanstack/react-query';
+import { createGuestHouseEnrollment } from "@/src/services/guestHouse/createGuestHouseEnrollment";
+import { uploadGuestHouseImages } from "@/src/services/guestHouse/uploadGuestHouseImages";
+import { File } from "@/src/types/File";
+import { GuestHouseEnrollData } from "@/src/types/models/guestHouse/enroll";
+import { transformEnrollDataToRequest } from "@/src/utils/guestHouse/enrollDataTransformer";
+import { useMutation } from "@tanstack/react-query";
 
 export const useGuestHouseEnrollment = () => {
   const uploadImages = async (files: File[]): Promise<File[]> => {
@@ -13,8 +13,8 @@ export const useGuestHouseEnrollment = () => {
     const needsUpload: File[] = [];
 
     files.forEach((file) => {
-      if (typeof file === 'object' && 'uri' in file) {
-        if (!file.uri.startsWith('file://')) {
+      if (typeof file === "object" && "uri" in file) {
+        if (!file.uri.startsWith("file://")) {
           alreadyUploaded.push(file);
         } else {
           needsUpload.push(file);
@@ -30,20 +30,20 @@ export const useGuestHouseEnrollment = () => {
 
         if (uploadedUrls.length !== needsUpload.length) {
           throw new Error(
-            `이미지 업로드 실패: ${needsUpload.length}개 중 ${uploadedUrls.length}개만 업로드되었습니다.`,
+            `이미지 업로드 실패: ${needsUpload.length}개 중 ${uploadedUrls.length}개만 업로드되었습니다.`
           );
         }
 
         const uploadedFiles = uploadedUrls.map((uri, index) => ({
           uri,
-          type: needsUpload[index]?.type || 'image/jpeg',
+          type: needsUpload[index]?.type || "image/jpeg",
           name: needsUpload[index]?.name || `image-${index}.jpg`,
         }));
         return [...alreadyUploaded, ...uploadedFiles];
       } catch (error) {
-        console.error('이미지 업로드 에러:', error);
+        console.error("이미지 업로드 에러:", error);
         throw new Error(
-          '이미지 업로드 중 오류가 발생했습니다. 네트워크 연결을 확인하고 다시 시도해주세요.',
+          "이미지 업로드 중 오류가 발생했습니다. 네트워크 연결을 확인하고 다시 시도해주세요."
         );
       }
     }
@@ -64,7 +64,7 @@ export const useGuestHouseEnrollment = () => {
           processedData.parties.map(async (party) => ({
             ...party,
             images: await uploadImages(party.images),
-          })),
+          }))
         );
       }
 
@@ -73,7 +73,7 @@ export const useGuestHouseEnrollment = () => {
           processedData.rooms.map(async (room) => ({
             ...room,
             images: await uploadImages(room.images),
-          })),
+          }))
         );
       }
 
@@ -83,7 +83,7 @@ export const useGuestHouseEnrollment = () => {
       return guestHouseId;
     },
     onError: (error: Error) => {
-      console.error('게스트하우스 등록 에러:', error);
+      console.error("게스트하우스 등록 에러:", error);
     },
   });
 

@@ -54,6 +54,13 @@ export default function StepDetail() {
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
+      <View className='px-4 pt-3 pb-6'>
+        <DetailPageBackArrow
+          content='스텝공고 상세'
+          shareTitle='스텝공고 공유하기'
+          shareMessage='스텝공고를 공유해보세요!'
+        />
+      </View>
       {isPending ? (
         <View className='flex-1 items-center justify-center'>
           <ActivityIndicator size='large' color='#000' />
@@ -73,14 +80,6 @@ export default function StepDetail() {
         </View>
       ) : (
         <>
-          <View className='px-4 pt-3 pb-6'>
-            <DetailPageBackArrow
-              content='스텝공고 상세'
-              shareTitle='스텝공고 공유하기'
-              shareMessage='스텝공고를 공유해보세요!'
-            />
-          </View>
-
           <ScrollView ref={scrollViewRef}>
             <GehaImage
               images={data?.representativeImages}
