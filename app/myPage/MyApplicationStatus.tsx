@@ -98,16 +98,14 @@ export default function MyApplicationStatus() {
         <ScrollView>
           {filteredApplicationStatus?.map((applicationStatus) => (
             <Pressable
+              key={applicationStatus.id}
               onPress={() =>
                 router.push(
                   `/step/stepDetail/${applicationStatus.staffRecruitmentId}`
                 )
               }
             >
-              <View
-                key={applicationStatus.id}
-                className='mt-4 mx-4 p-4 bg-white rounded-lg'
-              >
+              <View className='mt-4 mx-4 p-4 bg-white rounded-lg'>
                 <View className='flex-row  gap-3'>
                   <View className='flex-row items-center gap-4'>
                     <Image

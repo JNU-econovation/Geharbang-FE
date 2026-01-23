@@ -107,7 +107,7 @@ export default function ProfileScreen() {
                 )}
               </View>
               <Pressable onPress={() => router.push("/myPage/MyApplication")}>
-                <View className='mt-6 py-3 rounded-lg bg-white flex items-center'>
+                <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
                   <TextSize
                     color='#101828'
                     size={16}
