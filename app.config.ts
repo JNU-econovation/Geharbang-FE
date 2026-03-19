@@ -79,7 +79,7 @@ const config: ExpoConfig = {
   extra: {
     router: {},
     eas: {
-      projectId: "a2ddf256-212f-4d72-80cf-530c3f1e238c",
+      projectId: "81bf359a-a232-4d2e-bf98-50c02b62485d",
     },
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
   },

@@ -2,11 +2,6 @@
   "expo": {
     "name": "Geharbang-FE",
     "slug": "Geharbang-FE",
-    "extra": {
-      "eas": {
-        "projectId": "bde73624-7a5c-4141-82ec-62e3c08bc4a4"
-      }
-    },
     "ios": {
       "bundleIdentifier": "com.jungseunghyeon77.geharbangfe",
       "infoPlist": {
