@@ -6,6 +6,12 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as Sentry from '@sentry/react-native';
+
+Sentry.init({
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  enabled: process.env.NODE_ENV === 'production',
+});
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 export { ErrorBoundary } from 'expo-router';
