@@ -106,15 +106,17 @@ export default function ProfileScreen() {
                   </View>
                 )}
               </View>
-              <Pressable onPress={() => router.push("/myPage/MyApplication")}>
-                <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
-                  <TextSize
-                    color='#101828'
-                    size={16}
-                    content='내 지원서 보기'
-                  />
-                </View>
-              </Pressable>
+              {isExist?.isExist && (
+                <Pressable onPress={() => router.push("/myPage/MyApplication")}>
+                  <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
+                    <TextSize
+                      color='#101828'
+                      size={16}
+                      content='내 지원서 보기'
+                    />
+                  </View>
+                </Pressable>
+              )}
             </View>
 
             <View className='pt-8'>
