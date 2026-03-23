@@ -12,10 +12,6 @@
     },
     "preview": {
       "distribution": "internal",
-      "env": {
-        "EXPO_PUBLIC_BASE_URL": "https://geharbang.org",
-        "EXPO_PUBLIC_API_URL": "https://geharbang.org"
-      },
       "android": {
         "buildType": "apk"
       },
