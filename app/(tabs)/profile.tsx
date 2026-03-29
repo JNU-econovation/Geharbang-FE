@@ -37,7 +37,7 @@ export default function ProfileScreen() {
 
   const { data: isExist } = useMyApplicationExist();
 
-  const myApplicationExist = isExist?.isExist ?? false;
+  const myApplicationExist = myApplicationExist ?? false;
 
   const { data, isLoading, isError, refetch } =
     useMyInfomation(myApplicationExist);
@@ -74,7 +74,7 @@ export default function ProfileScreen() {
           <ScrollView className='px-4'>
             <View className='px-6 py-4 mt-6 bg-[#E0F2FE] rounded-lg '>
               <View className='flex-row items-center gap-5'>
-                {isExist?.isExist ? (
+                {myApplicationExist ? (
                   <View className='flex-row items-center gap-5'>
                     <Image
                       source={{
@@ -106,15 +106,17 @@ export default function ProfileScreen() {
                   </View>
                 )}
               </View>
-              <Pressable onPress={() => router.push("/myPage/MyApplication")}>
-                <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
-                  <TextSize
-                    color='#101828'
-                    size={16}
-                    content='내 지원서 보기'
-                  />
-                </View>
-              </Pressable>
+              {myApplicationExist && (
+                <Pressable onPress={() => router.push("/myPage/MyApplication")}>
+                  <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
+                    <TextSize
+                      color='#101828'
+                      size={16}
+                      content='내 지원서 보기'
+                    />
+                  </View>
+                </Pressable>
+              )}
             </View>
 
             <View className='pt-8'>
