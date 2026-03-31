@@ -9,7 +9,7 @@ interface FormErrors {
   ownerMessage: string;
 }
 
-interface UseRecruitmentStep4ValidationProps {
+interface UseStep4ValidationProps {
   instagram: string;
   phone: string;
   email: string;
@@ -17,13 +17,13 @@ interface UseRecruitmentStep4ValidationProps {
   ownerMessage: string;
 }
 
-export function useRecruitmentStep4Validation({
+export function useStep4Validation({
   instagram,
   phone,
   email,
   website,
   ownerMessage,
-}: UseRecruitmentStep4ValidationProps) {
+}: UseStep4ValidationProps) {
   const [errors, setErrors] = useState<FormErrors>({
     instagram: '',
     phone: '',
@@ -46,7 +46,6 @@ export function useRecruitmentStep4Validation({
       ownerMessage: '',
     };
 
-    // 인스타그램 검증 (선택 필드)
     if (instagram) {
       if (instagram.trim() === '') {
         newErrors.instagram = '공백만 입력할 수 없습니다';
@@ -57,7 +56,6 @@ export function useRecruitmentStep4Validation({
       }
     }
 
-    // 전화번호 검증 (선택 필드)
     if (phone) {
       if (!validatePhoneNumber(phone)) {
         newErrors.phone = '올바른 전화번호 형식이 아닙니다 (예: 064-123-4567)';
@@ -65,7 +63,6 @@ export function useRecruitmentStep4Validation({
       }
     }
 
-    // 이메일 검증 (선택 필드)
     if (email) {
       if (email.length > 30) {
         newErrors.email = '이메일은 30자 이내로 입력해주세요';
@@ -76,7 +73,6 @@ export function useRecruitmentStep4Validation({
       }
     }
 
-    // 웹사이트 검증 (선택 필드)
     if (website) {
       if (website.trim() === '') {
         newErrors.website = '공백만 입력할 수 없습니다';
@@ -87,7 +83,6 @@ export function useRecruitmentStep4Validation({
       }
     }
 
-    // 사장님 한마디 검증 (선택 필드)
     if (ownerMessage) {
       if (ownerMessage.trim() === '') {
         newErrors.ownerMessage = '공백만 입력할 수 없습니다';

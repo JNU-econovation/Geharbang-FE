@@ -10,14 +10,14 @@ import FormField from "@/src/components/ui/Form/FormField";
 import FormSection from "@/src/components/ui/Form/FormSection";
 import MultiImagePicker from "@/src/components/ui/imagePicker/MultiImagePicker";
 import TextInput from "@/src/components/ui/TextInput";
-import { useRecruitmentStep3Validation } from "@/src/hooks/recruitment/useRecruitmentStep3Validation";
+import { useStep3Validation } from "@/src/hooks/stepRecruitment/useStep3Validation";
 import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
 
 export default function RecruitmentStep3() {
   const { step3Data, setStep3Update } = useStepRecruitmentStore();
 
   const { errors, clearError, validateForm } =
-    useRecruitmentStep3Validation(step3Data);
+    useStep3Validation(step3Data);
 
   const handleNext = () => {
     if (validateForm()) {

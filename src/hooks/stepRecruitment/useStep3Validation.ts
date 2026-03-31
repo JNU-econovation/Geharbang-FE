@@ -11,7 +11,7 @@ interface FormErrors {
   employeeBenefits: string;
 }
 
-export function useRecruitmentStep3Validation(step3Data: Step3Data) {
+export function useStep3Validation(step3Data: Step3Data) {
   const [errors, setErrors] = useState<FormErrors>({
     title: "",
     mainImageFiles: "",

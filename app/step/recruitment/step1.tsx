@@ -6,7 +6,7 @@ import RecruitmentStepLayout from "@/app/step/recruitment/_components/Recruitmen
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
-import { useStep1FormValidation } from "@/src/hooks/stepRecruitment/useStep1Valication";
+import { useStep1FormValidation } from "@/src/hooks/stepRecruitment/useStep1Validation";
 import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
 import GuestHouseLocation from "./_components/step1/GuestHouseLocation";
 import GuestHouseName from "./_components/step1/GuestHouseName";

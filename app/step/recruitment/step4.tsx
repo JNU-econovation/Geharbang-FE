@@ -4,7 +4,7 @@ import Button from '@/src/components/ui/Button/Button';
 import FormField from '@/src/components/ui/Form/FormField';
 import FormSection from '@/src/components/ui/Form/FormSection';
 import TextInput from '@/src/components/ui/TextInput';
-import { useRecruitmentStep4Validation } from '@/src/hooks/recruitment/useRecruitmentStep4Validation';
+import { useStep4Validation } from '@/src/hooks/stepRecruitment/useStep4Validation';
 import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
 import { formatPhoneNumber } from '@/src/utils/common/phoneNumberFormatter';
 import { router } from 'expo-router';
@@ -15,7 +15,7 @@ export default function RecruitmentStep4() {
   const { step4Data, setStep4Update } = useStepRecruitmentStore();
   const { instagram, phone, email, website, ownerMessage } = step4Data;
 
-  const { errors, clearError, validateForm } = useRecruitmentStep4Validation({
+  const { errors, clearError, validateForm } = useStep4Validation({
     instagram,
     phone,
     email,
