@@ -2,7 +2,7 @@ import Flex from "@/src/components/layout/Flex/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import MultiImagePicker from "@/src/components/ui/imagePicker/MultiImagePicker";
 import TimePickerField from "@/src/components/ui/TimePickerField";
-import { useGuestHouseStep3Validation } from "@/src/hooks/guestHouse/useGuestHouseStep3Validation";
+import { useGuestHouseStep4Validation } from "@/src/hooks/guestHouse/useGuestHouseStep4Validation";
 import { useGuestHouseStore } from "@/src/stores/guestHouse/useGuestHouseStore";
 import { File } from "@/src/types/File";
 import {
@@ -16,7 +16,7 @@ import {
 } from "@/src/utils/constants/guestHouseEnrollment";
 import { Feather } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -83,17 +83,27 @@ export default function AddRoomForm() {
   const { editId } = useLocalSearchParams<{ editId?: string }>();
   const isEditMode = !!editId;
 
-  const { addRoom, updateRoom, step3Data } = useGuestHouseStore();
+  const { addRoom, updateRoom, step4Data } = useGuestHouseStore();
+
+  const scrollViewRef = useRef<ScrollView>(null);
+  const fieldRefs = {
+    name: useRef<View>(null),
+    type: useRef<View>(null),
+    occupancy: useRef<View>(null),
+    checkInTime: useRef<View>(null),
+    price: useRef<View>(null),
+    images: useRef<View>(null),
+  };
 
   const getDefaultCheckInTime = () => {
     const date = new Date();
-    date.setHours(15, 0, 0, 0); // 오후 3시
+    date.setHours(15, 0, 0, 0);
     return date;
   };
 
   const getDefaultCheckOutTime = () => {
     const date = new Date();
-    date.setHours(11, 0, 0, 0); // 오전 11시
+    date.setHours(11, 0, 0, 0);
     return date;
   };
 
@@ -107,7 +117,7 @@ export default function AddRoomForm() {
 
   useEffect(() => {
     if (isEditMode && editId) {
-      const existingRoom = step3Data.rooms.find((r) => r.id === editId);
+      const existingRoom = step4Data.rooms.find((r) => r.id === editId);
       if (existingRoom) {
         setRoomName(existingRoom.name);
         setRoomType(existingRoom.type);
@@ -118,7 +128,7 @@ export default function AddRoomForm() {
         setRoomImages(existingRoom.images);
       }
     }
-  }, [isEditMode, editId, step3Data.rooms]);
+  }, [isEditMode, editId, step4Data.rooms]);
 
   const roomData = {
     id: "",
@@ -131,21 +141,37 @@ export default function AddRoomForm() {
     images: roomImages,
   };
 
-  const { validateRoomFields } = useGuestHouseStep3Validation({
-    rooms: [roomData],
-  });
-  const [fieldErrors, setFieldErrors] = useState({
-    name: "",
-    type: "",
-    occupancy: "",
-    checkInTime: "",
-    checkOutTime: "",
-    price: "",
-    images: "",
-  });
+  const { roomErrors, clearRoomError, validateRoomField, validateRoomForm } =
+    useGuestHouseStep4Validation({ rooms: [roomData] });
 
-  const clearFieldError = (field: keyof typeof fieldErrors) => {
-    setFieldErrors((prev) => ({ ...prev, [field]: "" }));
+  const scrollToFirstError = (errors: typeof roomErrors) => {
+    const fieldOrder = [
+      "name",
+      "type",
+      "occupancy",
+      "checkInTime",
+      "price",
+      "images",
+    ] as const;
+
+    setTimeout(() => {
+      const firstErrField = fieldOrder.find((k) => !!errors[k]);
+      const targetRef = firstErrField ? fieldRefs[firstErrField] : null;
+
+      if (targetRef?.current && scrollViewRef.current) {
+        targetRef.current.measureLayout(
+          scrollViewRef.current as any,
+          (_x: number, y: number) =>
+            scrollViewRef.current?.scrollTo({
+              y: Math.max(0, y - 16),
+              animated: true,
+            }),
+          () => scrollViewRef.current?.scrollTo({ y: 0, animated: true })
+        );
+      } else {
+        scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+      }
+    }, 100);
   };
 
   const handleAddRoom = () => {
@@ -155,11 +181,9 @@ export default function AddRoomForm() {
       occupancy: occupancy,
     };
 
-    const errors = validateRoomFields(validationData as any);
-    const hasErrors = Object.values(errors).some((error) => error !== "");
-
-    if (hasErrors) {
-      setFieldErrors(errors);
+    const isValid = validateRoomForm(validationData as any);
+    if (!isValid) {
+      scrollToFirstError(roomErrors);
       return;
     }
 
@@ -174,7 +198,7 @@ export default function AddRoomForm() {
       addRoom(roomPayload);
     }
 
-    router.push("/guestHouse/enroll/step3");
+    router.push("/guestHouse/enroll/step4");
   };
 
   const resetForm = () => {
@@ -185,38 +209,30 @@ export default function AddRoomForm() {
     setCheckOutTime(getDefaultCheckOutTime());
     setPrice("");
     setRoomImages([]);
-    setFieldErrors({
-      name: "",
-      type: "",
-      occupancy: "",
-      checkInTime: "",
-      checkOutTime: "",
-      price: "",
-      images: "",
-    });
   };
 
   const handleBackPress = () => {
-    if (!isEditMode) {
-      resetForm();
-    }
-    router.push("/guestHouse/enroll/step2");
+    if (!isEditMode) resetForm();
+    router.push("/guestHouse/enroll/step4");
   };
 
   const handleClose = () => {
-    if (!isEditMode) {
-      resetForm();
-    }
-    router.push("/guestHouse/enroll/step3");
+    if (!isEditMode) resetForm();
+    router.push("/guestHouse/enroll/step4");
   };
 
   return (
     <GuestHouseEnrollLayout
-      currentStep={3}
+      currentStep={4}
       stepTitle='객실 타입 등록'
       onBackPress={handleBackPress}
     >
-      <ScrollView className='bg-[#F9FAFB]' style={{ paddingHorizontal: 12 }}>
+      <ScrollView
+        ref={scrollViewRef}
+        className='bg-[#F9FAFB]'
+        style={{ paddingHorizontal: 12 }}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
         <View className='pt-4'>
           <View className='bg-white rounded-xl shadow-sm p-6 gap-6'>
             <View className='flex-row justify-between items-center mb-2'>
@@ -228,28 +244,31 @@ export default function AddRoomForm() {
               </TouchableOpacity>
             </View>
 
-            <View>
+            {/* 객실명 */}
+            <View ref={fieldRefs.name}>
               <FormLabel text='객실명' required />
               <TextInput
                 className={`w-full h-12 px-4 rounded-lg border text-sm mt-2 ${
-                  fieldErrors.name ? "border-red-500" : "border-gray-200"
+                  roomErrors.name ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder={PLACEHOLDERS.ROOM_NAME}
                 placeholderTextColor={ROOM_TYPE_COLORS.PLACEHOLDER}
                 value={roomName}
-                onChangeText={(text) => {
-                  setRoomName(text);
-                  clearFieldError("name");
-                }}
+                onChangeText={(text) => setRoomName(text)}
+                onFocus={() => clearRoomError("name")}
+                onBlur={() =>
+                  validateRoomField({ ...roomData, name: roomName }, "name")
+                }
               />
-              {fieldErrors.name && (
+              {roomErrors.name && (
                 <Text className='text-red-500 text-xs mt-1'>
-                  {fieldErrors.name}
+                  {roomErrors.name}
                 </Text>
               )}
             </View>
 
-            <View>
+            {/* 객실 타입 */}
+            <View ref={fieldRefs.type}>
               <FormLabel text='객실 타입' required />
               <View className='gap-2 mt-2'>
                 {ROOM_TYPES.map((roomTypeOption) => (
@@ -259,21 +278,22 @@ export default function AddRoomForm() {
                     selected={roomType === roomTypeOption.value}
                     onPress={() => {
                       setRoomType(roomTypeOption.value as RoomType);
-                      clearFieldError("type");
+                      clearRoomError("type");
                     }}
                     showCircle={true}
                     circleColor={roomTypeOption.color}
                   />
                 ))}
               </View>
-              {fieldErrors.type && (
+              {roomErrors.type && (
                 <Text className='text-red-500 text-xs mt-1'>
-                  {fieldErrors.type}
+                  {roomErrors.type}
                 </Text>
               )}
             </View>
 
-            <View>
+            {/* 객실 인원 */}
+            <View ref={fieldRefs.occupancy}>
               <FormLabel text='객실 인원' required />
               <View className='flex-row gap-2 mt-2'>
                 {OCCUPANCY_OPTIONS.map((label) => (
@@ -281,7 +301,7 @@ export default function AddRoomForm() {
                     key={label}
                     onPress={() => {
                       setOccupancy(label);
-                      clearFieldError("occupancy");
+                      clearRoomError("occupancy");
                     }}
                     className={`flex-1 h-11 rounded-lg border justify-center items-center ${
                       occupancy === label
@@ -301,14 +321,15 @@ export default function AddRoomForm() {
                   </TouchableOpacity>
                 ))}
               </View>
-              {fieldErrors.occupancy && (
+              {roomErrors.occupancy && (
                 <Text className='text-red-500 text-xs mt-1'>
-                  {fieldErrors.occupancy}
+                  {roomErrors.occupancy}
                 </Text>
               )}
             </View>
 
-            <View>
+            {/* 입실/퇴실 시간 */}
+            <View ref={fieldRefs.checkInTime}>
               <FormLabel text='입실/퇴실 시간' required />
               <View className='flex-row items-center gap-2 mt-2'>
                 <View className='flex-1 gap-1'>
@@ -317,9 +338,9 @@ export default function AddRoomForm() {
                     value={checkInTime}
                     onChange={(time) => {
                       setCheckInTime(time);
-                      clearFieldError("checkInTime");
+                      clearRoomError("checkInTime");
                     }}
-                    error={!!fieldErrors.checkInTime}
+                    error={!!roomErrors.checkInTime}
                   />
                 </View>
                 <Text className='text-[#364153] text-base mt-5'>~</Text>
@@ -329,24 +350,25 @@ export default function AddRoomForm() {
                     value={checkOutTime}
                     onChange={(time) => {
                       setCheckOutTime(time);
-                      clearFieldError("checkOutTime");
+                      clearRoomError("checkOutTime");
                     }}
-                    error={!!fieldErrors.checkOutTime}
+                    error={!!roomErrors.checkOutTime}
                   />
                 </View>
               </View>
-              {(fieldErrors.checkInTime || fieldErrors.checkOutTime) && (
+              {(roomErrors.checkInTime || roomErrors.checkOutTime) && (
                 <Text className='text-red-500 text-xs mt-1'>
-                  {fieldErrors.checkInTime || fieldErrors.checkOutTime}
+                  {roomErrors.checkInTime || roomErrors.checkOutTime}
                 </Text>
               )}
             </View>
 
-            <View>
+            {/* 1박 가격 */}
+            <View ref={fieldRefs.price}>
               <FormLabel text='1박 가격' required />
               <View
                 className={`flex-row items-center w-full h-12 px-4 rounded-lg border mt-2 ${
-                  fieldErrors.price ? "border-red-500" : "border-gray-200"
+                  roomErrors.price ? "border-red-500" : "border-gray-200"
                 }`}
               >
                 <TextInput
@@ -355,21 +377,23 @@ export default function AddRoomForm() {
                   placeholderTextColor={ROOM_TYPE_COLORS.PLACEHOLDER}
                   keyboardType='numeric'
                   value={price}
-                  onChangeText={(text) => {
-                    setPrice(text);
-                    clearFieldError("price");
-                  }}
+                  onChangeText={(text) => setPrice(text)}
+                  onFocus={() => clearRoomError("price")}
+                  onBlur={() =>
+                    validateRoomField({ ...roomData, price }, "price")
+                  }
                 />
                 <Text className='text-[#6a7282] text-sm ml-2'>원</Text>
               </View>
-              {fieldErrors.price && (
+              {roomErrors.price && (
                 <Text className='text-red-500 text-xs mt-1'>
-                  {fieldErrors.price}
+                  {roomErrors.price}
                 </Text>
               )}
             </View>
 
-            <View>
+            {/* 객실 사진 */}
+            <View ref={fieldRefs.images}>
               <FormLabel text='객실 사진' required />
               <Text className='text-[#697282] text-xs mt-1 mb-3'>
                 {FORM_DESCRIPTIONS.MAX_10_IMAGES}
@@ -378,15 +402,15 @@ export default function AddRoomForm() {
                 selectedImageFiles={roomImages}
                 setSelectedImageFiles={(files) => {
                   setRoomImages(files);
-                  clearFieldError("images");
+                  clearRoomError("images");
                 }}
                 maxCount={VALIDATION_LIMITS.ROOM_IMAGES.MAX}
-                error={!!fieldErrors.images}
-                clearError={() => clearFieldError("images")}
+                error={!!roomErrors.images}
+                clearError={() => clearRoomError("images")}
               />
-              {fieldErrors.images && (
+              {roomErrors.images && (
                 <Text className='text-red-500 text-xs mt-1'>
-                  {fieldErrors.images}
+                  {roomErrors.images}
                 </Text>
               )}
             </View>
