@@ -49,5 +49,12 @@ export const useFormValidation = <T, E>({
     return isValid;
   };
 
-  return { errors, clearError, validateForm };
+  const validateField = (field: keyof E): void => {
+    const validator = validators[step];
+    if (!validator) return;
+    const { errors: newErrors } = validator(formData, initialErrors);
+    setErrors((prev) => ({ ...prev, [field]: newErrors[field as keyof E] }));
+  };
+
+  return { errors, clearError, validateForm, validateField };
 };
