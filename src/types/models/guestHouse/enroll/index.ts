@@ -39,14 +39,17 @@ export interface Step2Data {
   introduction: string;
   facilities: string[]; // 편의시설 (태그 선택 + 직접 입력)
   atmosphere: string[]; // 최대 2개
-  parties: Party[];
 }
 
 export interface Step3Data {
-  rooms: Room[];
+  parties: Party[];
 }
 
 export interface Step4Data {
+  rooms: Room[];
+}
+
+export interface Step5Data {
   instagram: string;
   phone: string;
   website: string;
