@@ -8,8 +8,8 @@ import { MAX_ITEMS } from '@/src/utils/constants/guestHouseEnrollment';
 import PartyCard from './PartyCard';
 
 const PartyComponent = () => {
-  const { step2Data, removeParty } = useGuestHouseStore();
-  const { parties } = step2Data;
+  const { step3Data, removeParty } = useGuestHouseStore();
+  const { parties } = step3Data;
 
   return (
     <View className="flex-1">

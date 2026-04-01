@@ -21,13 +21,10 @@ import {
 import { useGuestHouseStep2Validation } from "@/src/hooks/guestHouse/useGuestHouseStep2Validation";
 import AtmosphereSelector from "./_components/step2/AtmosphereSelector";
 import FacilitiesForm from "./_components/step2/FacilitiesForm";
-import PartyComponent from "./_components/step2/PartyComponent";
 
 export default function GuestHouseEnrollStep2() {
   const { step2Data, setStep2Update } = useGuestHouseStore();
   const scrollViewRef = useRef<ScrollView>(null);
-  const partyComponentRef = useRef<any>(null);
-  const previousPartyCount = useRef(step2Data.parties.length);
 
   const { errors, validateForm, clearError } =
     useGuestHouseStep2Validation(step2Data);
@@ -52,18 +49,6 @@ export default function GuestHouseEnrollStep2() {
 
       return () => subscription.remove();
     }, [handleBackPress])
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      // 파티가 추가되었을 때만 스크롤
-      if (step2Data.parties.length > previousPartyCount.current) {
-        setTimeout(() => {
-          scrollViewRef.current?.scrollToEnd({ animated: true });
-        }, 100);
-      }
-      previousPartyCount.current = step2Data.parties.length;
-    }, [step2Data.parties.length])
   );
 
   return (
@@ -125,8 +110,6 @@ export default function GuestHouseEnrollStep2() {
             clearError={() => clearError("atmosphere")}
           />
         </FormSection>
-
-        <PartyComponent />
 
         <Flex items='center'>
           <Button

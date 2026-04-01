@@ -8,24 +8,18 @@ import ItemListContainer from "@/src/components/ui/ItemListContainer";
 import { useGuestHouseStore } from "@/src/stores/guestHouse/useGuestHouseStore";
 import {
   BUTTON_LABELS,
-  FORM_DESCRIPTIONS,
   MAX_ITEMS,
 } from "@/src/utils/constants/guestHouseEnrollment";
 
-import { useGuestHouseStep3Validation } from "@/src/hooks/guestHouse/useGuestHouseStep3Validation";
 import GuestHouseEnrollLayout from "./_components/GuestHouseEnrollLayout";
-import NoticeBox from "./_components/step3/NoticeBox";
-import RoomCard from "./_components/step3/RoomCard";
+import PartyCard from "./_components/step2/PartyCard";
 
 export default function GuestHouseEnrollStep3() {
-  const { step3Data, removeRoom } = useGuestHouseStore();
-  const { rooms } = step3Data;
-  const { errors, validateForm } = useGuestHouseStep3Validation(step3Data);
+  const { step3Data, removeParty } = useGuestHouseStore();
+  const { parties } = step3Data;
 
   const handleNext = () => {
-    if (validateForm()) {
-      router.push("/guestHouse/enroll/step4");
-    }
+    router.push("/guestHouse/enroll/step4");
   };
 
   const handleBackPress = useCallback(() => {
@@ -47,42 +41,35 @@ export default function GuestHouseEnrollStep3() {
   return (
     <GuestHouseEnrollLayout
       currentStep={3}
-      stepTitle='객실 타입 등록'
+      stepTitle='파티 등록'
       onBackPress={handleBackPress}
     >
       <ScrollView className='bg-[#F9FAFB]' style={{ paddingHorizontal: 12 }}>
         <View className='pt-4'>
-          <View className='gap-5'>
-            <ItemListContainer
-              title='객실 타입'
-              description={FORM_DESCRIPTIONS.MAX_10_ITEMS}
-              items={rooms}
-              emptyIcon='plus-square'
-              addIcon='plus-square'
-              addButtonLabel={BUTTON_LABELS.ADD_ROOM}
-              onAddPress={() => router.push("/guestHouse/enroll/addRoomForm")}
-              error={errors.rooms}
-              maxItems={MAX_ITEMS.ROOMS}
-              renderItem={(room, index) => (
-                <RoomCard
-                  key={room.id}
-                  room={room}
-                  isRepresentative={index === 0}
-                  onEdit={() => {
-                    router.push({
-                      pathname: "/guestHouse/enroll/addRoomForm",
-                      params: { editId: room.id },
-                    });
-                  }}
-                  onRemove={() => removeRoom(room.id)}
-                />
-              )}
-            />
-
-            <View className='bg-white rounded-[10px] shadow-sm p-6'>
-              <NoticeBox />
-            </View>
-          </View>
+          <ItemListContainer
+            title='파티'
+            description='최대 10개까지 등록할 수 있습니다'
+            items={parties}
+            emptyIcon='plus-square'
+            addIcon='plus-square'
+            addButtonLabel='파티 추가'
+            onAddPress={() => router.push("/guestHouse/enroll/makeParty")}
+            maxItems={MAX_ITEMS.PARTIES}
+            renderItem={(party, index) => (
+              <PartyCard
+                key={party.id}
+                party={party}
+                isRepresentative={index === 0}
+                onEdit={() => {
+                  router.push({
+                    pathname: "/guestHouse/enroll/makeParty",
+                    params: { editId: party.id },
+                  });
+                }}
+                onDelete={() => removeParty(party.id)}
+              />
+            )}
+          />
         </View>
         <Flex items='center'>
           <Button
