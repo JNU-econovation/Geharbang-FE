@@ -22,8 +22,8 @@ export default function AddImageButton({
     <Pressable
       onPress={onAdd}
       style={{ width: size, height: size }}
-      className={`border-2 rounded-xl bg-gray-50 pt-4 
-        ${error ? "border-primary-red" : "border-gray-border"}`}
+      className={`rounded-xl bg-gray-50 pt-4 
+        ${error ? "border border-primary-red" : "border-2 border-gray-border"}`}
     >
       <Flex items='center' justify='center' gap={4}>
         <TextSize size={24} color={COLORS.GRAY.TEXT} content='+' />
