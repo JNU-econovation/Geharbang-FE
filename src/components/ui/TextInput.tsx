@@ -54,7 +54,7 @@ export default function CustomTextInput({
         className={`border rounded-lg p-3
                   ${error ? 'border-primary-red' : 'border-gray-border'}`}
         style={{
-          height: height,
+          height: height || 48,
           width: width || '100%',
           lineHeight: lineHeight,
         }}
