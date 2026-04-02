@@ -1,39 +1,92 @@
-import QuestionSection from '@/app/step/recruitment/_components/QuestionSection';
-import RecruitmentStepLayout from '@/app/step/recruitment/_components/RecruitmentStepLayout';
-import Flex from '@/src/components/layout/Flex';
-import Button from '@/src/components/ui/Button/Button';
-import { useHandleStepRecruitmentSubmit } from '@/src/hooks/stepRecruitment/useHandleStepRecruitmentSubmit';
-import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
-import React, { useRef } from 'react';
+import QuestionSection from "@/app/step/recruitment/_components/QuestionSection";
+import RecruitmentStepLayout from "@/app/step/recruitment/_components/RecruitmentStepLayout";
+import Button from "@/src/components/ui/Button/Button";
+import { useHandleStepRecruitmentSubmit } from "@/src/hooks/stepRecruitment/useHandleStepRecruitmentSubmit";
+import { useStep1Validation } from "@/src/hooks/stepRecruitment/useStep1Validation";
+import { useStep2Validation } from "@/src/hooks/stepRecruitment/useStep2Validation";
+import { useStep3Validation } from "@/src/hooks/stepRecruitment/useStep3Validation";
+import { useStep4Validation } from "@/src/hooks/stepRecruitment/useStep4Validation";
+import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useRef } from "react";
 import {
   Alert,
+  BackHandler,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   View,
-} from 'react-native';
+} from "react-native";
 
 export default function RecruitmentStep5() {
   const storeData = useStepRecruitmentStore();
   const {
+    step1Data,
+    step2Data,
+    step3Data,
+    step4Data,
     step5Data,
     addStep5Question,
     removeStep5Question,
     updateStep5Question,
+    resetAllData,
+    setShouldScrollToError,
   } = storeData;
   const { questions } = step5Data;
+  const { instagram, phone, email, website, ownerMessage } = step4Data;
+
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const { handleSubmit } = useHandleStepRecruitmentSubmit();
+  const { validateForm: validateStep1 } = useStep1Validation(step1Data);
+  const { validateForm: validateStep2 } = useStep2Validation(step2Data);
+  const { validateForm: validateStep3 } = useStep3Validation(step3Data);
+  const { validateForm: validateStep4 } = useStep4Validation({
+    instagram,
+    phone,
+    email,
+    website,
+    ownerMessage,
+  });
+
+  const { handleSubmit: submitRecruitment } = useHandleStepRecruitmentSubmit();
+
+  const handleBackPress = useCallback(() => {
+    Alert.alert(
+      "등록 취소",
+      "스텝 모집 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.",
+      [
+        { text: "계속 작성", style: "cancel" },
+        {
+          text: "취소",
+          style: "destructive",
+          onPress: () => {
+            resetAllData();
+            router.replace("/");
+          },
+        },
+      ],
+    );
+    return true;
+  }, [resetAllData]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const subscription = BackHandler.addEventListener(
+        "hardwareBackPress",
+        handleBackPress,
+      );
+      return () => subscription.remove();
+    }, [handleBackPress]),
+  );
 
   const addQuestion = () => {
     if (questions.length >= 5) {
-      Alert.alert('알림', '최대 5개까지만 등록할 수 있습니다.');
+      Alert.alert("알림", "최대 5개까지만 등록할 수 있습니다.");
       return;
     }
     const newQuestion = {
       id: Date.now().toString(),
-      text: '',
+      text: "",
     };
     addStep5Question(newQuestion);
 
@@ -52,37 +105,73 @@ export default function RecruitmentStep5() {
 
   const canAddMore = questions.length < 5;
 
+  const handleSubmit = () => {
+    if (!validateStep1()) {
+      setShouldScrollToError(true);
+      router.navigate("/step/recruitment/step1");
+      return;
+    }
+    if (!validateStep2()) {
+      setShouldScrollToError(true);
+      router.navigate("/step/recruitment/step2");
+      return;
+    }
+    if (!validateStep3()) {
+      setShouldScrollToError(true);
+      router.navigate("/step/recruitment/step3");
+      return;
+    }
+    if (!validateStep4()) {
+      setShouldScrollToError(true);
+      router.navigate("/step/recruitment/step4");
+      return;
+    }
+    submitRecruitment();
+  };
+
   return (
-    <RecruitmentStepLayout currentStep={5} stepTitle="추가 질문">
+    <RecruitmentStepLayout
+      currentStep={5}
+      stepTitle='추가 질문'
+      onBackPress={handleBackPress}
+    >
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className='flex-1'
       >
         <ScrollView
           ref={scrollViewRef}
-          className="flex-1"
+          className='flex-1'
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="pt-4 px-3">
-            <Flex justify="start" items="center" gap={24}>
-              <QuestionSection
-                questions={questions}
-                onAddQuestion={addQuestion}
-                onDeleteQuestion={deleteQuestion}
-                onUpdateQuestion={updateQuestion}
-                canAddMore={canAddMore}
-              />
+          <View className='pt-4 px-3'>
+            <QuestionSection
+              questions={questions}
+              onAddQuestion={addQuestion}
+              onDeleteQuestion={deleteQuestion}
+              onUpdateQuestion={updateQuestion}
+              canAddMore={canAddMore}
+            />
 
+            <View className='flex-row gap-2 my-4'>
               <Button
-                variant="primary"
-                width={370}
+                variant='gray'
                 height={50}
-                textColor="white"
-                content="공고 등록하기"
-                onPress={handleSubmit}
+                textColor='black'
+                content='이전'
+                onPress={() => router.push("/step/recruitment/step4")}
+                className='flex-1'
               />
-            </Flex>
+              <Button
+                variant='primary'
+                height={50}
+                textColor='white'
+                content='공고 등록하기'
+                onPress={handleSubmit}
+                className='flex-1'
+              />
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

@@ -45,6 +45,7 @@ export default function MakeParty() {
   const scrollViewRef = useRef<ScrollView>(null);
   const fieldRefs = {
     type: useRef<View>(null),
+    customTypeName: useRef<View>(null),
     images: useRef<View>(null),
     startTime: useRef<View>(null),
     days: useRef<View>(null),
@@ -115,8 +116,12 @@ export default function MakeParty() {
     description,
   };
 
-  const { partyErrors, clearPartyError, validatePartyField, validatePartyForm } =
-    useGuestHouseStep3Validation(step3Data);
+  const {
+    partyErrors,
+    clearPartyError,
+    validatePartyField,
+    validatePartyForm,
+  } = useGuestHouseStep3Validation(step3Data);
 
   const togglePartyType = (type: string) => {
     setSelectedPartyType(toggleSingleSelect(selectedPartyType, type));
@@ -131,6 +136,7 @@ export default function MakeParty() {
   const scrollToFirstError = (errors: typeof partyErrors) => {
     const fieldOrder = [
       "type",
+      "customTypeName",
       "images",
       "startTime",
       "days",
@@ -155,7 +161,7 @@ export default function MakeParty() {
               y: Math.max(0, y - 16),
               animated: true,
             }),
-          () => scrollViewRef.current?.scrollTo({ y: 0, animated: true })
+          () => scrollViewRef.current?.scrollTo({ y: 0, animated: true }),
         );
       } else {
         scrollViewRef.current?.scrollTo({ y: 0, animated: true });
@@ -289,7 +295,7 @@ export default function MakeParty() {
                   </View>
 
                   {selectedPartyType === "기타" && (
-                    <View className='mt-3'>
+                    <View ref={fieldRefs.customTypeName} className='mt-3'>
                       <TextInput
                         value={otherPartyType}
                         onChangeText={(text) => setOtherPartyType(text)}
@@ -297,7 +303,7 @@ export default function MakeParty() {
                         onBlur={() =>
                           validatePartyField(
                             { ...partyData, type: selectedPartyType },
-                            "customTypeName"
+                            "customTypeName",
                           )
                         }
                         placeholder={PLACEHOLDERS.PARTY_CUSTOM_TYPE}
@@ -415,7 +421,7 @@ export default function MakeParty() {
                     onBlur={() =>
                       validatePartyField(
                         { ...partyData, location: partyLocation },
-                        "location"
+                        "location",
                       )
                     }
                     placeholder={PLACEHOLDERS.PARTY_LOCATION}
@@ -438,7 +444,7 @@ export default function MakeParty() {
                     onBlur={() =>
                       validatePartyField(
                         { ...partyData, mood: partyMood },
-                        "mood"
+                        "mood",
                       )
                     }
                     placeholder={PLACEHOLDERS.PARTY_MOOD}
@@ -460,7 +466,7 @@ export default function MakeParty() {
                         setAllowExternal(false);
                         clearPartyError("allowExternal");
                       }}
-                      className={`flex-1 h-11 rounded-lg border justify-center items-center ${
+                      className={`flex-1 h-11 rounded-lg border justify-center items-center  ${partyErrors.allowExternal && "border border-primary-red"} ${
                         allowExternal === false
                           ? "bg-sky-50 border-sky-500"
                           : "bg-white border-gray-200"
@@ -481,7 +487,7 @@ export default function MakeParty() {
                         setAllowExternal(true);
                         clearPartyError("allowExternal");
                       }}
-                      className={`flex-1 h-11 rounded-lg border justify-center items-center ${
+                      className={`flex-1 h-11 rounded-lg border justify-center items-center ${partyErrors.allowExternal && "border border-primary-red"} ${
                         allowExternal === true
                           ? "bg-sky-50 border-sky-500"
                           : "bg-white border-gray-200"
@@ -517,7 +523,7 @@ export default function MakeParty() {
                           onBlur={() =>
                             validatePartyField(
                               { ...partyData, guestFee },
-                              "guestFee"
+                              "guestFee",
                             )
                           }
                           placeholder={PLACEHOLDERS.PARTY_FEE}
@@ -546,7 +552,7 @@ export default function MakeParty() {
                             onBlur={() =>
                               validatePartyField(
                                 { ...partyData, externalFee },
-                                "externalFee"
+                                "externalFee",
                               )
                             }
                             placeholder={PLACEHOLDERS.PARTY_FEE}
@@ -583,7 +589,7 @@ export default function MakeParty() {
                     onBlur={() =>
                       validatePartyField(
                         { ...partyData, description },
-                        "description"
+                        "description",
                       )
                     }
                     placeholder={PLACEHOLDERS.PARTY_DESCRIPTION}
@@ -603,9 +609,7 @@ export default function MakeParty() {
               height={50}
               textColor='white'
               content={
-                isEditMode
-                  ? BUTTON_LABELS.EDIT_PARTY
-                  : BUTTON_LABELS.MAKE_PARTY
+                isEditMode ? BUTTON_LABELS.EDIT_PARTY : BUTTON_LABELS.MAKE_PARTY
               }
               onPress={handleNext}
               className='mt-4 mb-8'

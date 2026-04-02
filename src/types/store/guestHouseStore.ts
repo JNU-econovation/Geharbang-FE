@@ -68,5 +68,7 @@ export type AllSlices = Step1Slice & Step2Slice & Step3Slice & Step4Slice & Step
 
 // 전체 Store 타입
 export interface GuestHouseStore extends AllSlices {
+  shouldScrollToError: boolean;
+  setShouldScrollToError: (value: boolean) => void;
   resetAllData: () => void;
 }

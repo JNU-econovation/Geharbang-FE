@@ -15,6 +15,9 @@ export const useStepRecruitmentStore = create<StepRecruitmentStore>()(
     ...createStep4Slice(set, get, api),
     ...createStep5Slice(set, get, api),
 
+    shouldScrollToError: false,
+    setShouldScrollToError: (value: boolean) => set({ shouldScrollToError: value }),
+
     resetAllData: () => {
       set(() => ({
         step1Data: initialStep1Data,
@@ -22,6 +25,7 @@ export const useStepRecruitmentStore = create<StepRecruitmentStore>()(
         step3Data: initialStep3Data,
         step4Data: initialStep4Data,
         step5Data: initialStep5Data,
+        shouldScrollToError: false,
       }));
     },
   }),

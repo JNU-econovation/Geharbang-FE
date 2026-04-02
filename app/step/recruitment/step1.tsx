@@ -1,33 +1,43 @@
 import { router, useFocusEffect } from "expo-router";
-import { useCallback, useEffect } from "react";
-import { Alert, BackHandler, ScrollView } from "react-native";
+import { useCallback, useRef } from "react";
+import { Alert, BackHandler, ScrollView, View } from "react-native";
 
 import RecruitmentStepLayout from "@/app/step/recruitment/_components/RecruitmentStepLayout";
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
-import { useStep1FormValidation } from "@/src/hooks/stepRecruitment/useStep1Validation";
+import { useStep1Validation } from "@/src/hooks/stepRecruitment/useStep1Validation";
 import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
 import GuestHouseLocation from "./_components/step1/GuestHouseLocation";
 import GuestHouseName from "./_components/step1/GuestHouseName";
 import WorkingRegion from "./_components/step1/WorkingRegion";
 
 export default function RecruitmentStep1() {
-  const { step1Data, setStep1Update, resetAllData } = useStepRecruitmentStore();
+  const {
+    step1Data,
+    setStep1Update,
+    resetAllData,
+    shouldScrollToError,
+    setShouldScrollToError,
+  } = useStepRecruitmentStore();
 
-  useEffect(() => {
-    resetAllData();
-  }, []);
+  const scrollViewRef = useRef<ScrollView>(null);
+  const guestHouseNameRef = useRef<View>(null);
+  const workingRegionRef = useRef<View>(null);
+  const locationRef = useRef<View>(null);
+
+  const fieldRefMap = {
+    guestHouseName: guestHouseNameRef,
+    workingRegion: workingRegionRef,
+    location: locationRef,
+  } as const;
 
   const handleBackPress = useCallback(() => {
     Alert.alert(
       '등록 취소',
       '스텝 모집 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.',
       [
-        {
-          text: '계속 작성',
-          style: 'cancel',
-        },
+        { text: '계속 작성', style: 'cancel' },
         {
           text: '취소',
           style: 'destructive',
@@ -38,69 +48,109 @@ export default function RecruitmentStep1() {
         },
       ],
     );
+    return true;
   }, [resetAllData]);
 
   useFocusEffect(
     useCallback(() => {
-      const onHardwareBackPress = () => {
-        handleBackPress();
-        return true;
-      };
-
       const subscription = BackHandler.addEventListener(
         'hardwareBackPress',
-        onHardwareBackPress,
+        handleBackPress,
       );
-
       return () => subscription.remove();
     }, [handleBackPress]),
   );
 
-  const { errors, validateForm, clearError } =
-    useStep1FormValidation(step1Data);
+  const { errors, validateForm, clearError, validateField } =
+    useStep1Validation(step1Data);
 
-  const handleNext = () => {
-    if (validateForm()) {
-      router.push("/step/recruitment/step2");
-    }
-  };
+  const errorsRef = useRef(errors);
+  errorsRef.current = errors;
+
+  const validateFormRef = useRef(validateForm);
+  validateFormRef.current = validateForm;
+
+  const validateFieldRef = useRef(validateField);
+  validateFieldRef.current = validateField;
+
+  const step1DataRef = useRef(step1Data);
+  step1DataRef.current = step1Data;
+
+  useFocusEffect(
+    useCallback(() => {
+      if (shouldScrollToError) {
+        validateFormRef.current();
+        setTimeout(() => {
+          const fieldOrder = ["guestHouseName", "workingRegion", "location"] as const;
+          const firstErrField = fieldOrder.find((k) => !!errorsRef.current[k]);
+          const targetRef = firstErrField ? fieldRefMap[firstErrField] : null;
+          if (targetRef?.current && scrollViewRef.current) {
+            targetRef.current.measureLayout(
+              scrollViewRef.current as any,
+              (_x: number, y: number) =>
+                scrollViewRef.current?.scrollTo({
+                  y: Math.max(0, y - 16),
+                  animated: true,
+                }),
+              () => scrollViewRef.current?.scrollTo({ y: 0, animated: true })
+            );
+          } else {
+            scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+          }
+        }, 100);
+        return;
+      }
+      if (step1DataRef.current.guestHouseName) {
+        validateFieldRef.current("guestHouseName");
+      }
+    }, [shouldScrollToError])
+  );
 
   return (
     <RecruitmentStepLayout currentStep={1} stepTitle='기본 정보' onBackPress={handleBackPress}>
       <ScrollView
+        ref={scrollViewRef}
         className='bg-[#F9FAFB]'
         style={{ paddingTop: 16, paddingHorizontal: 12 }}
       >
         <FormSection title='기본 정보'>
-          <GuestHouseName
-            value={step1Data.guestHouseName}
-            onChangeText={(text) => {
-              setStep1Update("guestHouseName", text);
-              clearError("guestHouseName");
-            }}
-            errorMsg={errors.guestHouseName}
-            error={!!errors.guestHouseName}
-          />
+          <View ref={guestHouseNameRef}>
+            <GuestHouseName
+              value={step1Data.guestHouseName}
+              onChangeText={(text) => {
+                setStep1Update("guestHouseName", text);
+                clearError("guestHouseName");
+              }}
+              onBlur={() => validateField("guestHouseName")}
+              onFocus={() => clearError("guestHouseName")}
+              errorMsg={errors.guestHouseName}
+              error={!!errors.guestHouseName}
+            />
+          </View>
 
-          <WorkingRegion
-            selectedRegion={step1Data.workingRegion}
-            onChangeOption={(region) => {
-              setStep1Update("workingRegion", region);
-              clearError("workingRegion");
-            }}
-            errorMsg={errors.workingRegion}
-            error={!!errors.workingRegion}
-          />
+          <View ref={workingRegionRef}>
+            <WorkingRegion
+              selectedRegion={step1Data.workingRegion}
+              onChangeOption={(region) => {
+                setStep1Update("workingRegion", region);
+                clearError("workingRegion");
+              }}
+              errorMsg={errors.workingRegion}
+              error={!!errors.workingRegion}
+            />
+          </View>
 
-          <GuestHouseLocation
-            selectedAddress={step1Data.location}
-            setSelectedAddress={(location) => {
-              setStep1Update("location", location);
-              clearError("location");
-            }}
-            errorMsg={errors.location}
-            error={!!errors.location}
-          />
+          <View ref={locationRef}>
+            <GuestHouseLocation
+              selectedAddress={step1Data.location}
+              setSelectedAddress={(location) => {
+                setStep1Update("location", location);
+                clearError("location");
+              }}
+              errorMsg={errors.location}
+              error={!!errors.location}
+            />
+          </View>
         </FormSection>
 
         <Flex items='center'>
@@ -110,7 +160,7 @@ export default function RecruitmentStep1() {
             height={50}
             textColor='white'
             content='다음'
-            onPress={handleNext}
+            onPress={() => router.push("/step/recruitment/step2")}
             className='my-4'
           />
         </Flex>

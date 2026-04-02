@@ -23,6 +23,8 @@ interface WorkingTimeAndWorkProps {
   ) => void;
   onDelete: () => void;
   errors?: WorkingTimeAndWorkErrors;
+  onTextInputBlur?: (field: "workingTimeName" | "thatTimeWork") => void;
+  onTextInputFocus?: (field: "workingTimeName" | "thatTimeWork") => void;
 }
 
 export default function WorkingTimeAndWork({
@@ -30,6 +32,8 @@ export default function WorkingTimeAndWork({
   setAddedTimeAndWork,
   onDelete,
   errors,
+  onTextInputBlur,
+  onTextInputFocus,
 }: WorkingTimeAndWorkProps) {
   return (
     <ViewContext
@@ -53,6 +57,8 @@ export default function WorkingTimeAndWork({
               workingTimeName: name,
             })
           }
+          onBlur={() => onTextInputBlur?.("workingTimeName")}
+          onFocus={() => onTextInputFocus?.("workingTimeName")}
           placeholder='예: 오전조 / 오후조 / 야간조'
           error={!!errors?.workingTimeName}
         />
@@ -99,6 +105,8 @@ export default function WorkingTimeAndWork({
               thatTimeWork: work,
             })
           }
+          onBlur={() => onTextInputBlur?.("thatTimeWork")}
+          onFocus={() => onTextInputFocus?.("thatTimeWork")}
           placeholder='예: 체크인 / 체크아웃, 객실 청소'
           multiline={true}
           error={!!errors?.thatTimeWork}
