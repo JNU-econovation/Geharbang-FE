@@ -42,7 +42,7 @@ export function useStep3Validation(step3Data: Step3Data) {
       if (!introduction || introduction.trim() === "") {
         errorMsg = "소개글을 입력해주세요.";
       } else if (introduction.length < 10) {
-        errorMsg = "소개글을 더 자세히 입력해주세요";
+        errorMsg = "소개글은 최소 10자 이상 입력해주세요";
       }
     }
 

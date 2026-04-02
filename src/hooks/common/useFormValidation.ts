@@ -19,26 +19,26 @@ export const useFormValidation = <T, E>({
   const [errors, setErrors] = useState<E>(initialErrors);
 
   const clearError = (field: keyof E, index?: number, key?: string) => {
-    if (index !== undefined && Array.isArray(errors[field])) {
-      const arr = [...(errors[field] as any[])];
-      if (!arr[index]) arr[index] = {};
+    setErrors((prev) => {
+      if (index !== undefined && Array.isArray(prev[field])) {
+        const arr = [...(prev[field] as any[])];
+        if (!arr[index]) arr[index] = {};
 
-      if (key) {
-        arr[index] = { ...arr[index], [key]: "" };
+        if (key) {
+          arr[index] = { ...arr[index], [key]: "" };
+        } else {
+          arr[index] = Object.fromEntries(
+            Object.keys(arr[index]).map((k) => [k, ""])
+          );
+        }
+
+        return { ...prev, [field]: arr } as E;
+      } else if (key) {
+        return { ...prev, [field]: { ...prev[field], [key]: "" } } as E;
       } else {
-        arr[index] = Object.fromEntries(
-          Object.keys(arr[index]).map((k) => [k, ""])
-        );
+        return { ...prev, [field]: "" } as E;
       }
-
-      setErrors((prev) => ({ ...prev, [field]: arr } as E));
-    } else if (key) {
-      setErrors(
-        (prev) => ({ ...prev, [field]: { ...prev[field], [key]: "" } } as E)
-      );
-    } else {
-      setErrors((prev) => ({ ...prev, [field]: "" } as E));
-    }
+    });
   };
 
   const validateForm = (): boolean => {
@@ -49,11 +49,24 @@ export const useFormValidation = <T, E>({
     return isValid;
   };
 
-  const validateField = (field: keyof E): void => {
+  const validateField = (field: keyof E, index?: number, subField?: string): void => {
     const validator = validators[step];
     if (!validator) return;
     const { errors: newErrors } = validator(formData, initialErrors);
-    setErrors((prev) => ({ ...prev, [field]: newErrors[field as keyof E] }));
+
+    if (index !== undefined && subField && Array.isArray(newErrors[field])) {
+      setErrors((prev) => {
+        const arr = Array.isArray(prev[field]) ? [...(prev[field] as any[])] : [];
+        if (!arr[index]) arr[index] = {};
+        arr[index] = {
+          ...arr[index],
+          [subField]: (newErrors[field] as any[])[index]?.[subField] ?? "",
+        };
+        return { ...prev, [field]: arr } as E;
+      });
+    } else {
+      setErrors((prev) => ({ ...prev, [field]: newErrors[field as keyof E] }));
+    }
   };
 
   return { errors, clearError, validateForm, validateField };
