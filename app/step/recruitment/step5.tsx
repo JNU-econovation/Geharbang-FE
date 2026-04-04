@@ -7,7 +7,7 @@ import { useStep2Validation } from "@/src/hooks/stepRecruitment/useStep2Validati
 import { useStep3Validation } from "@/src/hooks/stepRecruitment/useStep3Validation";
 import { useStep4Validation } from "@/src/hooks/stepRecruitment/useStep4Validation";
 import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
-import { router } from "expo-router";
+import { Href, router } from "expo-router";
 import { useRef } from "react";
 import {
   Alert,
@@ -74,27 +74,28 @@ export default function RecruitmentStep5() {
 
   const canAddMore = questions.length < 5;
 
+  const validateStepAndNavigate = (
+    validator: () => boolean,
+    route: Href,
+  ): boolean => {
+    if (!validator()) {
+      setShouldScrollToError(true);
+      router.navigate(route);
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
-    if (!validateStep1()) {
-      setShouldScrollToError(true);
-      router.navigate("/step/recruitment/step1");
+    if (!validateStepAndNavigate(validateStep1, "/step/recruitment/step1"))
       return;
-    }
-    if (!validateStep2()) {
-      setShouldScrollToError(true);
-      router.navigate("/step/recruitment/step2");
+    if (!validateStepAndNavigate(validateStep2, "/step/recruitment/step2"))
       return;
-    }
-    if (!validateStep3()) {
-      setShouldScrollToError(true);
-      router.navigate("/step/recruitment/step3");
+    if (!validateStepAndNavigate(validateStep3, "/step/recruitment/step3"))
       return;
-    }
-    if (!validateStep4()) {
-      setShouldScrollToError(true);
-      router.navigate("/step/recruitment/step4");
+    if (!validateStepAndNavigate(validateStep4, "/step/recruitment/step4"))
       return;
-    }
+
     submitRecruitment();
   };
 

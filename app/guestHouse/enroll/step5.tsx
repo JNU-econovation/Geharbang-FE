@@ -1,11 +1,6 @@
-import { router, useFocusEffect } from "expo-router";
+import { Href, router, useFocusEffect } from "expo-router";
 import { useCallback, useRef } from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
@@ -116,22 +111,25 @@ export default function GuestHouseEnrollStep5() {
   const { mutateAsync: enrollGuestHouse, isPending } =
     useGuestHouseEnrollment();
 
+  const validateStepAndNavigate = (
+    validator: () => boolean,
+    route: Href,
+  ): boolean => {
+    if (!validator()) {
+      setShouldScrollToError(true);
+      router.navigate(route);
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
-    if (!validateStep1()) {
-      setShouldScrollToError(true);
-      router.navigate("/guestHouse/enroll/step1");
+    if (!validateStepAndNavigate(validateStep1, "/guestHouse/enroll/step1"))
       return;
-    }
-    if (!validateStep2()) {
-      setShouldScrollToError(true);
-      router.navigate("/guestHouse/enroll/step2");
+    if (!validateStepAndNavigate(validateStep2, "/guestHouse/enroll/step2"))
       return;
-    }
-    if (!validateStep4()) {
-      setShouldScrollToError(true);
-      router.navigate("/guestHouse/enroll/step4");
+    if (!validateStepAndNavigate(validateStep4, "/guestHouse/enroll/step4"))
       return;
-    }
     if (!validateForm()) return;
 
     const enrollData = {
