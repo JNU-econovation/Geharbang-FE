@@ -2,8 +2,6 @@ import RecruitmentStepLayout from "@/app/step/recruitment/_components/Recruitmen
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useRef } from "react";
 import {
-  Alert,
-  BackHandler,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -24,9 +22,7 @@ export default function RecruitmentStep3() {
   const {
     step3Data,
     setStep3Update,
-    resetAllData,
     shouldScrollToError,
-    setShouldScrollToError,
   } = useStepRecruitmentStore();
 
   const scrollViewRef = useRef<ScrollView>(null);
@@ -60,35 +56,6 @@ export default function RecruitmentStep3() {
 
   const step3DataRef = useRef(step3Data);
   step3DataRef.current = step3Data;
-
-  const handleBackPress = useCallback(() => {
-    Alert.alert(
-      "등록 취소",
-      "스텝 모집 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.",
-      [
-        { text: "계속 작성", style: "cancel" },
-        {
-          text: "취소",
-          style: "destructive",
-          onPress: () => {
-            resetAllData();
-            router.replace("/");
-          },
-        },
-      ],
-    );
-    return true;
-  }, [resetAllData]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const subscription = BackHandler.addEventListener(
-        "hardwareBackPress",
-        handleBackPress,
-      );
-      return () => subscription.remove();
-    }, [handleBackPress]),
-  );
 
   useFocusEffect(
     useCallback(() => {
@@ -128,11 +95,7 @@ export default function RecruitmentStep3() {
   );
 
   return (
-    <RecruitmentStepLayout
-      currentStep={3}
-      stepTitle='게스트하우스 소개'
-      onBackPress={handleBackPress}
-    >
+    <RecruitmentStepLayout currentStep={3} stepTitle='게스트하우스 소개'>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className='flex-1'

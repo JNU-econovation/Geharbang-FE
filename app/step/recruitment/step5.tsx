@@ -7,11 +7,10 @@ import { useStep2Validation } from "@/src/hooks/stepRecruitment/useStep2Validati
 import { useStep3Validation } from "@/src/hooks/stepRecruitment/useStep3Validation";
 import { useStep4Validation } from "@/src/hooks/stepRecruitment/useStep4Validation";
 import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
-import { router, useFocusEffect } from "expo-router";
-import { useCallback, useRef } from "react";
+import { router } from "expo-router";
+import { useRef } from "react";
 import {
   Alert,
-  BackHandler,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -29,7 +28,6 @@ export default function RecruitmentStep5() {
     addStep5Question,
     removeStep5Question,
     updateStep5Question,
-    resetAllData,
     setShouldScrollToError,
   } = storeData;
   const { questions } = step5Data;
@@ -49,35 +47,6 @@ export default function RecruitmentStep5() {
   });
 
   const { handleSubmit: submitRecruitment } = useHandleStepRecruitmentSubmit();
-
-  const handleBackPress = useCallback(() => {
-    Alert.alert(
-      "등록 취소",
-      "스텝 모집 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.",
-      [
-        { text: "계속 작성", style: "cancel" },
-        {
-          text: "취소",
-          style: "destructive",
-          onPress: () => {
-            resetAllData();
-            router.replace("/");
-          },
-        },
-      ],
-    );
-    return true;
-  }, [resetAllData]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const subscription = BackHandler.addEventListener(
-        "hardwareBackPress",
-        handleBackPress,
-      );
-      return () => subscription.remove();
-    }, [handleBackPress]),
-  );
 
   const addQuestion = () => {
     if (questions.length >= 5) {
@@ -130,11 +99,7 @@ export default function RecruitmentStep5() {
   };
 
   return (
-    <RecruitmentStepLayout
-      currentStep={5}
-      stepTitle='추가 질문'
-      onBackPress={handleBackPress}
-    >
+    <RecruitmentStepLayout currentStep={5} stepTitle='추가 질문'>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className='flex-1'

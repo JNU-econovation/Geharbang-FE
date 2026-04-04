@@ -1,6 +1,6 @@
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useRef } from "react";
-import { Alert, BackHandler, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import GuestHouseEnrollLayout from "@/app/guestHouse/enroll/_components/GuestHouseEnrollLayout";
 import Button from "@/src/components/ui/Button/Button";
@@ -25,9 +25,7 @@ export default function GuestHouseEnrollStep2() {
   const {
     step2Data,
     setStep2Update,
-    resetAllData,
     shouldScrollToError,
-    setShouldScrollToError,
   } = useGuestHouseStore();
 
   const scrollViewRef = useRef<ScrollView>(null);
@@ -57,35 +55,6 @@ export default function GuestHouseEnrollStep2() {
 
   const step2DataRef = useRef(step2Data);
   step2DataRef.current = step2Data;
-
-  const handleBackPress = useCallback(() => {
-    Alert.alert(
-      "등록 취소",
-      "게스트하우스 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.",
-      [
-        { text: "계속 작성", style: "cancel" },
-        {
-          text: "취소",
-          style: "destructive",
-          onPress: () => {
-            resetAllData();
-            router.replace("/");
-          },
-        },
-      ],
-    );
-    return true;
-  }, [resetAllData]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const subscription = BackHandler.addEventListener(
-        "hardwareBackPress",
-        handleBackPress,
-      );
-      return () => subscription.remove();
-    }, [handleBackPress]),
-  );
 
   useFocusEffect(
     useCallback(() => {
@@ -123,11 +92,7 @@ export default function GuestHouseEnrollStep2() {
   );
 
   return (
-    <GuestHouseEnrollLayout
-      currentStep={2}
-      stepTitle='게스트하우스 소개'
-      onBackPress={handleBackPress}
-    >
+    <GuestHouseEnrollLayout currentStep={2} stepTitle='게스트하우스 소개'>
       <ScrollView
         ref={scrollViewRef}
         className='bg-[#F9FAFB]'

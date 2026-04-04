@@ -1,6 +1,6 @@
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useRef } from "react";
-import { Alert, BackHandler, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import RecruitmentStepLayout from "@/app/step/recruitment/_components/RecruitmentStepLayout";
 import Flex from "@/src/components/layout/Flex";
@@ -16,9 +16,7 @@ export default function RecruitmentStep1() {
   const {
     step1Data,
     setStep1Update,
-    resetAllData,
     shouldScrollToError,
-    setShouldScrollToError,
   } = useStepRecruitmentStore();
 
   const scrollViewRef = useRef<ScrollView>(null);
@@ -31,35 +29,6 @@ export default function RecruitmentStep1() {
     workingRegion: workingRegionRef,
     location: locationRef,
   } as const;
-
-  const handleBackPress = useCallback(() => {
-    Alert.alert(
-      '등록 취소',
-      '스텝 모집 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.',
-      [
-        { text: '계속 작성', style: 'cancel' },
-        {
-          text: '취소',
-          style: 'destructive',
-          onPress: () => {
-            resetAllData();
-            router.replace('/');
-          },
-        },
-      ],
-    );
-    return true;
-  }, [resetAllData]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const subscription = BackHandler.addEventListener(
-        'hardwareBackPress',
-        handleBackPress,
-      );
-      return () => subscription.remove();
-    }, [handleBackPress]),
-  );
 
   const { errors, validateForm, clearError, validateField } =
     useStep1Validation(step1Data);
@@ -92,7 +61,7 @@ export default function RecruitmentStep1() {
                   y: Math.max(0, y - 16),
                   animated: true,
                 }),
-              () => scrollViewRef.current?.scrollTo({ y: 0, animated: true })
+              () => scrollViewRef.current?.scrollTo({ y: 0, animated: true }),
             );
           } else {
             scrollViewRef.current?.scrollTo({ y: 0, animated: true });
@@ -103,11 +72,11 @@ export default function RecruitmentStep1() {
       if (step1DataRef.current.guestHouseName) {
         validateFieldRef.current("guestHouseName");
       }
-    }, [shouldScrollToError])
+    }, [shouldScrollToError]),
   );
 
   return (
-    <RecruitmentStepLayout currentStep={1} stepTitle='기본 정보' onBackPress={handleBackPress}>
+    <RecruitmentStepLayout currentStep={1} stepTitle='기본 정보'>
       <ScrollView
         ref={scrollViewRef}
         className='bg-[#F9FAFB]'

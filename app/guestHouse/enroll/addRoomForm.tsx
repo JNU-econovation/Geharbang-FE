@@ -166,7 +166,7 @@ export default function AddRoomForm() {
               y: Math.max(0, y - 16),
               animated: true,
             }),
-          () => scrollViewRef.current?.scrollTo({ y: 0, animated: true })
+          () => scrollViewRef.current?.scrollTo({ y: 0, animated: true }),
         );
       } else {
         scrollViewRef.current?.scrollTo({ y: 0, animated: true });
@@ -222,11 +222,7 @@ export default function AddRoomForm() {
   };
 
   return (
-    <GuestHouseEnrollLayout
-      currentStep={4}
-      stepTitle='객실 타입 등록'
-      onBackPress={handleBackPress}
-    >
+    <GuestHouseEnrollLayout currentStep={4} stepTitle='객실 타입 등록'>
       <ScrollView
         ref={scrollViewRef}
         className='bg-[#F9FAFB]'

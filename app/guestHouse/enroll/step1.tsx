@@ -1,6 +1,6 @@
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useRef } from "react";
-import { Alert, BackHandler, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import GuestHouseLocation from "@/app/step/recruitment/_components/step1/GuestHouseLocation";
 import GuestHouseName from "@/app/step/recruitment/_components/step1/GuestHouseName";
@@ -17,9 +17,7 @@ export default function GuestHouseStep1() {
   const {
     step1Data,
     setStep1Update,
-    resetAllData,
     shouldScrollToError,
-    setShouldScrollToError,
   } = useGuestHouseStore();
 
   const scrollViewRef = useRef<ScrollView>(null);
@@ -32,43 +30,6 @@ export default function GuestHouseStep1() {
     workingRegion: workingRegionRef,
     location: locationRef,
   } as const;
-
-  const handleBackPress = useCallback(() => {
-    Alert.alert(
-      "등록 취소",
-      "게스트하우스 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.",
-      [
-        {
-          text: "계속 작성",
-          style: "cancel",
-        },
-        {
-          text: "취소",
-          style: "destructive",
-          onPress: () => {
-            resetAllData();
-            router.replace("/");
-          },
-        },
-      ],
-    );
-  }, [resetAllData]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const onHardwareBackPress = () => {
-        handleBackPress();
-        return true;
-      };
-
-      const subscription = BackHandler.addEventListener(
-        "hardwareBackPress",
-        onHardwareBackPress,
-      );
-
-      return () => subscription.remove();
-    }, [handleBackPress]),
-  );
 
   const { errors, validateForm, clearError, validateField } =
     useGuestHouseStep1Validation(step1Data);
@@ -87,7 +48,6 @@ export default function GuestHouseStep1() {
 
   useFocusEffect(
     useCallback(() => {
-    
       if (shouldScrollToError) {
         validateFormRef.current();
         setTimeout(() => {
@@ -117,11 +77,7 @@ export default function GuestHouseStep1() {
   );
 
   return (
-    <GuestHouseEnrollLayout
-      currentStep={1}
-      stepTitle='기본 정보'
-      onBackPress={handleBackPress}
-    >
+    <GuestHouseEnrollLayout currentStep={1} stepTitle='기본 정보'>
       <ScrollView
         ref={scrollViewRef}
         className='bg-[#F9FAFB]'

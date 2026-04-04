@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
@@ -10,17 +9,20 @@ import Button from "@/src/components/ui/Button/Button";
 import ErrorMessage from "@/src/components/ui/ErrorMessage";
 import LoadingSkeleton from "@/src/components/ui/LoadingSkeleton";
 import ConfirmModal from "@/src/components/ui/Modal/ConfirmModal";
+import { CloseableConfirmModal } from "@/src/components/ui/Modal/CloseableConfirmModal";
 import TextSize from "@/src/components/ui/TextSize";
 import {
   useDeleteMyStepRecruitment,
   useGetMyStepRecruitment,
   usePatchMyStepRecruitmentStatus,
 } from "@/src/hooks/myStepRecruitment/useMyStepRecruitment";
+import { useStepRecruitmentResumeDraft } from "@/src/hooks/stepRecruitment/useStepRecruitmentResumeDraft";
 import { COLORS } from "@/src/utils/constants/colors";
 import ManagementCard from "../guestHouse/_components/ManagementCard";
 
 export default function MyStepRecruitment() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { checkAndNavigate, modalProps } = useStepRecruitmentResumeDraft();
   const [selectedPost, setSelectedPost] = useState<{
     id: number;
     name: string;
@@ -65,7 +67,7 @@ export default function MyStepRecruitment() {
         <BackArrorHeader
           content='구인 공고 관리'
           icon={
-            <Pressable onPress={() => router.push("/step/recruitment/step1")}>
+            <Pressable onPress={checkAndNavigate}>
               <Text className='mx-4 mb-1 text-primary-blue text-3xl'>+</Text>
             </Pressable>
           }
@@ -90,7 +92,7 @@ export default function MyStepRecruitment() {
               height={40}
               width={180}
               textColor='white'
-              onPress={() => router.push("/step/recruitment/step1")}
+              onPress={checkAndNavigate}
               content='스텝 공고 올리기'
             />
           </View>
@@ -116,6 +118,8 @@ export default function MyStepRecruitment() {
           </View>
         )}
       </ScrollView>
+
+      <CloseableConfirmModal {...modalProps} />
 
       <ConfirmModal
         visible={isModalVisible}

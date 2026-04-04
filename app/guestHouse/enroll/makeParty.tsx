@@ -227,11 +227,7 @@ export default function MakeParty() {
   };
 
   return (
-    <GuestHouseEnrollLayout
-      currentStep={3}
-      stepTitle='파티 정보'
-      onBackPress={handleBackPress}
-    >
+    <GuestHouseEnrollLayout currentStep={3} stepTitle='파티 정보'>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className='flex-1'

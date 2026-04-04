@@ -1,6 +1,5 @@
-import { router, useFocusEffect } from "expo-router";
-import { useCallback } from "react";
-import { Alert, BackHandler, ScrollView, View } from "react-native";
+import { router } from "expo-router";
+import { ScrollView, View } from "react-native";
 
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
@@ -14,44 +13,11 @@ import GuestHouseEnrollLayout from "./_components/GuestHouseEnrollLayout";
 import PartyCard from "./_components/step2/PartyCard";
 
 export default function GuestHouseEnrollStep3() {
-  const { step3Data, removeParty, resetAllData } = useGuestHouseStore();
+  const { step3Data, removeParty } = useGuestHouseStore();
   const { parties } = step3Data;
 
-  const handleBackPress = useCallback(() => {
-    Alert.alert(
-      "등록 취소",
-      "게스트하우스 등록을 취소하시겠습니까?\n입력한 정보가 모두 사라집니다.",
-      [
-        { text: "계속 작성", style: "cancel" },
-        {
-          text: "취소",
-          style: "destructive",
-          onPress: () => {
-            resetAllData();
-            router.replace("/");
-          },
-        },
-      ],
-    );
-    return true;
-  }, [resetAllData]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const subscription = BackHandler.addEventListener(
-        "hardwareBackPress",
-        handleBackPress,
-      );
-      return () => subscription.remove();
-    }, [handleBackPress]),
-  );
-
   return (
-    <GuestHouseEnrollLayout
-      currentStep={3}
-      stepTitle='파티 등록'
-      onBackPress={handleBackPress}
-    >
+    <GuestHouseEnrollLayout currentStep={3} stepTitle='파티 등록'>
       <ScrollView className='bg-[#F9FAFB]' style={{ paddingHorizontal: 12 }}>
         <View className='pt-4'>
           <FormSection
