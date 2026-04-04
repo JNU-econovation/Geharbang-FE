@@ -153,7 +153,7 @@ export function useStep2Validation(step2Data: Step2Data) {
             isValid = false;
           }
 
-          if (item.perWorkingDay === "로테이션") {
+          if (item.perWorkingDay !== "_7일_기준") {
             if (
               item.closedCount === "" ||
               item.closedCount === null ||

@@ -6,6 +6,7 @@ import RecruitmentStepLayout from "@/app/step/recruitment/_components/Recruitmen
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
 import { useStep2Validation } from "@/src/hooks/stepRecruitment/useStep2Validation";
+import { WorkingTimeAndWorkErrors } from "@/src/types/models/stepRecruitment/Step2FormErrors";
 import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
 import StepPostGender from "./_components/step2/StepRecruitmentGender";
 import WorkingPeriod from "./_components/step2/WorkingPeriod";
@@ -128,6 +129,7 @@ export default function RecruitmentStep2() {
               onTextInputBlur={(index, field) => validateField("workingTimeAndWork", index, field)}
               onTextInputFocus={(index, field) => clearError("workingTimeAndWork", index, field)}
               onDeleteItem={(index) => removeItemErrors(index)}
+              onClearError={(index, field) => clearError("workingTimeAndWork", index, field as keyof WorkingTimeAndWorkErrors)}
             />
           </View>
 

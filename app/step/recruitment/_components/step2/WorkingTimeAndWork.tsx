@@ -25,6 +25,7 @@ interface WorkingTimeAndWorkProps {
   errors?: WorkingTimeAndWorkErrors;
   onTextInputBlur?: (field: "workingTimeName" | "thatTimeWork") => void;
   onTextInputFocus?: (field: "workingTimeName" | "thatTimeWork") => void;
+  onClearError?: (field: keyof WorkingTimeAndWorkErrors) => void;
 }
 
 export default function WorkingTimeAndWork({
@@ -34,6 +35,7 @@ export default function WorkingTimeAndWork({
   errors,
   onTextInputBlur,
   onTextInputFocus,
+  onClearError,
 }: WorkingTimeAndWorkProps) {
   return (
     <ViewContext
@@ -123,12 +125,13 @@ export default function WorkingTimeAndWork({
           size='49%'
           option={PER_WORKING_DAY}
           selected={addedTimeAndWork.perWorkingDay}
-          setSelected={(workingDay) =>
+          setSelected={(workingDay) => {
             setAddedTimeAndWork({
               ...addedTimeAndWork,
               perWorkingDay: workingDay,
-            })
-          }
+            });
+            onClearError?.("perWorkingDay");
+          }}
           error={!!errors?.perWorkingDay}
         />
       </FormField>
@@ -162,6 +165,8 @@ export default function WorkingTimeAndWork({
         }}
         workingErrors={errors?.workingCount}
         closedErrors={errors?.closedCount}
+        onWorkingFocus={() => onClearError?.("workingCount")}
+        onClosedFocus={() => onClearError?.("closedCount")}
       />
     </ViewContext>
   );

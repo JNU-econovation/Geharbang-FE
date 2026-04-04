@@ -19,6 +19,7 @@ interface WorkingTimeAndWorkListProps {
   onTextInputBlur?: (index: number, field: "workingTimeName" | "thatTimeWork") => void;
   onTextInputFocus?: (index: number, field: "workingTimeName" | "thatTimeWork") => void;
   onDeleteItem?: (index: number) => void;
+  onClearError?: (index: number, field: string) => void;
 }
 
 export default function WorkingTimeAndWorkList({
@@ -28,6 +29,7 @@ export default function WorkingTimeAndWorkList({
   onTextInputBlur,
   onTextInputFocus,
   onDeleteItem,
+  onClearError,
 }: WorkingTimeAndWorkListProps) {
   const { workingList, addWorking, updateWorking, deleteWorking } =
     useWorkingTimeAndWork(workingTimeAndWorkList, (_, value) =>
@@ -61,6 +63,7 @@ export default function WorkingTimeAndWorkList({
           errors={errors?.workingTimeAndWork?.[index]}
           onTextInputBlur={(field) => onTextInputBlur?.(index, field)}
           onTextInputFocus={(field) => onTextInputFocus?.(index, field)}
+          onClearError={(field) => onClearError?.(index, field)}
         />
       ))}
 
