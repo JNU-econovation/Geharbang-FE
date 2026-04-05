@@ -1,6 +1,6 @@
 import { Href, router, useFocusEffect } from "expo-router";
 import { useCallback, useRef } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import { findNodeHandle, KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
@@ -84,9 +84,10 @@ export default function GuestHouseEnrollStep5() {
           ] as const;
           const firstErrField = fieldOrder.find((k) => !!errorsRef.current[k]);
           const targetRef = firstErrField ? fieldRefMap[firstErrField] : null;
-          if (targetRef?.current && scrollViewRef.current) {
+          const parentHandle = findNodeHandle(scrollViewRef.current);
+          if (parentHandle && targetRef?.current) {
             targetRef.current.measureLayout(
-              scrollViewRef.current as any,
+              parentHandle,
               (_x: number, y: number) =>
                 scrollViewRef.current?.scrollTo({
                   y: Math.max(0, y - 16),

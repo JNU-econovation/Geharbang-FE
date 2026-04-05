@@ -1,6 +1,6 @@
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useRef } from "react";
-import { ScrollView, View } from "react-native";
+import { findNodeHandle, ScrollView, View } from "react-native";
 
 import Button from "@/src/components/ui/Button/Button";
 import FormSection from "@/src/components/ui/Form/FormSection";
@@ -39,9 +39,10 @@ export default function GuestHouseEnrollStep4() {
       if (shouldScrollToError) {
         validateFormRef.current();
         setTimeout(() => {
-          if (roomsRef.current && scrollViewRef.current) {
+          const parentHandle = findNodeHandle(scrollViewRef.current);
+          if (parentHandle && roomsRef.current) {
             roomsRef.current.measureLayout(
-              scrollViewRef.current as any,
+              parentHandle,
               (_x: number, y: number) =>
                 scrollViewRef.current?.scrollTo({
                   y: Math.max(0, y - 16),

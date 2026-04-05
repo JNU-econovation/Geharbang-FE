@@ -9,6 +9,7 @@ import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useRef } from "react";
 import {
+  findNodeHandle,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -73,9 +74,10 @@ export default function RecruitmentStep4() {
           ] as const;
           const firstErrField = fieldOrder.find((k) => !!errorsRef.current[k]);
           const targetRef = firstErrField ? fieldRefMap[firstErrField] : null;
-          if (targetRef?.current && scrollViewRef.current) {
+          const parentHandle = findNodeHandle(scrollViewRef.current);
+          if (parentHandle && targetRef?.current) {
             targetRef.current.measureLayout(
-              scrollViewRef.current as any,
+              parentHandle,
               (_x: number, y: number) =>
                 scrollViewRef.current?.scrollTo({
                   y: Math.max(0, y - 16),
