@@ -10,6 +10,8 @@ interface AppendableInputProps {
   height?: number;
   onChangeText: (text: string) => void;
   onDelete: () => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
   error?: boolean;
 }
 
@@ -19,6 +21,8 @@ export default function AppendableInput({
   height,
   onChangeText,
   onDelete,
+  onBlur,
+  onFocus,
   error
 }: AppendableInputProps) {
   return (
@@ -27,6 +31,8 @@ export default function AppendableInput({
         <TextInput
           value={value}
           onChangeText={onChangeText}
+          onBlur={onBlur}
+          onFocus={onFocus}
           placeholder={placeholder}
           multiline={true}
           height={height}

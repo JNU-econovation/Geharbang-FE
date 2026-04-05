@@ -6,9 +6,11 @@ import { useStep1Validation } from "@/src/hooks/stepRecruitment/useStep1Validati
 import { useStep2Validation } from "@/src/hooks/stepRecruitment/useStep2Validation";
 import { useStep3Validation } from "@/src/hooks/stepRecruitment/useStep3Validation";
 import { useStep4Validation } from "@/src/hooks/stepRecruitment/useStep4Validation";
+import { useStep5Validation } from "@/src/hooks/stepRecruitment/useStep5Validation";
 import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
+import { useFocusEffect } from "expo-router";
 import { Href, router } from "expo-router";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -29,6 +31,7 @@ export default function RecruitmentStep5() {
     removeStep5Question,
     updateStep5Question,
     setShouldScrollToError,
+    shouldScrollToError,
   } = storeData;
   const { questions } = step5Data;
   const { instagram, phone, email, website, ownerMessage } = step4Data;
@@ -45,6 +48,22 @@ export default function RecruitmentStep5() {
     website,
     ownerMessage,
   });
+  const {
+    errors: questionErrors,
+    clearError: clearQuestionError,
+    removeError: removeQuestionError,
+    validateForm: validateStep5,
+    validateField: validateQuestion,
+  } = useStep5Validation(questions);
+
+  const validateStep5Ref = useRef(validateStep5);
+  validateStep5Ref.current = validateStep5;
+
+  const validateQuestionRef = useRef(validateQuestion);
+  validateQuestionRef.current = validateQuestion;
+
+  const questionsRef = useRef(questions);
+  questionsRef.current = questions;
 
   const { handleSubmit: submitRecruitment } = useHandleStepRecruitmentSubmit();
 
@@ -65,14 +84,40 @@ export default function RecruitmentStep5() {
   };
 
   const deleteQuestion = (id: string) => {
+    const index = questions.findIndex((q) => q.id === id);
     removeStep5Question(id);
+    if (index !== -1) removeQuestionError(index);
   };
 
   const updateQuestion = (id: string, text: string) => {
     updateStep5Question(id, text);
+    const index = questions.findIndex((q) => q.id === id);
+    if (index !== -1) clearQuestionError(index);
+  };
+
+  const blurQuestion = (id: string) => {
+    const index = questions.findIndex((q) => q.id === id);
+    if (index !== -1) validateQuestionRef.current(index);
+  };
+
+  const focusQuestion = (id: string) => {
+    const index = questions.findIndex((q) => q.id === id);
+    if (index !== -1) clearQuestionError(index);
   };
 
   const canAddMore = questions.length < 5;
+
+  useFocusEffect(
+    useCallback(() => {
+      if (shouldScrollToError) {
+        validateStep5Ref.current();
+      } else {
+        questionsRef.current.forEach((_, index) => {
+          validateQuestionRef.current(index);
+        });
+      }
+    }, [shouldScrollToError])
+  );
 
   const validateStepAndNavigate = (
     validator: () => boolean,
@@ -95,6 +140,7 @@ export default function RecruitmentStep5() {
       return;
     if (!validateStepAndNavigate(validateStep4, "/step/recruitment/step4"))
       return;
+    if (!validateStep5()) return;
 
     submitRecruitment();
   };
@@ -117,7 +163,10 @@ export default function RecruitmentStep5() {
               onAddQuestion={addQuestion}
               onDeleteQuestion={deleteQuestion}
               onUpdateQuestion={updateQuestion}
+              onBlurQuestion={blurQuestion}
+              onFocusQuestion={focusQuestion}
               canAddMore={canAddMore}
+              errors={questionErrors}
             />
 
             <View className='flex-row gap-2 my-4'>
