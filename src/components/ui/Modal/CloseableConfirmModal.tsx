@@ -60,7 +60,7 @@ export function CloseableConfirmModal({
               />
             )}
 
-            <Flex dir='row' items='center' justify='between' gap={10}>
+            <Flex dir='row' items='center' justify='between' gap={10} className='mt-2'>
               <Button
                 variant='gray'
                 textColor={COLORS.GRAY.TEXT}
