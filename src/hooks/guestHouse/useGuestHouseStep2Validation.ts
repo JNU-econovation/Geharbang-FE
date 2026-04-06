@@ -23,6 +23,23 @@ export function useGuestHouseStep2Validation(step2Data: Step2Data) {
     setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
+  const validateField = (field: keyof FormErrors): void => {
+    let errorMsg = "";
+
+    if (field === "introduction") {
+      const { introduction } = step2Data;
+      if (!introduction || introduction.trim() === "") {
+        errorMsg = "소개글을 입력해주세요";
+      } else if (introduction.length < 10) {
+        errorMsg = "소개글은 최소 10자 이상 입력해주세요";
+      } else if (introduction.length > 500) {
+        errorMsg = "소개글은 최대 500자까지 입력할 수 있습니다";
+      }
+    }
+
+    setErrors((prev) => ({ ...prev, [field]: errorMsg }));
+  };
+
   const setError = (field: keyof FormErrors, message: string) => {
     setErrors((prev) => ({ ...prev, [field]: message }));
   };
@@ -92,5 +109,6 @@ export function useGuestHouseStep2Validation(step2Data: Step2Data) {
     clearError,
     setError,
     validateForm,
+    validateField,
   };
 }

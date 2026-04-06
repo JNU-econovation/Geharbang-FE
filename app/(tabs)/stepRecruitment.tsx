@@ -1,19 +1,28 @@
-import { router, useFocusEffect } from 'expo-router';
-import { useCallback } from 'react';
-import { View } from 'react-native';
+import { useFocusEffect } from "expo-router";
+import { useCallback, useRef } from "react";
+import { View } from "react-native";
 
-import { useRequireLogin } from '@/src/hooks/common/useRequireLogin';
+import { CloseableConfirmModal } from "@/src/components/ui/Modal/CloseableConfirmModal";
+import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
+import { useStepRecruitmentResumeDraft } from "@/src/hooks/stepRecruitment/useStepRecruitmentResumeDraft";
 
 export default function StepRecruitmentTab() {
   const { requireLogin } = useRequireLogin();
+  const { checkAndNavigate, modalProps } = useStepRecruitmentResumeDraft();
+
+  const requireLoginRef = useRef(requireLogin);
+  requireLoginRef.current = requireLogin;
 
   useFocusEffect(
     useCallback(() => {
-      requireLogin(() => {
-        router.push('/step/recruitment/step1');
-      });
-    }, [requireLogin]),
+      requireLoginRef.current(checkAndNavigate);
+    }, [checkAndNavigate]),
   );
 
-  return <View />;
+  return (
+    <>
+      <View />
+      <CloseableConfirmModal {...modalProps} />
+    </>
+  );
 }

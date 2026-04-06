@@ -1,200 +1,124 @@
-import { router } from "expo-router";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useRef } from "react";
+import { findNodeHandle, ScrollView, View } from "react-native";
 
-import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
-import FormField from "@/src/components/ui/Form/FormField";
 import FormSection from "@/src/components/ui/Form/FormSection";
-import TextInput from "@/src/components/ui/TextInput";
-import { useGuestHouseEnrollment } from "@/src/hooks/guestHouse/useGuestHouseEnrollment";
+import ItemListContainer from "@/src/components/ui/ItemListContainer";
 import { useGuestHouseStep4Validation } from "@/src/hooks/guestHouse/useGuestHouseStep4Validation";
 import { useGuestHouseStore } from "@/src/stores/guestHouse/useGuestHouseStore";
-import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import {
   BUTTON_LABELS,
-  INPUT_HEIGHTS,
-  INPUT_MAX_LENGTHS,
-  PLACEHOLDERS,
+  FORM_DESCRIPTIONS,
+  MAX_ITEMS,
 } from "@/src/utils/constants/guestHouseEnrollment";
 import GuestHouseEnrollLayout from "./_components/GuestHouseEnrollLayout";
+import NoticeBox from "./_components/step3/NoticeBox";
+import RoomCard from "./_components/step3/RoomCard";
 
 export default function GuestHouseEnrollStep4() {
-  const { step1Data, step2Data, step3Data, step4Data, setStep4Update } =
-    useGuestHouseStore();
-  const { instagram, phone, website, ownerMessage } = step4Data;
+  const {
+    step4Data,
+    removeRoom,
+    shouldScrollToError,
+  } = useGuestHouseStore();
+  const { rooms } = step4Data;
+  const { errors, validateForm } = useGuestHouseStep4Validation(step4Data);
 
-  const { errors, clearError, validateForm } = useGuestHouseStep4Validation({
-    instagram,
-    phone,
-    website,
-    ownerMessage,
-  });
+  const scrollViewRef = useRef<ScrollView>(null);
+  const roomsRef = useRef<View>(null);
 
-  const { mutateAsync: enrollGuestHouse, isPending } =
-    useGuestHouseEnrollment();
+  const errorsRef = useRef(errors);
+  errorsRef.current = errors;
 
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
+  const validateFormRef = useRef(validateForm);
+  validateFormRef.current = validateForm;
 
-    const enrollData = {
-      guestHouseName: step1Data.guestHouseName,
-      workingRegion: step1Data.workingRegion,
-      location: step1Data.location,
-
-      mainImages: step2Data.mainImages,
-      introduction: step2Data.introduction,
-      facilities: step2Data.facilities,
-      atmosphere: step2Data.atmosphere,
-      parties: step2Data.parties,
-
-      rooms: step3Data.rooms,
-
-      instagram,
-      phone,
-      website,
-      ownerMessage,
-    };
-
-    try {
-      const guestHouseId = await enrollGuestHouse(enrollData);
-
-      if (guestHouseId) {
-        router.push({
-          pathname: "/guestHouse/enroll/result",
-          params: { status: "success", guestHouseId: guestHouseId.toString() },
-        });
+  useFocusEffect(
+    useCallback(() => {
+      if (shouldScrollToError) {
+        validateFormRef.current();
+        setTimeout(() => {
+          const parentHandle = findNodeHandle(scrollViewRef.current);
+          if (parentHandle && roomsRef.current) {
+            roomsRef.current.measureLayout(
+              parentHandle,
+              (_x: number, y: number) =>
+                scrollViewRef.current?.scrollTo({
+                  y: Math.max(0, y - 16),
+                  animated: true,
+                }),
+              () => scrollViewRef.current?.scrollTo({ y: 0, animated: true }),
+            );
+          } else {
+            scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+          }
+        }, 100);
+        return;
       }
-    } catch (error) {
-      console.error("Enrollment Failed", error);
-
-      let userFriendlyMessage = "등록 중 오류가 발생했습니다.";
-
-      if (error instanceof Error) {
-        if (error.message.includes("이미지")) {
-          userFriendlyMessage = error.message;
-        } else if (error.message.includes("네트워크")) {
-          userFriendlyMessage = "네트워크 연결을 확인하고 다시 시도해주세요.";
-        } else if (error.message.includes("유효한 숫자")) {
-          userFriendlyMessage = "입력 정보를 다시 확인해주세요.";
-        } else {
-          userFriendlyMessage =
-            "등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
-        }
-      }
-
-      router.push({
-        pathname: "/guestHouse/enroll/result",
-        params: {
-          status: "error",
-          error: userFriendlyMessage,
-        },
-      });
-    }
-  };
+    }, [shouldScrollToError]),
+  );
 
   return (
-    <GuestHouseEnrollLayout currentStep={4} stepTitle='연락처 및 사장님 한마디'>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className='flex-1'
+    <GuestHouseEnrollLayout currentStep={4} stepTitle='객실 타입 등록'>
+      <ScrollView
+        ref={scrollViewRef}
+        className='bg-[#F9FAFB]'
+        style={{ paddingHorizontal: 12 }}
       >
-        <ScrollView
-          className='flex-1'
-          contentContainerStyle={{ paddingBottom: 100 }}
-          showsVerticalScrollIndicator={false}
-        >
-          <View className='pt-4 px-3'>
-            <Flex justify='start' items='center' gap={24}>
-              <FormSection title='연락처 및 사장님 한마디'>
-                <FormField
-                  label='인스타그램'
-                  required={false}
-                  errorMessage={errors.instagram}
-                >
-                  <TextInput
-                    value={instagram}
-                    onChangeText={(text) => {
-                      setStep4Update("instagram", text);
-                      clearError("instagram");
+        <View className='pt-4'>
+          <FormSection
+            title='객실 타입'
+            description={FORM_DESCRIPTIONS.MAX_10_ITEMS}
+          >
+            <View ref={roomsRef} className='gap-4'>
+              <ItemListContainer
+                items={rooms}
+                emptyIcon='plus-square'
+                addIcon='plus-square'
+                addButtonLabel={BUTTON_LABELS.ADD_ROOM}
+                onAddPress={() => router.push("/guestHouse/enroll/addRoomForm")}
+                error={errors.rooms}
+                maxItems={MAX_ITEMS.ROOMS}
+                renderItem={(room, index) => (
+                  <RoomCard
+                    key={room.id}
+                    room={room}
+                    isRepresentative={index === 0}
+                    onEdit={() => {
+                      router.push({
+                        pathname: "/guestHouse/enroll/addRoomForm",
+                        params: { editId: room.id },
+                      });
                     }}
-                    placeholder={PLACEHOLDERS.INSTAGRAM}
-                    error={!!errors.instagram}
-                    maxLength={INPUT_MAX_LENGTHS.INSTAGRAM}
+                    onRemove={() => removeRoom(room.id)}
                   />
-                </FormField>
+                )}
+              />
+              <NoticeBox />
+            </View>
+          </FormSection>
+        </View>
 
-                <FormField
-                  label='전화번호'
-                  required={false}
-                  errorMessage={errors.phone}
-                >
-                  <TextInput
-                    value={phone}
-                    onChangeText={(text) => {
-                      setStep4Update("phone", formatPhoneNumber(text));
-                      clearError("phone");
-                    }}
-                    placeholder={PLACEHOLDERS.PHONE}
-                    keyboardType='phone-pad'
-                    error={!!errors.phone}
-                    maxLength={INPUT_MAX_LENGTHS.PHONE}
-                  />
-                </FormField>
-
-                <FormField
-                  label='웹사이트'
-                  required={false}
-                  errorMessage={errors.website}
-                >
-                  <TextInput
-                    value={website}
-                    onChangeText={(text) => {
-                      setStep4Update("website", text);
-                      clearError("website");
-                    }}
-                    placeholder={PLACEHOLDERS.WEBSITE}
-                    keyboardType='url'
-                    error={!!errors.website}
-                    maxLength={INPUT_MAX_LENGTHS.WEBSITE}
-                  />
-                </FormField>
-
-                <FormField
-                  label='사장님 한마디'
-                  required={false}
-                  errorMessage={errors.ownerMessage}
-                >
-                  <TextInput
-                    value={ownerMessage}
-                    onChangeText={(text) => {
-                      setStep4Update("ownerMessage", text);
-                      clearError("ownerMessage");
-                    }}
-                    placeholder={PLACEHOLDERS.OWNER_MESSAGE}
-                    multiline={true}
-                    height={INPUT_HEIGHTS.OWNER_MESSAGE}
-                    error={!!errors.ownerMessage}
-                    maxLength={INPUT_MAX_LENGTHS.OWNER_MESSAGE}
-                  />
-                </FormField>
-              </FormSection>
-
-              <Flex items='center'>
-                <Button
-                  variant='primary'
-                  width={370}
-                  height={50}
-                  textColor='white'
-                  content={isPending ? "등록 중..." : BUTTON_LABELS.SUBMIT}
-                  onPress={handleSubmit}
-                  disabled={isPending}
-                  className='mt-4'
-                />
-              </Flex>
-            </Flex>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        <View className='flex-row gap-2 my-4'>
+          <Button
+            variant='gray'
+            height={50}
+            textColor='black'
+            content='이전'
+            onPress={() => router.push("/guestHouse/enroll/step3")}
+            className='flex-1'
+          />
+          <Button
+            variant='primary'
+            height={50}
+            textColor='white'
+            content={BUTTON_LABELS.NEXT}
+            onPress={() => router.push("/guestHouse/enroll/step5" as any)}
+            className='flex-1'
+          />
+        </View>
+      </ScrollView>
     </GuestHouseEnrollLayout>
   );
 }

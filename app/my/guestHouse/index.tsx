@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
@@ -8,8 +7,10 @@ import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import ErrorMessage from "@/src/components/ui/ErrorMessage";
 import LoadingSkeleton from "@/src/components/ui/LoadingSkeleton";
+import { CloseableConfirmModal } from "@/src/components/ui/Modal/CloseableConfirmModal";
 import ConfirmModal from "@/src/components/ui/Modal/ConfirmModal";
 import TextSize from "@/src/components/ui/TextSize";
+import { useGuestHouseResumeDraft } from "@/src/hooks/guestHouse/useGuestHouseResumeDraft";
 import {
   useDeleteMyGuestHouse,
   useGetMyGuestHouse,
@@ -21,6 +22,7 @@ import ManagementCard from "./_components/ManagementCard";
 
 export default function MyGuestHouse() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { checkAndNavigate, modalProps } = useGuestHouseResumeDraft();
   const [selectedPost, setSelectedPost] = useState<{
     id: number;
     name: string;
@@ -64,7 +66,7 @@ export default function MyGuestHouse() {
         <BackArrorHeader
           content='내 게스트하우스 관리'
           icon={
-            <Pressable onPress={() => router.push("/guestHouse/enroll")}>
+            <Pressable onPress={checkAndNavigate}>
               <Text className='mx-3 mb-1 text-primary-blue text-3xl'>+</Text>
             </Pressable>
           }
@@ -89,7 +91,7 @@ export default function MyGuestHouse() {
               height={40}
               width={180}
               textColor='white'
-              onPress={() => router.push("/guestHouse/enroll")}
+              onPress={checkAndNavigate}
               content='게스트하우스 등록하기'
             />
           </View>
@@ -117,6 +119,8 @@ export default function MyGuestHouse() {
           </View>
         )}
       </ScrollView>
+
+      <CloseableConfirmModal {...modalProps} />
 
       <ConfirmModal
         visible={isModalVisible}

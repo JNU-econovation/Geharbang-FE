@@ -18,6 +18,10 @@ import {
   createStep4Slice,
   initialStep4Data,
 } from "./slice/createStep4Slice";
+import {
+  createStep5Slice,
+  initialStep5Data,
+} from "./slice/createStep5Slice";
 
 export const useGuestHouseStore = create<GuestHouseStore>()(
   persist(
@@ -26,6 +30,10 @@ export const useGuestHouseStore = create<GuestHouseStore>()(
       ...createStep2Slice(set, get, api),
       ...createStep3Slice(set, get, api),
       ...createStep4Slice(set, get, api),
+      ...createStep5Slice(set, get, api),
+
+      shouldScrollToError: false,
+      setShouldScrollToError: (value: boolean) => set({ shouldScrollToError: value }),
 
       resetAllData: () => {
         set(() => ({
@@ -33,6 +41,8 @@ export const useGuestHouseStore = create<GuestHouseStore>()(
           step2Data: initialStep2Data,
           step3Data: initialStep3Data,
           step4Data: initialStep4Data,
+          step5Data: initialStep5Data,
+          shouldScrollToError: false,
         }));
       },
     }),

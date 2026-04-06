@@ -9,7 +9,7 @@ interface FormErrors {
   ownerMessage: string;
 }
 
-interface UseRecruitmentStep4ValidationProps {
+interface UseStep4ValidationProps {
   instagram: string;
   phone: string;
   email: string;
@@ -17,13 +17,13 @@ interface UseRecruitmentStep4ValidationProps {
   ownerMessage: string;
 }
 
-export function useRecruitmentStep4Validation({
+export function useStep4Validation({
   instagram,
   phone,
   email,
   website,
   ownerMessage,
-}: UseRecruitmentStep4ValidationProps) {
+}: UseStep4ValidationProps) {
   const [errors, setErrors] = useState<FormErrors>({
     instagram: '',
     phone: '',
@@ -36,6 +36,50 @@ export function useRecruitmentStep4Validation({
     setErrors((prev) => ({ ...prev, [field]: '' }));
   };
 
+  const validateField = (field: keyof FormErrors): void => {
+    let errorMsg = '';
+
+    if (field === 'instagram' && instagram) {
+      if (instagram.trim() === '') {
+        errorMsg = '공백만 입력할 수 없습니다';
+      } else if (instagram.length > 30) {
+        errorMsg = '인스타그램 아이디는 30자 이내로 입력해주세요';
+      }
+    }
+
+    if (field === 'phone' && phone) {
+      if (!validatePhoneNumber(phone)) {
+        errorMsg = '올바른 전화번호 형식이 아닙니다 (예: 064-123-4567)';
+      }
+    }
+
+    if (field === 'email' && email) {
+      if (email.length > 30) {
+        errorMsg = '이메일은 30자 이내로 입력해주세요';
+      } else if (!validateEmail(email)) {
+        errorMsg = '올바른 이메일 형식이 아닙니다';
+      }
+    }
+
+    if (field === 'website' && website) {
+      if (website.trim() === '') {
+        errorMsg = '공백만 입력할 수 없습니다';
+      } else if (website.length > 30) {
+        errorMsg = '웹사이트 주소는 30자 이내로 입력해주세요';
+      }
+    }
+
+    if (field === 'ownerMessage' && ownerMessage) {
+      if (ownerMessage.trim() === '') {
+        errorMsg = '공백만 입력할 수 없습니다';
+      } else if (ownerMessage.length > 100) {
+        errorMsg = '메시지는 100자 이내로 입력해주세요';
+      }
+    }
+
+    setErrors((prev) => ({ ...prev, [field]: errorMsg }));
+  };
+
   const validateForm = (): boolean => {
     let isValid = true;
     const newErrors: FormErrors = {
@@ -46,7 +90,6 @@ export function useRecruitmentStep4Validation({
       ownerMessage: '',
     };
 
-    // 인스타그램 검증 (선택 필드)
     if (instagram) {
       if (instagram.trim() === '') {
         newErrors.instagram = '공백만 입력할 수 없습니다';
@@ -57,7 +100,6 @@ export function useRecruitmentStep4Validation({
       }
     }
 
-    // 전화번호 검증 (선택 필드)
     if (phone) {
       if (!validatePhoneNumber(phone)) {
         newErrors.phone = '올바른 전화번호 형식이 아닙니다 (예: 064-123-4567)';
@@ -65,7 +107,6 @@ export function useRecruitmentStep4Validation({
       }
     }
 
-    // 이메일 검증 (선택 필드)
     if (email) {
       if (email.length > 30) {
         newErrors.email = '이메일은 30자 이내로 입력해주세요';
@@ -76,7 +117,6 @@ export function useRecruitmentStep4Validation({
       }
     }
 
-    // 웹사이트 검증 (선택 필드)
     if (website) {
       if (website.trim() === '') {
         newErrors.website = '공백만 입력할 수 없습니다';
@@ -87,7 +127,6 @@ export function useRecruitmentStep4Validation({
       }
     }
 
-    // 사장님 한마디 검증 (선택 필드)
     if (ownerMessage) {
       if (ownerMessage.trim() === '') {
         newErrors.ownerMessage = '공백만 입력할 수 없습니다';
@@ -106,5 +145,6 @@ export function useRecruitmentStep4Validation({
     errors,
     clearError,
     validateForm,
+    validateField,
   };
 }

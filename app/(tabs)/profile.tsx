@@ -28,7 +28,7 @@ import { useMyInfomation } from "@/src/hooks/application/myApplication/useMyInfo
 import { useLogout } from "@/src/hooks/login/useLogout";
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
 import { COLORS } from "@/src/utils/constants/colors";
-import MyActivity from "../myPage/_components/MyActivity";
+import MyActivity from "../my/application/_components/MyActivity";
 
 export default function ProfileScreen() {
   const handleLogout = useLogout();
@@ -37,7 +37,7 @@ export default function ProfileScreen() {
 
   const { data: isExist } = useMyApplicationExist();
 
-  const myApplicationExist = myApplicationExist ?? false;
+  const myApplicationExist = isExist?.isExist ?? false;
 
   const { data, isLoading, isError, refetch } =
     useMyInfomation(myApplicationExist);
@@ -107,7 +107,7 @@ export default function ProfileScreen() {
                 )}
               </View>
               {myApplicationExist && (
-                <Pressable onPress={() => router.push("/myPage/MyApplication")}>
+                <Pressable onPress={() => router.push("/my/application")}>
                   <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
                     <TextSize
                       color='#101828'
@@ -128,9 +128,7 @@ export default function ProfileScreen() {
                 />
               </Pressable>
 
-              <Pressable
-                onPress={() => router.push("/myPage/MyApplicationStatus")}
-              >
+              <Pressable onPress={() => router.push("/my/application/status")}>
                 <MyActivity
                   content='지원 내역'
                   icon={<ApplicationStatusIcon width={18} height={18} />}

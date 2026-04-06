@@ -4,6 +4,8 @@ import CustomTextInput from "@/src/components/ui/TextInput";
 interface GuestHouseNameProps {
   value: string;
   onChangeText: (text: string) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
   errorMsg?: string;
   error?: boolean;
 }
@@ -11,6 +13,8 @@ interface GuestHouseNameProps {
 export default function GuestHouseName({
   value,
   onChangeText,
+  onBlur,
+  onFocus,
   errorMsg,
   error,
 }: GuestHouseNameProps) {
@@ -23,6 +27,8 @@ export default function GuestHouseName({
       <CustomTextInput
         value={value}
         onChangeText={onChangeText}
+        onBlur={onBlur}
+        onFocus={onFocus}
         placeholder='예: 제주 바다뷰 게스트하우스'
         error={error}
       />

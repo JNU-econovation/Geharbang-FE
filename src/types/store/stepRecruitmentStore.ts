@@ -13,5 +13,7 @@ export type AllSlices = Step1Slice &
 // 전체 스토어 타입
 
 export type StepRecruitmentStore = AllSlices & {
+  shouldScrollToError: boolean;
+  setShouldScrollToError: (value: boolean) => void;
   resetAllData: () => void;
 };

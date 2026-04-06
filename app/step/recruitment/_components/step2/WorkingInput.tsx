@@ -18,6 +18,8 @@ interface WorkdayInputProps {
 
   workingErrors?: string;
   closedErrors?: string;
+  onWorkingFocus?: () => void;
+  onClosedFocus?: () => void;
 }
 
 export default function WorkingInput({
@@ -30,6 +32,8 @@ export default function WorkingInput({
   setBothCounts,
   workingErrors,
   closedErrors,
+  onWorkingFocus,
+  onClosedFocus,
 }: WorkdayInputProps) {
   const {
     workingCount,
@@ -49,6 +53,7 @@ export default function WorkingInput({
 
   const handleCheckboxSelect = (days: number) => {
     const restDays = 7 - days;
+    onWorkingFocus?.();
     if (setBothCounts) {
       setBothCounts(days, restDays);
     } else {
@@ -86,6 +91,7 @@ export default function WorkingInput({
             onChangeText={(v) => {
               updateWorkingCount(v === "" ? "" : Number(v));
             }}
+            onFocus={onWorkingFocus}
             error={!!workingErrors}
           />
           <TextSize size={16} color='#364153' content='일 근무' />
@@ -102,6 +108,7 @@ export default function WorkingInput({
             onChangeText={(v) => {
               updateClosedCount(v === "" ? "" : Number(v));
             }}
+            onFocus={onClosedFocus}
             error={!!closedErrors}
           />
           <TextSize size={16} color='#364153' content='일 휴무' />

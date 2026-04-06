@@ -18,6 +18,21 @@ export function useGuestHouseStep1Validation(step1Data: Step1Data) {
     setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
+  const validateField = (field: keyof FormErrors): void => {
+    let errorMsg = "";
+
+    if (field === "guestHouseName") {
+      const { guestHouseName } = step1Data;
+      if (!guestHouseName || guestHouseName.trim() === "") {
+        errorMsg = "게스트하우스 이름을 입력해주세요";
+      } else if (guestHouseName.length < 2 || guestHouseName.length > 30) {
+        errorMsg = "게스트하우스 이름은 2~30자 사이로 입력해주세요";
+      }
+    }
+
+    setErrors((prev) => ({ ...prev, [field]: errorMsg }));
+  };
+
   const validateForm = (): boolean => {
     let isValid = true;
     const newErrors: FormErrors = {
@@ -58,5 +73,6 @@ export function useGuestHouseStep1Validation(step1Data: Step1Data) {
     errors,
     clearError,
     validateForm,
+    validateField,
   };
 }
