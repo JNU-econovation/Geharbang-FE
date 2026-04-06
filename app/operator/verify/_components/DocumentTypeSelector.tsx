@@ -1,7 +1,7 @@
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { SvgUri } from 'react-native-svg';
-
+import { COLORS } from '@/src/utils/constants/colors';
 type DocumentType = 'business' | 'tourism' | null;
 
 interface DocumentTypeSelectorProps {
@@ -28,10 +28,10 @@ export default function DocumentTypeSelector({
         onPress={() => onSelect('business')}
       >
         <View className="w-full justify-center items-center gap-2">
-          <SvgUri
-            width={24}
-            height={24}
-            uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-8772f5e1-6fb9-40ed-bb6f-924d77d12ec1.svg"
+          <MaterialCommunityIcons
+            name="store-outline"
+            size={28}
+            color={selectedType === 'business' ? COLORS.PRIMARY.BLUE: '#99a1af'}
           />
           <Text
             className={`text-center text-sm font-normal ${
@@ -54,17 +54,17 @@ export default function DocumentTypeSelector({
         onPress={() => onSelect('tourism')}
       >
         <View className="w-full justify-center items-center gap-2">
-          <SvgUri
-            width={24}
-            height={24}
-            uri="https://storage.googleapis.com/uxpilot-auth.appspot.com/8lJMSuIRwZWxevURwGSQ2T5WaDK2/Icon-610d2f86-5ff4-4b16-b673-e4a497e592ec.svg"
+          <Feather
+            name="file-text"
+            size={26}
+            color={selectedType === 'tourism' ? COLORS.PRIMARY.BLUE: '#99a1af'}
           />
           <Text
             className={`text-center text-sm font-normal ${
               selectedType === 'tourism' ? 'text-[#024a70]' : 'text-[#364153]'
             }`}
           >
-            관광사업등록증
+            관광숙박업 신고증
           </Text>
         </View>
       </TouchableOpacity>

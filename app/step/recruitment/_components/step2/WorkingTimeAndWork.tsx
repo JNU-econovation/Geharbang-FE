@@ -23,6 +23,9 @@ interface WorkingTimeAndWorkProps {
   ) => void;
   onDelete: () => void;
   errors?: WorkingTimeAndWorkErrors;
+  onTextInputBlur?: (field: "workingTimeName" | "thatTimeWork") => void;
+  onTextInputFocus?: (field: "workingTimeName" | "thatTimeWork") => void;
+  onClearError?: (field: keyof WorkingTimeAndWorkErrors) => void;
 }
 
 export default function WorkingTimeAndWork({
@@ -30,6 +33,9 @@ export default function WorkingTimeAndWork({
   setAddedTimeAndWork,
   onDelete,
   errors,
+  onTextInputBlur,
+  onTextInputFocus,
+  onClearError,
 }: WorkingTimeAndWorkProps) {
   return (
     <ViewContext
@@ -53,6 +59,8 @@ export default function WorkingTimeAndWork({
               workingTimeName: name,
             })
           }
+          onBlur={() => onTextInputBlur?.("workingTimeName")}
+          onFocus={() => onTextInputFocus?.("workingTimeName")}
           placeholder='예: 오전조 / 오후조 / 야간조'
           error={!!errors?.workingTimeName}
         />
@@ -99,6 +107,8 @@ export default function WorkingTimeAndWork({
               thatTimeWork: work,
             })
           }
+          onBlur={() => onTextInputBlur?.("thatTimeWork")}
+          onFocus={() => onTextInputFocus?.("thatTimeWork")}
           placeholder='예: 체크인 / 체크아웃, 객실 청소'
           multiline={true}
           error={!!errors?.thatTimeWork}
@@ -115,12 +125,13 @@ export default function WorkingTimeAndWork({
           size='49%'
           option={PER_WORKING_DAY}
           selected={addedTimeAndWork.perWorkingDay}
-          setSelected={(workingDay) =>
+          setSelected={(workingDay) => {
             setAddedTimeAndWork({
               ...addedTimeAndWork,
               perWorkingDay: workingDay,
-            })
-          }
+            });
+            onClearError?.("perWorkingDay");
+          }}
           error={!!errors?.perWorkingDay}
         />
       </FormField>
@@ -154,6 +165,8 @@ export default function WorkingTimeAndWork({
         }}
         workingErrors={errors?.workingCount}
         closedErrors={errors?.closedCount}
+        onWorkingFocus={() => onClearError?.("workingCount")}
+        onClosedFocus={() => onClearError?.("closedCount")}
       />
     </ViewContext>
   );

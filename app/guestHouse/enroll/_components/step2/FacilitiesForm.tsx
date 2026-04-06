@@ -17,7 +17,10 @@ const FacilitiesForm = ({ errors, clearError }: FacilitiesFormProps) => {
   const { step2Data, setStep2Update } = useGuestHouseStore();
 
   const [localCustomFacilities, setLocalCustomFacilities] = useState<Feature[]>(
-    [],
+    () =>
+      step2Data.facilities
+        .filter((f) => !(FACILITY_OPTIONS as readonly string[]).includes(f))
+        .map((text, index) => ({ id: String(index), text })),
   );
 
   const selectedFacilities = useMemo(

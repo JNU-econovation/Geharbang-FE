@@ -16,12 +16,20 @@ interface WorkingTimeAndWorkListProps {
     workingTimeAndWork: IWorkingTimeAndWork[]
   ) => void;
   errors?: Step2FormErrors;
+  onTextInputBlur?: (index: number, field: "workingTimeName" | "thatTimeWork") => void;
+  onTextInputFocus?: (index: number, field: "workingTimeName" | "thatTimeWork") => void;
+  onDeleteItem?: (index: number) => void;
+  onClearError?: (index: number, field: string) => void;
 }
 
 export default function WorkingTimeAndWorkList({
   workingTimeAndWorkList,
   setWorkingTimeAndWorkList,
   errors,
+  onTextInputBlur,
+  onTextInputFocus,
+  onDeleteItem,
+  onClearError,
 }: WorkingTimeAndWorkListProps) {
   const { workingList, addWorking, updateWorking, deleteWorking } =
     useWorkingTimeAndWork(workingTimeAndWorkList, (_, value) =>
@@ -48,8 +56,14 @@ export default function WorkingTimeAndWorkList({
               typeof updater === "function" ? updater : () => updater
             );
           }}
-          onDelete={() => deleteWorking(index)}
+          onDelete={() => {
+            deleteWorking(index);
+            onDeleteItem?.(index);
+          }}
           errors={errors?.workingTimeAndWork?.[index]}
+          onTextInputBlur={(field) => onTextInputBlur?.(index, field)}
+          onTextInputFocus={(field) => onTextInputFocus?.(index, field)}
+          onClearError={(field) => onClearError?.(index, field)}
         />
       ))}
 

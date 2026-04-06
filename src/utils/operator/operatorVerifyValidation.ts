@@ -3,7 +3,7 @@ import { File } from '@/src/types/File';
 export type DocumentType = 'business' | 'tourism';
 
 export interface OperatorVerifyData {
-  documentType: DocumentType;
+  documentType: DocumentType | null;
   guestHouseName: string;
   representativeName: string;
   phoneNumber: string;

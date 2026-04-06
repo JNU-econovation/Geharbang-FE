@@ -1,11 +1,11 @@
 import { StateCreator } from "zustand";
-import { Step3Data, Room } from "@/src/types/models/guestHouse/enroll";
+import { Step3Data, Party } from "@/src/types/models/guestHouse/enroll";
 import { AllSlices, Step3Slice } from "@/src/types/store/guestHouseStore";
 
 type Updater<T> = T | ((prev: T) => T);
 
 export const initialStep3Data: Step3Data = {
-  rooms: [],
+  parties: [],
 };
 
 export const createStep3Slice: StateCreator<AllSlices, [], [], Step3Slice> = (
@@ -30,27 +30,29 @@ export const createStep3Slice: StateCreator<AllSlices, [], [], Step3Slice> = (
       };
     }),
 
-  addRoom: (room: Room) =>
+  addParty: (party: Party) =>
     set((state) => ({
       step3Data: {
         ...state.step3Data,
-        rooms: [...state.step3Data.rooms, room],
+        parties: [...state.step3Data.parties, party],
       },
     })),
 
-  removeRoom: (roomId: string) =>
+  removeParty: (partyId: string) =>
     set((state) => ({
       step3Data: {
         ...state.step3Data,
-        rooms: state.step3Data.rooms.filter((r) => r.id !== roomId),
+        parties: state.step3Data.parties.filter((p) => p.id !== partyId),
       },
     })),
 
-  updateRoom: (roomId: string, room: Room) =>
+  updateParty: (partyId: string, party: Party) =>
     set((state) => ({
       step3Data: {
         ...state.step3Data,
-        rooms: state.step3Data.rooms.map((r) => (r.id === roomId ? room : r)),
+        parties: state.step3Data.parties.map((p) =>
+          p.id === partyId ? party : p
+        ),
       },
     })),
 });

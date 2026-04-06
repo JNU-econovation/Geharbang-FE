@@ -11,7 +11,7 @@ interface FormErrors {
   employeeBenefits: string;
 }
 
-export function useRecruitmentStep3Validation(step3Data: Step3Data) {
+export function useStep3Validation(step3Data: Step3Data) {
   const [errors, setErrors] = useState<FormErrors>({
     title: "",
     mainImageFiles: "",
@@ -23,6 +23,30 @@ export function useRecruitmentStep3Validation(step3Data: Step3Data) {
 
   const clearError = (field: keyof FormErrors) => {
     setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const validateField = (field: keyof FormErrors): void => {
+    let errorMsg = "";
+
+    if (field === "title") {
+      const { title } = step3Data;
+      if (!title || title.trim() === "") {
+        errorMsg = "공고글 제목을 입력해주세요";
+      } else if (title.length < 5 || title.length > 30) {
+        errorMsg = "공고글 제목은 최소 5~30자 이내로 입력해주세요";
+      }
+    }
+
+    if (field === "introduction") {
+      const { introduction } = step3Data;
+      if (!introduction || introduction.trim() === "") {
+        errorMsg = "소개글을 입력해주세요.";
+      } else if (introduction.length < 10) {
+        errorMsg = "소개글은 최소 10자 이상 입력해주세요";
+      }
+    }
+
+    setErrors((prev) => ({ ...prev, [field]: errorMsg }));
   };
 
   const validateForm = (): boolean => {
@@ -106,5 +130,6 @@ export function useRecruitmentStep3Validation(step3Data: Step3Data) {
     errors,
     clearError,
     validateForm,
+    validateField,
   };
 }

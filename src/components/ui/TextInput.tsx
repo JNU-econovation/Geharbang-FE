@@ -6,6 +6,8 @@ import TextSize from './TextSize';
 interface CustomTextInputProps {
   value?: string | number;
   onChangeText?: (text: string) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
   placeholder?: string;
   error?: boolean;
   lineHeight?: number;
@@ -24,6 +26,8 @@ interface CustomTextInputProps {
 export default function CustomTextInput({
   value,
   onChangeText,
+  onBlur,
+  onFocus,
   placeholder,
   error,
   lineHeight,
@@ -43,12 +47,14 @@ export default function CustomTextInput({
       <TextInput
         value={String(value)}
         onChangeText={onChangeText}
+        onBlur={onBlur}
+        onFocus={onFocus}
         placeholder={placeholder}
         placeholderTextColor={COLORS.GRAY.PLACEHOLDER}
         className={`border rounded-lg p-3
                   ${error ? 'border-primary-red' : 'border-gray-border'}`}
         style={{
-          height: height,
+          height: height || 48,
           width: width || '100%',
           lineHeight: lineHeight,
         }}
