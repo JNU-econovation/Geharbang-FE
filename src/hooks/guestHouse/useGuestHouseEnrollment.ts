@@ -4,6 +4,8 @@ import { File } from "@/src/types/File";
 import { GuestHouseEnrollData } from "@/src/types/models/guestHouse/enroll";
 import { transformEnrollDataToRequest } from "@/src/utils/guestHouse/enrollDataTransformer";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { Alert } from "react-native";
 
 export const useGuestHouseEnrollment = () => {
   const uploadImages = async (files: File[]): Promise<File[]> => {
@@ -83,6 +85,10 @@ export const useGuestHouseEnrollment = () => {
       return guestHouseId;
     },
     onError: (error: Error) => {
+      if (axios.isAxiosError(error) && error.response?.status === 403) {
+        Alert.alert('인증 필요', '게스트하우스 등록은 인증서 심사가 완료된 사장님만 가능합니다.');
+        return;
+      }
       console.error("게스트하우스 등록 에러:", error);
     },
   });
