@@ -23,11 +23,14 @@ Geharbang FE는 **제주 게스트하우스 스텝 구인/구직 플랫폼**의 
 
 ### 사용자 유형별 화면
 
-| 유형 | 접근 가능 화면 |
-|------|---------------|
-| 비로그인 | 홈, 게스트하우스 목록/상세, 스텝 공고 목록/상세 |
-| 로그인 (일반) | + 지원서 작성, 공고 지원, 찜, 내 정보, 지원 내역 |
-| 운영자 | + 게스트하우스 등록/관리, 구인 공고 등록/관리, 지원자 관리 |
+| 유형 | 조건 | 접근 가능 화면 |
+|------|------|---------------|
+| 비로그인 | - | 홈, 게스트하우스 목록/상세, 스텝 공고 목록/상세 |
+| 로그인 (일반) | 소셜 로그인 | + 지원서 작성, 공고 지원, 찜, 내 정보, 지원 내역 |
+| 사장님 | `isOwner: true` (인증서 승인_완료) | + 게스트하우스 등록/관리, 구인 공고 등록/관리, 지원자 관리 |
+| 시스템 운영자 | `isAdmin: true` (DB 직접 설정) | + 인증서 심사 대시보드 |
+
+> `GET /api/v1/user/profile` 응답의 `isOwner`, `isAdmin`, `inReview`, `certificateStatus` 필드로 UI 분기 처리.
 
 ---
 
@@ -381,9 +384,25 @@ UI:
 3. 사업체명, 대표자명, 전화번호 입력
 4. 인증서 제출 → 관리자 심사 대기
 5. profile 화면에서 심사 상태 표시
-   - 검토 대기 중 → 배지 표시
-   - 승인 완료 → "인증 사장님" 배지 + 운영자 메뉴 활성화
+   - certificateStatus == "검토_대기" → "심사 중" 배지
+   - certificateStatus == "승인_완료" → "인증 사장님" 배지 + 사장님 메뉴 활성화
+   - certificateStatus == "거부됨"   → "거절됨" 안내 + 재신청 유도
+   - certificateStatus == null       → 인증서 신청 유도
 ```
+
+**profile 화면 권한 분기 기준 (`GET /api/v1/user/profile`):**
+
+| 필드 | 값 | 화면 처리 |
+|------|----|----------|
+| `isOwner` | true | 내 게스트하우스 관리, 구인 공고 관리 메뉴 표시 |
+| `inReview` | true | "심사 중" 배지 표시 |
+| `isAdmin` | true | 인증서 심사 대시보드 버튼 표시 |
+| `certificateStatus` | `거부됨` | 거절 안내 및 재신청 유도 |
+
+⚠️ **현재 미처리 이슈:**
+- `profile.tsx`에서 `isOwner` 대신 `inReview`로 사장님 메뉴 분기 중 — 수정 필요
+- `isAdmin` 기반 운영자 메뉴 분기 미적용 — 모든 유저가 `/operator/management` 접근 가능
+- `profile.tsx`의 `myApplicationExist = myApplicationExist ?? false` 자기 참조 버그
 
 ---
 
@@ -459,6 +478,26 @@ UI:
 
 API 호출 실패 시 에러 메시지를 추출하는 중앙화된 함수.
 useMutation의 `onError` 콜백에서 공통으로 사용.
+
+**403 권한 에러 처리 패턴:**
+
+BE에서 미인증 사장님이 등록 API 호출 시 `403 NOT_APPROVED_OWNER`를 반환함.
+각 mutation 훅의 `onError`에서 `axios.isAxiosError()`로 403을 감지해 `Alert`를 띄움.
+
+```typescript
+onError: (error) => {
+  if (axios.isAxiosError(error) && error.response?.status === 403) {
+    Alert.alert('인증 필요', '메시지');
+    return;
+  }
+  console.error(error);
+}
+```
+
+| 훅 | 에러 메시지 |
+|----|------------|
+| `useGuestHouseEnrollment` | "게스트하우스 등록은 인증서 심사가 완료된 사장님만 가능합니다." |
+| `useCreateStaffRecruitment` | "스텝 공고 등록은 인증서 심사가 완료된 사장님만 가능합니다." |
 
 ### 보안 스토리지 (`src/utils/login/secureStore.ts`)
 
