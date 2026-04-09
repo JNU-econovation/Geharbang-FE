@@ -236,7 +236,7 @@ export default function MakeParty() {
           ref={scrollViewRef}
           className='bg-[#F9FAFB]'
           style={{ paddingTop: 16, paddingHorizontal: 12 }}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 50 }}
         >
           <View
             className='bg-white p-4 w-full rounded-lg'
@@ -608,7 +608,7 @@ export default function MakeParty() {
                 isEditMode ? BUTTON_LABELS.EDIT_PARTY : BUTTON_LABELS.MAKE_PARTY
               }
               onPress={handleNext}
-              className='mt-4 mb-8'
+              className='mt-4'
             />
           </Flex>
         </ScrollView>
