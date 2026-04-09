@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, ListRenderItem } from "react-native";
+import { FlatList, ListRenderItem, RefreshControl } from "react-native";
 
 import GuestHouseCard from "@/app/step/_components/GuestHouseCard";
 import PostingListEmpty from "@/app/step/_components/PostingList/PostingListEmpty";
@@ -19,6 +19,7 @@ export default function GuestHouse() {
   const [selectedFilter, setSelectedFilter] = useState<SortOptionKey>("recent");
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
     region: [],
     lowestRoomPrice: null,
@@ -43,17 +44,11 @@ export default function GuestHouse() {
     filters,
   });
 
-  const renderHeader = () => (
-    <PostingListHeader
-      title='게스트하우스 찾기'
-      searchText={searchText}
-      onSearchChange={setSearchText}
-      selectedFilter={selectedFilter}
-      onFilterChange={setSelectedFilter}
-      filterOptions={SORT_OPTIONS}
-      onAdvancedFilterPress={() => setIsBottomSheetVisible(true)}
-    />
-  );
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   const renderFooter = () => (
     <PostingListFooter isLoadingMore={isLoadingMore} />
@@ -73,17 +68,34 @@ export default function GuestHouse() {
       statusBarBackgroundColor='bg-white'
     >
       <DismissKeyboardView>
+        <PostingListHeader
+          title='게스트하우스 찾기'
+          searchText={searchText}
+          onSearchChange={setSearchText}
+          selectedFilter={selectedFilter}
+          onFilterChange={setSelectedFilter}
+          filterOptions={SORT_OPTIONS}
+          onAdvancedFilterPress={() => setIsBottomSheetVisible(true)}
+        />
+
         <FlatList
           data={guestHousePosts}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
-          ListHeaderComponent={renderHeader}
           ListFooterComponent={renderFooter}
           ListEmptyComponent={renderEmpty}
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 12 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              colors={["#0EA5E9"]}
+              tintColor='#0EA5E9'
+            />
+          }
         />
 
         <BottomSheetModal
