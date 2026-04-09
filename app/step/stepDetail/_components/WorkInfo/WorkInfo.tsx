@@ -19,6 +19,7 @@ interface Job {
   workDays: number;
   restDays: number;
   workType: string;
+  weeklyWorkingDays: string;
 }
 
 interface WorkInfoProps extends SetSectionYPositionProps {
@@ -98,9 +99,9 @@ export default function WorkInfo({
                 color='#4A5565'
                 content={`근무일 : ${
                   job.workType === "_7일_기준"
-                    ? `주 ${job.workDays}일 근무`
-                    : `${job.workDays}일 근무`
-                }, 휴무 ${job.restDays}일 `}
+                    ? `${job.weeklyWorkingDays} 근무`
+                    : `${job.workDays}일 근무, 휴무 ${job.restDays}일 `
+                }`}
               />
               <View className='pt-4' />
             </React.Fragment>
