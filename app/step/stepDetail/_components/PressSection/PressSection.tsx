@@ -14,7 +14,7 @@ export default function PressSection({
   selectedSection,
 }: PressSectionProps) {
   return (
-    <Flex items='center' justify='center' dir='row' wrap='wrap' gap={24}>
+    <Flex items='center' justify='between' dir='row' wrap='wrap' className='px-5'>
       {items.map(({ section, content }) => (
         <PressSectionToScroll
           key={section}

@@ -6,8 +6,8 @@ import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
 import { useApplicationExist } from "@/src/hooks/stepDetail/useApplicationExist";
-import { useHandleSection } from "@/src/hooks/stepDetail/useHandleSection";
-import { useSectionToScroll } from "@/src/hooks/stepDetail/useSectionToScroll";
+import { useHandleSection } from "@/src/hooks/common/useHandleSection";
+import { useSectionToScroll } from "@/src/hooks/common/useSectionToScroll";
 import { useStepDetail } from "@/src/hooks/stepDetail/useStepDetail";
 
 import DetailPageBackArrow from "@/src/components/ui/DetailPageBackArrow";
@@ -28,8 +28,13 @@ import WorkInfo from "../_components/WorkInfo/WorkInfo";
 export default function StepDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { scrollViewRef, setSectionYPositions, sectionToScroll } =
-    useSectionToScroll();
+  const {
+    scrollViewRef,
+    setSectionYPositions,
+    sectionToScroll,
+    setContainerOffset,
+    setStickyHeaderHeight,
+  } = useSectionToScroll();
   const { selectedSection, handleSectionToScroll } = useHandleSection({
     sectionToScroll,
   });
@@ -80,14 +85,14 @@ export default function StepDetail() {
         </View>
       ) : (
         <>
-          <ScrollView ref={scrollViewRef}>
+          <ScrollView ref={scrollViewRef} stickyHeaderIndices={[2]}>
             <GehaImage
               images={data?.representativeImages}
               height={280}
               page={true}
             />
 
-            <View className='px-4 pt-4'>
+            <View className='px-4 pt-4 pb-8'>
               <GehaInfo
                 title={data?.title}
                 guestHouseName={data?.guestHouseName}
@@ -95,7 +100,10 @@ export default function StepDetail() {
               />
             </View>
 
-            <View className='pt-8'>
+            <View
+              className='bg-white border-b border-gray-100 py-3'
+              onLayout={(e) => setStickyHeaderHeight(e.nativeEvent.layout.height)}
+            >
               <PressSection
                 items={STEP_DETAIL}
                 handleSectionToScroll={handleSectionToScroll}
@@ -103,7 +111,7 @@ export default function StepDetail() {
               />
             </View>
 
-            <View className='px-4'>
+            <View className='px-4' onLayout={(e) => setContainerOffset(e.nativeEvent.layout.y)}>
               <View className='pt-10' />
               <Address
                 setSectionYPositions={setSectionYPositions}
