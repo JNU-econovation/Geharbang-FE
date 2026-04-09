@@ -79,12 +79,13 @@ export default function HomeScreen() {
           />
         }
       >
-        <View className='w-full items-center gap-9 mb-8'>
+        <View className='w-full items-center gap-6 mb-8'>
           <AdBanner />
           <GuesthouseSection
             selectedRegion={ghRegion}
             setSelectedRegion={setGhRegion}
           />
+          <View/>
           <StepRecruitmentSection
             selectedRegion={stepRegion}
             setSelectedRegion={setStepRegion}
