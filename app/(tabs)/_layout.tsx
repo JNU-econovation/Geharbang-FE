@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useHomeStore } from "@/src/stores/home/useHomeStore";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof Ionicons>["name"];
@@ -38,6 +39,16 @@ export default function TabLayout() {
           title: "홈",
           tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
         }}
+        listeners={({ navigation, route }) => ({
+          tabPress: () => {
+            const state = navigation.getState();
+            const isAlreadyOnHome =
+              state.routes[state.index]?.name === route.name;
+            if (isAlreadyOnHome) {
+              useHomeStore.getState().triggerRefresh();
+            }
+          },
+        })}
       />
       <Tabs.Screen
         name='guestHouseEnroll'
