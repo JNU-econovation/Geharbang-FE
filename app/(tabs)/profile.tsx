@@ -100,7 +100,7 @@ export default function ProfileScreen() {
                     </View>
                   </View>
                 )}
-                {data?.isOwer && (
+                {data?.isOwner && (
                   <View className='-ml-2 px-2 py-1 bg-[#0EA5E9] rounded-xl'>
                     <TextSize color='#FFFFFF' size={12} content='인증 사장님' />
                   </View>
@@ -139,7 +139,7 @@ export default function ProfileScreen() {
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='운영자 기능' />
 
-              {data?.inReview ? (
+              {data?.isOwner ? (
                 <View>
                   <Pressable onPress={() => router.push("/my/guestHouse")}>
                     <MyActivity
@@ -181,12 +181,14 @@ export default function ProfileScreen() {
 
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='설정' />
-              <Pressable onPress={() => router.push("/operator/management")}>
-                <MyActivity
-                  content='운영자 기능'
-                  icon={<DangerIcon width={18} height={18} />}
-                />
-              </Pressable>
+              {data?.isAdmin && (
+                <Pressable onPress={() => router.push("/operator/management")}>
+                  <MyActivity
+                    content='운영자 기능'
+                    icon={<DangerIcon width={18} height={18} />}
+                  />
+                </Pressable>
+              )}
               <Pressable
                 onPress={handleLogout}
                 className='pt-10 flex-row gap-3'

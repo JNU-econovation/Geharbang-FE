@@ -3,8 +3,10 @@ import { axiosPrivate } from "../../api/customAxios";
 type MyInfomationResponse = {
   name: string;
   imageUrl: string;
-  isOwer: boolean;
+  isOwner: boolean;
   inReview: boolean;
+  isAdmin: boolean;
+  certificateStatus: string | null;
 };
 
 export const getMyInfomation = async () => {
