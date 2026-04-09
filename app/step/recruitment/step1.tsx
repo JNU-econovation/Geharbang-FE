@@ -1,6 +1,6 @@
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useRef } from "react";
-import { findNodeHandle, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import RecruitmentStepLayout from "@/app/step/recruitment/_components/RecruitmentStepLayout";
 import Flex from "@/src/components/layout/Flex";
@@ -53,10 +53,9 @@ export default function RecruitmentStep1() {
           const fieldOrder = ["guestHouseName", "workingRegion", "location"] as const;
           const firstErrField = fieldOrder.find((k) => !!errorsRef.current[k]);
           const targetRef = firstErrField ? fieldRefMap[firstErrField] : null;
-          const parentHandle = findNodeHandle(scrollViewRef.current);
-          if (parentHandle && targetRef?.current) {
+          if (targetRef?.current && scrollViewRef.current) {
             targetRef.current.measureLayout(
-              parentHandle,
+              scrollViewRef.current as unknown as View,
               (_x: number, y: number) =>
                 scrollViewRef.current?.scrollTo({
                   y: Math.max(0, y - 16),

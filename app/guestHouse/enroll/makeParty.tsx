@@ -2,7 +2,6 @@ import { Feather } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  findNodeHandle,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -154,10 +153,9 @@ export default function MakeParty() {
         ? fieldRefs[firstErrField as keyof typeof fieldRefs]
         : null;
 
-      const parentHandle = findNodeHandle(scrollViewRef.current);
-      if (parentHandle && targetRef?.current) {
+      if (targetRef?.current && scrollViewRef.current) {
         targetRef.current.measureLayout(
-          parentHandle,
+          scrollViewRef.current as unknown as View,
           (_x: number, y: number) =>
             scrollViewRef.current?.scrollTo({
               y: Math.max(0, y - 16),
