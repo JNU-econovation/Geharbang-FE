@@ -28,13 +28,18 @@ export default function HomeScreen() {
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    resetRegions();
-    await Promise.all([
-      queryClient.refetchQueries({ queryKey: ["guestHouseRecommendation"] }),
-      queryClient.refetchQueries({ queryKey: ["stepRecommendation"] }),
-    ]);
-    setRefreshing(false);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      resetRegions();
+      await Promise.all([
+        queryClient.refetchQueries({ queryKey: ["guestHouseRecommendation"] }),
+        queryClient.refetchQueries({ queryKey: ["stepRecommendation"] }),
+      ]);
+    } catch (error) {
+      console.error("Refresh failed:", error);
+    } finally {
+      setRefreshing(false);
+    }
   }, [queryClient, resetRegions]);
 
   useEffect(() => {
@@ -53,10 +58,10 @@ export default function HomeScreen() {
         () => {
           BackHandler.exitApp();
           return true;
-        }
+        },
       );
       return () => subscription.remove();
-    }, [])
+    }, []),
   );
 
   return (
@@ -85,7 +90,7 @@ export default function HomeScreen() {
             selectedRegion={ghRegion}
             setSelectedRegion={setGhRegion}
           />
-          <View/>
+          <View />
           <StepRecruitmentSection
             selectedRegion={stepRegion}
             setSelectedRegion={setStepRegion}
