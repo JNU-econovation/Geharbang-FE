@@ -73,7 +73,7 @@ export function useGuestHouseStep3Validation(_step3Data: Step3Data) {
 
     if (field === "customTypeName") {
       if (party.type === "기타") {
-        if (party.customTypeName || party.customTypeName.trim() === "") {
+        if (!party.customTypeName || party.customTypeName.trim() === "") {
           errorMsg = "파티명을 입력해주세요";
         } else if (
           party.customTypeName.length < 1 ||
@@ -85,7 +85,7 @@ export function useGuestHouseStep3Validation(_step3Data: Step3Data) {
     }
 
     if (field === "location") {
-      if (party.location || party.location.trim() === "") {
+      if (!party.location || party.location.trim() === "") {
         errorMsg = "파티장소를 입력해주세요";
       } else if (party.location.length < 1 || party.location.length > 20) {
         errorMsg = "파티 장소는 1~20자 사이로 입력해주세요";
@@ -93,7 +93,7 @@ export function useGuestHouseStep3Validation(_step3Data: Step3Data) {
     }
 
     if (field === "mood" ) {
-      if (party.mood || party.mood.trim() === "") {
+      if (!party.mood || party.mood.trim() === "") {
         errorMsg = "파티분위기를 입력해주세요";
       } else if (party.mood.length < 1 || party.mood.length > 20) {
         errorMsg = "파티 분위기는 1~20자 사이로 입력해주세요";
@@ -122,7 +122,7 @@ export function useGuestHouseStep3Validation(_step3Data: Step3Data) {
     }
 
     if (field === "description") {
-      if (party.description || party.description.trim() === "") {
+      if (!party.description || party.description.trim() === "") {
         errorMsg = "파티 설명을 입력해주세요";
       } else if (party.description.length < 10) {
         errorMsg = "파티 설명은 최소 10자 이상 입력해주세요";
