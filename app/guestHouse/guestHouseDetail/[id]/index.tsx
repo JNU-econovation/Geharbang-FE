@@ -12,6 +12,7 @@ import TextSize from "@/src/components/ui/TextSize";
 import { useHandleSection } from "@/src/hooks/common/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/common/useSectionToScroll";
 import { useGuestHouseDetail } from "@/src/hooks/guestHouseDetail/useGuestHouseDetail";
+import { router, useLocalSearchParams } from "expo-router";
 import { GUESTHOUSE } from "@/src/utils/constants/pressSection";
 import GuestHouseInfo from "../_components/GuestHouseInfo";
 import GuestHouseIntro from "../_components/GuestHouseIntro";
@@ -19,6 +20,8 @@ import GuestHouseParty from "../_components/GuestHouseParty";
 import ParlorType from "../_components/ParlorType";
 
 export default function GuestHouseDetail() {
+  const { fromRegistration } = useLocalSearchParams<{ fromRegistration?: string }>();
+
   const {
     scrollViewRef,
     setSectionYPositions,
@@ -39,6 +42,7 @@ export default function GuestHouseDetail() {
           content='게스트하우스 상세'
           shareTitle='게스트하우스 공유하기'
           shareMessage='게스트하우스를 공유해보세요!'
+          onBack={fromRegistration === 'true' ? () => router.replace('/(tabs)') : undefined}
         />
       </View>
       {isPending ? (

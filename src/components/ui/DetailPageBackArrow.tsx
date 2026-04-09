@@ -10,16 +10,19 @@ interface DetailPageBackArrowProps {
   content: string;
   shareTitle: string;
   shareMessage: string;
+  onBack?: () => void;
 }
 
 export default function DetailPageBackArrow({
   content,
   shareTitle,
   shareMessage,
+  onBack,
 }: DetailPageBackArrowProps) {
   return (
     <BackArrorHeader
       content={content}
+      onPress={onBack}
       icon={
         <Flex items='center' justify='center' dir='row' gap={20}>
           <Streamed width={20} height={20} />

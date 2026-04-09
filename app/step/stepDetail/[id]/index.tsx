@@ -26,7 +26,7 @@ import PressSection from "../_components/PressSection/PressSection";
 import WorkInfo from "../_components/WorkInfo/WorkInfo";
 
 export default function StepDetail() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, fromRegistration } = useLocalSearchParams<{ id: string; fromRegistration?: string }>();
 
   const {
     scrollViewRef,
@@ -64,6 +64,7 @@ export default function StepDetail() {
           content='스텝공고 상세'
           shareTitle='스텝공고 공유하기'
           shareMessage='스텝공고를 공유해보세요!'
+          onBack={fromRegistration === 'true' ? () => router.replace('/(tabs)') : undefined}
         />
       </View>
       {isPending ? (
