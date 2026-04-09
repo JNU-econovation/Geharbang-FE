@@ -37,7 +37,6 @@ export default function HomeScreen() {
     setRefreshing(false);
   }, [queryClient, resetRegions]);
 
-  // 홈 탭 재클릭 시 스크롤 상단 + 새로고침
   useEffect(() => {
     if (refreshTrigger > 0) {
       if (scrollYRef.current > 0) {
@@ -47,7 +46,6 @@ export default function HomeScreen() {
     }
   }, [refreshTrigger]);
 
-  // Android 뒤로가기 → 앱 종료
   useFocusEffect(
     useCallback(() => {
       const subscription = BackHandler.addEventListener(
