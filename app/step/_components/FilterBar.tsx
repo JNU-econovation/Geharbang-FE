@@ -26,7 +26,7 @@ export default function FilterBar<T extends string>({
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   return (
-    <View className='px-8 py-2.5 mb-5 flex-row items-center justify-end border-b border-gray-200 relative'>
+    <View className='px-8 py-2.5 mb-1 flex-row items-center justify-end border-b border-gray-200 relative'>
       <View className='flex-row items-center gap-1.5'>
         <TouchableOpacity
           className='flex-row items-center gap-1'

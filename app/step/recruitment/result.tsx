@@ -39,7 +39,7 @@ export default function RecruitmentResultScreen() {
               onPress: () => {
                 router.replace({
                   pathname: "/step/stepDetail/[id]",
-                  params: { id: recruitmentId.toString() },
+                  params: { id: recruitmentId.toString(), fromRegistration: 'true' },
                 });
               },
               icon: "reader-outline",

@@ -32,18 +32,10 @@ export default function MyApplicationStatus() {
 
   return (
     <CustomSafeAreaView pageColor='bg-[#F9FAFB]'>
-      <View
-        className='px-3 pt-3 pb-4 border-b-[1px] border-[#E5E5E5]'
-        style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.08,
-          shadowRadius: 4,
-          elevation: 4,
-        }}
-      >
+      <View className='px-3 pt-3 pb-4 border-b-[1px] border-[#E5E5E5]'>
         <BackArrorHeader content='지원 현황' />
       </View>
+
       <View className='p-4 flex-row gap-4 bg-white'>
         <Pressable onPress={() => setFilter("ALL")}>
           <View
@@ -101,7 +93,7 @@ export default function MyApplicationStatus() {
               key={applicationStatus.id}
               onPress={() =>
                 router.push(
-                  `/step/stepDetail/${applicationStatus.staffRecruitmentId}`
+                  `/step/stepDetail/${applicationStatus.staffRecruitmentId}`,
                 )
               }
             >

@@ -24,7 +24,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { findNodeHandle } from 'react-native';
 import GuestHouseEnrollLayout from "./_components/GuestHouseEnrollLayout";
 
 
@@ -89,7 +88,6 @@ export default function AddRoomForm() {
   const { addRoom, updateRoom, step4Data } = useGuestHouseStore();
 
   const scrollViewRef = useRef<ScrollView>(null);
-  const parentHandle = findNodeHandle(scrollViewRef.current);
   const fieldRefs = {
     name: useRef<View>(null),
     type: useRef<View>(null),
@@ -162,9 +160,9 @@ export default function AddRoomForm() {
       const firstErrField = fieldOrder.find((k) => !!errors[k]);
       const targetRef = firstErrField ? fieldRefs[firstErrField] : null;
 
-      if (parentHandle && targetRef?.current) {
+      if (targetRef?.current && scrollViewRef.current) {
         targetRef.current.measureLayout(
-          parentHandle,
+          scrollViewRef.current as unknown as View,
           (_x: number, y: number) =>
             scrollViewRef.current?.scrollTo({
               y: Math.max(0, y - 16),
