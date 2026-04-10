@@ -50,5 +50,5 @@ export const useRequireOwner = () => {
     callback?.();
   };
 
-  return { requireOwner };
+  return { requireOwner, isLoading };
 };
