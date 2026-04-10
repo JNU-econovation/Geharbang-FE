@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import React from "react";
 import {
   ActivityIndicator,
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -25,10 +26,17 @@ import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 import { useMyApplicationExist } from "@/src/hooks/application/myApplication/useMyApplicationExist";
 import { useMyInfomation } from "@/src/hooks/application/myApplication/useMyInfomation";
+import { useOwnerStatus } from "@/src/hooks/common/useOwnerStatus";
 import { useLogout } from "@/src/hooks/login/useLogout";
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
 import { COLORS } from "@/src/utils/constants/colors";
 import MyActivity from "../my/application/_components/MyActivity";
+
+const showReviewAlert = () =>
+  Alert.alert(
+    "심사가 진행 중입니다",
+    "운영진의 승인 완료 후 숙소 및 공고 등록이 가능합니다."
+  );
 
 export default function ProfileScreen() {
   const handleLogout = useLogout();
@@ -41,6 +49,8 @@ export default function ProfileScreen() {
 
   const { data, isLoading, isError, refetch } =
     useMyInfomation(myApplicationExist);
+
+  const { data: ownerStatus } = useOwnerStatus();
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -72,7 +82,8 @@ export default function ProfileScreen() {
           </View>
         ) : (
           <ScrollView className='px-4'>
-            <View className='px-6 py-4 mt-6 bg-[#E0F2FE] rounded-lg '>
+            {/* 프로필 카드 */}
+            <View className='px-6 py-4 mt-6 bg-[#E0F2FE] rounded-lg'>
               <View className='flex-row items-center gap-5'>
                 {myApplicationExist ? (
                   <View className='flex-row items-center gap-5'>
@@ -100,14 +111,26 @@ export default function ProfileScreen() {
                     </View>
                   </View>
                 )}
-                {data?.isOwner && (
+                {ownerStatus?.isAdmin && (
+                  <View className='-ml-2 px-2 py-1 bg-[#7C3AED] rounded-xl'>
+                    <TextSize color='#FFFFFF' size={12} content='운영자' />
+                  </View>
+                )}
+                {ownerStatus?.isOwner && !ownerStatus?.isAdmin && (
                   <View className='-ml-2 px-2 py-1 bg-[#0EA5E9] rounded-xl'>
                     <TextSize color='#FFFFFF' size={12} content='인증 사장님' />
                   </View>
                 )}
+                {ownerStatus?.inReview && !ownerStatus?.isOwner && (
+                  <Pressable onPress={showReviewAlert} className='-ml-2'>
+                    <View className='px-2 py-1 bg-[#F59E0B] rounded-xl'>
+                      <TextSize color='#FFFFFF' size={12} content='심사 중' />
+                    </View>
+                  </Pressable>
+                )}
               </View>
               {myApplicationExist && (
-                <Pressable onPress={() => router.push("/my/application")}>
+                <Pressable onPress={() => router.push("/my/application" as any)}>
                   <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
                     <TextSize
                       color='#101828'
@@ -119,6 +142,7 @@ export default function ProfileScreen() {
               )}
             </View>
 
+            {/* 내 활동 */}
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='내 활동' />
               <Pressable onPress={() => router.push("/application/create")}>
@@ -127,8 +151,7 @@ export default function ProfileScreen() {
                   icon={<ApplicationIcon width={18} height={18} />}
                 />
               </Pressable>
-
-              <Pressable onPress={() => router.push("/my/application/status")}>
+              <Pressable onPress={() => router.push("/my/application/status" as any)}>
                 <MyActivity
                   content='지원 내역'
                   icon={<ApplicationStatusIcon width={18} height={18} />}
@@ -136,10 +159,10 @@ export default function ProfileScreen() {
               </Pressable>
             </View>
 
+            {/* 사장님 기능 — 로그인한 모든 유저에게 노출 */}
             <View className='pt-8'>
-              <TextSize color='#6A7282' size={18} content='운영자 기능' />
-
-              {data?.isOwner ? (
+              <TextSize color='#6A7282' size={18} content='사장님 기능' />
+              {(ownerStatus?.isOwner || ownerStatus?.isAdmin) ? (
                 <View>
                   <Pressable onPress={() => router.push("/my/guestHouse")}>
                     <MyActivity
@@ -154,6 +177,45 @@ export default function ProfileScreen() {
                     />
                   </Pressable>
                 </View>
+              ) : ownerStatus?.inReview ? (
+                <View className='mt-5 px-6 py-4 bg-[#F9FAFB] rounded-lg flex-row items-center gap-3'>
+                  <PresidentIcon width={18} height={18} />
+                  <View className='flex-1'>
+                    <TextSize
+                      color='#101828'
+                      size={16}
+                      content='사장님 인증 심사 중'
+                    />
+                    <View className='pt-1' />
+                    <TextSize
+                      color='#4A5565'
+                      size={14}
+                      content='제출하신 서류를 검토하고 있어요'
+                    />
+                  </View>
+                </View>
+              ) : ownerStatus?.certificateStatus === '거부됨' ? (
+                <Pressable onPress={() => router.push("/operator/verify")}>
+                  <View className='mt-5 px-6 py-4 bg-[#FEF2F2] rounded-lg flex-row items-center'>
+                    <View className='p-2 rounded-full bg-white'>
+                      <PresidentIcon width={18} height={18} />
+                    </View>
+                    <View className='flex-1 ml-3'>
+                      <TextSize
+                        color='#E7000B'
+                        size={16}
+                        content='인증이 거부되었습니다'
+                      />
+                      <View className='pt-2' />
+                      <TextSize
+                        color='#4A5565'
+                        size={14}
+                        content='서류를 다시 제출해 재신청할 수 있어요'
+                      />
+                    </View>
+                    <ArrowRoute width={22} height={22} />
+                  </View>
+                </Pressable>
               ) : (
                 <Pressable onPress={() => router.push("/operator/verify")}>
                   <View className='mt-5 px-6 py-4 bg-[#F9FAFB] rounded-lg flex-row items-center'>
@@ -164,7 +226,7 @@ export default function ProfileScreen() {
                       <TextSize
                         color='#101828'
                         size={16}
-                        content='운영자이신가요?'
+                        content='사장님이신가요?'
                       />
                       <View className='pt-2' />
                       <TextSize
@@ -179,12 +241,13 @@ export default function ProfileScreen() {
               )}
             </View>
 
+            {/* 설정 */}
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='설정' />
-              {data?.isAdmin && (
+              {ownerStatus?.isAdmin && (
                 <Pressable onPress={() => router.push("/operator/management")}>
                   <MyActivity
-                    content='운영자 기능'
+                    content='서류 심사'
                     icon={<DangerIcon width={18} height={18} />}
                   />
                 </Pressable>
@@ -236,7 +299,6 @@ export default function ProfileScreen() {
               size={18}
               content='로그인하면 이런 게 좋아요'
             />
-
             <View className='px-6 py-4 mt-4 bg-[#F9FAFB] rounded-lg flex-row gap-2'>
               <CheckIcon width={22} height={22} />
               <View className='flex-col gap-1'>
