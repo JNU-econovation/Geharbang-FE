@@ -45,7 +45,7 @@ const config: ExpoConfig = {
     // edgeToEdgeEnabled: false,
     predictiveBackGestureEnabled: false,
     package: "com.econovation.geharbang",
-    versionCode: 1,
+    versionCode: 2,
     intentFilters: [
       {
         action: "VIEW",
