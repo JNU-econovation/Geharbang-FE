@@ -1,16 +1,27 @@
 import { router } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, Text, View } from 'react-native';
 
 import ManagementTabs from '@/app/operator/management/_components/ManagementTabs';
 import OperatorCard from '@/app/operator/management/_components/OperatorCard';
 import CustomSafeAreaView from '@/src/components/layout/CustomSafeAreaView';
 import BackArrowHeader from '@/src/components/ui/BackArrowHeader';
+import { useOwnerStatus } from '@/src/hooks/common/useOwnerStatus';
 import { useCertificates } from '@/src/hooks/operator/useCertificates';
 import { useUpdateCertificateStatus } from '@/src/hooks/operator/useUpdateCertificateStatus';
 import { TabType, convertCertificateToCardData } from '@/src/types/operator';
 
 export default function OperatorManagementScreen() {
+  const { data: ownerStatus, isLoading: isStatusLoading } = useOwnerStatus();
+
+  useEffect(() => {
+    if (isStatusLoading) return;
+    if (!ownerStatus?.isAdmin) {
+      Alert.alert('접근 권한이 없습니다', '운영자만 이용할 수 있는 페이지입니다.', [
+        { text: '확인', onPress: () => router.back() },
+      ]);
+    }
+  }, [ownerStatus, isStatusLoading]);
   const [activeTab, setActiveTab] = useState<TabType>('pending');
 
   // API 훅
