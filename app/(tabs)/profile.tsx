@@ -116,12 +116,12 @@ export default function ProfileScreen() {
                     <TextSize color='#FFFFFF' size={12} content='운영자' />
                   </View>
                 )}
-                {ownerStatus?.isOwner && !ownerStatus?.isAdmin && (
+                {ownerStatus?.isOwner && !ownerStatus?.isAdmin && !ownerStatus?.inReview && (
                   <View className='-ml-2 px-2 py-1 bg-[#0EA5E9] rounded-xl'>
                     <TextSize color='#FFFFFF' size={12} content='인증 사장님' />
                   </View>
                 )}
-                {ownerStatus?.inReview && !ownerStatus?.isOwner && (
+                {ownerStatus?.inReview && !ownerStatus?.isAdmin && (
                   <Pressable onPress={showReviewAlert} className='-ml-2'>
                     <View className='px-2 py-1 bg-[#F59E0B] rounded-xl'>
                       <TextSize color='#FFFFFF' size={12} content='심사 중' />
@@ -162,7 +162,14 @@ export default function ProfileScreen() {
             {/* 사장님 기능 — 로그인한 모든 유저에게 노출 */}
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='사장님 기능' />
-              {(ownerStatus?.isOwner || ownerStatus?.isAdmin) ? (
+              {ownerStatus?.isAdmin ? (
+                <Pressable onPress={() => router.push("/operator/management")}>
+                  <MyActivity
+                    content='서류 심사'
+                    icon={<DangerIcon width={18} height={18} />}
+                  />
+                </Pressable>
+              ) : (ownerStatus?.isOwner && !ownerStatus?.inReview) ? (
                 <View>
                   <Pressable onPress={() => router.push("/my/guestHouse")}>
                     <MyActivity
@@ -244,14 +251,6 @@ export default function ProfileScreen() {
             {/* 설정 */}
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='설정' />
-              {ownerStatus?.isAdmin && (
-                <Pressable onPress={() => router.push("/operator/management")}>
-                  <MyActivity
-                    content='서류 심사'
-                    icon={<DangerIcon width={18} height={18} />}
-                  />
-                </Pressable>
-              )}
               <Pressable
                 onPress={handleLogout}
                 className='pt-10 flex-row gap-3'
