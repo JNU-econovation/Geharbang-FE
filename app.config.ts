@@ -2,7 +2,7 @@ import { ExpoConfig } from "@expo/config";
 import "dotenv/config";
 
 const config: ExpoConfig = {
-  name: "Geharbang-FE",
+  name: "게하르방",
   slug: "Geharbang-FE",
   owner: "superkid0714",
   version: "1.0.0",
