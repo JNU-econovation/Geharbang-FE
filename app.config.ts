@@ -13,6 +13,12 @@ const config: ExpoConfig = {
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
 
+  splash: {
+    image: "./assets/icon.png",
+    resizeMode: "contain",
+    backgroundColor: "#ffffff",
+  },
+
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.econovation.geharbang",
@@ -39,6 +45,7 @@ const config: ExpoConfig = {
     // edgeToEdgeEnabled: false,
     predictiveBackGestureEnabled: false,
     package: "com.econovation.geharbang",
+    versionCode: 1,
     intentFilters: [
       {
         action: "VIEW",
