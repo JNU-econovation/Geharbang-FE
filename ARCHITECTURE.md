@@ -210,6 +210,37 @@ Zustand와 React Query를 역할에 따라 분리해서 사용함.
 
 ---
 
+## 6-1. 인증 상태 관련 공통 훅
+
+### useOwnerStatus (`src/hooks/common/useOwnerStatus.ts`)
+
+```typescript
+// 로그인된 경우 프로필 정보(isOwner, isAdmin, inReview, certificateStatus)를 조회
+export const useOwnerStatus = () => {
+  const accessToken = useAuthStore((state) => state.accessToken);
+  return useQuery({
+    queryKey: ["myInfomation"],
+    queryFn: () => getMyInfomation(),
+    enabled: !!accessToken,
+  });
+};
+```
+
+### useRequireOwner (`src/hooks/common/useRequireOwner.ts`)
+
+게스트하우스 등록/스텝 모집 탭 진입 시 사용. `requireOwner(callback)` 호출 시 아래 순서로 접근 제어:
+
+```
+1. 비로그인 → "로그인이 필요합니다" Alert + 로그인 화면 이동
+2. inReview: true → "심사가 진행 중입니다" Alert
+3. isOwner/isAdmin 모두 false → "사장님 인증이 필요합니다" Alert + /operator/verify 이동
+4. 통과 → callback() 실행
+```
+
+`(tabs)/guestHouseEnroll.tsx`와 `(tabs)/stepRecruitment.tsx`에서 탭 진입 시 호출.
+
+---
+
 ## 7. API 통신
 
 ### Axios 설정 (`src/services/api/customAxios.ts`)
@@ -399,10 +430,19 @@ UI:
 | `isAdmin` | true | 인증서 심사 대시보드 버튼 표시 |
 | `certificateStatus` | `거부됨` | 거절 안내 및 재신청 유도 |
 
-⚠️ **현재 미처리 이슈:**
-- `profile.tsx`에서 `isOwner` 대신 `inReview`로 사장님 메뉴 분기 중 — 수정 필요
-- `isAdmin` 기반 운영자 메뉴 분기 미적용 — 모든 유저가 `/operator/management` 접근 가능
-- `profile.tsx`의 `myApplicationExist = myApplicationExist ?? false` 자기 참조 버그
+**profile 화면 역할별 배지 표시:**
+
+| 조건 | 배지 색상 | 텍스트 |
+|------|---------|--------|
+| `isAdmin: true` | 보라 (`#7C3AED`) | 운영자 |
+| `isOwner: true` (비관리자) | 파랑 (`#0EA5E9`) | 인증 사장님 |
+| `inReview: true` (미승인) | 노랑 (`#F59E0B`) | 심사 중 |
+| `certificateStatus: '거부됨'` | 빨강 배경 안내 | 재신청 유도 |
+
+> ✅ 이전 버전의 미처리 이슈 모두 해결됨 (2026-04-10)
+> - `isOwner`/`isAdmin` 기반으로 사장님 메뉴 분기 수정
+> - `isAdmin` 체크로 `/operator/management` 접근 제한 적용
+> - `myApplicationExist` 자기 참조 버그 수정
 
 ---
 
@@ -514,6 +554,19 @@ Expo Secure Store를 감싼 래퍼. 토큰 저장/조회/삭제를 추상화.
 | `EXPO_PUBLIC_BASE_URL` | API 서버 주소 (예: `https://geharbang.org`) |
 | `EXPO_PUBLIC_SENTRY_DSN` | Sentry 에러 추적 DSN |
 | `GOOGLE_MAPS_API_KEY` | Google Maps/Geocoding API 키 |
+
+### 앱 기본 정보 (`app.config.ts`)
+
+> `app.json`은 삭제됨. `app.config.ts` 단일 파일로 관리. (`app.config.ts`가 우선순위를 가지므로 둘 다 존재할 필요 없음)
+
+| 항목 | 값 |
+|------|-----|
+| `name` | 게하르방 (설치 시 아이콘 아래 표시 이름) |
+| `slug` | Geharbang-FE (EAS 프로젝트 식별자, 변경 금지) |
+| `scheme` | geharbang (딥링크 OAuth 콜백용) |
+| `package` | com.econovation.geharbang |
+| `versionCode` | 1 (Play Store 제출 시 빌드마다 수동으로 +1) |
+| `splash` | `assets/icon.png` (임시 — 정식 스플래시 이미지 준비 후 `assets/splash.png`로 교체 필요) |
 
 `EXPO_PUBLIC_` 접두사가 붙은 변수만 앱 번들에 포함됨. 나머지는 빌드 타임에만 사용.
 
