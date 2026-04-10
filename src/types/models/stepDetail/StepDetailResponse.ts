@@ -40,4 +40,5 @@ export interface JobInfo {
   workDays: number;
   restDays: number;
   workType: string;
+  weeklyWorkingDays: string;
 }

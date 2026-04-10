@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Step from "@/public/svgs/Home/step.svg";
 import { useStepRecommendation } from "@/src/hooks/home/useStepRecommendation ";
 import { SlideSectionLayout } from "./SlideSectionLayout";
 
-export function StepRecruitmentSection() {
-  const [selectedRegion, setSelectedRegion] = useState("제주시");
+interface StepRecruitmentSectionProps {
+  selectedRegion: string;
+  setSelectedRegion: (region: string) => void;
+}
+
+export function StepRecruitmentSection({ selectedRegion, setSelectedRegion }: StepRecruitmentSectionProps) {
   const {
     data = [],
     isLoading,

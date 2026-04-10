@@ -22,7 +22,7 @@ export default function PressSectionToScroll({
         size={14}
         color={isActive ? "#0084D1" : "#6A7282"}
       />
-      <View className='pt-5' />
+      <View className='pt-3' />
       {isActive && <View className='border border-b border-[#0084D1]' />}
     </Pressable>
   );

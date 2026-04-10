@@ -26,14 +26,12 @@ export default function Contact({
   contact,
   owerMessage,
 }: ContactProps) {
-  const isShowContact =
-    !!contact?.email &&
-    !!contact?.instagramId &&
-    !!contact?.phoneNumber &&
-    !!contact?.webSite &&
+  const hasAnyContact =
+    !!contact?.email ||
+    !!contact?.instagramId ||
+    !!contact?.phoneNumber ||
+    !!contact?.webSite ||
     !!owerMessage;
-
-  if (!isShowContact) return null;
 
   return (
     <SectionYPosition
@@ -41,6 +39,13 @@ export default function Contact({
       content='연락처'
       setSectionYPositions={setSectionYPositions}
     >
+      {!hasAnyContact && (
+        <View className='pt-6'>
+          <View className='bg-[#F9FAFB] rounded-lg p-3'>
+            <TextSize color='#4A5565' size={14} content='등록된 연락처 정보가 없어요 🥲' />
+          </View>
+        </View>
+      )}
       {contact?.instagramId && (
         <View className='pt-6'>
           <ContactCompo
