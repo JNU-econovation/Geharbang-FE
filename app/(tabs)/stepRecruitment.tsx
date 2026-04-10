@@ -3,19 +3,19 @@ import { useCallback, useRef } from "react";
 import { View } from "react-native";
 
 import { CloseableConfirmModal } from "@/src/components/ui/Modal/CloseableConfirmModal";
-import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
+import { useRequireOwner } from "@/src/hooks/common/useRequireOwner";
 import { useStepRecruitmentResumeDraft } from "@/src/hooks/stepRecruitment/useStepRecruitmentResumeDraft";
 
 export default function StepRecruitmentTab() {
-  const { requireLogin } = useRequireLogin();
+  const { requireOwner } = useRequireOwner();
   const { checkAndNavigate, modalProps } = useStepRecruitmentResumeDraft();
 
-  const requireLoginRef = useRef(requireLogin);
-  requireLoginRef.current = requireLogin;
+  const requireOwnerRef = useRef(requireOwner);
+  requireOwnerRef.current = requireOwner;
 
   useFocusEffect(
     useCallback(() => {
-      requireLoginRef.current(checkAndNavigate);
+      requireOwnerRef.current(checkAndNavigate);
     }, [checkAndNavigate]),
   );
 
