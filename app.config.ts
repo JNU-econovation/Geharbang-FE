@@ -4,7 +4,9 @@ import "dotenv/config";
 const config: ExpoConfig = {
   name: "Geharbang-FE",
   slug: "Geharbang-FE",
+  owner: "superkid0714",
   version: "1.0.0",
+  icon: "./assets/icon.png",
   orientation: "portrait",
   scheme: "geharbang",
   platforms: ["ios", "android", "web"],
@@ -30,6 +32,7 @@ const config: ExpoConfig = {
 
   android: {
     adaptiveIcon: {
+      foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#ffffff",
     },
 
