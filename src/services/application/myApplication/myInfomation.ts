@@ -6,7 +6,7 @@ type MyInfomationResponse = {
   isOwner: boolean;
   inReview: boolean;
   isAdmin: boolean;
-  certificateStatus: string | null;
+  certificateStatus: "검토_대기" | "승인_완료" | "거부됨" | null;
 };
 
 export const getMyInfomation = async () => {
