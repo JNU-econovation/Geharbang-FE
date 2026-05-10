@@ -38,7 +38,7 @@ Geharbang FE는 **제주 게스트하우스 스텝 구인/구직 플랫폼**의 
 
 | 분류 | 라이브러리 | 버전 | 용도 |
 |------|-----------|------|------|
-| 프레임워크 | React Native + Expo | 0.81.5 / 54.0.23 | 앱 기반 |
+| 프레임워크 | React Native + Expo | 0.81.5 / 54.0.34 | 앱 기반 |
 | 라우팅 | Expo Router | - | 파일 기반 라우팅 |
 | 서버 상태 | TanStack React Query | 5.90.5 | API 캐싱/동기화 |
 | 클라이언트 상태 | Zustand | 5.0.8 | 폼 데이터, 인증 |
@@ -51,7 +51,7 @@ Geharbang FE는 **제주 게스트하우스 스텝 구인/구직 플랫폼**의 
 | 지오코딩 | react-native-geocoding | 0.5.0 | 주소 ↔ 좌표 변환 |
 | 날짜 | dayjs | - | 날짜 포맷 |
 | 날짜 선택 | @react-native-community/datetimepicker | 8.4.4 | 날짜 입력 |
-| 에러 추적 | @sentry/react-native | 8.5.0 | 에러 모니터링 |
+| 에러 추적 | @sentry/react-native | 7.2.0 | 에러 모니터링 |
 
 ---
 
@@ -64,19 +64,18 @@ Geharbang-FE/
 │   ├── application/          # 지원서 작성
 │   ├── guestHouse/           # 게스트하우스 목록/상세/등록
 │   ├── login/                # 로그인
-│   ├── my/                   # 내 게스트하우스/공고 관리
-│   ├── myPage/               # 내 지원서/지원 내역
+│   ├── my/                   # 내 지원서/지원 내역, 내 게스트하우스/공고 관리
 │   ├── operator/             # 운영자 인증/관리
 │   ├── step/                 # 스텝 공고 목록/상세/작성
 │   └── _layout.tsx           # 루트 레이아웃
 │
 ├── src/
-│   ├── components/           # 재사용 UI 컴포넌트 (52개)
-│   ├── hooks/                # 기능별 커스텀 훅 (68개)
+│   ├── components/           # 재사용 UI 컴포넌트 (57개)
+│   ├── hooks/                # 기능별 커스텀 훅 (71개)
 │   ├── services/             # API 호출 함수 (30개)
-│   ├── stores/               # Zustand 전역 상태 (13개)
-│   ├── types/                # TypeScript 타입 정의 (25개+)
-│   └── utils/                # 유틸 함수 (40개+)
+│   ├── stores/               # Zustand 전역 상태/슬라이스 (14개)
+│   ├── types/                # TypeScript 타입 정의 (37개)
+│   └── utils/                # 유틸 함수 (28개)
 │
 ├── public/
 │   ├── fonts/                # Noto Sans KR
@@ -114,9 +113,9 @@ app/
 ├── application/create/                  # 지원서 작성 (2단계)
 │
 ├── guestHouse/
-│   ├── index.tsx (또는 list)            # 게스트하우스 목록
+│   ├── index.tsx                        # 게스트하우스 목록
 │   ├── guestHouseDetail/[id]/           # 상세 페이지
-│   └── enroll/                          # 등록 (4단계)
+│   └── enroll/                          # 등록 (5단계)
 │
 ├── step/
 │   ├── index.tsx                        # 스텝 공고 목록
@@ -124,13 +123,9 @@ app/
 │   └── recruitment/                     # 공고 작성 (5단계)
 │
 ├── my/
+│   ├── application/                     # 내 지원서 보기, 지원 내역
 │   ├── guestHouse/                      # 내 게스트하우스 관리
-│   └── stepRecruitment/[id]/applicationList/  # 지원자 목록
-│
-├── myPage/
-│   ├── MyApplication                    # 내 지원서 보기
-│   ├── MyApplicationStatus              # 내 지원 내역
-│   └── ...
+│   └── stepRecruitment/                 # 내 구인 공고 관리
 │
 └── operator/
     ├── verify/                          # 운영자 인증 신청
@@ -200,13 +195,15 @@ Zustand와 React Query를 역할에 따라 분리해서 사용함.
 - `setUpdate()` 메서드로 특정 필드만 부분 업데이트 가능
 
 #### useGuestHouseStore (`src/stores/guestHouse/`)
-- 게스트하우스 등록 4단계 폼 데이터
+- 게스트하우스 등록 5단계 폼 데이터
 - **AsyncStorage에 자동 저장** (앱 종료 후 재진입 시 이어서 작성 가능)
 - `resetAllData()`로 전체 초기화
 
 #### useStepRecruitmentStore (`src/stores/stepRecruitment/`)
 - 스텝 구인 공고 작성 5단계 폼 데이터
-- **저장 안 함** (흐름 이탈 시 초기화)
+- **AsyncStorage에 자동 저장** (key: `step-recruitment-storage`)
+- 근무 시간의 `Date` 값은 커스텀 storage reviver로 복원
+- `resetAllData()`로 전체 초기화
 
 ---
 
@@ -223,11 +220,20 @@ axiosPrivate.interceptors.request.use(async (config) => {
   return config;
 });
 
-// 인증 불필요한 API용 (로그인, 공개 목록 조회 등)
+// 인증 불필요한 API용 (로그인 등)
 export const axiosPublic = axios.create({ baseURL });
+
+// 공개 조회 API지만 로그인 사용자의 개인화 필드가 필요한 경우
+export const axiosOptionalAuth = axios.create({ baseURL });
+axiosOptionalAuth.interceptors.request.use(async (config) => {
+  const token = await getAccessToken(TOKEN_KEYS.ACCESS_TOKEN);
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 ```
 
-`baseURL`은 `.env`의 `EXPO_PUBLIC_BASE_URL` 값 (예: `https://geharbang.org`)
+`baseURL`은 `.env`의 `EXPO_PUBLIC_BASE_URL` 또는 `EXPO_PUBLIC_API_URL` 값이며, 값이 없으면 `https://geharbang.org`를 기본값으로 사용한다.
+게스트하우스/스텝 공고 목록과 상세처럼 비회원도 조회 가능하지만 로그인 사용자의 `isWished`가 필요한 API는 `axiosOptionalAuth`를 사용한다.
 
 ### 서비스 함수 패턴
 
@@ -240,10 +246,43 @@ export const getMyApplication = async () => {
 
 // POST with body
 export const createApplication = async (data: ApplicationData) => {
-  const response = await axiosPrivate.post<{ id: number }>("/api/v1/application/", data);
-  return response.data;
+  const response = await axiosPrivate.post<{ applicationId: number }>("/api/v1/application", data);
+  return response.data.applicationId;
 };
 ```
+
+### 찜 API
+
+찜 추가/삭제는 로그인 토큰이 필요한 기능이므로 `axiosPrivate`를 사용한다.
+
+| 대상 | 추가 | 삭제 |
+|------|------|------|
+| 스텝 구인 공고 | `POST /api/v1/wish/staff-recruitment/{id}` | `DELETE /api/v1/wish/staff-recruitment/{id}` |
+| 게스트하우스 게시글 | `POST /api/v1/wish/guest-houses/{id}` | `DELETE /api/v1/wish/guest-houses/{id}` |
+
+내가 찜한 목록은 `GET /api/v1/wish/staff-recruitment/my`와 `GET /api/v1/wish/guest-houses/my`를 사용한다.
+FE 서비스 함수는 `src/services/wish/wish.ts`에 있고, 화면에서는 `src/hooks/wish/useToggleWish.ts`와 `src/hooks/wish/useMyWishedPosts.ts`를 통해 호출한다.
+목록 응답의 찜 여부 필드는 `isWished`이며, `wished`가 아니다.
+
+### 이미지 업로드 패턴
+
+게스트하우스/스텝 공고 이미지는 공통 이미지 업로드 API를 사용한다.
+
+```typescript
+const formData = new FormData();
+files.forEach((file) => formData.append("images", file as unknown as Blob));
+
+const response = await axiosPrivate.post<{ imageUrl: string[] }>(
+  "/api/v1/images",
+  formData,
+  { headers: { "Content-Type": "multipart/form-data" } }
+);
+
+return response.data.imageUrl;
+```
+
+지원서 프로필 이미지는 `/api/v1/application/images`에 `image` 필드로 1장만 업로드한다.
+인증서 파일은 `/api/v1/certificate/file-upload`에 `file`, `fileType`, `fileName`을 함께 보낸다.
 
 ### 훅 패턴 — 데이터 조회 (useQuery)
 
@@ -335,32 +374,53 @@ Step 2: 프로필
 제출: useApplicationSlice 스토어 데이터 → createApplication(data) → 서버 저장
 ```
 
-### 게스트하우스 등록 (4단계)
+### 게스트하우스 등록 (5단계)
 
 ```
-Step 1: 기본 정보 (이름, 지역, 주소, 연락처)
+Step 1: 기본 정보 (이름, 지역, 주소)
   - 주소 검색 → react-native-maps + geocoding
-Step 2: 시설 & 분위기 (체크박스 다중선택)
-Step 3: 객실 구성 (객실 추가/삭제, 가격 입력)
-Step 4: 최종 확인 & 제출
+Step 2: 대표 이미지, 소개, 시설 & 분위기 (체크박스 다중선택)
+Step 3: 파티 구성 (파티 추가/수정/삭제)
+Step 4: 객실 구성 (객실 추가/수정/삭제, 가격 입력)
+Step 5: 연락처, 웹사이트, 사장님 한마디
 
-- 4단계 데이터 → useGuestHouseStore (AsyncStorage 자동 저장)
+- 5단계 데이터 → useGuestHouseStore (AsyncStorage 자동 저장)
 - 뒤로 가거나 앱을 껐다 켜도 데이터 유지
+- 이전 작성 내용이 있으면 `useGuestHouseResumeDraft`가 이어쓰기/새로쓰기 모달 표시
 - 제출 시 enrollDataTransformer로 API 형식으로 변환 후 전송
 ```
 
 ### 스텝 구인 공고 작성 (5단계)
 
 ```
-Step 1: 게스트하우스 선택 + 모집 지역
+Step 1: 게스트하우스명 + 모집 지역 + 주소
 Step 2: 근무 조건 (스케줄, 기간, 성별)
-Step 3: 추가 질문 작성 (자유롭게 추가/삭제)
-Step 4: 혜택/특징 선택 (체크박스)
-Step 5: 이미지 업로드 (다중) + 최종 확인
+Step 3: 제목, 소개, 대표/소개 이미지, 혜택/특징
+Step 4: 연락처, 웹사이트, 사장님 한마디
+Step 5: 추가 질문 작성 (자유롭게 추가/삭제)
 
-- 5단계 데이터 → useStepRecruitmentStore (저장 없음)
+- 5단계 데이터 → useStepRecruitmentStore (AsyncStorage 자동 저장)
+- 이전 작성 내용이 있으면 `useStepRecruitmentResumeDraft`가 이어쓰기/새로쓰기 모달 표시
 - 제출 시 transformStoreToApi로 변환 후 전송
 ```
+
+### 내 게시글/공고 관리
+
+```
+내 게스트하우스 관리
+  - GET /api/v1/guest-houses/owner
+  - PATCH /api/v1/guest-houses/{id}
+  - DELETE /api/v1/guest-houses/{id}
+
+구인 공고 관리
+  - GET /api/v1/staff-recruitment/owner
+  - PATCH /api/v1/staff-recruitment/{id}
+  - DELETE /api/v1/staff-recruitment/{id}
+```
+
+현재 관리 화면은 목록 조회, 활성/비활성 전환, 삭제, 새 등록 진입을 제공한다.
+백엔드에는 `PUT /api/v1/guest-houses/{id}`, `PUT /api/v1/staff-recruitment/{id}` 수정 API가 있지만, 프론트 서비스/화면에는 아직 연결되어 있지 않다.
+수정 화면을 만들 때는 등록 스토어를 재사용하되 기존 이미지 URL을 유지할 수 있도록 `file://` 로컬 이미지와 서버 URL 이미지를 구분해야 한다.
 
 ### 공고 목록 조회 및 필터링
 
@@ -375,6 +435,22 @@ UI:
   - 필터 선택 → FilterBottomSheet 컴포넌트
   - 스크롤 끝 도달 → loadMore() 자동 호출
 ```
+
+### 찜 토글
+
+게스트하우스/스텝 공고 카드의 하트 버튼은 `GuestHouseCard`에서 공통으로 처리한다.
+
+```
+GuestHouseCard
+  → useState(item.isWished)로 카드 로컬 상태 유지
+  → useEffect([item.id, item.isWished])로 서버 목록 데이터 갱신 시 동기화
+  → useToggleWish({ type, id })로 optimistic update 실행
+  → 실패 시 기존 item.isWished 값으로 rollback
+```
+
+현재 목록 훅은 React Query cache 밖에서 page 상태를 직접 관리하므로, 찜 토글은 카드 단위 optimistic update로 처리한다.
+목록 훅을 `useInfiniteQuery`로 전환하면 query cache update/invalidation을 함께 적용할 수 있다.
+대표 이미지가 없는 게시글/공고는 BE가 `imageUrl: ""`로 내려주며, 카드는 placeholder 아이콘을 표시한다.
 
 ### 운영자 인증
 
@@ -399,10 +475,10 @@ UI:
 | `isAdmin` | true | 인증서 심사 대시보드 버튼 표시 |
 | `certificateStatus` | `거부됨` | 거절 안내 및 재신청 유도 |
 
-⚠️ **현재 미처리 이슈:**
-- `profile.tsx`에서 `isOwner` 대신 `inReview`로 사장님 메뉴 분기 중 — 수정 필요
-- `isAdmin` 기반 운영자 메뉴 분기 미적용 — 모든 유저가 `/operator/management` 접근 가능
-- `profile.tsx`의 `myApplicationExist = myApplicationExist ?? false` 자기 참조 버그
+⚠️ **현재 확인된 이슈:**
+- `profile.tsx`의 사장님 메뉴는 `isOwner`, 운영자 심사 메뉴는 `isAdmin`으로 분기 중이다.
+- 다만 `useMyInfomation(myApplicationExist)`가 지원서 존재 여부에 묶여 있어, 지원서를 작성하지 않은 로그인 사용자는 `GET /api/v1/user/profile` 호출이 막힐 수 있다.
+- 사장님/운영자 권한 UI는 지원서 존재 여부와 무관해야 하므로, 프로필 조회 query의 `enabled` 조건을 분리하는 수정이 필요하다.
 
 ---
 
@@ -512,6 +588,7 @@ Expo Secure Store를 감싼 래퍼. 토큰 저장/조회/삭제를 추상화.
 | 변수명 | 용도 |
 |--------|------|
 | `EXPO_PUBLIC_BASE_URL` | API 서버 주소 (예: `https://geharbang.org`) |
+| `EXPO_PUBLIC_API_URL` | API 서버 주소 fallback |
 | `EXPO_PUBLIC_SENTRY_DSN` | Sentry 에러 추적 DSN |
 | `GOOGLE_MAPS_API_KEY` | Google Maps/Geocoding API 키 |
 
@@ -524,6 +601,20 @@ Expo Secure Store를 감싼 래퍼. 토큰 저장/조회/삭제를 추상화.
 | `development` | 개발/디버깅 | Metro 서버 연결 필요, 독립 실행 불가 |
 | `preview` | 내부 테스트 | 독립 실행 가능, APK 배포 |
 | `production` | 스토어 배포 | Play Store / App Store 제출용 |
+
+### 로컬 검증 명령어
+
+배포 전에는 아래 순서로 확인한다.
+
+```bash
+npx tsc --noEmit
+npx expo-doctor
+npx expo export --platform android --output-dir /tmp/geharbang-fe-export --clear
+```
+
+`expo-doctor` 기준으로 `app.json`과 `app.config.ts`를 동시에 유지하면 동적 config 충돌이 날 수 있으므로, 현재 앱 설정은 `app.config.ts`로 단일화한다.
+`@types/react-native`는 React Native에 타입이 포함되어 있어 직접 설치하지 않는다.
+`npm audit fix --force`는 Expo SDK를 깨는 다운그레이드를 유도할 수 있으므로 사용 전에 반드시 영향 범위를 확인한다.
 
 ### OTA 업데이트
 
