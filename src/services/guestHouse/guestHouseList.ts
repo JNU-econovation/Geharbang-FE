@@ -2,7 +2,7 @@ import {
   GuestHousePostParams,
   GuestHousePostResponse,
 } from "@/src/types/models/guestHouse/types";
-import { axiosPublic } from "../api/customAxios";
+import { axiosOptionalAuth } from "../api/customAxios";
 
 export const getGuestHousePostList = async (
   params: GuestHousePostParams
@@ -50,7 +50,7 @@ export const getGuestHousePostList = async (
   }
 
   const url = `/api/v1/guest-houses?${queryParams.toString()}`;
-  const response = await axiosPublic.get<GuestHousePostResponse>(url);
+  const response = await axiosOptionalAuth.get<GuestHousePostResponse>(url);
 
   return response.data;
 };
