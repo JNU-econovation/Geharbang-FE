@@ -29,6 +29,7 @@ const config: ExpoConfig = {
   },
 
   android: {
+    versionCode: 3,
     adaptiveIcon: {
       backgroundColor: "#ffffff",
     },
