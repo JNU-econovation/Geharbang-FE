@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
 import GuestHouse from "@/public/svgs/Home/guestHouse.svg";
 import { useGuestHouseRecommendation } from "@/src/hooks/home/useGuestHouseRecommendation";
 import { SlideSectionLayout } from "./SlideSectionLayout";
 
-export function GuesthouseSection() {
-  const [selectedRegion, setSelectedRegion] = useState("제주시");
+interface GuesthouseSectionProps {
+  selectedRegion: string;
+  setSelectedRegion: (region: string) => void;
+}
+
+export function GuesthouseSection({ selectedRegion, setSelectedRegion }: GuesthouseSectionProps) {
   const {
     data = [],
     isLoading,

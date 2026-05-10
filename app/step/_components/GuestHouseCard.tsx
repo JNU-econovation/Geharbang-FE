@@ -55,10 +55,10 @@ export default function GuestHouseCard({
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={handlePress}
-      className='mx-4 px-4 pt-4 pb-4 bg-white rounded-xl border border-gray-200 mb-3 -z-10'
+      className='mx-4 px-2 py-3 bg-white rounded-xl border border-gray-200 mb-3 -z-10'
     >
       <View className='flex-row'>
-        <View className='w-16 h-16 rounded-lg overflow-hidden bg-gray-100 items-center justify-center'>
+        <View className='w-20 h-20 rounded-lg overflow-hidden bg-gray-100 items-center justify-center'>
           {item.imageUrl ? (
             <Image
               source={{ uri: `${baseURL}${item.imageUrl}` }}
@@ -72,7 +72,7 @@ export default function GuestHouseCard({
 
         <View className='flex-1 ml-3 justify-start gap-0.5'>
           <Text
-            className='text-[#1d2838] text-sm font-normal leading-[21px]'
+            className='text-[#1d2838] text-[15px] font-normal leading-[21px]'
             numberOfLines={1}
           >
             {displayTitle}
@@ -80,7 +80,7 @@ export default function GuestHouseCard({
           <Text className='text-[#495565] text-xs font-normal leading-[18px]'>
             {item.region}
           </Text>
-          <View className='flex-row gap-1'>
+          <View className='mt-1.5 flex-row gap-1'>
             {item.tags.map((tag, index) => (
               <Tag
                 key={index}

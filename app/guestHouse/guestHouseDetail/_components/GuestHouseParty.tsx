@@ -33,7 +33,11 @@ export default function GuestHouseParty({
       setSectionYPositions={setSectionYPositions}
     >
       <View className='pt-6' />
-      {transformedParties &&
+      {!transformedParties || transformedParties.length === 0 ? (
+        <View className='bg-[#F9FAFB] rounded-lg p-3'>
+          <TextSize color='#4A5565' size={14} content='등록된 파티 정보가 없어요 🥲' />
+        </View>
+      ) : (
         transformedParties.map((party, i) => (
           <View key={i} className='border border-[#E5E7EB] rounded-lg'>
             <GehaImage
@@ -116,7 +120,8 @@ export default function GuestHouseParty({
               </View>
             </View>
           </View>
-        ))}
+        ))
+      )}
     </SectionYPosition>
   );
 }

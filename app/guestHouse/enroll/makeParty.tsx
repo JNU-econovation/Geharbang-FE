@@ -2,7 +2,6 @@ import { Feather } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  findNodeHandle,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -154,10 +153,9 @@ export default function MakeParty() {
         ? fieldRefs[firstErrField as keyof typeof fieldRefs]
         : null;
 
-      const parentHandle = findNodeHandle(scrollViewRef.current);
-      if (parentHandle && targetRef?.current) {
+      if (targetRef?.current && scrollViewRef.current) {
         targetRef.current.measureLayout(
-          parentHandle,
+          scrollViewRef.current as unknown as View,
           (_x: number, y: number) =>
             scrollViewRef.current?.scrollTo({
               y: Math.max(0, y - 16),
@@ -238,7 +236,7 @@ export default function MakeParty() {
           ref={scrollViewRef}
           className='bg-[#F9FAFB]'
           style={{ paddingTop: 16, paddingHorizontal: 12 }}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 50 }}
         >
           <View
             className='bg-white p-4 w-full rounded-lg'
@@ -610,7 +608,7 @@ export default function MakeParty() {
                 isEditMode ? BUTTON_LABELS.EDIT_PARTY : BUTTON_LABELS.MAKE_PARTY
               }
               onPress={handleNext}
-              className='mt-4 mb-8'
+              className='mt-4'
             />
           </Flex>
         </ScrollView>

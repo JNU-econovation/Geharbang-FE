@@ -9,17 +9,26 @@ import Button from "@/src/components/ui/Button/Button";
 import Contact from "@/src/components/ui/Contact";
 import DetailPageBackArrow from "@/src/components/ui/DetailPageBackArrow";
 import TextSize from "@/src/components/ui/TextSize";
+import { useHandleSection } from "@/src/hooks/common/useHandleSection";
+import { useSectionToScroll } from "@/src/hooks/common/useSectionToScroll";
 import { useGuestHouseDetail } from "@/src/hooks/guestHouseDetail/useGuestHouseDetail";
-import { useHandleSection } from "@/src/hooks/stepDetail/useHandleSection";
-import { useSectionToScroll } from "@/src/hooks/stepDetail/useSectionToScroll";
+import { router, useLocalSearchParams } from "expo-router";
 import { GUESTHOUSE } from "@/src/utils/constants/pressSection";
+import GuestHouseInfo from "../_components/GuestHouseInfo";
 import GuestHouseIntro from "../_components/GuestHouseIntro";
 import GuestHouseParty from "../_components/GuestHouseParty";
 import ParlorType from "../_components/ParlorType";
 
 export default function GuestHouseDetail() {
-  const { scrollViewRef, setSectionYPositions, sectionToScroll } =
-    useSectionToScroll();
+  const { fromRegistration } = useLocalSearchParams<{ fromRegistration?: string }>();
+
+  const {
+    scrollViewRef,
+    setSectionYPositions,
+    sectionToScroll,
+    setContainerOffset,
+    setStickyHeaderHeight,
+  } = useSectionToScroll();
   const { selectedSection, handleSectionToScroll } = useHandleSection({
     sectionToScroll,
   });
@@ -33,6 +42,7 @@ export default function GuestHouseDetail() {
           content='게스트하우스 상세'
           shareTitle='게스트하우스 공유하기'
           shareMessage='게스트하우스를 공유해보세요!'
+          onBack={fromRegistration === 'true' ? () => router.replace('/(tabs)') : undefined}
         />
       </View>
       {isPending ? (
@@ -54,14 +64,19 @@ export default function GuestHouseDetail() {
         </View>
       ) : (
         <>
-          <ScrollView ref={scrollViewRef}>
+          <ScrollView ref={scrollViewRef} stickyHeaderIndices={[2]}>
             <GehaImage images={data?.imageUrls} height={280} page={true} />
 
-            <View className='px-4 pt-4'>
+            <View className='px-4 pt-4 pb-8'>
               <GehaInfo title={data?.guestHouseName} region={data?.region} />
             </View>
 
-            <View className='pt-8'>
+            <View
+              className='bg-white border-b border-gray-100'
+              onLayout={(e) =>
+                setStickyHeaderHeight(e.nativeEvent.layout.height)
+              }
+            >
               <PressSection
                 items={GUESTHOUSE}
                 handleSectionToScroll={handleSectionToScroll}
@@ -69,7 +84,10 @@ export default function GuestHouseDetail() {
               />
             </View>
 
-            <View className='px-4'>
+            <View
+              className='px-4'
+              onLayout={(e) => setContainerOffset(e.nativeEvent.layout.y)}
+            >
               <View className='pt-10' />
               <Address
                 setSectionYPositions={setSectionYPositions}
@@ -88,15 +106,12 @@ export default function GuestHouseDetail() {
                 introduction={data?.introduction}
               />
 
-              {data?.parties && data.parties.length > 0 && (
-                <View>
-                  <View className='pt-10' />
-                  <GuestHouseParty
-                    setSectionYPositions={setSectionYPositions}
-                    parties={data.parties}
-                  />
-                </View>
-              )}
+              <View className='pt-10' />
+              <GuestHouseInfo
+                setSectionYPositions={setSectionYPositions}
+                amenities={data?.amenities}
+                moods={data?.moods}
+              />
 
               <View className='pt-10' />
               <GuestHouseParty

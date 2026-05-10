@@ -33,8 +33,7 @@ export default function PostingListHeader({
           <BackArrorHeader content={title} />
         </View>
 
-        <AdBanner />
-        <View className='my-4 px-4 '>
+        <View className='mb-3 px-4 '>
           <SearchInput
             value={searchText}
             onChangeText={onSearchChange}
