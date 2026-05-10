@@ -1,0 +1,502 @@
+# Geharbang-FE 학습 가이드
+
+이 문서는 Geharbang-FE 코드를 읽으면서 같이 공부하면 좋은 주제를 정리한 문서다.
+React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 쓰이는 흐름을 따라가며 학습하는 것을 목표로 한다.
+
+---
+
+## 1. Expo Router와 앱 화면 구조
+
+### 공부할 것
+
+- 파일 기반 라우팅
+- `(tabs)` 라우트 그룹
+- `_layout.tsx` 역할
+- 동적 라우트 `[id]`
+- `router.push`, `router.replace`, `useLocalSearchParams`
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 루트 레이아웃 | `app/_layout.tsx` |
+| 하단 탭 레이아웃 | `app/(tabs)/_layout.tsx` |
+| 내 정보 탭 | `app/(tabs)/profile.tsx` |
+| 게스트하우스 상세 동적 라우트 | `app/guestHouse/guestHouseDetail/[id]/index.tsx` |
+| 스텝 공고 상세 동적 라우트 | `app/step/stepDetail/[id]/index.tsx` |
+| 게스트하우스 등록 플로우 | `app/guestHouse/enroll/*` |
+| 스텝 공고 등록 플로우 | `app/step/recruitment/*` |
+
+### 코드에서 확인할 포인트
+
+- `app/_layout.tsx`에서 `QueryClientProvider`, `SafeAreaProvider`, `ThemeProvider`, Sentry, 폰트 로딩, 인증 토큰 로딩을 묶는다.
+- 멀티스텝 폼 라우트는 `gestureEnabled: false`로 뒤로가기 제스처를 제한한다.
+- `(tabs)` 폴더는 URL에는 직접 나타나지 않는 라우트 그룹이다.
+
+### 직접 해볼 것
+
+- `profile.tsx`에서 사장님 메뉴를 눌렀을 때 어떤 라우트로 이동하는지 따라가기
+- `[id]` 폴더 화면에서 id를 읽어 API 호출에 넘기는 흐름을 확인하기
+
+---
+
+## 2. React Query로 서버 상태 관리하기
+
+### 공부할 것
+
+- `useQuery`와 `useMutation`
+- queryKey 설계
+- `enabled` 조건
+- `invalidateQueries`
+- 로딩/에러 상태 처리
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 게스트하우스 추천 조회 | `src/hooks/home/useGuestHouseRecommendation.ts` |
+| 스텝 공고 목록 조회 | `src/hooks/stepList/useStaffRecruitmentList.ts` |
+| 내 게스트하우스 관리 | `src/hooks/myGuestHouse/useMyGuestHouse.ts` |
+| 내 구인 공고 관리 | `src/hooks/myStepRecruitment/useMyStepRecruitment.ts` |
+| 게스트하우스 등록 mutation | `src/hooks/guestHouse/useGuestHouseEnrollment.ts` |
+| 스텝 공고 등록 mutation | `src/hooks/stepRecruitment/useCreateStaffRecruitment.ts` |
+
+### 코드에서 확인할 포인트
+
+- 서버에서 받은 목록/상세 데이터는 Zustand가 아니라 React Query 또는 hook local state가 관리한다.
+- 삭제/상태 변경 성공 후에는 관련 queryKey를 무효화해서 화면을 다시 동기화한다.
+- `useStaffRecruitmentList`는 `useInfiniteQuery` 대신 직접 페이지 상태와 `loadMore()`를 관리한다.
+- 찜 토글은 현재 목록 cache를 직접 갱신하지 않고 카드 로컬 상태에서 optimistic update와 rollback을 처리한다.
+
+### 직접 해볼 것
+
+- `usePatchMyGuestHouseStatus()` 성공 후 어떤 queryKey가 무효화되는지 확인하기
+- 게스트하우스 수정 API를 붙인다면 어떤 queryKey를 invalidate해야 하는지 적어 보기
+- `useToggleWish`가 `type`에 따라 스텝 공고/게스트하우스 찜 API를 어떻게 나누어 호출하는지 따라가기
+- `useMyWishedPosts`가 내가 찜한 스텝 공고/게스트하우스 목록 API를 기존 목록 응답 타입으로 재사용하는지 확인하기
+
+---
+
+## 3. Axios 인스턴스와 인증 토큰
+
+### 공부할 것
+
+- Axios instance
+- request interceptor
+- Authorization Bearer header
+- Expo Secure Store
+- 공개 API와 인증 API 분리
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| Axios 설정 | `src/services/api/customAxios.ts` |
+| 토큰 전역 상태 | `src/stores/auth/useAuthStore.ts` |
+| Secure Store 래퍼 | `src/utils/login/secureStore.ts` |
+| OAuth callback 처리 | `app/oauth-callback.tsx` |
+| 로그인 URL 요청 | `src/services/login/loginUrlRequest.ts` |
+| OAuth 인증 요청 | `src/services/login/oauthAuth.ts` |
+
+### 코드에서 확인할 포인트
+
+- `axiosPrivate`는 요청마다 Secure Store에서 access token을 읽어 `Authorization: Bearer {token}`을 붙인다.
+- `axiosPublic`은 공개 목록 조회나 로그인처럼 토큰이 필요 없는 API에 사용한다.
+- `axiosOptionalAuth`는 토큰이 있으면 붙이고 없으면 그대로 요청한다. 비회원도 볼 수 있지만 로그인 사용자의 `isWished`가 필요한 게스트하우스/스텝 공고 목록과 상세 조회에 사용한다.
+- 찜 추가/삭제 API는 로그인 필수이므로 `axiosPrivate`를 사용한다.
+- 앱 시작 시 `useAuthStore.loadToken()`을 호출하고, `isAuthReady`가 true가 될 때까지 화면을 렌더링하지 않는다.
+
+### 직접 해볼 것
+
+- 토큰이 없는 상태에서 `axiosPrivate` API를 호출하면 서버가 어떻게 응답하는지 확인하기
+- 공개 조회 API에 `axiosPrivate`를 쓰면 어떤 문제가 생길 수 있는지 정리하기
+- `axiosOptionalAuth`를 쓰는 API에서 로그인/비로그인 응답의 `isWished` 값이 어떻게 달라지는지 비교하기
+
+---
+
+## 4. Zustand와 멀티스텝 폼 상태
+
+### 공부할 것
+
+- Zustand store
+- slice 패턴
+- `persist` middleware
+- AsyncStorage
+- Date 직렬화/역직렬화
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 게스트하우스 등록 스토어 | `src/stores/guestHouse/useGuestHouseStore.ts` |
+| 게스트하우스 단계별 slice | `src/stores/guestHouse/slice/*` |
+| 스텝 공고 등록 스토어 | `src/stores/stepRecruitment/useStepRecruitmentStore.ts` |
+| 스텝 공고 단계별 slice | `src/stores/stepRecruitment/slice/*` |
+| 지원서 작성 스토어 | `src/stores/application/useApplicationSlice.ts` |
+| 스토어 타입 | `src/types/store/*` |
+
+### 코드에서 확인할 포인트
+
+- 게스트하우스 등록 스토어는 `guesthouse-enrollment-storage` key로 AsyncStorage에 저장된다.
+- 스텝 공고 등록 스토어는 `step-recruitment-storage` key를 쓰고, `Date` 필드를 복원하기 위한 custom storage reviver가 있다.
+- 등록 완료 후에는 `resetAllData()`를 호출해 이전 작성 데이터가 남지 않게 해야 한다.
+
+### 직접 해볼 것
+
+- 앱을 껐다 켜도 게스트하우스 등록 데이터가 유지되는 흐름을 AsyncStorage 관점에서 설명하기
+- 스텝 공고 근무 시간의 `Date`가 JSON 저장 후 다시 `Date` 객체로 복원되는 이유를 설명하기
+
+---
+
+## 5. 멀티스텝 폼 검증과 제출 변환
+
+### 공부할 것
+
+- 단계별 validation
+- UI 상태와 API request DTO 분리
+- transformer 함수
+- enum/string 매핑
+- 로컬 이미지와 서버 이미지 URL 구분
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 게스트하우스 단계별 검증 | `src/hooks/guestHouse/useGuestHouseStep*Validation.ts` |
+| 게스트하우스 요청 변환 | `src/utils/guestHouse/enrollDataTransformer.ts` |
+| 스텝 공고 단계별 검증 | `src/hooks/stepRecruitment/useStep*Validation.ts` |
+| 스텝 공고 요청 변환 | `src/utils/stepRecruitment/transformStoreToApi.ts` |
+| 게스트하우스 제출 hook | `src/hooks/guestHouse/useGuestHouseEnrollment.ts` |
+| 스텝 공고 제출 hook | `src/hooks/stepRecruitment/useHandleStepRecruitmentSubmit.ts` |
+
+### 코드에서 확인할 포인트
+
+- UI에서 쓰는 값과 백엔드 enum 값이 다를 수 있어 transformer에서 변환한다.
+- 게스트하우스 이미지 제출 전 `file://` 로컬 이미지는 먼저 업로드하고, 서버 URL만 request body에 넣는다.
+- `transformImagesToUrls()`는 아직 업로드되지 않은 `file://` 이미지가 남아 있으면 에러를 던진다.
+
+### 직접 해볼 것
+
+- `디너 파티`가 API 요청에서 `디너_파티`로 바뀌는 흐름을 찾아보기
+- 수정 화면을 만들 때 기존 이미지 URL과 새 로컬 이미지를 어떻게 섞어 처리해야 하는지 설계해 보기
+
+---
+
+## 6. 이미지/파일 업로드
+
+### 공부할 것
+
+- Expo ImagePicker
+- Expo DocumentPicker
+- React Native FormData
+- multipart/form-data
+- 서버 URL과 앱 내부 파일 URI의 차이
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 다중 이미지 선택 hook | `src/hooks/form/useMultiImagePicker.ts` |
+| 단일 이미지 선택 hook | `src/hooks/form/useSingleImagePicker.ts` |
+| 게스트하우스 이미지 업로드 | `src/services/guestHouse/uploadGuestHouseImages.ts` |
+| 스텝 공고 이미지 업로드 | `src/services/step/uploadRecruitmentImages.ts` |
+| 지원서 프로필 이미지 업로드 | `src/services/application/uploadImage.ts` |
+| 인증서 파일 업로드 | `src/services/operator/uploadCertificateFile.ts` |
+| 인증서 파일 처리 유틸 | `src/utils/operator/fileOperations.ts`, `src/utils/operator/documentUpload.ts` |
+
+### 코드에서 확인할 포인트
+
+- 게스트하우스/스텝 공고 이미지는 `/api/v1/images`에 `images` 필드로 업로드하고 `imageUrl` 배열을 받는다.
+- 지원서 프로필 이미지는 `/api/v1/application/images`에 `image` 필드로 1장만 업로드한다.
+- 인증서 파일은 `file`, `fileType`, `fileName`을 함께 보낸다.
+
+### 직접 해볼 것
+
+- 이미지 업로드 응답 URL이 등록 request의 `imageUrls`에 들어가기까지 흐름을 그려 보기
+- 수정 API를 붙일 때 이미 업로드된 URL은 다시 업로드하지 않아야 하는 이유를 설명하기
+
+---
+
+## 7. 권한 UI 분기와 사용자 프로필
+
+### 공부할 것
+
+- 인증 여부와 권한 여부의 차이
+- `isOwner`, `inReview`, `isAdmin`, `certificateStatus` 의미
+- 401/403 에러 처리
+- 권한 UI와 서버 권한 검증의 관계
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 내 정보 화면 | `app/(tabs)/profile.tsx` |
+| 프로필 조회 service | `src/services/application/myApplication/myInfomation.ts` |
+| 프로필 조회 hook | `src/hooks/application/myApplication/useMyInfomation.ts` |
+| 인증서 제출 화면 | `app/operator/verify/index.tsx` |
+| 인증서 심사 화면 | `app/operator/management/index.tsx` |
+| 인증서 승인/거부 hook | `src/hooks/operator/useUpdateCertificateStatus.ts` |
+
+### 코드에서 확인할 포인트
+
+- 사장님 메뉴는 `isOwner` 기준으로 표시한다.
+- 시스템 운영자 심사 메뉴는 `isAdmin` 기준으로 표시한다.
+- `inReview`는 심사 중 안내에 사용하고, 사장님 메뉴 노출 기준으로 쓰면 안 된다.
+- 현재 프로필 조회 hook은 지원서 존재 여부와 결합되어 있어, 지원서가 없는 사용자도 권한 정보를 볼 수 있도록 분리할 필요가 있다.
+
+### 직접 해볼 것
+
+- 지원서를 작성하지 않았지만 사장님 인증은 완료된 사용자가 내 정보 화면에서 어떤 문제가 생길지 시나리오를 써 보기
+- 403 `NOT_APPROVED_OWNER`가 발생했을 때 어떤 hook에서 Alert를 띄우는지 확인하기
+
+---
+
+## 8. 목록 필터, 검색, 페이지네이션
+
+### 공부할 것
+
+- controlled input
+- debounce
+- query string 만들기
+- 무한 스크롤
+- AbortController
+- hasNext 기반 페이지 종료
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 게스트하우스 목록 hook | `src/hooks/guestHouse/useGuestHousePostList.ts` |
+| 스텝 공고 목록 hook | `src/hooks/stepList/useStaffRecruitmentList.ts` |
+| 게스트하우스 목록 service | `src/services/guestHouse/guestHouseList.ts` |
+| 스텝 공고 목록 service | `src/services/step/staffRecruitment.ts` |
+| 필터 상수 | `src/utils/constants/filterOptions.ts` |
+| debounce hook | `src/hooks/useDebounce.ts` |
+
+### 코드에서 확인할 포인트
+
+- 검색어는 300ms debounce 후 요청한다.
+- 필터가 배열이면 같은 query key를 여러 번 append한다. 예: `region=제주시&region=서귀포시`
+- 이전 요청이 남아 있으면 AbortController로 취소한다.
+
+### 직접 해볼 것
+
+- 스텝 공고 목록에서 필터를 바꾸면 `page`, `data`, `hasMore`가 어떻게 초기화되는지 따라가기
+- BE Querydsl 필터 조건과 FE query string 이름이 맞는지 대조해 보기
+
+---
+
+## 9. 공통 UI 컴포넌트와 NativeWind
+
+### 공부할 것
+
+- React Native 기본 컴포넌트
+- NativeWind className
+- tailwind-variants
+- 공통 컴포넌트 추상화 기준
+- controlled component
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 버튼 | `src/components/ui/Button/Button.tsx`, `button.variants.ts` |
+| 텍스트 | `src/components/ui/TextSize.tsx` |
+| 입력 | `src/components/ui/TextInput.tsx` |
+| 체크박스 | `src/components/ui/Checkbox/*` |
+| 폼 섹션 | `src/components/ui/Form/*` |
+| 모달 | `src/components/ui/Modal/*` |
+| 레이아웃 | `src/components/layout/*` |
+| 색상 상수 | `src/utils/constants/colors.ts` |
+| Tailwind 설정 | `tailwind.config.js` |
+
+### 코드에서 확인할 포인트
+
+- 공통 UI는 `src/components/ui`, 화면 전용 컴포넌트는 `app/{feature}/_components`에 둔다.
+- Button은 variant를 분리해 화면마다 색상/상태를 직접 중복 구현하지 않는다.
+- `TextSize`를 사용해 텍스트 스타일을 통일한다.
+
+### 직접 해볼 것
+
+- 기존 Button variant에 없는 상태가 필요할 때 새 variant를 어디에 추가해야 하는지 찾아보기
+- 화면 전용 컴포넌트를 공통 컴포넌트로 승격해야 하는 기준을 사례로 정리하기
+
+---
+
+## 10. 타입스크립트 타입 설계
+
+### 공부할 것
+
+- interface와 type 차이
+- API request/response 타입
+- 도메인 모델 타입
+- store 타입
+- nullable과 optional
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 게스트하우스 등록 request 타입 | `src/types/api/guestHouse/GuestHouseEnrollRequest.ts` |
+| 게스트하우스 목록 모델 | `src/types/models/guestHouse/types.ts` |
+| 스텝 공고 request 타입 | `src/types/models/stepRecruitment/StaffRecruitmentRequest.ts` |
+| 게스트하우스 store 타입 | `src/types/store/guestHouseStore.ts` |
+| 스텝 공고 store 타입 | `src/types/store/stepRecruitmentStore.ts` |
+| 공통 파일 타입 | `src/types/File.ts` |
+
+### 코드에서 확인할 포인트
+
+- API request 타입은 백엔드 DTO와 필드명이 맞아야 한다.
+- UI 단계별 store 타입은 사용자가 입력하기 좋은 형태이고, submit 직전에 API 타입으로 변환된다.
+- nullable 필드는 백엔드와 맞춰 `null`을 명확히 보내는 편이 좋다.
+
+### 직접 해볼 것
+
+- `GuestHouseEnrollData`와 `GuestHouseEnrollRequest`가 어떻게 다른지 비교해 보기
+- 백엔드 DTO에 필드가 추가되면 FE에서 어떤 타입, transformer, validation을 수정해야 하는지 체크리스트 만들기
+
+---
+
+## 11. 에러 처리와 사용자 피드백
+
+### 공부할 것
+
+- AxiosError 판별
+- HTTP status별 처리
+- Alert와 화면 에러 메시지
+- 요청 취소 에러 무시
+- 로딩 상태와 버튼 비활성화
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| API 에러 메시지 유틸 | `src/utils/api/errorHandler.ts` |
+| 게스트하우스 등록 403 처리 | `src/hooks/guestHouse/useGuestHouseEnrollment.ts` |
+| 스텝 공고 등록 403 처리 | `src/hooks/stepRecruitment/useCreateStaffRecruitment.ts` |
+| 목록 조회 에러 처리 | `src/hooks/stepList/useStaffRecruitmentList.ts` |
+| 공통 에러 화면 | `src/components/ui/ErrorMessage.tsx` |
+| 로딩 스켈레톤 | `src/components/ui/LoadingSkeleton.tsx` |
+
+### 코드에서 확인할 포인트
+
+- 403은 사장님 인증 필요 Alert로 사용자에게 안내한다.
+- 요청 취소(`AbortError`, `CanceledError`)는 실제 실패가 아니므로 에러 UI를 띄우지 않는다.
+- mutation의 `isPending`을 버튼 로딩/비활성화에 연결한다.
+
+### 직접 해볼 것
+
+- 네트워크를 끊고 목록 조회를 했을 때 어떤 에러 메시지가 표시되는지 확인하기
+- 등록 버튼을 여러 번 누르지 못하게 하려면 어떤 상태를 Button에 넘겨야 하는지 찾기
+
+---
+
+## 12. 지도, 주소, 외부 API
+
+### 공부할 것
+
+- react-native-maps
+- Geocoding
+- Google Maps API key
+- 주소와 좌표 저장 구조
+- 앱 환경변수와 빌드 설정
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 주소 입력 컴포넌트 | `src/components/ui/Address/Address.tsx` |
+| 지도 컴포넌트 | `src/components/ui/Address/AddressMap.tsx` |
+| 주소 상세 지도 | `src/components/ui/AddressMapDetail.tsx` |
+| Google Maps 설정 | `app.config.ts` |
+| 위치 request 변환 | `src/utils/guestHouse/enrollDataTransformer.ts`, `src/utils/stepRecruitment/transformStoreToApi.ts` |
+
+### 코드에서 확인할 포인트
+
+- API 요청의 좌표는 `[longitude, latitude]` 순서로 만들어진다.
+- `GOOGLE_MAPS_API_KEY`는 `app.config.ts`에서 iOS/Android config에 주입된다.
+
+### 직접 해볼 것
+
+- 주소 선택 후 store에 저장되는 값과 API request의 `location.coordinates` 값을 비교해 보기
+- 위도/경도 순서를 반대로 보내면 백엔드 검색/지도 표시에서 어떤 문제가 생길지 생각해 보기
+
+---
+
+## 13. 빌드, 환경변수, 앱 설정
+
+### 공부할 것
+
+- Expo app config
+- EAS build profile
+- development build와 production build 차이
+- `EXPO_PUBLIC_` 환경변수
+- Sentry 초기화
+- SVG transformer
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| Expo 설정 | `app.config.ts` |
+| EAS 빌드 설정 | `eas.json` |
+| Metro/SVG 설정 | `metro.config.js` |
+| Babel/NativeWind 설정 | `babel.config.js` |
+| Tailwind 설정 | `tailwind.config.js` |
+| Sentry 초기화 | `app/_layout.tsx` |
+
+### 코드에서 확인할 포인트
+
+- `EXPO_PUBLIC_BASE_URL`은 앱 번들에서 접근 가능한 API 서버 주소다.
+- `GOOGLE_MAPS_API_KEY`는 `app.config.ts`를 통해 native config에 들어간다.
+- 현재 앱 설정은 `app.config.ts`로 단일화한다. `app.json`을 같이 두면 Expo 동적 config 검증에서 충돌이 날 수 있다.
+- `@sentry/react-native`와 `expo-web-browser`는 `app.config.ts`의 `plugins`에 등록되어야 한다.
+- 현재 OTA 업데이트용 `expo-updates`는 설치되어 있지 않으므로 앱 코드 변경은 새 빌드가 필요하다.
+
+### 직접 해볼 것
+
+- `development`, `preview`, `production` 빌드 프로필의 차이를 `eas.json`에서 정리하기
+- `.env` 값을 바꿨을 때 Metro 재시작이 필요한 경우를 확인하기
+- `npx tsc --noEmit`, `npx expo-doctor`, `npx expo export --platform android --output-dir /tmp/geharbang-fe-export --clear`가 각각 무엇을 검증하는지 정리하기
+- `npm audit fix --force`가 Expo SDK 다운그레이드를 제안할 때 바로 적용하면 안 되는 이유를 설명하기
+
+---
+
+## 14. 백엔드와 맞춰 읽기
+
+### 공부할 것
+
+- API 명세와 FE 타입 동기화
+- BE enum과 FE 표시 문구 매핑
+- 401/403/404 응답 처리
+- 전체 교체형 수정 API
+- `isWished`처럼 boolean 필드명이 BE JSON 응답과 FE 타입에서 정확히 맞아야 하는 이유
+- BE가 `imageUrl: ""`를 내려줄 때 FE 카드가 placeholder를 보여주는 fallback 처리
+
+### 같이 볼 파일
+
+| FE | BE |
+|----|----|
+| `src/types/api/guestHouse/GuestHouseEnrollRequest.ts` | `GuestHouseCreateRequest.java` |
+| `src/utils/guestHouse/enrollDataTransformer.ts` | `GuestHouseMapper.java`, `GuestHousePostService.java` |
+| `src/types/models/stepRecruitment/StaffRecruitmentRequest.ts` | 스텝 공고 request DTO, `StaffRecruitmentService.java` |
+| `src/services/api/customAxios.ts` | `TokenProcessor.java`, `@UserId` 처리 코드 |
+| `app/(tabs)/profile.tsx` | `UserService.getProfile()` |
+
+### 직접 해볼 것
+
+- 게스트하우스 등록 request를 FE transformer 결과와 BE DTO 기준으로 필드별 대조하기
+- 백엔드에 추가된 `PUT /api/v1/guest-houses/{id}`를 프론트에 연결할 때 필요한 파일 목록을 작성하기
+
+---
+
+## 추천 학습 순서
+
+1. Expo Router 화면 구조와 `_layout.tsx` 이해
+2. Axios, Secure Store, AuthStore로 인증 흐름 이해
+3. React Query의 조회/변경/캐시 무효화 이해
+4. Zustand persist로 멀티스텝 폼 상태 이해
+5. transformer로 UI 데이터가 API request로 바뀌는 과정 이해
+6. 이미지 업로드와 서버 URL 처리 이해
+7. 권한 UI 분기와 403 처리 이해
+8. BE DTO와 FE 타입을 나란히 보며 수정 API 연동 설계
