@@ -1,9 +1,10 @@
 import Tag from "@/src/components/ui/Tag/Tag";
+import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
 import { GuestHousePost } from "@/src/types/models/guestHouse/types";
 import { StaffRecruitmentPost } from "@/src/types/models/step/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
@@ -20,6 +21,18 @@ export default function GuestHouseCard({
   onPress,
 }: GuestHouseCardProps) {
   const isStepRecruitment = type === "stepRecruitment";
+  const [isWished, setIsWished] = useState(item.isWished);
+
+  useEffect(() => {
+    setIsWished(item.isWished);
+  }, [item.id, item.isWished]);
+
+  const { mutate: toggleWish } = useToggleWish({
+    type,
+    id: item.id,
+    onOptimisticUpdate: setIsWished,
+    onError: () => setIsWished(item.isWished),
+  });
 
   const displayTitle = isStepRecruitment
     ? (item as StaffRecruitmentPost).title
@@ -80,11 +93,14 @@ export default function GuestHouseCard({
           </View>
         </View>
 
-        <TouchableOpacity className='w-6 h-6 items-center justify-center'>
+        <TouchableOpacity
+          className='w-6 h-6 items-center justify-center'
+          onPress={() => toggleWish(isWished)}
+        >
           <Ionicons
-            name={item.isWished ? "heart" : "heart-outline"}
+            name={isWished ? "heart" : "heart-outline"}
             size={16}
-            color={item.isWished ? "#ef4444" : "#d1d5db"}
+            color={isWished ? "#ef4444" : "#d1d5db"}
           />
         </TouchableOpacity>
       </View>
