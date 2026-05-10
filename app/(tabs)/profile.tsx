@@ -107,7 +107,7 @@ export default function ProfileScreen() {
                 )}
               </View>
               {myApplicationExist && (
-                <Pressable onPress={() => router.push("/my/application")}>
+                <Pressable onPress={() => router.push("/my/application" as any)}>
                   <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
                     <TextSize
                       color='#101828'
@@ -128,7 +128,7 @@ export default function ProfileScreen() {
                 />
               </Pressable>
 
-              <Pressable onPress={() => router.push("/my/application/status")}>
+              <Pressable onPress={() => router.push("/my/application/status" as any)}>
                 <MyActivity
                   content='지원 내역'
                   icon={<ApplicationStatusIcon width={18} height={18} />}
