@@ -3,6 +3,8 @@ import React, { ReactNode } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 interface ItemListContainerProps<T> {
+  title?: string;
+  description?: string;
   items: T[];
   emptyIcon?: keyof typeof Feather.glyphMap;
   addIcon?: keyof typeof Feather.glyphMap;
@@ -14,6 +16,8 @@ interface ItemListContainerProps<T> {
 }
 
 const ItemListContainer = <T,>({
+  title,
+  description,
   items,
   emptyIcon = "plus",
   addIcon = "plus",
@@ -27,6 +31,19 @@ const ItemListContainer = <T,>({
 
   return (
     <View>
+      {(title || description) && (
+        <View className='mb-4'>
+          {title && (
+            <Text className='text-lg font-semibold text-gray-900'>
+              {title}
+            </Text>
+          )}
+          {description && (
+            <Text className='text-sm text-gray-500 mt-1'>{description}</Text>
+          )}
+        </View>
+      )}
+
       {error && (
         <View className='bg-red-50 border border-red-200 rounded-lg p-3 mb-3'>
           <Text className='text-red-600 text-sm'>{error}</Text>
