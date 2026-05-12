@@ -9,13 +9,12 @@ import {
   StepRecommendationCard,
 } from "@/src/types/models/home/GuestHouseCard";
 import { COLORS } from "@/src/utils/constants/colors";
+import { buildAssetUrl } from "@/src/config/url";
 
 interface ItemCardProps {
   item: StepRecommendationCard | guestHouseRecommendationCard;
   type: "guestHouse" | "stepNotice";
 }
-
-const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export function ItemCard({ item, type }: ItemCardProps) {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
@@ -43,7 +42,7 @@ export function ItemCard({ item, type }: ItemCardProps) {
         onPress={handleCardPress}
       >
         <Image
-          source={{ uri: `${baseURL}${item.imageUrl}` }}
+          source={{ uri: buildAssetUrl(item.imageUrl) }}
           className='w-full h-36'
         />
         <View className='p-3 gap-2'>
