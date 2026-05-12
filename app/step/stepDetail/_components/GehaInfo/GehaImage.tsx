@@ -5,6 +5,7 @@ import Bed from "@/public/svgs/GuestHouse/bed.svg";
 import ModalImage from "@/src/components/ui/Modal/ModalImage";
 import TextSize from "@/src/components/ui/TextSize";
 import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
+import { buildAssetUrl } from "@/src/config/url";
 
 interface GehaImageProps {
   images?: string[];
@@ -35,11 +36,6 @@ export default function GehaImage({
   if (!images || images.length === 0) {
     return;
   }
-
-  const resolveImageUri = (uri: string) => {
-    if (uri.startsWith("https")) return uri;
-    return `${process.env.EXPO_PUBLIC_BASE_URL}${uri}`;
-  };
 
   if (headCountType === "_1인실") {
     headCountType = "1인실";
@@ -74,7 +70,7 @@ export default function GehaImage({
             }}
           >
             <Image
-              source={{ uri: resolveImageUri(img) }}
+              source={{ uri: buildAssetUrl(img) }}
               className={`w-full h-full ${(party || type) && "rounded-t-lg"}`}
               resizeMode='cover'
             />
