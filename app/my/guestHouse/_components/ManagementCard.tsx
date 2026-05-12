@@ -3,14 +3,13 @@ import GehaLocation from "@/public/svgs/StepDetail/gehaLocation.svg";
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Pressable, View } from "react-native";
 import StatusBadge from "./StatusBadge";
-
-const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 interface ManagementCardProps {
   id: number;
@@ -48,7 +47,7 @@ export default function ManagementCard({
     >
       <View className='relative w-full h-44'>
         <Image
-          source={{ uri: `${baseURL}${imageUrl}` }}
+          source={{ uri: buildAssetUrl(imageUrl) }}
           className='w-full h-full'
           resizeMode='cover'
         />
