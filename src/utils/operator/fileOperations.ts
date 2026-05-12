@@ -1,7 +1,23 @@
-import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import * as WebBrowser from 'expo-web-browser';
 import { Alert, Platform } from 'react-native';
+import { buildAssetUrl } from '@/src/config/url';
+
+type FileInfo = {
+  exists: boolean;
+  size?: number;
+};
+
+type FileSystemLegacy = {
+  documentDirectory: string | null;
+  cacheDirectory: string | null;
+  getInfoAsync: (fileUri: string) => Promise<FileInfo>;
+  deleteAsync: (fileUri: string) => Promise<void>;
+  downloadAsync: (uri: string, fileUri: string) => Promise<{ uri: string }>;
+  getContentUriAsync: (fileUri: string) => Promise<string>;
+};
+
+const FileSystem = require('expo-file-system/legacy') as FileSystemLegacy;
 
 /**
  * 파일 미리보기 (브라우저에서 열기)
@@ -15,7 +31,7 @@ export const previewFile = async (
 ): Promise<boolean> => {
   try {
     // 서버 URL로 직접 브라우저에서 열기 (이미지처럼)
-    const fullUrl = `${process.env.EXPO_PUBLIC_BASE_URL}${fileUrl}`;
+    const fullUrl = buildAssetUrl(fileUrl);
 
     await WebBrowser.openBrowserAsync(fullUrl, {
       presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
@@ -50,7 +66,7 @@ export const downloadFile = async (
       return null;
     }
 
-    const fullUrl = `${process.env.EXPO_PUBLIC_BASE_URL}${fileUrl}`;
+    const fullUrl = buildAssetUrl(fileUrl);
 
     const directory =
       Platform.OS === 'ios'
@@ -64,7 +80,7 @@ export const downloadFile = async (
     const fileInfo = await FileSystem.getInfoAsync(downloadResult.uri);
     const maxSize = 10 * 1024 * 1024;
 
-    if (fileInfo.exists && fileInfo.size > maxSize) {
+    if (fileInfo.exists && typeof fileInfo.size === 'number' && fileInfo.size > maxSize) {
       await FileSystem.deleteAsync(downloadResult.uri);
       Alert.alert('오류', '파일 크기는 최대 10MB까지 다운로드 가능합니다.');
       return null;
