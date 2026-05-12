@@ -2,6 +2,7 @@ import { Dimensions, FlatList, Image, Pressable, View } from "react-native";
 
 import ModalImage from "@/src/components/ui/Modal/ModalImage";
 import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
+import { buildAssetUrl } from "@/src/config/url";
 
 interface IntroImgSliderProps {
   images?: string[];
@@ -31,7 +32,7 @@ export default function IntroImgSlider({ images }: IntroImgSliderProps) {
             }}
           >
             <Image
-              source={{ uri: `${process.env.EXPO_PUBLIC_BASE_URL}${item}` }}
+              source={{ uri: buildAssetUrl(item) }}
               className='w-full h-full rounded-3xl'
               resizeMode='cover'
             />
