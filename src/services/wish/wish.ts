@@ -32,7 +32,12 @@ export const getMyWishedStaffRecruitments = async (
   pageNumber = 0
 ): Promise<StaffRecruitmentResponse> => {
   const response = await axiosPrivate.get<StaffRecruitmentResponse>(
-    `/api/v1/wish/staff-recruitment/my?pageNumber=${pageNumber}`
+    "/api/v1/wish/staff-recruitment/my",
+    {
+      params: {
+        pageNumber,
+      },
+    }
   );
   return response.data;
 };
@@ -41,7 +46,12 @@ export const getMyWishedGuestHouses = async (
   pageNumber = 0
 ): Promise<GuestHousePostResponse> => {
   const response = await axiosPrivate.get<GuestHousePostResponse>(
-    `/api/v1/wish/guest-houses/my?pageNumber=${pageNumber}`
+    "/api/v1/wish/guest-houses/my",
+    {
+      params: {
+        pageNumber,
+      },
+    }
   );
   return response.data;
 };
