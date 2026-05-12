@@ -30,7 +30,7 @@ export default function OAuthCallback() {
 
       await Promise.all([
         setAccessToken(TOKEN_KEYS.ACCESS_TOKEN, accessToken),
-        setAccessToken("userId", userId),
+        setAccessToken(TOKEN_KEYS.USER_ID, userId),
       ]);
 
       if (cancelled) return;
