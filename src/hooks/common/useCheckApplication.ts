@@ -18,7 +18,7 @@ export const useCheckApplication = () => {
           { text: "닫기", style: "cancel" },
           {
             text: "내 지원서 보기",
-            onPress: () => router.push("/myPage/MyApplication"),
+            onPress: () => router.push("/my/application"),
           },
         ],
       );
