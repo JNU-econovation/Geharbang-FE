@@ -81,7 +81,8 @@ Geharbang-FE/
 │   ├── fonts/                # Noto Sans KR
 │   └── svgs/                 # SVG 아이콘/일러스트
 │
-└── .env                      # 환경변수 (EXPO_PUBLIC_BASE_URL 등)
+├── .env                      # 환경변수 (EXPO_PUBLIC_BASE_URL 등)
+└── src/config/url.ts         # API/이미지/파일 URL 공통 설정
 ```
 
 ---
@@ -162,6 +163,7 @@ app/
 | 훅 | `src/hooks/` | 비즈니스 로직, 상태 관리, API 호출 조합 |
 | 서비스 | `src/services/` | API 엔드포인트 호출 함수 |
 | Axios | `src/services/api/customAxios.ts` | 인증 헤더 주입, 기본 URL 설정 |
+| URL 설정 | `src/config/url.ts` | API/이미지/파일 URL 생성, fallback 관리 |
 | 스토어 | `src/stores/` | 전역 상태 (폼 데이터, 인증 토큰) |
 
 ---
@@ -209,11 +211,16 @@ Zustand와 React Query를 역할에 따라 분리해서 사용함.
 
 ## 7. API 통신
 
-### Axios 설정 (`src/services/api/customAxios.ts`)
+### Axios 설정 (`src/services/api/customAxios.ts`, `src/config/url.ts`)
 
 ```typescript
+export const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL ||
+  process.env.EXPO_PUBLIC_BASE_URL ||
+  "https://geharbang.org";
+
 // 인증이 필요한 API용 — 요청마다 토큰 자동 주입
-export const axiosPrivate = axios.create({ baseURL });
+export const axiosPrivate = axios.create({ baseURL: API_BASE_URL });
 axiosPrivate.interceptors.request.use(async (config) => {
   const token = await getAccessToken(TOKEN_KEYS.ACCESS_TOKEN);
   if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -221,10 +228,10 @@ axiosPrivate.interceptors.request.use(async (config) => {
 });
 
 // 인증 불필요한 API용 (로그인 등)
-export const axiosPublic = axios.create({ baseURL });
+export const axiosPublic = axios.create({ baseURL: API_BASE_URL });
 
 // 공개 조회 API지만 로그인 사용자의 개인화 필드가 필요한 경우
-export const axiosOptionalAuth = axios.create({ baseURL });
+export const axiosOptionalAuth = axios.create({ baseURL: API_BASE_URL });
 axiosOptionalAuth.interceptors.request.use(async (config) => {
   const token = await getAccessToken(TOKEN_KEYS.ACCESS_TOKEN);
   if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -232,7 +239,9 @@ axiosOptionalAuth.interceptors.request.use(async (config) => {
 });
 ```
 
-`baseURL`은 `.env`의 `EXPO_PUBLIC_BASE_URL` 또는 `EXPO_PUBLIC_API_URL` 값이며, 값이 없으면 `https://geharbang.org`를 기본값으로 사용한다.
+이미지와 파일 경로는 `src/config/url.ts`의 `buildAssetUrl()`을 통해 공통 생성한다. 이 함수는 상대 경로에 `ASSET_BASE_URL`을 붙이고, 이미 `http/https`인 절대 URL은 그대로 사용한다.
+
+`API_BASE_URL`은 `.env`의 `EXPO_PUBLIC_API_URL` 또는 `EXPO_PUBLIC_BASE_URL` 값이며, 값이 없으면 `https://geharbang.org`를 기본값으로 사용한다.
 게스트하우스/스텝 공고 목록과 상세처럼 비회원도 조회 가능하지만 로그인 사용자의 `isWished`가 필요한 API는 `axiosOptionalAuth`를 사용한다.
 
 ### 서비스 함수 패턴
@@ -262,6 +271,7 @@ export const createApplication = async (data: ApplicationData) => {
 
 내가 찜한 목록은 `GET /api/v1/wish/staff-recruitment/my`와 `GET /api/v1/wish/guest-houses/my`를 사용한다.
 FE 서비스 함수는 `src/services/wish/wish.ts`에 있고, 화면에서는 `src/hooks/wish/useToggleWish.ts`와 `src/hooks/wish/useMyWishedPosts.ts`를 통해 호출한다.
+페이지 번호는 수동 query string 대신 Axios `params` 옵션으로 전달한다.
 목록 응답의 찜 여부 필드는 `isWished`이며, `wished`가 아니다.
 
 ### 이미지 업로드 패턴
@@ -341,12 +351,12 @@ useStaffRecruitmentList
   → 브라우저(WebView)에서 소셜 로그인
   → 소셜 서버 → 앱으로 딥링크 리다이렉트
     geharbang://oauth-callback?accessToken={token}&userId={id}
-  → accessToken을 Expo Secure Store에 저장
+  → accessToken, userId를 Expo Secure Store에 저장
   → useAuthStore.setAccessToken(token)
   → 로그인 완료
 
 [로그아웃]
-  → Secure Store에서 토큰 삭제
+  → Secure Store에서 accessToken, userId 삭제
   → useAuthStore.setAccessToken(null)
 
 [API 요청 시]
@@ -379,6 +389,7 @@ Step 2: 프로필
 ```
 Step 1: 기본 정보 (이름, 지역, 주소)
   - 주소 검색 → react-native-maps + geocoding
+  - 웹에서는 `AddressMapDetail.web.tsx` fallback UI 사용
 Step 2: 대표 이미지, 소개, 시설 & 분위기 (체크박스 다중선택)
 Step 3: 파티 구성 (파티 추가/수정/삭제)
 Step 4: 객실 구성 (객실 추가/수정/삭제, 가격 입력)
@@ -542,7 +553,7 @@ GuestHouseCard
 | `filterOptions.ts` | 필터 선택지 목록 |
 | `regions.ts` | 지역 목록 |
 | `mbti.ts` | MBTI 16가지 목록 |
-| `TokenKeys.ts` | 스토리지 키 상수 |
+| `TokenKeys.ts` | 스토리지 키 상수 (`ACCESS_TOKEN`, `USER_ID`) |
 
 ### 포맷터 (`src/utils/common/`)
 
@@ -577,7 +588,7 @@ onError: (error) => {
 
 ### 보안 스토리지 (`src/utils/login/secureStore.ts`)
 
-Expo Secure Store를 감싼 래퍼. 토큰 저장/조회/삭제를 추상화.
+Expo Secure Store를 감싼 래퍼. access token과 userId 저장/조회/삭제를 공통 처리한다.
 
 ---
 
@@ -587,8 +598,8 @@ Expo Secure Store를 감싼 래퍼. 토큰 저장/조회/삭제를 추상화.
 
 | 변수명 | 용도 |
 |--------|------|
-| `EXPO_PUBLIC_BASE_URL` | API 서버 주소 (예: `https://geharbang.org`) |
-| `EXPO_PUBLIC_API_URL` | API 서버 주소 fallback |
+| `EXPO_PUBLIC_BASE_URL` | 이미지/파일 URL 기본 주소, API URL fallback |
+| `EXPO_PUBLIC_API_URL` | API 요청 기본 주소 |
 | `EXPO_PUBLIC_SENTRY_DSN` | Sentry 에러 추적 DSN |
 | `GOOGLE_MAPS_API_KEY` | Google Maps/Geocoding API 키 |
 
@@ -609,7 +620,7 @@ Expo Secure Store를 감싼 래퍼. 토큰 저장/조회/삭제를 추상화.
 ```bash
 npx tsc --noEmit
 npx expo-doctor
-npx expo export --platform android --output-dir /tmp/geharbang-fe-export --clear
+npx expo export --platform web
 ```
 
 `expo-doctor` 기준으로 `app.json`과 `app.config.ts`를 동시에 유지하면 동적 config 충돌이 날 수 있으므로, 현재 앱 설정은 `app.config.ts`로 단일화한다.

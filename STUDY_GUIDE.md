@@ -104,6 +104,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 - `axiosPublic`은 공개 목록 조회나 로그인처럼 토큰이 필요 없는 API에 사용한다.
 - `axiosOptionalAuth`는 토큰이 있으면 붙이고 없으면 그대로 요청한다. 비회원도 볼 수 있지만 로그인 사용자의 `isWished`가 필요한 게스트하우스/스텝 공고 목록과 상세 조회에 사용한다.
 - 찜 추가/삭제 API는 로그인 필수이므로 `axiosPrivate`를 사용한다.
+- `src/config/url.ts`가 API 기본 주소와 이미지/파일 URL 생성 규칙을 함께 관리한다.
 - 앱 시작 시 `useAuthStore.loadToken()`을 호출하고, `isAuthReady`가 true가 될 때까지 화면을 렌더링하지 않는다.
 
 ### 직접 해볼 것
@@ -257,7 +258,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 
 - controlled input
 - debounce
-- query string 만들기
+- Axios `params` 옵션
 - 무한 스크롤
 - AbortController
 - hasNext 기반 페이지 종료
@@ -276,6 +277,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 ### 코드에서 확인할 포인트
 
 - 검색어는 300ms debounce 후 요청한다.
+- query parameter는 가능하면 Axios `params`로 전달한다.
 - 필터가 배열이면 같은 query key를 여러 번 append한다. 예: `region=제주시&region=서귀포시`
 - 이전 요청이 남아 있으면 AbortController로 취소한다.
 
@@ -407,7 +409,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 |------|------|
 | 주소 입력 컴포넌트 | `src/components/ui/Address/Address.tsx` |
 | 지도 컴포넌트 | `src/components/ui/Address/AddressMap.tsx` |
-| 주소 상세 지도 | `src/components/ui/AddressMapDetail.tsx` |
+| 주소 상세 지도 | `src/components/ui/AddressMapDetail.native.tsx`, `src/components/ui/AddressMapDetail.web.tsx` |
 | Google Maps 설정 | `app.config.ts` |
 | 위치 request 변환 | `src/utils/guestHouse/enrollDataTransformer.ts`, `src/utils/stepRecruitment/transformStoreToApi.ts` |
 
@@ -415,6 +417,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 
 - API 요청의 좌표는 `[longitude, latitude]` 순서로 만들어진다.
 - `GOOGLE_MAPS_API_KEY`는 `app.config.ts`에서 iOS/Android config에 주입된다.
+- 웹에서는 `react-native-maps` 대신 fallback UI를 렌더링하도록 플랫폼 파일을 분리했다.
 
 ### 직접 해볼 것
 
@@ -447,17 +450,19 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 
 ### 코드에서 확인할 포인트
 
-- `EXPO_PUBLIC_BASE_URL`은 앱 번들에서 접근 가능한 API 서버 주소다.
+- `EXPO_PUBLIC_API_URL`은 API 요청 기본 주소다.
+- `EXPO_PUBLIC_BASE_URL`은 이미지/파일 URL 기본 주소이며, API 주소 fallback으로도 사용된다.
 - `GOOGLE_MAPS_API_KEY`는 `app.config.ts`를 통해 native config에 들어간다.
 - 현재 앱 설정은 `app.config.ts`로 단일화한다. `app.json`을 같이 두면 Expo 동적 config 검증에서 충돌이 날 수 있다.
 - `@sentry/react-native`와 `expo-web-browser`는 `app.config.ts`의 `plugins`에 등록되어야 한다.
 - 현재 OTA 업데이트용 `expo-updates`는 설치되어 있지 않으므로 앱 코드 변경은 새 빌드가 필요하다.
+- `TOKEN_KEYS`에는 `ACCESS_TOKEN`, `USER_ID` 같은 Secure Store 키가 모여 있어 하드코딩을 줄인다.
 
 ### 직접 해볼 것
 
 - `development`, `preview`, `production` 빌드 프로필의 차이를 `eas.json`에서 정리하기
 - `.env` 값을 바꿨을 때 Metro 재시작이 필요한 경우를 확인하기
-- `npx tsc --noEmit`, `npx expo-doctor`, `npx expo export --platform android --output-dir /tmp/geharbang-fe-export --clear`가 각각 무엇을 검증하는지 정리하기
+- `npx tsc --noEmit`, `npx expo-doctor`, `npx expo export --platform web`가 각각 무엇을 검증하는지 정리하기
 - `npm audit fix --force`가 Expo SDK 다운그레이드를 제안할 때 바로 적용하면 안 되는 이유를 설명하기
 
 ---

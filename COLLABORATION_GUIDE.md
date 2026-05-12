@@ -177,6 +177,7 @@ router.replace("/login");
 - 멀티스텝 폼 화면은 `gestureEnabled: false` (스와이프 뒤로가기 막기)
 - 모달로 띄울 화면은 `presentation: 'modal'` 옵션 추가
 - 동적 라우트는 `[id]` 형식 사용
+- 플랫폼별 구현이 필요하면 `Component.native.tsx`, `Component.web.tsx` 파일로 분리한다. 현재 지도 상세 UI는 `AddressMapDetail.native.tsx`, `AddressMapDetail.web.tsx` 패턴을 사용한다.
 
 ---
 
@@ -427,11 +428,13 @@ export const uploadGuestHouseImages = async (files: File[]): Promise<string[]> =
 - **응답 타입 제네릭 명시**: `axiosPublic.get<ResponseType>(...)`
 - **반환값은 `response.data`** — axios 래퍼는 훅이 아닌 서비스 함수에서 처리
 - 서비스 함수는 try/catch 없이 작성 — 에러는 훅의 `onError`에서 처리
+- query parameter는 문자열을 직접 이어붙이기보다 Axios `params` 옵션을 우선 사용한다.
 - 게스트하우스/스텝 공고 목록과 상세 조회는 비회원 접근도 가능해야 하므로 `axiosPrivate`가 아니라 `axiosOptionalAuth`를 사용
 - 게스트하우스/스텝 공고 이미지는 `/api/v1/images`에 `images` 필드로 업로드하고, 응답의 `imageUrl` 배열을 사용
 - 지원서 프로필 이미지는 `/api/v1/application/images`에 `image` 필드로 업로드
 - 인증서 파일은 `/api/v1/certificate/file-upload`에 `file`, `fileType`, `fileName`을 함께 전송
 - 수정 API(`PUT`)는 백엔드가 전체 교체 방식으로 처리하므로, 유지할 이미지 URL/하위 목록도 요청 body에 모두 포함
+- 이미지/파일 URL은 `process.env`를 각 컴포넌트에서 직접 읽지 말고 `src/config/url.ts`의 `buildAssetUrl()`을 사용한다.
 
 ### 찜 API 연결 규칙
 
@@ -543,6 +546,7 @@ export const useGuestHouseStore = create<GuestHouseStore>()(
 - 스텝 공고 등록 스토어 key는 `step-recruitment-storage`, `Date` 필드는 커스텀 storage reviver로 복원
 - **스토어 초기화**는 `resetAllData()` 메서드로 — 등록 완료 후 반드시 호출
 - **스토어에서 직접 타입 import** — `src/types/store/` 폴더에 Store 타입 분리
+- Secure Store 키는 문자열 하드코딩 대신 `src/utils/constants/TokenKeys.ts` 상수를 사용한다.
 
 ### 수정 화면 구현 시 주의
 
@@ -783,7 +787,8 @@ onError: (err) => {
 ```bash
 npx tsc --noEmit
 npx expo-doctor
-npx expo export --platform android --output-dir /tmp/geharbang-fe-export --clear
+npx expo export --platform web
 ```
 
 `npm audit`에서 남은 항목이 있더라도 `--force`가 Expo SDK 다운그레이드를 제안하면 적용하지 않는다. 이 경우 Expo SDK 호환 버전 업데이트를 먼저 확인한다.
+`expo-doctor`에서 잡히는 Expo SDK 패키지 버전 불일치는 코드 변경 검증과 별개로 관리해야 하며, 기능 작업 PR에서는 반드시 원인과 영향 범위를 함께 기록한다.
