@@ -2,12 +2,11 @@ import Tag from "@/src/components/ui/Tag/Tag";
 import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
 import { GuestHousePost } from "@/src/types/models/guestHouse/types";
 import { StaffRecruitmentPost } from "@/src/types/models/step/types";
+import { buildAssetUrl } from "@/src/config/url";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-
-const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 interface GuestHouseCardProps {
   type: "stepRecruitment" | "guestHouse";
@@ -61,7 +60,7 @@ export default function GuestHouseCard({
         <View className='w-20 h-20 rounded-lg overflow-hidden bg-gray-100 items-center justify-center'>
           {item.imageUrl ? (
             <Image
-              source={{ uri: `${baseURL}${item.imageUrl}` }}
+              source={{ uri: buildAssetUrl(item.imageUrl) }}
               className='w-full h-full'
               resizeMode='cover'
             />
