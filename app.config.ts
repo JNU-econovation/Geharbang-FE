@@ -1,6 +1,33 @@
 import { ExpoConfig } from "@expo/config";
 import "dotenv/config";
 
+const sentryOrg = process.env.SENTRY_ORG;
+const sentryProject = process.env.SENTRY_PROJECT;
+const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN;
+
+const plugins: ExpoConfig["plugins"] = [
+  "expo-router",
+  "expo-web-browser",
+  [
+    "expo-secure-store",
+    {
+      configureAndroidBackup: true,
+      faceIDPermission:
+        "Allow $(PRODUCT_NAME) to access your Face ID biometric data.",
+    },
+  ],
+];
+
+if (sentryOrg && sentryProject && sentryAuthToken) {
+  plugins.splice(1, 0, [
+    "@sentry/react-native/expo",
+    {
+      organization: sentryOrg,
+      project: sentryProject,
+    },
+  ]);
+}
+
 const config: ExpoConfig = {
   name: "Geharbang-FE",
   slug: "Geharbang-FE",
@@ -29,7 +56,7 @@ const config: ExpoConfig = {
   },
 
   android: {
-    versionCode: 3,
+    versionCode: 4,
     adaptiveIcon: {
       backgroundColor: "#ffffff",
     },
@@ -61,25 +88,7 @@ const config: ExpoConfig = {
     output: "static",
   },
 
-  plugins: [
-    "expo-router",
-    [
-      "@sentry/react-native/expo",
-      {
-        organization: process.env.SENTRY_ORG,
-        project: process.env.SENTRY_PROJECT,
-      },
-    ],
-    "expo-web-browser",
-    [
-      "expo-secure-store",
-      {
-        configureAndroidBackup: true,
-        faceIDPermission:
-          "Allow $(PRODUCT_NAME) to access your Face ID biometric data.",
-      },
-    ],
-  ],
+  plugins,
 
   experiments: {
     typedRoutes: true,
