@@ -451,6 +451,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 ### 코드에서 확인할 포인트
 
 - `EXPO_PUBLIC_API_URL`은 API 요청 기본 주소다.
+- `EXPO_PUBLIC_ASSET_URL`은 선택 사항이며, 이미지/파일 서버를 분리할 때 사용한다.
 - `EXPO_PUBLIC_BASE_URL`은 이미지/파일 URL 기본 주소이며, API 주소 fallback으로도 사용된다.
 - `GOOGLE_MAPS_API_KEY`는 `app.config.ts`를 통해 native config에 들어간다.
 - 현재 앱 설정은 `app.config.ts`로 단일화한다. `app.json`을 같이 두면 Expo 동적 config 검증에서 충돌이 날 수 있다.

@@ -30,12 +30,15 @@ npx eas build -p android --profile production
 ```env
 EXPO_PUBLIC_BASE_URL=
 EXPO_PUBLIC_API_URL=
+EXPO_PUBLIC_ASSET_URL=
 GOOGLE_MAPS_API_KEY=
 ```
 
 - API 요청 기본 주소는 `src/config/url.ts`에서 관리한다.
 - 이미지/파일 URL도 같은 모듈의 `buildAssetUrl()`을 통해 생성한다.
-- `EXPO_PUBLIC_BASE_URL`이 없으면 `EXPO_PUBLIC_API_URL`, 그것도 없으면 `https://geharbang.org`를 fallback으로 사용한다.
+- `EXPO_PUBLIC_ASSET_URL`은 선택 사항이며, 에셋 서버를 API 서버와 분리할 때 사용한다.
+- API는 `EXPO_PUBLIC_API_URL -> EXPO_PUBLIC_BASE_URL -> https://geharbang.org` 순서로 fallback 한다.
+- 에셋은 `EXPO_PUBLIC_ASSET_URL -> EXPO_PUBLIC_BASE_URL -> EXPO_PUBLIC_API_URL -> https://geharbang.org` 순서로 fallback 한다.
 
 ## 검증 명령어
 

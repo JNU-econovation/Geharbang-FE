@@ -81,7 +81,7 @@ Geharbang-FE/
 │   ├── fonts/                # Noto Sans KR
 │   └── svgs/                 # SVG 아이콘/일러스트
 │
-├── .env                      # 환경변수 (EXPO_PUBLIC_BASE_URL 등)
+├── .env                      # 환경변수 (EXPO_PUBLIC_API_URL, EXPO_PUBLIC_ASSET_URL 등)
 └── src/config/url.ts         # API/이미지/파일 URL 공통 설정
 ```
 
@@ -219,6 +219,12 @@ export const API_BASE_URL =
   process.env.EXPO_PUBLIC_BASE_URL ||
   "https://geharbang.org";
 
+export const ASSET_BASE_URL =
+  process.env.EXPO_PUBLIC_ASSET_URL ||
+  process.env.EXPO_PUBLIC_BASE_URL ||
+  process.env.EXPO_PUBLIC_API_URL ||
+  "https://geharbang.org";
+
 // 인증이 필요한 API용 — 요청마다 토큰 자동 주입
 export const axiosPrivate = axios.create({ baseURL: API_BASE_URL });
 axiosPrivate.interceptors.request.use(async (config) => {
@@ -242,6 +248,8 @@ axiosOptionalAuth.interceptors.request.use(async (config) => {
 이미지와 파일 경로는 `src/config/url.ts`의 `buildAssetUrl()`을 통해 공통 생성한다. 이 함수는 상대 경로에 `ASSET_BASE_URL`을 붙이고, 이미 `http/https`인 절대 URL은 그대로 사용한다.
 
 `API_BASE_URL`은 `.env`의 `EXPO_PUBLIC_API_URL` 또는 `EXPO_PUBLIC_BASE_URL` 값이며, 값이 없으면 `https://geharbang.org`를 기본값으로 사용한다.
+`ASSET_BASE_URL`은 `EXPO_PUBLIC_ASSET_URL`을 최우선으로 사용하고, 값이 없으면 `EXPO_PUBLIC_BASE_URL`, `EXPO_PUBLIC_API_URL`, 기본값 순서로 fallback 한다.
+에셋 서버를 별도로 두지 않는 환경에서는 `EXPO_PUBLIC_ASSET_URL` 없이도 동작한다.
 게스트하우스/스텝 공고 목록과 상세처럼 비회원도 조회 가능하지만 로그인 사용자의 `isWished`가 필요한 API는 `axiosOptionalAuth`를 사용한다.
 
 ### 서비스 함수 패턴
@@ -598,6 +606,7 @@ Expo Secure Store를 감싼 래퍼. access token과 userId 저장/조회/삭제�
 
 | 변수명 | 용도 |
 |--------|------|
+| `EXPO_PUBLIC_ASSET_URL` | 선택 사항. 이미지/파일 전용 에셋 서버 주소 |
 | `EXPO_PUBLIC_BASE_URL` | 이미지/파일 URL 기본 주소, API URL fallback |
 | `EXPO_PUBLIC_API_URL` | API 요청 기본 주소 |
 | `EXPO_PUBLIC_SENTRY_DSN` | Sentry 에러 추적 DSN |
