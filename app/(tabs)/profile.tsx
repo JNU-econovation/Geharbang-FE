@@ -27,6 +27,7 @@ import { useMyApplicationExist } from "@/src/hooks/application/myApplication/use
 import { useMyInfomation } from "@/src/hooks/application/myApplication/useMyInfomation";
 import { useLogout } from "@/src/hooks/login/useLogout";
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
+import { buildAssetUrl } from "@/src/config/url";
 import { COLORS } from "@/src/utils/constants/colors";
 import MyActivity from "../my/application/_components/MyActivity";
 
@@ -78,7 +79,7 @@ export default function ProfileScreen() {
                   <View className='flex-row items-center gap-5'>
                     <Image
                       source={{
-                        uri: `${process.env.EXPO_PUBLIC_BASE_URL}${data?.imageUrl}`,
+                        uri: buildAssetUrl(data?.imageUrl),
                       }}
                       style={{ width: 80, height: 80, borderRadius: 100 }}
                       resizeMode='cover'
