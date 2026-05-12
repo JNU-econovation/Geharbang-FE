@@ -14,6 +14,7 @@ import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import { useMyApplicationStatus } from "@/src/hooks/application/myApplication/useMyApplicationStatus";
 import { COLORS } from "@/src/utils/constants/colors";
 import { router } from "expo-router";
@@ -102,7 +103,7 @@ export default function MyApplicationStatus() {
                   <View className='flex-row items-center gap-4'>
                     <Image
                       source={{
-                        uri: `${process.env.EXPO_PUBLIC_BASE_URL}${applicationStatus.imageUrl}`,
+                        uri: buildAssetUrl(applicationStatus.imageUrl),
                       }}
                       style={{ width: 70, height: 70, borderRadius: 100 }}
                       resizeMode='cover'
