@@ -6,6 +6,12 @@
     ],
     "strict": true,
     "jsx": "react-native",
+    "skipLibCheck": true,
+    "moduleSuffixes": [
+      ".native",
+      ".web",
+      ""
+    ],
     "paths": {
       "@/*": [
         "./*"
