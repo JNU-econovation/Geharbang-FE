@@ -3,9 +3,8 @@ import { Image, View } from "react-native";
 import Flex from "@/src/components/layout/Flex/Flex";
 import CheckmarkCircle from "@/src/components/ui/CheckmarkCircle";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import { COLORS } from "@/src/utils/constants/colors";
-
-const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 interface SelectedApplicationProps {
   name: string;
@@ -20,7 +19,7 @@ export default function SelectedApplication({
     <View className="gap-3 py-3 px-4 border-b border-gray-border">
       <Flex justify="start" items="center" dir="row" gap={10}>
         <Image
-          src={`${baseURL}${imageUrl}`}
+          src={buildAssetUrl(imageUrl)}
           className="rounded-full w-12 h-12"
         />
         <View className="gap-2">
