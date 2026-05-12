@@ -4,8 +4,7 @@ import Flex from "@/src/components/layout/Flex/Flex";
 import Tag from "@/src/components/ui/Tag/Tag";
 import TextSize from "@/src/components/ui/TextSize";
 import { COLORS } from "@/src/utils/constants/colors";
-
-const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
+import { buildAssetUrl } from "@/src/config/url";
 
 interface TargetPostingInfoProps {
   imageUrl: string;
@@ -23,7 +22,10 @@ export default function TargetPostingInfo({
   return (
     <View className='bg-[#F9FAFB] px-3 py-4 border border-gray-border'>
       <Flex justify='start' items='center' dir='row' gap={10}>
-        <Image src={`${baseURL}${imageUrl}`} className='rounded-xl w-16 h-16' />
+        <Image
+          src={buildAssetUrl(imageUrl)}
+          className='rounded-xl w-16 h-16'
+        />
         <Flex justify='center' items='start' gap={6}>
           <TextSize size={17} content={guestHouseName} />
           {region && (
