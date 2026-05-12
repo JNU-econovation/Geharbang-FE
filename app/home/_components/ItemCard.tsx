@@ -20,6 +20,7 @@ export function ItemCard({ item, type }: ItemCardProps) {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const CARD_WIDTH = SCREEN_WIDTH * 0.4;
   const handleCardPress = useCardPress(type, item.id);
+  const imageUri = buildAssetUrl(item.imageUrl);
 
   const isGuestHouse = type === "guestHouse";
   const displayName = isGuestHouse
@@ -41,10 +42,14 @@ export function ItemCard({ item, type }: ItemCardProps) {
         className='rounded-2xl overflow-hidden'
         onPress={handleCardPress}
       >
-        <Image
-          source={{ uri: buildAssetUrl(item.imageUrl) }}
-          className='w-full h-36'
-        />
+        {imageUri ? (
+          <Image
+            source={{ uri: imageUri }}
+            className='w-full h-36'
+          />
+        ) : (
+          <View className='w-full h-36 bg-gray-100' />
+        )}
         <View className='p-3 gap-2'>
           <TextSize
             size={16}

@@ -42,6 +42,7 @@ export default function ProfileScreen() {
 
   const { data, isLoading, isError, refetch } =
     useMyInfomation(myApplicationExist);
+  const profileImageUri = buildAssetUrl(data?.imageUrl);
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -77,13 +78,19 @@ export default function ProfileScreen() {
               <View className='flex-row items-center gap-5'>
                 {myApplicationExist ? (
                   <View className='flex-row items-center gap-5'>
-                    <Image
-                      source={{
-                        uri: buildAssetUrl(data?.imageUrl),
-                      }}
-                      style={{ width: 80, height: 80, borderRadius: 100 }}
-                      resizeMode='cover'
-                    />
+                    {profileImageUri ? (
+                      <Image
+                        source={{
+                          uri: profileImageUri,
+                        }}
+                        style={{ width: 80, height: 80, borderRadius: 100 }}
+                        resizeMode='cover'
+                      />
+                    ) : (
+                      <View className='w-20 h-20 bg-white rounded-full flex items-center justify-center'>
+                        <MyPageIcon width={30} height={30} />
+                      </View>
+                    )}
                     <TextSize color='#101828' size={16} content={data?.name} />
                   </View>
                 ) : (

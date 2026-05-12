@@ -32,6 +32,8 @@ export default function ManagementCard({
   onDelete,
   onToggleActive,
 }: ManagementCardProps) {
+  const imageUri = buildAssetUrl(imageUrl);
+
   const onDetail = () => {
     if (type == "guestHouse") {
       router.push(`/guestHouse/guestHouseDetail/${id}`);
@@ -46,11 +48,15 @@ export default function ManagementCard({
       className='w-full bg-white rounded-2xl gap-2 border border-gray-border overflow-hidden'
     >
       <View className='relative w-full h-44'>
-        <Image
-          source={{ uri: buildAssetUrl(imageUrl) }}
-          className='w-full h-full'
-          resizeMode='cover'
-        />
+        {imageUri ? (
+          <Image
+            source={{ uri: imageUri }}
+            className='w-full h-full'
+            resizeMode='cover'
+          />
+        ) : (
+          <View className='w-full h-full bg-gray-100' />
+        )}
 
         <StatusBadge type={type} isClosed={isClosed} />
 

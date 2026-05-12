@@ -23,21 +23,28 @@ export default function IntroImgSlider({ images }: IntroImgSliderProps) {
         showsHorizontalScrollIndicator={false}
         decelerationRate='normal'
         contentContainerStyle={{ gap: 20 }}
-        renderItem={({ item, index }) => (
-          <Pressable
-            style={{ width: PHONEWIDTH }}
-            onPress={() => {
-              setModalVisible(true);
-              setModalIdx(index);
-            }}
-          >
-            <Image
-              source={{ uri: buildAssetUrl(item) }}
-              className='w-full h-full rounded-3xl'
-              resizeMode='cover'
-            />
-          </Pressable>
-        )}
+        renderItem={({ item, index }) => {
+          const imageUri = buildAssetUrl(item);
+          return (
+            <Pressable
+              style={{ width: PHONEWIDTH }}
+              onPress={() => {
+                setModalVisible(true);
+                setModalIdx(index);
+              }}
+            >
+              {imageUri ? (
+                <Image
+                  source={{ uri: imageUri }}
+                  className='w-full h-full rounded-3xl'
+                  resizeMode='cover'
+                />
+              ) : (
+                <View className='w-full h-full rounded-3xl bg-gray-100' />
+              )}
+            </Pressable>
+          );
+        }}
       />
 
       <ModalImage

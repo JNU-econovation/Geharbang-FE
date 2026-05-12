@@ -21,6 +21,7 @@ export default function GuestHouseCard({
 }: GuestHouseCardProps) {
   const isStepRecruitment = type === "stepRecruitment";
   const [isWished, setIsWished] = useState(item.isWished);
+  const imageUri = buildAssetUrl(item.imageUrl);
 
   useEffect(() => {
     setIsWished(item.isWished);
@@ -58,9 +59,9 @@ export default function GuestHouseCard({
     >
       <View className='flex-row'>
         <View className='w-20 h-20 rounded-lg overflow-hidden bg-gray-100 items-center justify-center'>
-          {item.imageUrl ? (
+          {imageUri ? (
             <Image
-              source={{ uri: buildAssetUrl(item.imageUrl) }}
+              source={{ uri: imageUri }}
               className='w-full h-full'
               resizeMode='cover'
             />

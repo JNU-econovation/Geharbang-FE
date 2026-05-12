@@ -6,13 +6,14 @@ export const API_BASE_URL =
   DEFAULT_BASE_URL;
 
 export const ASSET_BASE_URL =
+  process.env.EXPO_PUBLIC_ASSET_URL ||
   process.env.EXPO_PUBLIC_BASE_URL ||
   process.env.EXPO_PUBLIC_API_URL ||
   DEFAULT_BASE_URL;
 
 export const buildAssetUrl = (path?: string | null) => {
   if (!path) {
-    return "";
+    return null;
   }
 
   if (/^https?:\/\//.test(path)) {

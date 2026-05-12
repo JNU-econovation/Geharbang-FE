@@ -15,13 +15,19 @@ export default function SelectedApplication({
   name,
   imageUrl,
 }: SelectedApplicationProps) {
+  const imageUri = buildAssetUrl(imageUrl);
+
   return (
     <View className="gap-3 py-3 px-4 border-b border-gray-border">
       <Flex justify="start" items="center" dir="row" gap={10}>
-        <Image
-          src={buildAssetUrl(imageUrl)}
-          className="rounded-full w-12 h-12"
-        />
+        {imageUri ? (
+          <Image
+            source={{ uri: imageUri }}
+            className="rounded-full w-12 h-12"
+          />
+        ) : (
+          <View className="rounded-full w-12 h-12 bg-gray-100" />
+        )}
         <View className="gap-2">
           <TextSize size={17} content={name} />
           <TextSize

@@ -61,21 +61,30 @@ export default function GehaImage({
         onIndexChanged={(idx) => setImageIdx(idx)}
         showsPagination={false}
       >
-        {images?.map((img, index) => (
-          <Pressable
-            key={index}
-            onPress={() => {
-              setModalVisible(true);
-              setImageIdx(index);
-            }}
-          >
-            <Image
-              source={{ uri: buildAssetUrl(img) }}
-              className={`w-full h-full ${(party || type) && "rounded-t-lg"}`}
-              resizeMode='cover'
-            />
-          </Pressable>
-        ))}
+        {images?.map((img, index) => {
+          const imageUri = buildAssetUrl(img);
+          return (
+            <Pressable
+              key={index}
+              onPress={() => {
+                setModalVisible(true);
+                setImageIdx(index);
+              }}
+            >
+              {imageUri ? (
+                <Image
+                  source={{ uri: imageUri }}
+                  className={`w-full h-full ${(party || type) && "rounded-t-lg"}`}
+                  resizeMode='cover'
+                />
+              ) : (
+                <View
+                  className={`w-full h-full bg-gray-100 ${(party || type) && "rounded-t-lg"}`}
+                />
+              )}
+            </Pressable>
+          );
+        })}
       </Swiper>
 
       {page && (

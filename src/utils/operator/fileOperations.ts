@@ -17,6 +17,8 @@ type FileSystemLegacy = {
   getContentUriAsync: (fileUri: string) => Promise<string>;
 };
 
+// `expo-file-system/legacy` 타입 정의가 현재 Expo SDK 조합에서 tsc를 깨뜨려서,
+// 이 파일에서 실제로 사용하는 최소한의 surface만 좁은 타입으로 다룬다.
 const FileSystem = require('expo-file-system/legacy') as FileSystemLegacy;
 
 /**
@@ -30,8 +32,11 @@ export const previewFile = async (
   _fileName: string,
 ): Promise<boolean> => {
   try {
-    // 서버 URL로 직접 브라우저에서 열기 (이미지처럼)
     const fullUrl = buildAssetUrl(fileUrl);
+    if (!fullUrl) {
+      Alert.alert('오류', '파일 URL이 올바르지 않습니다.');
+      return false;
+    }
 
     await WebBrowser.openBrowserAsync(fullUrl, {
       presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
@@ -67,11 +72,20 @@ export const downloadFile = async (
     }
 
     const fullUrl = buildAssetUrl(fileUrl);
+    if (!fullUrl) {
+      Alert.alert('오류', '파일 URL이 올바르지 않습니다.');
+      return null;
+    }
 
     const directory =
       Platform.OS === 'ios'
         ? FileSystem.documentDirectory
         : FileSystem.cacheDirectory;
+    if (!directory) {
+      Alert.alert('오류', '파일 저장 경로를 찾을 수 없습니다.');
+      return null;
+    }
+
     const localUri = `${directory}${fileName}`;
 
     const downloadResult = await FileSystem.downloadAsync(fullUrl, localUri);
@@ -117,6 +131,10 @@ export const deleteLocalFile = async (fileName: string): Promise<boolean> => {
       Platform.OS === 'ios'
         ? FileSystem.documentDirectory
         : FileSystem.cacheDirectory;
+    if (!directory) {
+      return false;
+    }
+
     const fileUri = `${directory}${fileName}`;
     const fileInfo = await FileSystem.getInfoAsync(fileUri);
 

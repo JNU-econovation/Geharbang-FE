@@ -19,13 +19,19 @@ export default function TargetPostingInfo({
   region,
   tags,
 }: TargetPostingInfoProps) {
+  const imageUri = buildAssetUrl(imageUrl);
+
   return (
     <View className='bg-[#F9FAFB] px-3 py-4 border border-gray-border'>
       <Flex justify='start' items='center' dir='row' gap={10}>
-        <Image
-          src={buildAssetUrl(imageUrl)}
-          className='rounded-xl w-16 h-16'
-        />
+        {imageUri ? (
+          <Image
+            source={{ uri: imageUri }}
+            className='rounded-xl w-16 h-16'
+          />
+        ) : (
+          <View className='rounded-xl w-16 h-16 bg-gray-100' />
+        )}
         <Flex justify='center' items='start' gap={6}>
           <TextSize size={17} content={guestHouseName} />
           {region && (
