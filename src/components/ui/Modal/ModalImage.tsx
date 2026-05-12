@@ -1,5 +1,6 @@
 import { Image, Modal, View } from "react-native";
 import Swiper from "react-native-swiper";
+import { buildAssetUrl } from "@/src/config/url";
 
 import TextSize from "../TextSize";
 import ModalBtn from "./ModalBtn";
@@ -46,7 +47,7 @@ export default function ModalImage({
           {images?.map((img, i) => (
             <View key={i}>
               <Image
-                source={{ uri: `${process.env.EXPO_PUBLIC_BASE_URL}${img}` }}
+                source={{ uri: buildAssetUrl(img) }}
                 className='w-full h-full'
                 resizeMode='contain'
               />
