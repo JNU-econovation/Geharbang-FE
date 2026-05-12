@@ -63,7 +63,13 @@ const config: ExpoConfig = {
 
   plugins: [
     "expo-router",
-    "@sentry/react-native",
+    [
+      "@sentry/react-native/expo",
+      {
+        organization: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+      },
+    ],
     "expo-web-browser",
     [
       "expo-secure-store",
