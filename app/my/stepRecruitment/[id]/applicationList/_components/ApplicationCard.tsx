@@ -1,14 +1,13 @@
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import { Image, View } from "react-native";
 import ApplicantStatusBadge from "./ApplicationStatusBadge";
-
-const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export type ApplicationStatusType = "대기중" | "합격";
 
@@ -35,7 +34,7 @@ export default function ApplicationCard({
     <View className='w-full bg-white border border-gray-border rounded-2xl p-4 gap-4'>
       <Flex dir='row' justify='start' items='center' gap={14}>
         <Image
-          source={{ uri: `${baseURL}${imageUrl}` }}
+          source={{ uri: buildAssetUrl(imageUrl) }}
           className='rounded-full w-12 h-12'
         />
         <View className='gap-1.5'>
