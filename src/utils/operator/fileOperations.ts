@@ -1,7 +1,25 @@
-import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import * as WebBrowser from 'expo-web-browser';
 import { Alert, Platform } from 'react-native';
+import { buildAssetUrl } from '@/src/config/url';
+
+type FileInfo = {
+  exists: boolean;
+  size?: number;
+};
+
+type FileSystemLegacy = {
+  documentDirectory: string | null;
+  cacheDirectory: string | null;
+  getInfoAsync: (fileUri: string) => Promise<FileInfo>;
+  deleteAsync: (fileUri: string) => Promise<void>;
+  downloadAsync: (uri: string, fileUri: string) => Promise<{ uri: string }>;
+  getContentUriAsync: (fileUri: string) => Promise<string>;
+};
+
+// `expo-file-system/legacy` 타입 정의가 현재 Expo SDK 조합에서 tsc를 깨뜨려서,
+// 이 파일에서 실제로 사용하는 최소한의 surface만 좁은 타입으로 다룬다.
+const FileSystem = require('expo-file-system/legacy') as FileSystemLegacy;
 
 /**
  * 파일 미리보기 (브라우저에서 열기)
@@ -14,8 +32,11 @@ export const previewFile = async (
   _fileName: string,
 ): Promise<boolean> => {
   try {
-    // 서버 URL로 직접 브라우저에서 열기 (이미지처럼)
-    const fullUrl = `${process.env.EXPO_PUBLIC_BASE_URL}${fileUrl}`;
+    const fullUrl = buildAssetUrl(fileUrl);
+    if (!fullUrl) {
+      Alert.alert('오류', '파일 URL이 올바르지 않습니다.');
+      return false;
+    }
 
     await WebBrowser.openBrowserAsync(fullUrl, {
       presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
@@ -50,12 +71,21 @@ export const downloadFile = async (
       return null;
     }
 
-    const fullUrl = `${process.env.EXPO_PUBLIC_BASE_URL}${fileUrl}`;
+    const fullUrl = buildAssetUrl(fileUrl);
+    if (!fullUrl) {
+      Alert.alert('오류', '파일 URL이 올바르지 않습니다.');
+      return null;
+    }
 
     const directory =
       Platform.OS === 'ios'
         ? FileSystem.documentDirectory
         : FileSystem.cacheDirectory;
+    if (!directory) {
+      Alert.alert('오류', '파일 저장 경로를 찾을 수 없습니다.');
+      return null;
+    }
+
     const localUri = `${directory}${fileName}`;
 
     const downloadResult = await FileSystem.downloadAsync(fullUrl, localUri);
@@ -64,7 +94,7 @@ export const downloadFile = async (
     const fileInfo = await FileSystem.getInfoAsync(downloadResult.uri);
     const maxSize = 10 * 1024 * 1024;
 
-    if (fileInfo.exists && fileInfo.size > maxSize) {
+    if (fileInfo.exists && typeof fileInfo.size === 'number' && fileInfo.size > maxSize) {
       await FileSystem.deleteAsync(downloadResult.uri);
       Alert.alert('오류', '파일 크기는 최대 10MB까지 다운로드 가능합니다.');
       return null;
@@ -101,6 +131,10 @@ export const deleteLocalFile = async (fileName: string): Promise<boolean> => {
       Platform.OS === 'ios'
         ? FileSystem.documentDirectory
         : FileSystem.cacheDirectory;
+    if (!directory) {
+      return false;
+    }
+
     const fileUri = `${directory}${fileName}`;
     const fileInfo = await FileSystem.getInfoAsync(fileUri);
 

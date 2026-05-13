@@ -14,6 +14,7 @@ import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import { useMyApplicationStatus } from "@/src/hooks/application/myApplication/useMyApplicationStatus";
 import { COLORS } from "@/src/utils/constants/colors";
 import { router } from "expo-router";
@@ -88,7 +89,9 @@ export default function MyApplicationStatus() {
         </View>
       ) : (
         <ScrollView>
-          {filteredApplicationStatus?.map((applicationStatus) => (
+          {filteredApplicationStatus?.map((applicationStatus) => {
+            const imageUri = buildAssetUrl(applicationStatus.imageUrl);
+            return (
             <Pressable
               key={applicationStatus.id}
               onPress={() =>
@@ -100,13 +103,15 @@ export default function MyApplicationStatus() {
               <View className='mt-4 mx-4 p-4 bg-white rounded-lg'>
                 <View className='flex-row  gap-3'>
                   <View className='flex-row items-center gap-4'>
-                    <Image
-                      source={{
-                        uri: `${process.env.EXPO_PUBLIC_BASE_URL}${applicationStatus.imageUrl}`,
-                      }}
-                      style={{ width: 70, height: 70, borderRadius: 100 }}
-                      resizeMode='cover'
-                    />
+                    {imageUri ? (
+                      <Image
+                        source={{ uri: imageUri }}
+                        style={{ width: 70, height: 70, borderRadius: 100 }}
+                        resizeMode='cover'
+                      />
+                    ) : (
+                      <View className='w-[70px] h-[70px] rounded-full bg-[#E5E7EB]' />
+                    )}
 
                     <View className='flex gap-3'>
                       <TextSize
@@ -147,7 +152,8 @@ export default function MyApplicationStatus() {
                 </View>
               </View>
             </Pressable>
-          ))}
+          );
+          })}
         </ScrollView>
       )}
     </CustomSafeAreaView>

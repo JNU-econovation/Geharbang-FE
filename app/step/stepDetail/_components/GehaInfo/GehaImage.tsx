@@ -5,6 +5,7 @@ import Bed from "@/public/svgs/GuestHouse/bed.svg";
 import ModalImage from "@/src/components/ui/Modal/ModalImage";
 import TextSize from "@/src/components/ui/TextSize";
 import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
+import { buildAssetUrl } from "@/src/config/url";
 
 interface GehaImageProps {
   images?: string[];
@@ -36,11 +37,6 @@ export default function GehaImage({
     return;
   }
 
-  const resolveImageUri = (uri: string) => {
-    if (uri.startsWith("https")) return uri;
-    return `${process.env.EXPO_PUBLIC_BASE_URL}${uri}`;
-  };
-
   if (headCountType === "_1인실") {
     headCountType = "1인실";
   } else if (headCountType === "_2인실") {
@@ -65,21 +61,30 @@ export default function GehaImage({
         onIndexChanged={(idx) => setImageIdx(idx)}
         showsPagination={false}
       >
-        {images?.map((img, index) => (
-          <Pressable
-            key={index}
-            onPress={() => {
-              setModalVisible(true);
-              setImageIdx(index);
-            }}
-          >
-            <Image
-              source={{ uri: resolveImageUri(img) }}
-              className={`w-full h-full ${(party || type) && "rounded-t-lg"}`}
-              resizeMode='cover'
-            />
-          </Pressable>
-        ))}
+        {images?.map((img, index) => {
+          const imageUri = buildAssetUrl(img);
+          return (
+            <Pressable
+              key={index}
+              onPress={() => {
+                setModalVisible(true);
+                setImageIdx(index);
+              }}
+            >
+              {imageUri ? (
+                <Image
+                  source={{ uri: imageUri }}
+                  className={`w-full h-full ${(party || type) && "rounded-t-lg"}`}
+                  resizeMode='cover'
+                />
+              ) : (
+                <View
+                  className={`w-full h-full bg-gray-100 ${(party || type) && "rounded-t-lg"}`}
+                />
+              )}
+            </Pressable>
+          );
+        })}
       </Swiper>
 
       {page && (

@@ -12,12 +12,14 @@ import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import { useMyApplication } from "@/src/hooks/application/myApplication/useMyApplication";
 import { COLORS } from "@/src/utils/constants/colors";
 import MyApplicationCompoLayout from "./_components/MyApplicationCompoLayout";
 
 export default function MyApplication() {
   const { data, isLoading, isError, refetch } = useMyApplication();
+  const profileImageUri = buildAssetUrl(data?.imageUrl);
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -49,13 +51,17 @@ export default function MyApplication() {
       ) : (
         <ScrollView>
           <View className='py-6 flex items-center gap-5'>
-            <Image
-              source={{
-                uri: `${process.env.EXPO_PUBLIC_BASE_URL}${data?.imageUrl}`,
-              }}
-              style={{ width: 100, height: 100, borderRadius: 100 }}
-              resizeMode='cover'
-            />
+            {profileImageUri ? (
+              <Image
+                source={{
+                  uri: profileImageUri,
+                }}
+                style={{ width: 100, height: 100, borderRadius: 100 }}
+                resizeMode='cover'
+              />
+            ) : (
+              <View className='w-[100px] h-[100px] rounded-full bg-[#E5E7EB]' />
+            )}
             <TextSize color='#101828' size={20} content={data?.name} />
             <TextSize
               color='#4A5565'

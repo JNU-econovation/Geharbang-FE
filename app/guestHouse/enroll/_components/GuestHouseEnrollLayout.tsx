@@ -69,7 +69,7 @@ export default function GuestHouseEnrollLayout({
     if (currentStep === 1) {
       handleHeaderBackPress();
     } else {
-      router.push(STEP_ROUTES[currentStep - 2]);
+      router.push(STEP_ROUTES[currentStep - 2] as any);
     }
     return true;
   }, [currentStep, handleHeaderBackPress]);

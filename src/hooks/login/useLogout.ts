@@ -1,8 +1,8 @@
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
 import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
+import { removeAccessToken } from "@/src/utils/login/secureStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
-import * as SecureStore from "expo-secure-store";
 import { Alert } from "react-native";
 
 export const useLogout = () => {
@@ -11,7 +11,10 @@ export const useLogout = () => {
 
   const performLogout = async () => {
     try {
-      await SecureStore.deleteItemAsync(TOKEN_KEYS.ACCESS_TOKEN);
+      await Promise.all([
+        removeAccessToken(TOKEN_KEYS.ACCESS_TOKEN),
+        removeAccessToken(TOKEN_KEYS.USER_ID),
+      ]);
       setAccessToken(null);
       queryClient.clear();
 

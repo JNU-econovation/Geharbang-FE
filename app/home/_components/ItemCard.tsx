@@ -9,18 +9,18 @@ import {
   StepRecommendationCard,
 } from "@/src/types/models/home/GuestHouseCard";
 import { COLORS } from "@/src/utils/constants/colors";
+import { buildAssetUrl } from "@/src/config/url";
 
 interface ItemCardProps {
   item: StepRecommendationCard | guestHouseRecommendationCard;
   type: "guestHouse" | "stepNotice";
 }
 
-const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
-
 export function ItemCard({ item, type }: ItemCardProps) {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const CARD_WIDTH = SCREEN_WIDTH * 0.4;
   const handleCardPress = useCardPress(type, item.id);
+  const imageUri = buildAssetUrl(item.imageUrl);
 
   const isGuestHouse = type === "guestHouse";
   const displayName = isGuestHouse
@@ -42,10 +42,14 @@ export function ItemCard({ item, type }: ItemCardProps) {
         className='rounded-2xl overflow-hidden'
         onPress={handleCardPress}
       >
-        <Image
-          source={{ uri: `${baseURL}${item.imageUrl}` }}
-          className='w-full h-36'
-        />
+        {imageUri ? (
+          <Image
+            source={{ uri: imageUri }}
+            className='w-full h-36'
+          />
+        ) : (
+          <View className='w-full h-36 bg-gray-100' />
+        )}
         <View className='p-3 gap-2'>
           <TextSize
             size={16}

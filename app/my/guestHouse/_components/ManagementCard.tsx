@@ -3,14 +3,13 @@ import GehaLocation from "@/public/svgs/StepDetail/gehaLocation.svg";
 import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Pressable, View } from "react-native";
 import StatusBadge from "./StatusBadge";
-
-const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 interface ManagementCardProps {
   id: number;
@@ -33,6 +32,8 @@ export default function ManagementCard({
   onDelete,
   onToggleActive,
 }: ManagementCardProps) {
+  const imageUri = buildAssetUrl(imageUrl);
+
   const onDetail = () => {
     if (type == "guestHouse") {
       router.push(`/guestHouse/guestHouseDetail/${id}`);
@@ -47,11 +48,15 @@ export default function ManagementCard({
       className='w-full bg-white rounded-2xl gap-2 border border-gray-border overflow-hidden'
     >
       <View className='relative w-full h-44'>
-        <Image
-          source={{ uri: `${baseURL}${imageUrl}` }}
-          className='w-full h-full'
-          resizeMode='cover'
-        />
+        {imageUri ? (
+          <Image
+            source={{ uri: imageUri }}
+            className='w-full h-full'
+            resizeMode='cover'
+          />
+        ) : (
+          <View className='w-full h-full bg-gray-100' />
+        )}
 
         <StatusBadge type={type} isClosed={isClosed} />
 

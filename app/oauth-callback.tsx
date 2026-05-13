@@ -3,6 +3,8 @@ import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 
+import { useAuthStore } from "@/src/stores/auth/useAuthStore";
+import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
 import { setAccessToken } from "@/src/utils/login/secureStore";
 
 function pickString(v: unknown) {
@@ -11,6 +13,7 @@ function pickString(v: unknown) {
 
 export default function OAuthCallback() {
   const router = useRouter();
+  const setAccessTokenStore = useAuthStore((state) => state.setAccessToken);
 
   useEffect(() => {
     let cancelled = false;
@@ -26,11 +29,12 @@ export default function OAuthCallback() {
       }
 
       await Promise.all([
-        setAccessToken("accessToken", accessToken),
-        setAccessToken("userId", userId),
+        setAccessToken(TOKEN_KEYS.ACCESS_TOKEN, accessToken),
+        setAccessToken(TOKEN_KEYS.USER_ID, userId),
       ]);
 
       if (cancelled) return;
+      setAccessTokenStore(accessToken);
       router.replace("/(tabs)");
     };
 
@@ -55,7 +59,7 @@ export default function OAuthCallback() {
       cancelled = true;
       sub.remove();
     };
-  }, [router]);
+  }, [router, setAccessTokenStore]);
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

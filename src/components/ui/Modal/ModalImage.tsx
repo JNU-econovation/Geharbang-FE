@@ -1,5 +1,6 @@
 import { Image, Modal, View } from "react-native";
 import Swiper from "react-native-swiper";
+import { buildAssetUrl } from "@/src/config/url";
 
 import TextSize from "../TextSize";
 import ModalBtn from "./ModalBtn";
@@ -43,15 +44,23 @@ export default function ModalImage({
           onIndexChanged={(idx) => setModalIdx(idx)}
           showsPagination={false}
         >
-          {images?.map((img, i) => (
-            <View key={i}>
-              <Image
-                source={{ uri: `${process.env.EXPO_PUBLIC_BASE_URL}${img}` }}
-                className='w-full h-full'
-                resizeMode='contain'
-              />
-            </View>
-          ))}
+          {images?.map((img, i) => {
+            const imageUri = buildAssetUrl(img);
+
+            return (
+              <View key={i}>
+                {imageUri ? (
+                  <Image
+                    source={{ uri: imageUri }}
+                    className='w-full h-full'
+                    resizeMode='contain'
+                  />
+                ) : (
+                  <View className='w-full h-full bg-[#F3F4F6]' />
+                )}
+              </View>
+            );
+          })}
         </Swiper>
       </View>
     </Modal>

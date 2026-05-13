@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Pressable, TextInput, View } from "react-native";
 import Geocoder from "react-native-geocoding";
 import MapView, { Marker } from "react-native-maps";
+import type { MapPressEvent } from "react-native-maps";
 
 import ModalBtn from "@/src/components/ui/Modal/ModalBtn";
 import { useMarker } from "@/src/hooks/stepRecruitment/useMarker";
@@ -10,7 +11,7 @@ import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/Step1Da
 import TextSize from "./TextSize";
 
 const GOOGLE_MAPS_API_KEY = Constants.expoConfig?.extra?.googleMapsApiKey;
-Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'ko' });
+Geocoder.init(GOOGLE_MAPS_API_KEY, { language: "ko" });
 
 interface AddressMapDetailProps {
   latitude: number;
@@ -57,7 +58,7 @@ export default function AddressMapDetail({
           longitudeDelta,
         }}
         mapType='standard'
-        onPress={(e) =>
+        onPress={(e: MapPressEvent) =>
           selectable && setMarkerPosition(e.nativeEvent.coordinate)
         }
         pointerEvents={pointerEvents}

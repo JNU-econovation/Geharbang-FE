@@ -27,6 +27,7 @@ import { useMyApplicationExist } from "@/src/hooks/application/myApplication/use
 import { useMyInfomation } from "@/src/hooks/application/myApplication/useMyInfomation";
 import { useLogout } from "@/src/hooks/login/useLogout";
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
+import { buildAssetUrl } from "@/src/config/url";
 import { COLORS } from "@/src/utils/constants/colors";
 import MyActivity from "../my/application/_components/MyActivity";
 
@@ -41,6 +42,7 @@ export default function ProfileScreen() {
 
   const { data, isLoading, isError, refetch } =
     useMyInfomation(myApplicationExist);
+  const profileImageUri = buildAssetUrl(data?.imageUrl);
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -76,13 +78,19 @@ export default function ProfileScreen() {
               <View className='flex-row items-center gap-5'>
                 {myApplicationExist ? (
                   <View className='flex-row items-center gap-5'>
-                    <Image
-                      source={{
-                        uri: `${process.env.EXPO_PUBLIC_BASE_URL}${data?.imageUrl}`,
-                      }}
-                      style={{ width: 80, height: 80, borderRadius: 100 }}
-                      resizeMode='cover'
-                    />
+                    {profileImageUri ? (
+                      <Image
+                        source={{
+                          uri: profileImageUri,
+                        }}
+                        style={{ width: 80, height: 80, borderRadius: 100 }}
+                        resizeMode='cover'
+                      />
+                    ) : (
+                      <View className='w-20 h-20 bg-white rounded-full flex items-center justify-center'>
+                        <MyPageIcon width={30} height={30} />
+                      </View>
+                    )}
                     <TextSize color='#101828' size={16} content={data?.name} />
                   </View>
                 ) : (
@@ -100,14 +108,14 @@ export default function ProfileScreen() {
                     </View>
                   </View>
                 )}
-                {data?.isOwer && (
+                {data?.isOwner && (
                   <View className='-ml-2 px-2 py-1 bg-[#0EA5E9] rounded-xl'>
                     <TextSize color='#FFFFFF' size={12} content='인증 사장님' />
                   </View>
                 )}
               </View>
               {myApplicationExist && (
-                <Pressable onPress={() => router.push("/my/application")}>
+                <Pressable onPress={() => router.push("/my/application" as any)}>
                   <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
                     <TextSize
                       color='#101828'
@@ -128,7 +136,7 @@ export default function ProfileScreen() {
                 />
               </Pressable>
 
-              <Pressable onPress={() => router.push("/my/application/status")}>
+              <Pressable onPress={() => router.push("/my/application/status" as any)}>
                 <MyActivity
                   content='지원 내역'
                   icon={<ApplicationStatusIcon width={18} height={18} />}
@@ -139,7 +147,7 @@ export default function ProfileScreen() {
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='운영자 기능' />
 
-              {data?.inReview ? (
+              {data?.isOwner ? (
                 <View>
                   <Pressable onPress={() => router.push("/my/guestHouse")}>
                     <MyActivity
@@ -181,12 +189,14 @@ export default function ProfileScreen() {
 
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='설정' />
-              <Pressable onPress={() => router.push("/operator/management")}>
-                <MyActivity
-                  content='운영자 기능'
-                  icon={<DangerIcon width={18} height={18} />}
-                />
-              </Pressable>
+              {data?.isAdmin && (
+                <Pressable onPress={() => router.push("/operator/management")}>
+                  <MyActivity
+                    content='운영자 기능'
+                    icon={<DangerIcon width={18} height={18} />}
+                  />
+                </Pressable>
+              )}
               <Pressable
                 onPress={handleLogout}
                 className='pt-10 flex-row gap-3'
