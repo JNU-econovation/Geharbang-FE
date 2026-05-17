@@ -63,8 +63,10 @@ export function useStep3Validation(step3Data: Step3Data) {
     const {
       title,
       mainImageFiles,
+      mainImageUrls,
       introduction,
       introImageFiles,
+      introImageUrls,
       advantages,
       employeeBenefits,
     } = step3Data;
@@ -79,7 +81,7 @@ export function useStep3Validation(step3Data: Step3Data) {
     }
 
     // 대표 사진 검증
-    if (!mainImageFiles || mainImageFiles.length === 0) {
+    if (mainImageFiles.length === 0 && mainImageUrls.length === 0) {
       newErrors.mainImageFiles = "최소 1장 이상의 사진을 추가해주세요";
       isValid = false;
     }
@@ -94,7 +96,7 @@ export function useStep3Validation(step3Data: Step3Data) {
     }
 
     // 소개 사진 검증
-    if (!introImageFiles || introImageFiles.length === 0) {
+    if (introImageFiles.length === 0 && introImageUrls.length === 0) {
       newErrors.introImageFiles = "최소 1장 이상의 사진을 추가해주세요";
       isValid = false;
     }
