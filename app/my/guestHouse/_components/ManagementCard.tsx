@@ -20,6 +20,7 @@ interface ManagementCardProps {
   isClosed: boolean;
   onDelete: () => void;
   onToggleActive: () => void;
+  onEdit?: () => void;
 }
 
 export default function ManagementCard({
@@ -31,6 +32,7 @@ export default function ManagementCard({
   isClosed,
   onDelete,
   onToggleActive,
+  onEdit,
 }: ManagementCardProps) {
   const imageUri = buildAssetUrl(imageUrl);
 
@@ -61,7 +63,14 @@ export default function ManagementCard({
         <StatusBadge type={type} isClosed={isClosed} />
 
         <Pressable
-          className='absolute top-3 right-3 bg-primary-red p-2 rounded-full'
+          className='absolute top-3 right-12 bg-[#FFA44F] p-2 pt-1.5 rounded-full'
+          onPress={onEdit}
+        >
+          <Ionicons name='create-outline' color='white' size={15} />
+        </Pressable>
+
+        <Pressable
+          className='absolute top-3 right-3 bg-primary-red p-2 pt-1.5 rounded-full'
           onPress={onDelete}
         >
           <Ionicons name='trash-outline' color='white' size={15} />

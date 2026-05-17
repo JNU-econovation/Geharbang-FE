@@ -16,6 +16,7 @@ import {
   useGetMyStepRecruitment,
   usePatchMyStepRecruitmentStatus,
 } from "@/src/hooks/myStepRecruitment/useMyStepRecruitment";
+import { useEditStepRecruitment } from "@/src/hooks/stepRecruitment/useEditStepRecruitment";
 import { useStepRecruitmentResumeDraft } from "@/src/hooks/stepRecruitment/useStepRecruitmentResumeDraft";
 import { COLORS } from "@/src/utils/constants/colors";
 import ManagementCard from "../guestHouse/_components/ManagementCard";
@@ -23,6 +24,7 @@ import ManagementCard from "../guestHouse/_components/ManagementCard";
 export default function MyStepRecruitment() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { checkAndNavigate, modalProps } = useStepRecruitmentResumeDraft();
+  const { handleEditPress } = useEditStepRecruitment();
   const [selectedPost, setSelectedPost] = useState<{
     id: number;
     name: string;
@@ -65,7 +67,7 @@ export default function MyStepRecruitment() {
     <CustomSafeAreaView pageColor='bg-white'>
       <View className='px-4 py-3'>
         <BackArrorHeader
-          content='구인 공고 관리'
+          content='내 구인 공고 관리'
           icon={
             <Pressable onPress={checkAndNavigate}>
               <Text className='mx-4 mb-1 text-primary-blue text-3xl'>+</Text>
@@ -112,6 +114,7 @@ export default function MyStepRecruitment() {
                   onToggleActive={() =>
                     handleToggleStatus(post.id, post.isClosed)
                   }
+                  onEdit={() => handleEditPress(post.id)}
                 />
               ))}
             </Flex>
