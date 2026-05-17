@@ -68,26 +68,36 @@ export default function RecruitmentStepLayout({
   currentStep,
   children,
 }: RecruitmentStepLayoutProps) {
-  const { resetAllData } = useStepRecruitmentStore();
+  const { resetAllData, editingId } = useStepRecruitmentStore();
   const [isExitModalVisible, setIsExitModalVisible] = useState(false);
 
   const handleHeaderBackPress = useCallback(() => {
+    if (editingId) {
+      resetAllData();
+      router.navigate("/my/stepRecruitment");
+      return;
+    }
     if (isFormEmpty()) {
       resetAllData();
       router.replace("/");
     } else {
       setIsExitModalVisible(true);
     }
-  }, [resetAllData]);
+  }, [resetAllData, editingId]);
 
   const handleAndroidBack = useCallback(() => {
+    if (editingId) {
+      resetAllData();
+      router.navigate("/my/stepRecruitment");
+      return true;
+    }
     if (currentStep === 1) {
       handleHeaderBackPress();
     } else {
       router.push(STEP_ROUTES[currentStep - 2]);
     }
     return true;
-  }, [currentStep, handleHeaderBackPress]);
+  }, [currentStep, handleHeaderBackPress, editingId, resetAllData]);
 
   useFocusEffect(
     useCallback(() => {
