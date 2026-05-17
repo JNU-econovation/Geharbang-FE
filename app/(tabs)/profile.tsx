@@ -109,9 +109,18 @@ export default function ProfileScreen() {
                     </View>
                   </View>
                 )}
-                {data?.isOwner && (
-                  <View className='-ml-2 px-2 py-1 bg-[#0EA5E9] rounded-xl'>
-                    <TextSize color='#FFFFFF' size={12} content='인증 사장님' />
+                {(data?.isAdmin || data?.isOwner) && (
+                  <View className='-ml-2 flex-col gap-1'>
+                    {data?.isAdmin && (
+                      <View className='px-2 py-1 bg-[#101828] rounded-xl'>
+                        <TextSize color='#FFFFFF' size={12} content='관리자' />
+                      </View>
+                    )}
+                    {data?.isOwner && (
+                      <View className='px-2 py-1 bg-[#0EA5E9] rounded-xl'>
+                        <TextSize color='#FFFFFF' size={12} content='인증 사장님' />
+                      </View>
+                    )}
                   </View>
                 )}
               </View>
