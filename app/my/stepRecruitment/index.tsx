@@ -68,7 +68,7 @@ export default function MyStepRecruitment() {
     <CustomSafeAreaView pageColor='bg-white'>
       <View className='px-4 py-3'>
         <BackArrorHeader
-          content='내 구인 공고 관리'
+          content='내 스텝 공고 관리'
           onPress={() => router.push("/profile")}
           icon={
             <Pressable onPress={checkAndNavigate}>
@@ -88,7 +88,7 @@ export default function MyStepRecruitment() {
             <TextSize
               size={14}
               color={COLORS.GRAY.TEXT}
-              content={`등록된 구인 공고가 없습니다.\n지금 바로 스텝 모집을 시작해 보세요!`}
+              content={`등록된 스텝 공고가 없습니다.\n지금 바로 스텝 모집을 시작해 보세요!`}
               align='center'
             />
             <Button
