@@ -1,5 +1,6 @@
 export interface GuestHouseDetailResponse {
   guestHouseName: string;
+  isWished: boolean;
   region: string;
   location: {
     lotNumberAddress: string;
