@@ -46,7 +46,7 @@ export default function ProfileScreen() {
   const profileImageUri = buildAssetUrl(data?.imageUrl);
 
   return (
-    <CustomSafeAreaView pageColor='bg-white'>
+    <CustomSafeAreaView pageColor='bg-white' topOnly={true}>
       <View className='px-3 pt-3 pb-4 border-b-[1px] border-[#E5E5E5]'>
         <BackArrorHeader content='내 정보' />
       </View>
@@ -116,9 +116,7 @@ export default function ProfileScreen() {
                 )}
               </View>
               {myApplicationExist && (
-                <Pressable
-                  onPress={() => router.push("/my/application" as any)}
-                >
+                <Pressable onPress={() => router.push("/my/application")}>
                   <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
                     <TextSize
                       color='#101828'
