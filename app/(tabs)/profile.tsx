@@ -18,16 +18,17 @@ import MyGuestHouseIcon from "@/public/svgs/MyPage/myGuestHouseIcon.svg";
 import MyPageIcon from "@/public/svgs/MyPage/myPageIcon.svg";
 import PresidentIcon from "@/public/svgs/MyPage/presidentIcon.svg";
 import RecruitmentIcon from "@/public/svgs/MyPage/recruitmentIcon.svg";
+import { Ionicons } from "@expo/vector-icons";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import { useMyApplicationExist } from "@/src/hooks/application/myApplication/useMyApplicationExist";
 import { useMyInfomation } from "@/src/hooks/application/myApplication/useMyInfomation";
 import { useLogout } from "@/src/hooks/login/useLogout";
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
-import { buildAssetUrl } from "@/src/config/url";
 import { COLORS } from "@/src/utils/constants/colors";
 import MyActivity from "../my/application/_components/MyActivity";
 
@@ -115,7 +116,9 @@ export default function ProfileScreen() {
                 )}
               </View>
               {myApplicationExist && (
-                <Pressable onPress={() => router.push("/my/application" as any)}>
+                <Pressable
+                  onPress={() => router.push("/my/application" as any)}
+                >
                   <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
                     <TextSize
                       color='#101828'
@@ -136,10 +139,28 @@ export default function ProfileScreen() {
                 />
               </Pressable>
 
-              <Pressable onPress={() => router.push("/my/application/status" as any)}>
+              <Pressable onPress={() => router.push("/my/application/status")}>
                 <MyActivity
                   content='지원 내역'
                   icon={<ApplicationStatusIcon width={18} height={18} />}
+                />
+              </Pressable>
+
+              <Pressable onPress={() => router.push("/my/wish/step")}>
+                <MyActivity
+                  content='찜한 스텝 공고'
+                  icon={
+                    <Ionicons name='heart-outline' size={18} color='#0EA5E9' />
+                  }
+                />
+              </Pressable>
+
+              <Pressable onPress={() => router.push("/my/wish/guestHouse")}>
+                <MyActivity
+                  content='찜한 게스트하우스'
+                  icon={
+                    <Ionicons name='home-outline' size={18} color='#0EA5E9' />
+                  }
                 />
               </Pressable>
             </View>
