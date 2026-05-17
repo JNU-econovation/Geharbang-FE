@@ -213,7 +213,7 @@ export default function ProfileScreen() {
               {data?.isAdmin && (
                 <Pressable onPress={() => router.push("/operator/management")}>
                   <MyActivity
-                    content='운영자 기능'
+                    content='관리자 기능'
                     icon={<DangerIcon width={18} height={18} />}
                   />
                 </Pressable>
@@ -283,7 +283,7 @@ export default function ProfileScreen() {
                 <TextSize
                   color='#101828'
                   size={16}
-                  content='사장님 기능 이용 가능'
+                  content='운영자 기능 이용 가능'
                 />
                 <TextSize
                   color='#4A5565'
