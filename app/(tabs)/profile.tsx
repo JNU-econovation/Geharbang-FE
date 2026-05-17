@@ -41,8 +41,9 @@ export default function ProfileScreen() {
   const myApplicationExist = isExist?.isExist ?? false;
 
   const { data, isLoading, isError, refetch } =
-    useMyInfomation(myApplicationExist);
+    useMyInfomation(Boolean(isLogined));
   const profileImageUri = buildAssetUrl(data?.imageUrl);
+  const canUseOwnerFeatures = Boolean(data?.isOwner || data?.isAdmin);
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -145,9 +146,9 @@ export default function ProfileScreen() {
             </View>
 
             <View className='pt-8'>
-              <TextSize color='#6A7282' size={18} content='운영자 기능' />
+              <TextSize color='#6A7282' size={18} content='사장님 기능' />
 
-              {data?.isOwner ? (
+              {canUseOwnerFeatures ? (
                 <View>
                   <Pressable onPress={() => router.push("/my/guestHouse")}>
                     <MyActivity
@@ -172,7 +173,7 @@ export default function ProfileScreen() {
                       <TextSize
                         color='#101828'
                         size={16}
-                        content='운영자이신가요?'
+                        content='사장님이신가요?'
                       />
                       <View className='pt-2' />
                       <TextSize
@@ -192,7 +193,7 @@ export default function ProfileScreen() {
               {data?.isAdmin && (
                 <Pressable onPress={() => router.push("/operator/management")}>
                   <MyActivity
-                    content='운영자 기능'
+                    content='관리자 기능'
                     icon={<DangerIcon width={18} height={18} />}
                   />
                 </Pressable>
