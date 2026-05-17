@@ -28,7 +28,7 @@ Geharbang FE는 **제주 게스트하우스 스텝 구인/구직 플랫폼**의 
 | 비로그인 | - | 홈, 게스트하우스 목록/상세, 스텝 공고 목록/상세 |
 | 로그인 (일반) | 소셜 로그인 | + 지원서 작성, 공고 지원, 찜, 내 정보, 지원 내역 |
 | 사장님 | `isOwner: true` (인증서 승인_완료) | + 게스트하우스 등록/관리, 구인 공고 등록/관리, 지원자 관리 |
-| 시스템 운영자 | `isAdmin: true` (DB 직접 설정) | + 인증서 심사 대시보드 |
+| 시스템 운영자 | `isAdmin: true` (DB 직접 설정) | + 인증서 심사 대시보드, 사장님 기능 메뉴 |
 
 > `GET /api/v1/user/profile` 응답의 `isOwner`, `isAdmin`, `inReview`, `certificateStatus` 필드로 UI 분기 처리.
 
@@ -471,7 +471,7 @@ GuestHouseCard
 목록 훅을 `useInfiniteQuery`로 전환하면 query cache update/invalidation을 함께 적용할 수 있다.
 대표 이미지가 없는 게시글/공고는 BE가 `imageUrl: ""`로 내려주며, 카드는 placeholder 아이콘을 표시한다.
 
-### 운영자 인증
+### 사장님 인증
 
 ```
 1. 인증서 파일 선택 (expo-document-picker → PDF/이미지)
@@ -479,8 +479,9 @@ GuestHouseCard
 3. 사업체명, 대표자명, 전화번호 입력
 4. 인증서 제출 → 관리자 심사 대기
 5. profile 화면에서 심사 상태 표시
+   - isAdmin == true                  → "관리자" 배지 + 관리자 기능 + 사장님 기능 활성화
    - certificateStatus == "검토_대기" → "심사 중" 배지
-   - certificateStatus == "승인_완료" → "인증 사장님" 배지 + 사장님 메뉴 활성화
+   - certificateStatus == "승인_완료" → "인증 사장님" 배지 + 사장님 기능 활성화
    - certificateStatus == "거부됨"   → "거절됨" 안내 + 재신청 유도
    - certificateStatus == null       → 인증서 신청 유도
 ```
@@ -489,15 +490,15 @@ GuestHouseCard
 
 | 필드 | 값 | 화면 처리 |
 |------|----|----------|
-| `isOwner` | true | 내 게스트하우스 관리, 구인 공고 관리 메뉴 표시 |
+| `isOwner` | true | "인증 사장님" 배지, 내 게스트하우스 관리, 구인 공고 관리 메뉴 표시 |
 | `inReview` | true | "심사 중" 배지 표시 |
-| `isAdmin` | true | 인증서 심사 대시보드 버튼 표시 |
+| `isAdmin` | true | "관리자" 배지, 인증서 심사 대시보드 버튼 표시, 사장님 기능 메뉴 표시 |
 | `certificateStatus` | `거부됨` | 거절 안내 및 재신청 유도 |
 
-⚠️ **현재 확인된 이슈:**
-- `profile.tsx`의 사장님 메뉴는 `isOwner`, 운영자 심사 메뉴는 `isAdmin`으로 분기 중이다.
-- 다만 `useMyInfomation(myApplicationExist)`가 지원서 존재 여부에 묶여 있어, 지원서를 작성하지 않은 로그인 사용자는 `GET /api/v1/user/profile` 호출이 막힐 수 있다.
-- 사장님/운영자 권한 UI는 지원서 존재 여부와 무관해야 하므로, 프로필 조회 query의 `enabled` 조건을 분리하는 수정이 필요하다.
+**현재 구현 기준:**
+- 프로필 조회는 로그인 여부만 기준으로 실행한다. 지원서 작성 여부와 권한 정보는 분리되어 있다.
+- 사장님 기능 메뉴는 `isOwner || isAdmin`이면 표시한다.
+- 배지는 `isAdmin`을 우선한다. 관리자면 "관리자"만 표시하고, 관리자가 아닌 인증 사장님이면 "인증 사장님"을 표시한다.
 
 ---
 
