@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
@@ -8,8 +9,8 @@ import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import ErrorMessage from "@/src/components/ui/ErrorMessage";
 import LoadingSkeleton from "@/src/components/ui/LoadingSkeleton";
-import ConfirmModal from "@/src/components/ui/Modal/ConfirmModal";
 import { CloseableConfirmModal } from "@/src/components/ui/Modal/CloseableConfirmModal";
+import ConfirmModal from "@/src/components/ui/Modal/ConfirmModal";
 import TextSize from "@/src/components/ui/TextSize";
 import {
   useDeleteMyStepRecruitment,
@@ -68,6 +69,7 @@ export default function MyStepRecruitment() {
       <View className='px-4 py-3'>
         <BackArrorHeader
           content='내 구인 공고 관리'
+          onPress={() => router.push("/profile")}
           icon={
             <Pressable onPress={checkAndNavigate}>
               <Text className='mx-4 mb-1 text-primary-blue text-3xl'>+</Text>

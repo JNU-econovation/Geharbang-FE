@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
@@ -67,6 +68,7 @@ export default function MyGuestHouse() {
       <View className='px-4 py-3'>
         <BackArrorHeader
           content='내 게스트하우스 관리'
+          onPress={() => router.push("/profile")}
           icon={
             <Pressable onPress={checkAndNavigate}>
               <Text className='mx-3 mb-1 text-primary-blue text-3xl'>+</Text>
