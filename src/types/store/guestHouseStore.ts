@@ -71,4 +71,6 @@ export interface GuestHouseStore extends AllSlices {
   shouldScrollToError: boolean;
   setShouldScrollToError: (value: boolean) => void;
   resetAllData: () => void;
+  editingId: number | null;
+  setEditingId: (id: number | null) => void;
 }

@@ -10,6 +10,7 @@ import LoadingSkeleton from "@/src/components/ui/LoadingSkeleton";
 import { CloseableConfirmModal } from "@/src/components/ui/Modal/CloseableConfirmModal";
 import ConfirmModal from "@/src/components/ui/Modal/ConfirmModal";
 import TextSize from "@/src/components/ui/TextSize";
+import { useEditGuestHouse } from "@/src/hooks/guestHouse/useEditGuestHouse";
 import { useGuestHouseResumeDraft } from "@/src/hooks/guestHouse/useGuestHouseResumeDraft";
 import {
   useDeleteMyGuestHouse,
@@ -23,6 +24,7 @@ import ManagementCard from "./_components/ManagementCard";
 export default function MyGuestHouse() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { checkAndNavigate, modalProps } = useGuestHouseResumeDraft();
+  const { handleEditPress } = useEditGuestHouse();
   const [selectedPost, setSelectedPost] = useState<{
     id: number;
     name: string;
@@ -113,6 +115,7 @@ export default function MyGuestHouse() {
                   onToggleActive={() =>
                     handleToggleStatus(post.id, post.isClosed)
                   }
+                  onEdit={() => handleEditPress(post.id)}
                 />
               ))}
             </Flex>

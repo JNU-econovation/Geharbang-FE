@@ -33,6 +33,7 @@ export default function GuestHouseEnrollStep5() {
     resetAllData,
     shouldScrollToError,
     setShouldScrollToError,
+    editingId,
   } = useGuestHouseStore();
   const { instagram, phone, website, ownerMessage } = step5Data;
 
@@ -156,10 +157,14 @@ export default function GuestHouseEnrollStep5() {
 
       if (guestHouseId) {
         resetAllData();
-        router.push({
-          pathname: "/guestHouse/enroll/result",
-          params: { status: "success", guestHouseId: guestHouseId.toString() },
-        });
+        if (editingId) {
+          router.navigate("/my/guestHouse");
+        } else {
+          router.push({
+            pathname: "/guestHouse/enroll/result",
+            params: { status: "success", guestHouseId: guestHouseId.toString() },
+          });
+        }
       }
     } catch (error) {
       console.error("Enrollment Failed", error);
@@ -307,7 +312,7 @@ export default function GuestHouseEnrollStep5() {
                 variant='primary'
                 height={50}
                 textColor='white'
-                content={isPending ? "등록 중..." : BUTTON_LABELS.SUBMIT}
+                content={isPending ? (editingId ? "수정 중..." : "등록 중...") : (editingId ? "수정하기" : BUTTON_LABELS.SUBMIT)}
                 onPress={handleSubmit}
                 disabled={isPending}
                 className='flex-1'

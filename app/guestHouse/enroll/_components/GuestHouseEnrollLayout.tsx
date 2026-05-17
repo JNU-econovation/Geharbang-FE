@@ -53,26 +53,36 @@ export default function GuestHouseEnrollLayout({
   currentStep,
   children,
 }: GuestHouseEnrollLayoutProps) {
-  const { resetAllData } = useGuestHouseStore();
+  const { resetAllData, editingId } = useGuestHouseStore();
   const [isExitModalVisible, setIsExitModalVisible] = useState(false);
 
   const handleHeaderBackPress = useCallback(() => {
+    if (editingId) {
+      resetAllData();
+      router.navigate("/my/guestHouse");
+      return;
+    }
     if (isFormEmpty()) {
       resetAllData();
       router.replace("/");
     } else {
       setIsExitModalVisible(true);
     }
-  }, [resetAllData]);
+  }, [resetAllData, editingId]);
 
   const handleAndroidBack = useCallback(() => {
+    if (editingId) {
+      resetAllData();
+      router.navigate("/my/guestHouse");
+      return true;
+    }
     if (currentStep === 1) {
       handleHeaderBackPress();
     } else {
       router.push(STEP_ROUTES[currentStep - 2] as any);
     }
     return true;
-  }, [currentStep, handleHeaderBackPress]);
+  }, [currentStep, handleHeaderBackPress, editingId, resetAllData]);
 
   useFocusEffect(
     useCallback(() => {

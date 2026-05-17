@@ -176,7 +176,7 @@ export default function ProfileScreen() {
                   </Pressable>
                   <Pressable onPress={() => router.push("/my/stepRecruitment")}>
                     <MyActivity
-                      content='구인 공고 관리'
+                      content='내 구인 공고 관리'
                       icon={<RecruitmentIcon width={18} height={18} />}
                     />
                   </Pressable>
