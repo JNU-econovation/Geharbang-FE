@@ -130,9 +130,17 @@ export default function ProfileScreen() {
 
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='내 활동' />
-              <Pressable onPress={() => router.push("/application/create")}>
+              <Pressable
+                onPress={() =>
+                  router.push(
+                    myApplicationExist
+                      ? "/application/create?mode=edit"
+                      : "/application/create"
+                  )
+                }
+              >
                 <MyActivity
-                  content='지원서 작성'
+                  content={myApplicationExist ? "지원서 수정" : "지원서 작성"}
                   icon={<ApplicationIcon width={18} height={18} />}
                 />
               </Pressable>

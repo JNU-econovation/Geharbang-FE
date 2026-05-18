@@ -1,6 +1,5 @@
-import { router } from "expo-router";
-import { useEffect } from "react";
-import { ScrollView, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import DismissKeyboardView from "@/src/components/layout/DismissKeyboardView";
@@ -12,30 +11,31 @@ import FormField from "@/src/components/ui/Form/FormField";
 import SingleImagePicker from "@/src/components/ui/imagePicker/SingleImagePicker";
 import OptionSelector from "@/src/components/ui/OptionSelector";
 import TextSize from "@/src/components/ui/TextSize";
+import { COLORS } from "@/src/utils/constants/colors";
 import { useApplicationSlice } from "@/src/stores/application/useApplicationSlice";
 import { Gender } from "@/src/types/Gender";
-
 import { formatPhoneNumber } from "@/src/utils/common/phoneNumberFormatter";
 import { GENDER_BASIC } from "@/src/utils/constants/options";
 
 import { useApplicationFormValidation } from "@/src/hooks/application/create/useApplicationFormValidation";
+import { usePreFillApplication } from "@/src/hooks/application/create/usePreFillApplication";
 import FormSection from "../../../src/components/ui/Form/FormSection";
 import ProgressBar from "../../../src/components/ui/Form/ProgressBar";
 import TextInput from "../../../src/components/ui/TextInput";
 import DateInput from "../_components/DateInput";
 
 export default function applicationCreate() {
+  const { mode } = useLocalSearchParams<{ mode?: string }>();
+  const isEditMode = mode === "edit";
+
+  const { isPreFilling } = usePreFillApplication(isEditMode);
+
   const {
     data: applicationData,
     setUpdate: setApplicationData,
-    resetData,
     imageFile,
     setImageFile,
   } = useApplicationSlice();
-
-  useEffect(() => {
-    resetData();
-  }, [resetData]);
 
   const { errors, clearError, validateForm } = useApplicationFormValidation(
     applicationData,
@@ -45,7 +45,10 @@ export default function applicationCreate() {
 
   const handleNext = () => {
     if (validateForm()) {
-      router.push("/application/create/step2");
+      router.push({
+        pathname: "/application/create/step2",
+        params: { mode },
+      });
     }
   };
 
@@ -54,13 +57,17 @@ export default function applicationCreate() {
       <View className='p-3'>
         <Flex justify='start' items='center' dir='row' gap={124}>
           <BackArrow color='black' size={24} />
-          <TextSize size={18} content='지원서 작성' />
+          <TextSize size={18} content={isEditMode ? "지원서 수정" : "지원서 작성"} />
         </Flex>
       </View>
 
       <ProgressBar stepTitle='기본정보' currentStep={1} totalSteps={2} />
 
-      <ScrollView className='bg-[#F9FAFB]'>
+      {isPreFilling ? (
+        <View className='flex-1 justify-center items-center'>
+          <ActivityIndicator size={60} color={COLORS.PRIMARY.BLUE} />
+        </View>
+      ) : <ScrollView className='bg-[#F9FAFB]'>
         <DismissKeyboardView>
           <View className='pt-4 px-3 '>
             <Flex justify='start' items='center' gap={24}>
@@ -162,7 +169,7 @@ export default function applicationCreate() {
             </Flex>
           </View>
         </DismissKeyboardView>
-      </ScrollView>
+      </ScrollView>}
     </CustomSafeAreaView>
   );
 }
