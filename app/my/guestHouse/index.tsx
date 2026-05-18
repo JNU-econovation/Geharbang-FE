@@ -1,5 +1,6 @@
+import { Image } from "expo-image";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
@@ -11,6 +12,7 @@ import LoadingSkeleton from "@/src/components/ui/LoadingSkeleton";
 import { CloseableConfirmModal } from "@/src/components/ui/Modal/CloseableConfirmModal";
 import ConfirmModal from "@/src/components/ui/Modal/ConfirmModal";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import { useEditGuestHouse } from "@/src/hooks/guestHouse/useEditGuestHouse";
 import { useGuestHouseResumeDraft } from "@/src/hooks/guestHouse/useGuestHouseResumeDraft";
 import {
@@ -39,6 +41,15 @@ export default function MyGuestHouse() {
   } = useGetMyGuestHouse();
   const { mutate: deletePost } = useDeleteMyGuestHouse();
   const { mutate: updateStatus } = usePatchMyGuestHouseStatus();
+
+  useEffect(() => {
+    if (myGuestHouseData) {
+      myGuestHouseData.forEach((post) => {
+        const uri = buildAssetUrl(post.imageUrl);
+        if (uri) Image.prefetch(uri);
+      });
+    }
+  }, [myGuestHouseData]);
 
   const handleDeletePress = (id: number, name: string) => {
     setSelectedPost({ id, name });

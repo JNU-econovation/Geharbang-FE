@@ -6,7 +6,8 @@ import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
-import { Image, View } from "react-native";
+import { View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 import ApplicantStatusBadge from "./ApplicationStatusBadge";
 
 export type ApplicationStatusType = "대기중" | "합격";
@@ -36,10 +37,7 @@ export default function ApplicationCard({
     <View className='w-full bg-white border border-gray-border rounded-2xl p-4 gap-4'>
       <Flex dir='row' justify='start' items='center' gap={14}>
         {imageUri ? (
-          <Image
-            source={{ uri: imageUri }}
-            className='rounded-full w-12 h-12'
-          />
+          <CachedImage uri={imageUri} className='rounded-full w-12 h-12' />
         ) : (
           <View className='rounded-full w-12 h-12 bg-gray-100' />
         )}

@@ -1,8 +1,10 @@
+import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
+import { buildAssetUrl } from "@/src/config/url";
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import Flex from "@/src/components/layout/Flex";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
@@ -40,6 +42,15 @@ export default function MyStepRecruitment() {
 
   const { mutate: deletePost } = useDeleteMyStepRecruitment();
   const { mutate: updateStatus } = usePatchMyStepRecruitmentStatus();
+
+  useEffect(() => {
+    if (myStepRecruitment) {
+      myStepRecruitment.forEach((post) => {
+        const uri = buildAssetUrl(post.imageUrl);
+        if (uri) Image.prefetch(uri);
+      });
+    }
+  }, [myStepRecruitment]);
 
   const handleDeletePress = (id: number, name: string) => {
     setSelectedPost({ id, name });

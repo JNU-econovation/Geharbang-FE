@@ -1,12 +1,7 @@
+import CachedImage from "@/src/components/ui/CachedImage";
 import { router } from "expo-router";
 import React from "react";
-import {
-  ActivityIndicator,
-  Image,
-  Pressable,
-  ScrollView,
-  View,
-} from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, View } from "react-native";
 
 import ApplicationIcon from "@/public/svgs/MyPage/applicationIcon.svg";
 import ApplicationStatusIcon from "@/public/svgs/MyPage/applicationStatusIcon.svg";
@@ -80,12 +75,9 @@ export default function ProfileScreen() {
                 {myApplicationExist ? (
                   <View className='flex-row items-center gap-5'>
                     {profileImageUri ? (
-                      <Image
-                        source={{
-                          uri: profileImageUri,
-                        }}
+                      <CachedImage
+                        uri={profileImageUri}
                         style={{ width: 80, height: 80, borderRadius: 100 }}
-                        resizeMode='cover'
                       />
                     ) : (
                       <View className='w-20 h-20 bg-white rounded-full flex items-center justify-center'>
@@ -135,7 +127,7 @@ export default function ProfileScreen() {
                   router.push(
                     myApplicationExist
                       ? "/application/create?mode=edit"
-                      : "/application/create"
+                      : "/application/create",
                   )
                 }
               >
@@ -152,20 +144,20 @@ export default function ProfileScreen() {
                 />
               </Pressable>
 
-              <Pressable onPress={() => router.push("/my/wish/step")}>
-                <MyActivity
-                  content='찜한 스텝 공고'
-                  icon={
-                    <Ionicons name='heart-outline' size={18} color='#0EA5E9' />
-                  }
-                />
-              </Pressable>
-
               <Pressable onPress={() => router.push("/my/wish/guestHouse")}>
                 <MyActivity
                   content='찜한 게스트하우스'
                   icon={
                     <Ionicons name='home-outline' size={18} color='#0EA5E9' />
+                  }
+                />
+              </Pressable>
+
+              <Pressable onPress={() => router.push("/my/wish/step")}>
+                <MyActivity
+                  content='찜한 스텝 공고'
+                  icon={
+                    <Ionicons name='heart-outline' size={18} color='#0EA5E9' />
                   }
                 />
               </Pressable>

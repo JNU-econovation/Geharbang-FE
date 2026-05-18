@@ -8,7 +8,8 @@ import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
-import { Image, Pressable, View } from "react-native";
+import { Pressable, View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 import StatusBadge from "./StatusBadge";
 
 interface ManagementCardProps {
@@ -51,11 +52,7 @@ export default function ManagementCard({
     >
       <View className='relative w-full h-44'>
         {imageUri ? (
-          <Image
-            source={{ uri: imageUri }}
-            className='w-full h-full'
-            resizeMode='cover'
-          />
+          <CachedImage uri={imageUri} className='w-full h-full' />
         ) : (
           <View className='w-full h-full bg-gray-100' />
         )}

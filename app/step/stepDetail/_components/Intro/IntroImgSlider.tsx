@@ -1,4 +1,5 @@
-import { Dimensions, FlatList, Image, Pressable, View } from "react-native";
+import { Dimensions, FlatList, Pressable, View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 
 import ModalImage from "@/src/components/ui/Modal/ModalImage";
 import { useImageModal } from "@/src/hooks/stepDetail/useImageModal";
@@ -34,11 +35,7 @@ export default function IntroImgSlider({ images }: IntroImgSliderProps) {
               }}
             >
               {imageUri ? (
-                <Image
-                  source={{ uri: imageUri }}
-                  className='w-full h-full rounded-3xl'
-                  resizeMode='cover'
-                />
+                <CachedImage uri={imageUri} className='w-full h-full rounded-3xl' />
               ) : (
                 <View className='w-full h-full rounded-3xl bg-gray-100' />
               )}

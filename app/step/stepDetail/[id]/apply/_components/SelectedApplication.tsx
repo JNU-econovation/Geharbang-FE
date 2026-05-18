@@ -1,4 +1,5 @@
-import { Image, View } from "react-native";
+import { View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 
 import Flex from "@/src/components/layout/Flex/Flex";
 import CheckmarkCircle from "@/src/components/ui/CheckmarkCircle";
@@ -21,10 +22,7 @@ export default function SelectedApplication({
     <View className="gap-3 py-3 px-4 border-b border-gray-border">
       <Flex justify="start" items="center" dir="row" gap={10}>
         {imageUri ? (
-          <Image
-            source={{ uri: imageUri }}
-            className="rounded-full w-12 h-12"
-          />
+          <CachedImage uri={imageUri} className="rounded-full w-12 h-12" />
         ) : (
           <View className="rounded-full w-12 h-12 bg-gray-100" />
         )}

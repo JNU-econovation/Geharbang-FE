@@ -1,11 +1,11 @@
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Image,
   Pressable,
   ScrollView,
   View,
 } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 
 import Location from "@/public/svgs/GuestHouse/location.svg";
 import Calender from "@/public/svgs/MyPage/calender.svg";
@@ -104,10 +104,9 @@ export default function MyApplicationStatus() {
                 <View className='flex-row  gap-3'>
                   <View className='flex-row items-center gap-4'>
                     {imageUri ? (
-                      <Image
-                        source={{ uri: imageUri }}
+                      <CachedImage
+                        uri={imageUri}
                         style={{ width: 70, height: 70, borderRadius: 100 }}
-                        resizeMode='cover'
                       />
                     ) : (
                       <View className='w-[70px] h-[70px] rounded-full bg-[#E5E7EB]' />
