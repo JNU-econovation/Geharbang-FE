@@ -28,7 +28,6 @@ import WorkInfo from "../_components/WorkInfo/WorkInfo";
 
 export default function StepDetail() {
   const { id, fromRegistration } = useLocalSearchParams<{ id: string; fromRegistration?: string }>();
-console.log(id);
 
   const {
     scrollViewRef,
