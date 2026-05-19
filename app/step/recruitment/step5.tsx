@@ -163,7 +163,7 @@ export default function RecruitmentStep5() {
           showsVerticalScrollIndicator={false}
         >
           <View className='pt-4 px-3'>
-            {editingId && (
+            {editingId && existingQuestions.length > 0 && (
               <View className='mb-4 px-4 py-3 bg-amber-50 rounded-xl flex-row items-start gap-2 border border-amber-200'>
                 <Ionicons name='information-circle-outline' size={18} color='#d97706' style={{ marginTop: 1 }} />
                 <Text className='flex-1 text-amber-700 text-sm leading-5'>

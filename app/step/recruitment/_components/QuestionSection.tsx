@@ -85,7 +85,7 @@ export default function QuestionSection({
         {questions.map((question, index) => (
           <View key={question.id}>
             <AppendableInput
-              placeholder={`질문 ${(hasExisting ? existingQuestions!.length : 0) + index + 1}을(를) 입력해주세요`}
+              placeholder={`질문 ${(hasExisting ? existingQuestions.length : 0) + index + 1}을(를) 입력해주세요`}
               height={86}
               value={question.text}
               onChangeText={handleTextChange(question.id)}
