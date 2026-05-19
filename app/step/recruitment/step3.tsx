@@ -145,6 +145,10 @@ export default function RecruitmentStep3() {
                       setSelectedImageFiles={(files) =>
                         setStep3Update("mainImageFiles", files)
                       }
+                      existingImageUrls={step3Data.mainImageUrls}
+                      setExistingImageUrls={(urls) =>
+                        setStep3Update("mainImageUrls", urls)
+                      }
                       maxCount={10}
                       error={!!errors.mainImageFiles}
                       clearError={() => clearError("mainImageFiles")}
@@ -186,6 +190,10 @@ export default function RecruitmentStep3() {
                       selectedImageFiles={step3Data.introImageFiles}
                       setSelectedImageFiles={(files) =>
                         setStep3Update("introImageFiles", files)
+                      }
+                      existingImageUrls={step3Data.introImageUrls}
+                      setExistingImageUrls={(urls) =>
+                        setStep3Update("introImageUrls", urls)
                       }
                       maxCount={10}
                       error={!!errors.introImageFiles}

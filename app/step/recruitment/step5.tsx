@@ -8,6 +8,7 @@ import { useStep3Validation } from "@/src/hooks/stepRecruitment/useStep3Validati
 import { useStep4Validation } from "@/src/hooks/stepRecruitment/useStep4Validation";
 import { useStep5Validation } from "@/src/hooks/stepRecruitment/useStep5Validation";
 import { useStepRecruitmentStore } from "@/src/stores/stepRecruitment/useStepRecruitmentStore";
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
 import { Href, router } from "expo-router";
 import { useCallback, useRef } from "react";
@@ -16,6 +17,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Text,
   View,
 } from "react-native";
 
@@ -32,6 +34,8 @@ export default function RecruitmentStep5() {
     updateStep5Question,
     setShouldScrollToError,
     shouldScrollToError,
+    editingId,
+    existingQuestions,
   } = storeData;
   const { questions } = step5Data;
   const { instagram, phone, email, website, ownerMessage } = step4Data;
@@ -105,7 +109,8 @@ export default function RecruitmentStep5() {
     if (index !== -1) clearQuestionError(index);
   };
 
-  const canAddMore = questions.length < 5;
+  const totalQuestions = existingQuestions.length + questions.length;
+  const canAddMore = totalQuestions < 5;
 
   useFocusEffect(
     useCallback(() => {
@@ -158,8 +163,18 @@ export default function RecruitmentStep5() {
           showsVerticalScrollIndicator={false}
         >
           <View className='pt-4 px-3'>
+            {editingId && existingQuestions.length > 0 && (
+              <View className='mb-4 px-4 py-3 bg-amber-50 rounded-xl flex-row items-start gap-2 border border-amber-200'>
+                <Ionicons name='information-circle-outline' size={18} color='#d97706' style={{ marginTop: 1 }} />
+                <Text className='flex-1 text-amber-700 text-sm leading-5'>
+                  기존 질문은 수정할 수 없어요.{"\n"}새 질문만 추가할 수 있어요.
+                </Text>
+              </View>
+            )}
+
             <QuestionSection
               questions={questions}
+              existingQuestions={editingId ? existingQuestions : undefined}
               onAddQuestion={addQuestion}
               onDeleteQuestion={deleteQuestion}
               onUpdateQuestion={updateQuestion}
@@ -182,7 +197,7 @@ export default function RecruitmentStep5() {
                 variant='primary'
                 height={50}
                 textColor='white'
-                content='공고 등록하기'
+                content={editingId ? '공고 수정하기' : '공고 등록하기'}
                 onPress={handleSubmit}
                 className='flex-1'
               />

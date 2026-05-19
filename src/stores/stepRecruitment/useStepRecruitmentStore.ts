@@ -37,6 +37,12 @@ export const useStepRecruitmentStore = create<StepRecruitmentStore>()(
       shouldScrollToError: false,
       setShouldScrollToError: (value: boolean) => set({ shouldScrollToError: value }),
 
+      editingId: null,
+      setEditingId: (id: number | null) => set({ editingId: id }),
+
+      existingQuestions: [],
+      setExistingQuestions: (questions) => set({ existingQuestions: questions }),
+
       resetAllData: () => {
         set(() => ({
           step1Data: initialStep1Data,
@@ -45,6 +51,8 @@ export const useStepRecruitmentStore = create<StepRecruitmentStore>()(
           step4Data: initialStep4Data,
           step5Data: initialStep5Data,
           shouldScrollToError: false,
+          editingId: null,
+          existingQuestions: [],
         }));
       },
     }),

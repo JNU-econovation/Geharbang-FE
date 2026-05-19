@@ -1,4 +1,5 @@
-import { Image, Modal, View } from "react-native";
+import { Modal, View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 import Swiper from "react-native-swiper";
 import { buildAssetUrl } from "@/src/config/url";
 
@@ -50,11 +51,7 @@ export default function ModalImage({
             return (
               <View key={i}>
                 {imageUri ? (
-                  <Image
-                    source={{ uri: imageUri }}
-                    className='w-full h-full'
-                    resizeMode='contain'
-                  />
+                  <CachedImage uri={imageUri} className='w-full h-full' contentFit='contain' />
                 ) : (
                   <View className='w-full h-full bg-[#F3F4F6]' />
                 )}

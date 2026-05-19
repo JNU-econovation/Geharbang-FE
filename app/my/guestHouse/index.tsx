@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
@@ -10,6 +12,8 @@ import LoadingSkeleton from "@/src/components/ui/LoadingSkeleton";
 import { CloseableConfirmModal } from "@/src/components/ui/Modal/CloseableConfirmModal";
 import ConfirmModal from "@/src/components/ui/Modal/ConfirmModal";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
+import { useEditGuestHouse } from "@/src/hooks/guestHouse/useEditGuestHouse";
 import { useGuestHouseResumeDraft } from "@/src/hooks/guestHouse/useGuestHouseResumeDraft";
 import {
   useDeleteMyGuestHouse,
@@ -23,6 +27,7 @@ import ManagementCard from "./_components/ManagementCard";
 export default function MyGuestHouse() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { checkAndNavigate, modalProps } = useGuestHouseResumeDraft();
+  const { handleEditPress } = useEditGuestHouse();
   const [selectedPost, setSelectedPost] = useState<{
     id: number;
     name: string;
@@ -36,6 +41,15 @@ export default function MyGuestHouse() {
   } = useGetMyGuestHouse();
   const { mutate: deletePost } = useDeleteMyGuestHouse();
   const { mutate: updateStatus } = usePatchMyGuestHouseStatus();
+
+  useEffect(() => {
+    if (myGuestHouseData) {
+      myGuestHouseData.forEach((post) => {
+        const uri = buildAssetUrl(post.imageUrl);
+        if (uri) Image.prefetch(uri);
+      });
+    }
+  }, [myGuestHouseData]);
 
   const handleDeletePress = (id: number, name: string) => {
     setSelectedPost({ id, name });
@@ -65,6 +79,7 @@ export default function MyGuestHouse() {
       <View className='px-4 py-3'>
         <BackArrorHeader
           content='내 게스트하우스 관리'
+          onPress={() => router.push("/profile")}
           icon={
             <Pressable onPress={checkAndNavigate}>
               <Text className='mx-3 mb-1 text-primary-blue text-3xl'>+</Text>
@@ -113,6 +128,7 @@ export default function MyGuestHouse() {
                   onToggleActive={() =>
                     handleToggleStatus(post.id, post.isClosed)
                   }
+                  onEdit={() => handleEditPress(post.id)}
                 />
               ))}
             </Flex>

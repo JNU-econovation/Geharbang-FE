@@ -35,6 +35,9 @@ export const useGuestHouseStore = create<GuestHouseStore>()(
       shouldScrollToError: false,
       setShouldScrollToError: (value: boolean) => set({ shouldScrollToError: value }),
 
+      editingId: null,
+      setEditingId: (id: number | null) => set({ editingId: id }),
+
       resetAllData: () => {
         set(() => ({
           step1Data: initialStep1Data,
@@ -43,6 +46,7 @@ export const useGuestHouseStore = create<GuestHouseStore>()(
           step4Data: initialStep4Data,
           step5Data: initialStep5Data,
           shouldScrollToError: false,
+          editingId: null,
         }));
       },
     }),

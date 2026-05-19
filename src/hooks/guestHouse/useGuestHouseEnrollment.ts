@@ -1,5 +1,7 @@
 import { createGuestHouseEnrollment } from "@/src/services/guestHouse/createGuestHouseEnrollment";
+import { updateGuestHouse } from "@/src/services/guestHouse/updateGuestHouse";
 import { uploadGuestHouseImages } from "@/src/services/guestHouse/uploadGuestHouseImages";
+import { useGuestHouseStore } from "@/src/stores/guestHouse/useGuestHouseStore";
 import { File } from "@/src/types/File";
 import { GuestHouseEnrollData } from "@/src/types/models/guestHouse/enroll";
 import { transformEnrollDataToRequest } from "@/src/utils/guestHouse/enrollDataTransformer";
@@ -8,6 +10,7 @@ import axios from "axios";
 import { Alert } from "react-native";
 
 export const useGuestHouseEnrollment = () => {
+  const { editingId } = useGuestHouseStore();
   const uploadImages = async (files: File[]): Promise<File[]> => {
     if (files.length === 0) return [];
 
@@ -80,8 +83,13 @@ export const useGuestHouseEnrollment = () => {
       }
 
       const requestData = transformEnrollDataToRequest(processedData);
-      const guestHouseId = await createGuestHouseEnrollment(requestData);
 
+      if (editingId) {
+        await updateGuestHouse(editingId, requestData);
+        return editingId;
+      }
+
+      const guestHouseId = await createGuestHouseEnrollment(requestData);
       return guestHouseId;
     },
     onError: (error: Error) => {

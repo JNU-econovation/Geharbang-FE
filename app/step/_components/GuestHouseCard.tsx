@@ -6,7 +6,8 @@ import { buildAssetUrl } from "@/src/config/url";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 
 interface GuestHouseCardProps {
   type: "stepRecruitment" | "guestHouse";
@@ -60,11 +61,7 @@ export default function GuestHouseCard({
       <View className='flex-row'>
         <View className='w-20 h-20 rounded-lg overflow-hidden bg-gray-100 items-center justify-center'>
           {imageUri ? (
-            <Image
-              source={{ uri: imageUri }}
-              className='w-full h-full'
-              resizeMode='cover'
-            />
+            <CachedImage uri={imageUri} className='w-full h-full' />
           ) : (
             <Ionicons name='image-outline' size={24} color='#9ca3af' />
           )}

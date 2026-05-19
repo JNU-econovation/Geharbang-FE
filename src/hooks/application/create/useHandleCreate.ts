@@ -18,7 +18,9 @@ export const useHandleCreate = (validateForm: () => boolean) => {
       });
 
       try {
-        await uploadMutation.mutateAsync(imageFile);
+        if (imageFile.type) {
+          await uploadMutation.mutateAsync(imageFile);
+        }
         const latestData = useApplicationSlice.getState().data;
         await createMutation.mutateAsync(latestData);
 

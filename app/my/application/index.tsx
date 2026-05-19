@@ -1,4 +1,5 @@
-import { ActivityIndicator, Image, ScrollView, View } from "react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 
 import CalenderIcon from "@/public/svgs/MyPage/calenderIcon.svg";
 import CalenderIconGreen from "@/public/svgs/MyPage/calenderIconGreen.svg";
@@ -52,12 +53,9 @@ export default function MyApplication() {
         <ScrollView>
           <View className='py-6 flex items-center gap-5'>
             {profileImageUri ? (
-              <Image
-                source={{
-                  uri: profileImageUri,
-                }}
+              <CachedImage
+                uri={profileImageUri}
                 style={{ width: 100, height: 100, borderRadius: 100 }}
-                resizeMode='cover'
               />
             ) : (
               <View className='w-[100px] h-[100px] rounded-full bg-[#E5E7EB]' />

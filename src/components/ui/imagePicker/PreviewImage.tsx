@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Image, Pressable, View } from "react-native";
+import { Pressable, View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 
 interface PreviewImageProps {
   imageUri: string;
@@ -17,10 +18,7 @@ export default function PreviewImage({
       style={{ width: size, height: size }}
       className='rounded-xl overflow-hidden'
     >
-      <Image
-        source={{ uri: imageUri }}
-        className='w-full h-full object-cover'
-      />
+      <CachedImage uri={imageUri} className='w-full h-full' />
 
       <Pressable
         onPress={() => onRemoveImage(imageUri)}
