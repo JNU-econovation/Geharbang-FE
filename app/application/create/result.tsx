@@ -34,7 +34,7 @@ export default function CreateResultScreen() {
               label: "→ 스텝 지원하러 가기",
               onPress: () => router.replace("/step"),
             }}
-            secondary={{ label: "내 지원서 확인", icon: "reader-outline", onPress: () => router.replace("/my/application") }}
+            secondary={{ label: "내 지원서 확인", icon: "reader-outline", onPress: () => router.replace("/my/application" as any) }}
             tertiary={{
               label: "홈으로 돌아가기",
               onPress: goHome,
