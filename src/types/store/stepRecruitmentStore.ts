@@ -16,4 +16,8 @@ export type StepRecruitmentStore = AllSlices & {
   shouldScrollToError: boolean;
   setShouldScrollToError: (value: boolean) => void;
   resetAllData: () => void;
+  editingId: number | null;
+  setEditingId: (id: number | null) => void;
+  existingQuestions: { id: string; text: string }[];
+  setExistingQuestions: (questions: { id: string; text: string }[]) => void;
 };

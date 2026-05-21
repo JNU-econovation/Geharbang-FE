@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 
 import GehaImage from "@/app/step/stepDetail/_components/GehaInfo/GehaImage";
@@ -12,6 +13,7 @@ import TextSize from "@/src/components/ui/TextSize";
 import { useHandleSection } from "@/src/hooks/common/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/common/useSectionToScroll";
 import { useGuestHouseDetail } from "@/src/hooks/guestHouseDetail/useGuestHouseDetail";
+import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
 import { router, useLocalSearchParams } from "expo-router";
 import { GUESTHOUSE } from "@/src/utils/constants/pressSection";
 import GuestHouseInfo from "../_components/GuestHouseInfo";
@@ -20,7 +22,7 @@ import GuestHouseParty from "../_components/GuestHouseParty";
 import ParlorType from "../_components/ParlorType";
 
 export default function GuestHouseDetail() {
-  const { fromRegistration } = useLocalSearchParams<{ fromRegistration?: string }>();
+  const { id, fromRegistration } = useLocalSearchParams<{ id: string; fromRegistration?: string }>();
 
   const {
     scrollViewRef,
@@ -35,6 +37,19 @@ export default function GuestHouseDetail() {
 
   const { data, isPending, isError, refetch } = useGuestHouseDetail();
 
+  const [isWished, setIsWished] = useState(false);
+
+  useEffect(() => {
+    if (data?.isWished !== undefined) setIsWished(data.isWished);
+  }, [data?.isWished]);
+
+  const { mutate: toggleWish } = useToggleWish({
+    type: "guestHouse",
+    id: Number(id),
+    onOptimisticUpdate: setIsWished,
+    onError: () => setIsWished((v) => !v),
+  });
+
   return (
     <CustomSafeAreaView pageColor='bg-white'>
       <View className='px-4 pt-3 pb-6'>
@@ -43,6 +58,8 @@ export default function GuestHouseDetail() {
           shareTitle='게스트하우스 공유하기'
           shareMessage='게스트하우스를 공유해보세요!'
           onBack={fromRegistration === 'true' ? () => router.replace('/(tabs)') : undefined}
+          isWished={isWished}
+          onWishToggle={() => toggleWish(isWished)}
         />
       </View>
       {isPending ? (

@@ -1,4 +1,5 @@
-import { Image, View } from "react-native";
+import { View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 
 import Flex from "@/src/components/layout/Flex/Flex";
 import Tag from "@/src/components/ui/Tag/Tag";
@@ -25,10 +26,7 @@ export default function TargetPostingInfo({
     <View className='bg-[#F9FAFB] px-3 py-4 border border-gray-border'>
       <Flex justify='start' items='center' dir='row' gap={10}>
         {imageUri ? (
-          <Image
-            source={{ uri: imageUri }}
-            className='rounded-xl w-16 h-16'
-          />
+          <CachedImage uri={imageUri} className='rounded-xl w-16 h-16' />
         ) : (
           <View className='rounded-xl w-16 h-16 bg-gray-100' />
         )}

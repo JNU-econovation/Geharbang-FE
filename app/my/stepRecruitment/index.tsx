@@ -1,21 +1,25 @@
+import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
+import { buildAssetUrl } from "@/src/config/url";
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import Flex from "@/src/components/layout/Flex";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import ErrorMessage from "@/src/components/ui/ErrorMessage";
 import LoadingSkeleton from "@/src/components/ui/LoadingSkeleton";
-import ConfirmModal from "@/src/components/ui/Modal/ConfirmModal";
 import { CloseableConfirmModal } from "@/src/components/ui/Modal/CloseableConfirmModal";
+import ConfirmModal from "@/src/components/ui/Modal/ConfirmModal";
 import TextSize from "@/src/components/ui/TextSize";
 import {
   useDeleteMyStepRecruitment,
   useGetMyStepRecruitment,
   usePatchMyStepRecruitmentStatus,
 } from "@/src/hooks/myStepRecruitment/useMyStepRecruitment";
+import { useEditStepRecruitment } from "@/src/hooks/stepRecruitment/useEditStepRecruitment";
 import { useStepRecruitmentResumeDraft } from "@/src/hooks/stepRecruitment/useStepRecruitmentResumeDraft";
 import { COLORS } from "@/src/utils/constants/colors";
 import ManagementCard from "../guestHouse/_components/ManagementCard";
@@ -23,6 +27,7 @@ import ManagementCard from "../guestHouse/_components/ManagementCard";
 export default function MyStepRecruitment() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { checkAndNavigate, modalProps } = useStepRecruitmentResumeDraft();
+  const { handleEditPress } = useEditStepRecruitment();
   const [selectedPost, setSelectedPost] = useState<{
     id: number;
     name: string;
@@ -37,6 +42,15 @@ export default function MyStepRecruitment() {
 
   const { mutate: deletePost } = useDeleteMyStepRecruitment();
   const { mutate: updateStatus } = usePatchMyStepRecruitmentStatus();
+
+  useEffect(() => {
+    if (myStepRecruitment) {
+      myStepRecruitment.forEach((post) => {
+        const uri = buildAssetUrl(post.imageUrl);
+        if (uri) Image.prefetch(uri);
+      });
+    }
+  }, [myStepRecruitment]);
 
   const handleDeletePress = (id: number, name: string) => {
     setSelectedPost({ id, name });
@@ -65,7 +79,8 @@ export default function MyStepRecruitment() {
     <CustomSafeAreaView pageColor='bg-white'>
       <View className='px-4 py-3'>
         <BackArrorHeader
-          content='구인 공고 관리'
+          content='내 스텝 공고 관리'
+          onPress={() => router.push("/profile")}
           icon={
             <Pressable onPress={checkAndNavigate}>
               <Text className='mx-4 mb-1 text-primary-blue text-3xl'>+</Text>
@@ -84,7 +99,7 @@ export default function MyStepRecruitment() {
             <TextSize
               size={14}
               color={COLORS.GRAY.TEXT}
-              content={`등록된 구인 공고가 없습니다.\n지금 바로 스텝 모집을 시작해 보세요!`}
+              content={`등록된 스텝 공고가 없습니다.\n지금 바로 스텝 모집을 시작해 보세요!`}
               align='center'
             />
             <Button
@@ -112,6 +127,7 @@ export default function MyStepRecruitment() {
                   onToggleActive={() =>
                     handleToggleStatus(post.id, post.isClosed)
                   }
+                  onEdit={() => handleEditPress(post.id)}
                 />
               ))}
             </Flex>

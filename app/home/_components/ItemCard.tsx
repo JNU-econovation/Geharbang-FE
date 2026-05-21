@@ -1,4 +1,5 @@
-import { Image, Pressable, useWindowDimensions, View } from "react-native";
+import { Pressable, useWindowDimensions, View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 
 import Flex from "@/src/components/layout//Flex/Flex";
 import Tag from "@/src/components/ui/Tag/Tag";
@@ -43,10 +44,7 @@ export function ItemCard({ item, type }: ItemCardProps) {
         onPress={handleCardPress}
       >
         {imageUri ? (
-          <Image
-            source={{ uri: imageUri }}
-            className='w-full h-36'
-          />
+          <CachedImage uri={imageUri} className='w-full h-36' />
         ) : (
           <View className='w-full h-36 bg-gray-100' />
         )}

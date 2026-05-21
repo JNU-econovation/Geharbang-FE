@@ -1,4 +1,5 @@
-import { Image, Pressable, View } from "react-native";
+import { Pressable, View } from "react-native";
+import CachedImage from "@/src/components/ui/CachedImage";
 import Swiper from "react-native-swiper";
 
 import Bed from "@/public/svgs/GuestHouse/bed.svg";
@@ -72,10 +73,9 @@ export default function GehaImage({
               }}
             >
               {imageUri ? (
-                <Image
-                  source={{ uri: imageUri }}
+                <CachedImage
+                  uri={imageUri}
                   className={`w-full h-full ${(party || type) && "rounded-t-lg"}`}
-                  resizeMode='cover'
                 />
               ) : (
                 <View

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import Button from "@/src/components/ui/Button/Button";
+import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
 import TextSize from "@/src/components/ui/TextSize";
 import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
 import { useApplicationExist } from "@/src/hooks/stepDetail/useApplicationExist";
@@ -54,6 +55,18 @@ export default function StepDetail() {
   const { isApplicationExist } = useApplicationExist();
 
   const [isVisible, setIsVisible] = useState(false);
+  const [isWished, setIsWished] = useState(false);
+
+  useEffect(() => {
+    if (data?.isWished !== undefined) setIsWished(data.isWished);
+  }, [data?.isWished]);
+
+  const { mutate: toggleWish } = useToggleWish({
+    type: "stepRecruitment",
+    id: Number(id),
+    onOptimisticUpdate: setIsWished,
+    onError: () => setIsWished((v) => !v),
+  });
 
   const { requireLogin } = useRequireLogin();
 
@@ -65,6 +78,8 @@ export default function StepDetail() {
           shareTitle='스텝공고 공유하기'
           shareMessage='스텝공고를 공유해보세요!'
           onBack={fromRegistration === 'true' ? () => router.replace('/(tabs)') : undefined}
+          isWished={isWished}
+          onWishToggle={() => toggleWish(isWished)}
         />
       </View>
       {isPending ? (

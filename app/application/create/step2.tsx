@@ -1,3 +1,4 @@
+import { useLocalSearchParams } from "expo-router";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
@@ -20,6 +21,9 @@ import DaySelector from "../_components/DaySelector";
 import StyleSelector from "../_components/StyleSelector";
 
 export default function Step2Screen() {
+  const { mode } = useLocalSearchParams<{ mode?: string }>();
+  const isEditMode = mode === "edit";
+
   const {
     data: applicationData,
     setUpdate: setApplicationData,
@@ -41,7 +45,7 @@ export default function Step2Screen() {
       <View className='p-3'>
         <Flex justify='start' items='center' dir='row' gap={124}>
           <BackArrow color='black' size={24} />
-          <TextSize size={18} content='지원서 작성' />
+          <TextSize size={18} content={isEditMode ? "지원서 수정" : "지원서 작성"} />
         </Flex>
       </View>
 
@@ -161,7 +165,7 @@ export default function Step2Screen() {
                   width={370}
                   height={50}
                   textColor='white'
-                  content='작성 완료'
+                  content={isEditMode ? "수정 완료" : "작성 완료"}
                   onPress={handleCreate}
                 />
               </Flex>

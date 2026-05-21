@@ -1,12 +1,7 @@
+import CachedImage from "@/src/components/ui/CachedImage";
 import { router } from "expo-router";
 import React from "react";
-import {
-  ActivityIndicator,
-  Image,
-  Pressable,
-  ScrollView,
-  View,
-} from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, View } from "react-native";
 
 import ApplicationIcon from "@/public/svgs/MyPage/applicationIcon.svg";
 import ApplicationStatusIcon from "@/public/svgs/MyPage/applicationStatusIcon.svg";
@@ -18,16 +13,17 @@ import MyGuestHouseIcon from "@/public/svgs/MyPage/myGuestHouseIcon.svg";
 import MyPageIcon from "@/public/svgs/MyPage/myPageIcon.svg";
 import PresidentIcon from "@/public/svgs/MyPage/presidentIcon.svg";
 import RecruitmentIcon from "@/public/svgs/MyPage/recruitmentIcon.svg";
+import { Ionicons } from "@expo/vector-icons";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import { useMyApplicationExist } from "@/src/hooks/application/myApplication/useMyApplicationExist";
 import { useMyInfomation } from "@/src/hooks/application/myApplication/useMyInfomation";
 import { useLogout } from "@/src/hooks/login/useLogout";
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
-import { buildAssetUrl } from "@/src/config/url";
 import { COLORS } from "@/src/utils/constants/colors";
 import MyActivity from "../my/application/_components/MyActivity";
 
@@ -46,7 +42,7 @@ export default function ProfileScreen() {
   const canUseOwnerFeatures = Boolean(data?.isOwner || data?.isAdmin);
 
   return (
-    <CustomSafeAreaView pageColor='bg-white'>
+    <CustomSafeAreaView pageColor='bg-white' topOnly={true}>
       <View className='px-3 pt-3 pb-4 border-b-[1px] border-[#E5E5E5]'>
         <BackArrorHeader content='내 정보' />
       </View>
@@ -80,12 +76,9 @@ export default function ProfileScreen() {
                 {myApplicationExist ? (
                   <View className='flex-row items-center gap-5'>
                     {profileImageUri ? (
-                      <Image
-                        source={{
-                          uri: profileImageUri,
-                        }}
+                      <CachedImage
+                        uri={profileImageUri}
                         style={{ width: 80, height: 80, borderRadius: 100 }}
-                        resizeMode='cover'
                       />
                     ) : (
                       <View className='w-20 h-20 bg-white rounded-full flex items-center justify-center'>
@@ -120,7 +113,7 @@ export default function ProfileScreen() {
                 )}
               </View>
               {myApplicationExist && (
-                <Pressable onPress={() => router.push("/my/application" as any)}>
+                <Pressable onPress={() => router.push("/my/application")}>
                   <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
                     <TextSize
                       color='#101828'
@@ -134,17 +127,43 @@ export default function ProfileScreen() {
 
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='내 활동' />
-              <Pressable onPress={() => router.push("/application/create")}>
+              <Pressable
+                onPress={() =>
+                  router.push(
+                    myApplicationExist
+                      ? "/application/create?mode=edit"
+                      : "/application/create",
+                  )
+                }
+              >
                 <MyActivity
-                  content='지원서 작성'
+                  content={myApplicationExist ? "지원서 수정" : "지원서 작성"}
                   icon={<ApplicationIcon width={18} height={18} />}
                 />
               </Pressable>
 
-              <Pressable onPress={() => router.push("/my/application/status" as any)}>
+              <Pressable onPress={() => router.push("/my/application/status")}>
                 <MyActivity
                   content='지원 내역'
                   icon={<ApplicationStatusIcon width={18} height={18} />}
+                />
+              </Pressable>
+
+              <Pressable onPress={() => router.push("/my/wish/guestHouse")}>
+                <MyActivity
+                  content='찜한 게스트하우스'
+                  icon={
+                    <Ionicons name='home-outline' size={18} color='#0EA5E9' />
+                  }
+                />
+              </Pressable>
+
+              <Pressable onPress={() => router.push("/my/wish/step")}>
+                <MyActivity
+                  content='찜한 스텝 공고'
+                  icon={
+                    <Ionicons name='heart-outline' size={18} color='#0EA5E9' />
+                  }
                 />
               </Pressable>
             </View>
@@ -162,7 +181,7 @@ export default function ProfileScreen() {
                   </Pressable>
                   <Pressable onPress={() => router.push("/my/stepRecruitment")}>
                     <MyActivity
-                      content='구인 공고 관리'
+                      content='내 스텝 공고 관리'
                       icon={<RecruitmentIcon width={18} height={18} />}
                     />
                   </Pressable>
@@ -267,7 +286,7 @@ export default function ProfileScreen() {
                 <TextSize
                   color='#101828'
                   size={16}
-                  content='사장님 기능 이용 가능'
+                  content='운영자 기능 이용 가능'
                 />
                 <TextSize
                   color='#4A5565'
