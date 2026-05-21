@@ -515,18 +515,16 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 
 ```
 src/services/notification/
-├── notification.ts          # 알림 목록, 읽음 처리 API
-└── pushToken.ts             # push token 저장/삭제 API
+└── notification.ts          # 알림 목록, 읽음 처리 API
 
 src/hooks/notification/
-├── useNotifications.ts
-├── useUnreadNotificationCount.ts
-├── useMarkNotificationRead.ts
-└── useRegisterPushToken.ts
+└── useNotifications.ts      # 목록, unread count, 읽음 mutation
 
 app/notifications/
 └── index.tsx                # 알림 목록 화면
 ```
+
+푸시 단계로 확장할 때 `pushToken.ts`, `useRegisterPushToken.ts`를 추가한다.
 
 ### 1단계: 인앱 알림 화면
 
@@ -547,7 +545,7 @@ app/notifications/
 |------|------------|----------|
 | `CERTIFICATE_APPROVED` | `CERTIFICATE` | 내 정보 또는 사장님 기능 안내 |
 | `CERTIFICATE_REJECTED` | `CERTIFICATE` | 사장님 인증 신청 화면 |
-| `STAFF_APPLICATION_CREATED` | `STAFF_RECRUITMENT` | 내 스텝 공고 지원자 목록 |
+| `STAFF_APPLICATION_CREATED` | `APPLICATION_RECORD` | 내 스텝 공고 관리 |
 | `APPLICATION_ACCEPTED` | `APPLICATION_RECORD` | 내 지원 내역 |
 
 ### 2단계: 푸시 권한 요청

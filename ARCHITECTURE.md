@@ -65,6 +65,7 @@ Geharbang-FE/
 │   ├── guestHouse/           # 게스트하우스 목록/상세/등록
 │   ├── login/                # 로그인
 │   ├── my/                   # 내 지원서/지원 내역, 내 게스트하우스/공고 관리
+│   ├── notifications/        # 인앱 알림 목록
 │   ├── operator/             # 운영자 인증/관리
 │   ├── step/                 # 스텝 공고 목록/상세/작성
 │   └── _layout.tsx           # 루트 레이아웃
@@ -281,6 +282,19 @@ export const createApplication = async (data: ApplicationData) => {
 FE 서비스 함수는 `src/services/wish/wish.ts`에 있고, 화면에서는 `src/hooks/wish/useToggleWish.ts`와 `src/hooks/wish/useMyWishedPosts.ts`를 통해 호출한다.
 페이지 번호는 수동 query string 대신 Axios `params` 옵션으로 전달한다.
 목록 응답의 찜 여부 필드는 `isWished`이며, `wished`가 아니다.
+
+### 알림 API
+
+알림 목록/읽음 처리는 로그인 토큰이 필요한 기능이므로 `axiosPrivate`를 사용한다.
+
+| 기능 | Endpoint | FE 위치 |
+|------|----------|---------|
+| 내 알림 목록 | `GET /api/v1/notifications?pageNumber=0` | `src/services/notification/notification.ts` |
+| 읽지 않은 개수 | `GET /api/v1/notifications/unread-count` | 홈 헤더/내 정보 배지 |
+| 단일 읽음 처리 | `PATCH /api/v1/notifications/{id}/read` | 알림 카드 클릭 |
+| 전체 읽음 처리 | `PATCH /api/v1/notifications/read-all` | 알림 화면의 `모두 읽음` |
+
+알림 화면은 `app/notifications/index.tsx`이며, React Query 훅은 `src/hooks/notification/useNotifications.ts`에 모아둔다.
 
 ### 이미지 업로드 패턴
 
