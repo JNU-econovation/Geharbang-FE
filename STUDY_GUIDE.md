@@ -240,14 +240,16 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 
 ### 코드에서 확인할 포인트
 
-- 사장님 메뉴는 `isOwner` 기준으로 표시한다.
+- 사장님 메뉴는 `isOwner || isAdmin` 기준으로 표시한다. 관리자는 사장님 인증 없이도 게스트하우스/스텝 공고 작성 권한을 가진다.
 - 시스템 운영자 심사 메뉴는 `isAdmin` 기준으로 표시한다.
 - `inReview`는 심사 중 안내에 사용하고, 사장님 메뉴 노출 기준으로 쓰면 안 된다.
-- 현재 프로필 조회 hook은 지원서 존재 여부와 결합되어 있어, 지원서가 없는 사용자도 권한 정보를 볼 수 있도록 분리할 필요가 있다.
+- 프로필 조회 hook은 로그인 여부만 기준으로 실행한다. 지원서가 없는 사용자도 권한 정보를 볼 수 있어야 한다.
+- 배지는 관리자 우선이다. `isAdmin`이면 "관리자"만 표시하고, 관리자가 아니면서 `isOwner`이면 "인증 사장님"을 표시한다.
 
 ### 직접 해볼 것
 
-- 지원서를 작성하지 않았지만 사장님 인증은 완료된 사용자가 내 정보 화면에서 어떤 문제가 생길지 시나리오를 써 보기
+- 지원서를 작성하지 않았지만 사장님 인증은 완료된 사용자가 내 정보 화면에서 사장님 메뉴를 볼 수 있는지 확인하기
+- 관리자 계정이 "관리자" 배지와 사장님 기능 메뉴를 동시에 갖는지 확인하기
 - 403 `NOT_APPROVED_OWNER`가 발생했을 때 어떤 hook에서 Alert를 띄우는지 확인하기
 
 ---
@@ -496,6 +498,113 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 
 ---
 
+## 15. 알림 기능 학습과 구현 가이드
+
+알림은 **인앱 알림 화면**과 **푸시 알림 권한/토큰 등록**을 분리해서 생각한다.
+앱 안에서 알림 목록이 먼저 안정적으로 동작해야, 푸시 알림이 실패해도 사용자가 나중에 알림을 확인할 수 있다.
+
+### 공부할 것
+
+- Expo Notifications 권한 요청
+- Expo push token 발급과 서버 등록
+- React Query로 알림 목록, 안 읽은 개수 관리
+- 앱 상태별 알림 처리: foreground, background, killed
+- 알림 클릭 시 특정 화면으로 이동하는 deep link 처리
+
+### 추천 파일 구조
+
+```
+src/services/notification/
+└── notification.ts          # 알림 목록, 읽음 처리 API
+
+src/hooks/notification/
+└── useNotifications.ts      # 목록, unread count, 읽음 mutation
+
+app/notifications/
+└── index.tsx                # 알림 목록 화면
+```
+
+푸시 단계로 확장할 때 `pushToken.ts`, `useRegisterPushToken.ts`를 추가한다.
+
+### 1단계: 인앱 알림 화면
+
+먼저 서버 알림 목록을 조회해서 앱 안에서 보여준다.
+
+**API 연결 예시:**
+
+| 기능 | Method / Endpoint | FE 처리 |
+|------|-------------------|---------|
+| 알림 목록 | `GET /api/v1/notifications?pageNumber=0` | `useNotifications` |
+| 안 읽은 개수 | `GET /api/v1/notifications/unread-count` | 탭/헤더 배지 |
+| 읽음 처리 | `PATCH /api/v1/notifications/{id}/read` | 알림 클릭 시 실행 |
+| 전체 읽음 | `PATCH /api/v1/notifications/read-all` | 전체 읽음 버튼 |
+
+**알림 타입별 이동 예시:**
+
+| type | targetType | 이동 화면 |
+|------|------------|----------|
+| `CERTIFICATE_APPROVED` | `CERTIFICATE` | 내 정보 또는 사장님 기능 안내 |
+| `CERTIFICATE_REJECTED` | `CERTIFICATE` | 사장님 인증 신청 화면 |
+| `STAFF_APPLICATION_CREATED` | `APPLICATION_RECORD` | 내 스텝 공고 관리 |
+| `APPLICATION_ACCEPTED` | `APPLICATION_RECORD` | 내 지원 내역 |
+
+### 2단계: 푸시 권한 요청
+
+로그인 후 한 번만 권한을 요청한다.
+
+구현 원칙:
+
+- 비로그인 상태에서는 push token을 등록하지 않는다.
+- 권한 거부 시 앱 사용은 막지 않는다.
+- 권한 승인 후 받은 Expo push token을 BE에 저장한다.
+- 로그아웃 시 토큰 삭제 또는 비활성화 API를 호출한다.
+
+### 3단계: Expo push token 등록
+
+`expo-notifications`를 사용한다.
+
+필요 패키지:
+
+```bash
+npx expo install expo-notifications expo-device
+```
+
+기본 흐름:
+
+```text
+앱 실행/로그인
+→ 알림 권한 확인
+→ 권한 없으면 요청
+→ Expo push token 발급
+→ POST /api/v1/push-tokens 로 서버 저장
+```
+
+### 4단계: 앱 상태별 처리
+
+| 상태 | 처리 |
+|------|------|
+| foreground | 앱 내부 toast/banner 또는 React Query invalidate |
+| background | OS 알림 표시, 클릭 시 화면 이동 |
+| killed | 앱 실행 후 notification response 확인, target 화면 이동 |
+
+알림 클릭 이동은 `targetType`, `targetId`를 기준으로 라우트 매핑을 만든다.
+
+### 5단계: React Query 캐시 전략
+
+- 알림 목록 query key: `['notifications']`
+- 안 읽은 개수 query key: `['notifications', 'unreadCount']`
+- 알림 읽음 처리 성공 시 두 query를 invalidate
+- foreground 알림을 받으면 unread count를 invalidate
+
+### 직접 해볼 것
+
+- 알림 권한을 거부한 사용자가 앱을 정상 사용할 수 있는지 확인하기
+- 로그인 전/후 push token 등록 시점을 구분해서 그려 보기
+- `APPLICATION_ACCEPTED` 알림을 눌렀을 때 어느 화면으로 이동해야 하는지 라우트 작성하기
+- 알림 읽음 처리 후 unread count가 즉시 줄어드는지 확인하기
+
+---
+
 ## 추천 학습 순서
 
 1. Expo Router 화면 구조와 `_layout.tsx` 이해
@@ -506,3 +615,4 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 6. 이미지 업로드와 서버 URL 처리 이해
 7. 권한 UI 분기와 403 처리 이해
 8. BE DTO와 FE 타입을 나란히 보며 수정 API 연동 설계
+9. 알림 목록 UI를 만든 뒤 Expo push token 등록으로 확장

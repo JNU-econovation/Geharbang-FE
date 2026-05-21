@@ -104,7 +104,7 @@ export default function OperatorAuthScreen() {
   return (
     <CustomSafeAreaView pageColor="bg-white">
       <View className="p-3">
-        <BackArrowHeader content="운영자 인증하기" onPress={handleBackPress} />
+        <BackArrowHeader content="사장님 인증하기" onPress={handleBackPress} />
       </View>
 
       <ScrollView
@@ -122,7 +122,7 @@ export default function OperatorAuthScreen() {
               />
               <View className="flex-1 flex-col justify-start items-start gap-1">
                 <Text className="text-[#024a70] text-sm font-normal leading-5">
-                  운영자 인증이 필요합니다
+                  사장님 인증이 필요합니다
                 </Text>
                 <Text className="text-[#0068a8] text-xs font-normal leading-5">
                   영업신고증 또는 관광숙박업 신고증을 제출하시면,{'\n'}

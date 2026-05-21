@@ -37,8 +37,9 @@ export default function ProfileScreen() {
   const myApplicationExist = isExist?.isExist ?? false;
 
   const { data, isLoading, isError, refetch } =
-    useMyInfomation(myApplicationExist);
+    useMyInfomation(Boolean(isLogined));
   const profileImageUri = buildAssetUrl(data?.imageUrl);
+  const canUseOwnerFeatures = Boolean(data?.isOwner || data?.isAdmin);
 
   return (
     <CustomSafeAreaView pageColor='bg-white' topOnly={true}>
@@ -101,14 +102,18 @@ export default function ProfileScreen() {
                     </View>
                   </View>
                 )}
-                {data?.isOwner && (
+                {(data?.isAdmin || data?.isOwner) && (
                   <View className='-ml-2 px-2 py-1 bg-[#0EA5E9] rounded-xl'>
-                    <TextSize color='#FFFFFF' size={12} content='인증 사장님' />
+                    <TextSize
+                      color='#FFFFFF'
+                      size={12}
+                      content={data?.isAdmin ? '관리자' : '인증 사장님'}
+                    />
                   </View>
                 )}
               </View>
               {myApplicationExist && (
-                <Pressable onPress={() => router.push("/my/application")}>
+                <Pressable onPress={() => router.push("/my/application" as any)}>
                   <View className='mt-4 py-3 rounded-lg bg-white flex items-center'>
                     <TextSize
                       color='#101828'
@@ -137,14 +142,14 @@ export default function ProfileScreen() {
                 />
               </Pressable>
 
-              <Pressable onPress={() => router.push("/my/application/status")}>
+              <Pressable onPress={() => router.push("/my/application/status" as any)}>
                 <MyActivity
                   content='지원 내역'
                   icon={<ApplicationStatusIcon width={18} height={18} />}
                 />
               </Pressable>
 
-              <Pressable onPress={() => router.push("/my/wish/guestHouse")}>
+              <Pressable onPress={() => router.push("/my/wish/guestHouse" as any)}>
                 <MyActivity
                   content='찜한 게스트하우스'
                   icon={
@@ -153,7 +158,7 @@ export default function ProfileScreen() {
                 />
               </Pressable>
 
-              <Pressable onPress={() => router.push("/my/wish/step")}>
+              <Pressable onPress={() => router.push("/my/wish/step" as any)}>
                 <MyActivity
                   content='찜한 스텝 공고'
                   icon={
@@ -164,9 +169,9 @@ export default function ProfileScreen() {
             </View>
 
             <View className='pt-8'>
-              <TextSize color='#6A7282' size={18} content='운영자 기능' />
+              <TextSize color='#6A7282' size={18} content='사장님 기능' />
 
-              {data?.isOwner ? (
+              {canUseOwnerFeatures ? (
                 <View>
                   <Pressable onPress={() => router.push("/my/guestHouse")}>
                     <MyActivity
@@ -191,7 +196,7 @@ export default function ProfileScreen() {
                       <TextSize
                         color='#101828'
                         size={16}
-                        content='운영자이신가요?'
+                        content='사장님이신가요?'
                       />
                       <View className='pt-2' />
                       <TextSize
