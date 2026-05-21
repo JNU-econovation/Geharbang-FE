@@ -1,7 +1,10 @@
 import * as Linking from "expo-linking";
+import * as WebBrowser from "expo-web-browser";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
+
+WebBrowser.maybeCompleteAuthSession();
 
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
 import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
