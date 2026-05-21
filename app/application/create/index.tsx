@@ -28,7 +28,8 @@ export default function applicationCreate() {
   const { mode } = useLocalSearchParams<{ mode?: string }>();
   const isEditMode = mode === "edit";
 
-  const { isPreFilling } = usePreFillApplication(isEditMode);
+  const { isPreFilling, preFillError, goBackAfterPreFillError } =
+    usePreFillApplication(isEditMode);
 
   const {
     data: applicationData,
@@ -66,6 +67,31 @@ export default function applicationCreate() {
       {isPreFilling ? (
         <View className='flex-1 justify-center items-center'>
           <ActivityIndicator size={60} color={COLORS.PRIMARY.BLUE} />
+        </View>
+      ) : preFillError ? (
+        <View className='flex-1 justify-center items-center px-6'>
+          <TextSize
+            size={18}
+            color='#101828'
+            content='기존 지원서를 불러오지 못했어요'
+            align='center'
+          />
+          <View className='pt-3' />
+          <TextSize
+            size={14}
+            color={COLORS.GRAY.TEXT}
+            content='빈 폼으로 수정되지 않도록 이전 화면으로 돌아가주세요.'
+            align='center'
+          />
+          <View className='pt-6' />
+          <Button
+            variant='primary'
+            height={48}
+            width={180}
+            content='돌아가기'
+            textColor='#FFFFFF'
+            onPress={goBackAfterPreFillError}
+          />
         </View>
       ) : <ScrollView className='bg-[#F9FAFB]'>
         <DismissKeyboardView>
