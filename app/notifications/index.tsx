@@ -139,16 +139,16 @@ function NotificationCard({ notification, onPress }: NotificationCardProps) {
 export default function NotificationsScreen() {
   const isLogined = useAuthStore((state) => Boolean(state.accessToken));
   const { data, isLoading, isError, refetch } = useNotifications();
-  const { mutateAsync: markAsRead } = useMarkNotificationAsRead();
+  const { mutate: markAsRead } = useMarkNotificationAsRead();
   const { mutate: markAllAsRead, isPending: isMarkingAll } =
     useMarkAllNotificationsAsRead();
 
   const notifications = data?.notifications ?? [];
   const hasUnread = notifications.some((notification) => !notification.isRead);
 
-  const handleNotificationPress = async (notification: NotificationItem) => {
+  const handleNotificationPress = (notification: NotificationItem) => {
     if (!notification.isRead) {
-      await markAsRead(notification.id);
+      markAsRead(notification.id);
     }
     navigateByNotification(notification);
   };
