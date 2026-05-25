@@ -10,8 +10,10 @@ import Button from "@/src/components/ui/Button/Button";
 import Contact from "@/src/components/ui/Contact";
 import DetailPageBackArrow from "@/src/components/ui/DetailPageBackArrow";
 import TextSize from "@/src/components/ui/TextSize";
+import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
 import { useHandleSection } from "@/src/hooks/common/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/common/useSectionToScroll";
+import { useCreateChatRoom } from "@/src/hooks/chat/useChat";
 import { useGuestHouseDetail } from "@/src/hooks/guestHouseDetail/useGuestHouseDetail";
 import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
 import { router, useLocalSearchParams } from "expo-router";
@@ -36,6 +38,9 @@ export default function GuestHouseDetail() {
   });
 
   const { data, isPending, isError, refetch } = useGuestHouseDetail();
+  const { requireLogin } = useRequireLogin();
+  const { mutate: createChatRoom, isPending: isCreatingChatRoom } =
+    useCreateChatRoom();
 
   const [isWished, setIsWished] = useState(false);
 
@@ -49,6 +54,25 @@ export default function GuestHouseDetail() {
     onOptimisticUpdate: setIsWished,
     onError: () => setIsWished((v) => !v),
   });
+
+  const handleChatPress = () => {
+    requireLogin(() => {
+      createChatRoom(
+        { guestHousePostId: Number(id) },
+        {
+          onSuccess: ({ chatRoomId }) => {
+            router.push({
+              pathname: "/chats/[roomId]",
+              params: {
+                roomId: String(chatRoomId),
+                title: data?.guestHouseName ?? "채팅",
+              },
+            });
+          },
+        },
+      );
+    });
+  };
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -80,8 +104,12 @@ export default function GuestHouseDetail() {
           />
         </View>
       ) : (
-        <>
-          <ScrollView ref={scrollViewRef} stickyHeaderIndices={[2]}>
+        <View className='flex-1'>
+          <ScrollView
+            ref={scrollViewRef}
+            stickyHeaderIndices={[2]}
+            contentContainerStyle={{ paddingBottom: 24 }}
+          >
             <GehaImage images={data?.imageUrls} height={280} page={true} />
 
             <View className='px-4 pt-4 pb-8'>
@@ -142,9 +170,21 @@ export default function GuestHouseDetail() {
                 contact={data?.contact}
                 owerMessage={data?.ownerMessage}
               />
+              <View className='pt-10' />
             </View>
           </ScrollView>
-        </>
+
+          <View className='px-4 pt-3 pb-3 bg-white border-t border-[#E5E7EB]'>
+            <Button
+              variant='primary'
+              height={56}
+              content='채팅하기'
+              textColor='#ffffff'
+              isPending={isCreatingChatRoom}
+              onPress={handleChatPress}
+            />
+          </View>
+        </View>
       )}
     </CustomSafeAreaView>
   );

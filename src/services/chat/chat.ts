@@ -3,6 +3,7 @@ import { axiosPrivate } from "@/src/services/api/customAxios";
 import {
   ChatMessage,
   ChatMessagesResponse,
+  ChatRoomCreateRequest,
   ChatRoomCreateResponse,
   ChatRoomsResponse,
 } from "@/src/types/models/chat/Chat";
@@ -10,11 +11,11 @@ import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
 import { getAccessToken } from "@/src/utils/login/secureStore";
 
 export const createChatRoom = async (
-  applicationRecordId: number,
+  request: ChatRoomCreateRequest,
 ): Promise<ChatRoomCreateResponse> => {
   const response = await axiosPrivate.post<ChatRoomCreateResponse>(
     "/api/v1/chats/rooms",
-    { applicationRecordId },
+    request,
   );
   return response.data;
 };
@@ -61,7 +62,7 @@ export const markChatRoomAsRead = async (roomId: number): Promise<void> => {
   await axiosPrivate.patch(`/api/v1/chats/rooms/${roomId}/read`);
 };
 
-export const getChatWebSocketUrl = async () => {
+export const getChatWebSocketUrl = async (roomId: number) => {
   const token = await getAccessToken(TOKEN_KEYS.ACCESS_TOKEN);
   if (!token) {
     return null;
@@ -71,5 +72,5 @@ export const getChatWebSocketUrl = async () => {
     /^http/,
     "ws",
   );
-  return `${wsBaseUrl}/ws/chats?token=${encodeURIComponent(token)}`;
+  return `${wsBaseUrl}/ws/chats?token=${encodeURIComponent(token)}&roomId=${roomId}`;
 };

@@ -35,7 +35,7 @@ export default function MyApplicationStatus() {
       : data?.applicationRecords;
 
   const handleChatPress = (applicationRecordId: number, title: string) => {
-    createChatRoom(applicationRecordId, {
+    createChatRoom({ applicationRecordId }, {
       onSuccess: ({ chatRoomId }) => {
         router.push({
           pathname: "/chats/[roomId]",

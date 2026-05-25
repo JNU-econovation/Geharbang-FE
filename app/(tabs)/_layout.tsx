@@ -69,6 +69,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name='chats'
+        options={{
+          title: "채팅",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name='chatbubble-ellipses-outline' color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name='profile'
         options={{
           title: "내정보",

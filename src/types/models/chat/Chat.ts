@@ -1,7 +1,8 @@
 export interface ChatRoom {
   id: number;
-  applicationRecordId: number;
-  staffRecruitmentId: number;
+  applicationRecordId: number | null;
+  staffRecruitmentId: number | null;
+  guestHousePostId: number | null;
   staffRecruitmentTitle: string;
   opponentId: number;
   opponentName: string | null;
@@ -30,4 +31,10 @@ export interface ChatMessagesResponse {
 
 export interface ChatRoomCreateResponse {
   chatRoomId: number;
+}
+
+export interface ChatRoomCreateRequest {
+  applicationRecordId?: number;
+  staffRecruitmentId?: number;
+  guestHousePostId?: number;
 }

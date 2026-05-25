@@ -12,7 +12,7 @@ export const useChatWebSocket = (roomId: number) => {
     let isClosed = false;
 
     const connect = async () => {
-      const url = await getChatWebSocketUrl();
+      const url = await getChatWebSocketUrl(roomId);
       if (!url || isClosed) {
         return;
       }

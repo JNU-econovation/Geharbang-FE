@@ -37,7 +37,7 @@ export default function ApplicationCard({
     useCreateChatRoom();
 
   const handleChatPress = () => {
-    createChatRoom(applicationId, {
+    createChatRoom({ applicationRecordId: applicationId }, {
       onSuccess: ({ chatRoomId }) => {
         router.push({
           pathname: "/chats/[roomId]",
