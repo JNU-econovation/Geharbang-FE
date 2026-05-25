@@ -1,9 +1,12 @@
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
+import { unregisterPushToken } from "@/src/services/notification/pushToken";
 import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
 import { removeAccessToken } from "@/src/utils/login/secureStore";
+import { getExpoNotifications } from "@/src/utils/notification/getExpoNotifications";
 import { useQueryClient } from "@tanstack/react-query";
+import Constants from "expo-constants";
 import { router } from "expo-router";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 
 export const useLogout = () => {
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
@@ -11,6 +14,22 @@ export const useLogout = () => {
 
   const performLogout = async () => {
     try {
+      const projectId =
+        Constants.expoConfig?.extra?.eas?.projectId ??
+        Constants.easConfig?.projectId;
+      const notifications = getExpoNotifications();
+      const token = projectId && notifications
+        ? await notifications.getExpoPushTokenAsync({ projectId }).catch(
+            () => null,
+          )
+        : null;
+      if (token?.data) {
+        await unregisterPushToken({
+          token: token.data,
+          platform: Platform.OS,
+        }).catch(() => undefined);
+      }
+
       await Promise.all([
         removeAccessToken(TOKEN_KEYS.ACCESS_TOKEN),
         removeAccessToken(TOKEN_KEYS.USER_ID),

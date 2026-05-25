@@ -213,6 +213,12 @@ export default function ProfileScreen() {
 
             <View className='pt-8'>
               <TextSize color='#6A7282' size={18} content='설정' />
+              <Pressable onPress={() => router.push("/my/notification-settings" as any)}>
+                <MyActivity
+                  content='알림 설정'
+                  icon={<Ionicons name='notifications-outline' size={18} color='#0EA5E9' />}
+                />
+              </Pressable>
               {data?.isAdmin && (
                 <Pressable onPress={() => router.push("/operator/management")}>
                   <MyActivity

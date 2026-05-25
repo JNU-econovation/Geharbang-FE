@@ -8,6 +8,7 @@ const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN;
 const plugins: ExpoConfig["plugins"] = [
   "expo-router",
   "expo-web-browser",
+  "expo-notifications",
   [
     "expo-secure-store",
     {
@@ -57,6 +58,7 @@ const config: ExpoConfig = {
 
   android: {
     versionCode: 5,
+    softwareKeyboardLayoutMode: "pan",
     adaptiveIcon: {
       backgroundColor: "#ffffff",
     },

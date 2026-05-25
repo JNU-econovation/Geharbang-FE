@@ -16,6 +16,11 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 export { ErrorBoundary } from "expo-router";
 
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
+import {
+  useForegroundNotificationHandler,
+  usePushNotificationNavigation,
+  useRegisterPushNotifications,
+} from "@/src/hooks/notification/usePushNotifications";
 import "../global.css";
 
 export const unstable_settings = {
@@ -60,6 +65,7 @@ function RootLayoutNav() {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
+        <AppNotificationEffects />
         <ThemeProvider value={DefaultTheme}>
           <Stack
             screenOptions={{
@@ -69,7 +75,7 @@ function RootLayoutNav() {
             }}
           >
             <Stack.Screen name='(tabs)' />
-            <Stack.Screen name='login' />
+            <Stack.Screen name='login/index' />
             <Stack.Screen
               name='application/create'
               options={{ gestureEnabled: false }}
@@ -82,10 +88,17 @@ function RootLayoutNav() {
               name='guestHouse/enroll'
               options={{ gestureEnabled: false }}
             />
-            <Stack.Screen name='modal' options={{ presentation: "modal" }} />
           </Stack>
         </ThemeProvider>
       </QueryClientProvider>
     </SafeAreaProvider>
   );
+}
+
+function AppNotificationEffects() {
+  useRegisterPushNotifications();
+  usePushNotificationNavigation();
+  useForegroundNotificationHandler();
+
+  return null;
 }
