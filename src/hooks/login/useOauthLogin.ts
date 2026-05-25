@@ -18,7 +18,10 @@ export const useOauthLogin = (provider: OauthLoginType) => {
     mutationFn: () => oauthAuth.login(provider),
 
     onSuccess: async (data) => {
-      await setAccessToken(TOKEN_KEYS.ACCESS_TOKEN, data.accessToken);
+      await Promise.all([
+        setAccessToken(TOKEN_KEYS.ACCESS_TOKEN, data.accessToken),
+        setAccessToken(TOKEN_KEYS.USER_ID, data.user.id),
+      ]);
       setAccessTokenStore(data.accessToken);
       
       router.replace("/(tabs)");
