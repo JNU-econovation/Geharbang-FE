@@ -515,16 +515,18 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 
 ```
 src/services/notification/
-└── notification.ts          # 알림 목록, 읽음 처리 API
+├── notification.ts          # 알림 목록, 읽음 처리 API
+└── pushToken.ts             # Expo Push Token 등록/해제 API
 
 src/hooks/notification/
-└── useNotifications.ts      # 목록, unread count, 읽음 mutation
+├── useNotifications.ts      # 목록, unread count, 읽음 mutation
+└── usePushNotifications.ts  # 권한 요청, token 등록, 푸시 클릭 이동
 
 app/notifications/
 └── index.tsx                # 알림 목록 화면
 ```
 
-푸시 단계로 확장할 때 `pushToken.ts`, `useRegisterPushToken.ts`를 추가한다.
+`expo-notifications` 네이티브 모듈이 아직 dev client에 없을 수 있으므로 `src/utils/notification/getExpoNotifications.ts`에서 optional load로 감싼다.
 
 ### 1단계: 인앱 알림 화면
 
@@ -538,6 +540,12 @@ app/notifications/
 | 안 읽은 개수 | `GET /api/v1/notifications/unread-count` | 탭/헤더 배지 |
 | 읽음 처리 | `PATCH /api/v1/notifications/{id}/read` | 알림 클릭 시 실행 |
 | 전체 읽음 | `PATCH /api/v1/notifications/read-all` | 전체 읽음 버튼 |
+| 알림 설정 조회 | `GET /api/v1/notification-settings` | 설정 화면 진입 시 조회 |
+| 알림 설정 변경 | `PATCH /api/v1/notification-settings` | 푸시/채팅 알림 on/off |
+| 푸시 토큰 등록 | `POST /api/v1/push-tokens` | 로그인 후 자동 등록 |
+| 푸시 토큰 해제 | `DELETE /api/v1/push-tokens` | 로그아웃 시 자동 비활성화 |
+
+`pushEnabled`는 OS 푸시 수신 여부만 제어하고, `chatPushEnabled`는 채팅 알림 자체를 제어한다. 채팅 알림을 끄면 알림함에도 새 채팅 알림이 쌓이지 않는다.
 
 **알림 타입별 이동 예시:**
 
@@ -547,6 +555,7 @@ app/notifications/
 | `CERTIFICATE_REJECTED` | `CERTIFICATE` | 사장님 인증 신청 화면 |
 | `STAFF_APPLICATION_CREATED` | `APPLICATION_RECORD` | 내 스텝 공고 관리 |
 | `APPLICATION_ACCEPTED` | `APPLICATION_RECORD` | 내 지원 내역 |
+| `CHAT_MESSAGE_CREATED` | `CHAT_ROOM` | 채팅방 |
 
 ### 2단계: 푸시 권한 요청
 
@@ -577,6 +586,7 @@ npx expo install expo-notifications expo-device
 → 권한 없으면 요청
 → Expo push token 발급
 → POST /api/v1/push-tokens 로 서버 저장
+→ 로그아웃 시 DELETE /api/v1/push-tokens 로 비활성화
 ```
 
 ### 4단계: 앱 상태별 처리
@@ -602,6 +612,40 @@ npx expo install expo-notifications expo-device
 - 로그인 전/후 push token 등록 시점을 구분해서 그려 보기
 - `APPLICATION_ACCEPTED` 알림을 눌렀을 때 어느 화면으로 이동해야 하는지 라우트 작성하기
 - 알림 읽음 처리 후 unread count가 즉시 줄어드는지 확인하기
+
+## 16. 채팅 기능 학습과 구현 가이드
+
+채팅은 **REST 저장/조회 + WebSocket 수신 + 알림 연동**으로 구성한다.
+
+### 주요 파일
+
+```
+app/chats/
+├── index.tsx                # 채팅방 목록
+└── [roomId].tsx             # 채팅방 메시지 화면
+
+src/services/chat/
+└── chat.ts                  # 채팅 REST API, WebSocket URL 생성
+
+src/hooks/chat/
+├── useChat.ts               # 채팅 REST query/mutation
+└── useChatWebSocket.ts      # 새 메시지 수신
+```
+
+### 진입 경로
+
+- 스텝 공고 상세: 하단 고정 액션바에서 `채팅하기`와 `지원하기`를 함께 제공한다.
+- 게스트하우스 상세: 하단 고정 `채팅하기` 버튼으로 채팅방을 생성/진입한다.
+- 탭 바의 `채팅`에서 진행 중인 채팅방 목록을 확인한다.
+- 알림/푸시의 `CHAT_MESSAGE_CREATED`를 누르면 해당 채팅방으로 이동한다.
+- 채팅방 WebSocket은 `/ws/chats?token={accessToken}&roomId={roomId}`로 연결해 BE가 채팅방 접속 상태를 판단할 수 있게 한다.
+
+### UI 원칙
+
+- 내 메시지는 오른쪽 파란 말풍선으로 표시한다.
+- 상대 메시지는 왼쪽에 프로필/이름/흰 말풍선을 함께 표시한다.
+- Android에서는 키보드가 입력창을 가리지 않도록 키보드 높이를 감지해 입력바를 직접 위로 올린다.
+- 채팅방 헤더는 route param의 `title`이 없으면 채팅방 목록의 `opponentName`으로 보완한다.
 
 ---
 

@@ -45,6 +45,7 @@ Geharbang FE는 **제주 게스트하우스 스텝 구인/구직 플랫폼**의 
 | HTTP | Axios | 1.13.1 | API 통신 |
 | 스타일 | NativeWind | 4.2.1 | Tailwind CSS in RN |
 | 보안 스토리지 | expo-secure-store | - | 토큰 저장 |
+| 푸시 알림 | expo-notifications | - | Expo Push Token 발급, OS 알림 수신/클릭 처리 |
 | 이미지 | expo-image-picker | - | 갤러리 접근 |
 | 파일 | expo-document-picker | - | 문서 파일 선택 |
 | 지도 | react-native-maps | 1.20.1 | 지도 표시 |
@@ -66,6 +67,7 @@ Geharbang-FE/
 │   ├── login/                # 로그인
 │   ├── my/                   # 내 지원서/지원 내역, 내 게스트하우스/공고 관리
 │   ├── notifications/        # 인앱 알림 목록
+│   ├── chats/                # 채팅 목록/채팅방
 │   ├── operator/             # 운영자 인증/관리
 │   ├── step/                 # 스텝 공고 목록/상세/작성
 │   └── _layout.tsx           # 루트 레이아웃
@@ -293,8 +295,34 @@ FE 서비스 함수는 `src/services/wish/wish.ts`에 있고, 화면에서는 `s
 | 읽지 않은 개수 | `GET /api/v1/notifications/unread-count` | 홈 헤더/내 정보 배지 |
 | 단일 읽음 처리 | `PATCH /api/v1/notifications/{id}/read` | 알림 카드 클릭 |
 | 전체 읽음 처리 | `PATCH /api/v1/notifications/read-all` | 알림 화면의 `모두 읽음` |
+| 알림 설정 조회 | `GET /api/v1/notification-settings` | 내 정보 > 알림 설정 |
+| 알림 설정 변경 | `PATCH /api/v1/notification-settings` | 푸시/채팅 알림 on/off |
+| 푸시 토큰 등록 | `POST /api/v1/push-tokens` | 로그인 후 Expo Push Token 등록 |
+| 푸시 토큰 해제 | `DELETE /api/v1/push-tokens` | 로그아웃 시 토큰 비활성화 |
 
 알림 화면은 `app/notifications/index.tsx`이며, React Query 훅은 `src/hooks/notification/useNotifications.ts`에 모아둔다.
+푸시 권한/토큰 등록과 알림 클릭 이동은 `src/hooks/notification/usePushNotifications.ts`에서 처리한다.
+`pushEnabled`는 앱 외부 OS 푸시만 제어하고, `chatPushEnabled`는 채팅 알림 자체를 제어한다. 따라서 `chatPushEnabled=false`이면 채팅 인앱 알림도 쌓이지 않고 푸시도 발송되지 않는다.
+기존 dev client에 `expo-notifications` 네이티브 모듈이 없을 수 있으므로 `src/utils/notification/getExpoNotifications.ts`에서 optional load로 감싼다.
+
+### 채팅 API
+
+채팅은 REST로 방/메시지를 조회·저장하고, WebSocket으로 새 메시지를 실시간 반영한다.
+
+| 기능 | Endpoint | FE 위치 |
+|------|----------|---------|
+| 채팅방 생성/조회 | `POST /api/v1/chats/rooms` | `src/services/chat/chat.ts` |
+| 채팅방 목록 | `GET /api/v1/chats/rooms` | `app/chats/index.tsx` |
+| 메시지 목록 | `GET /api/v1/chats/rooms/{roomId}/messages?pageNumber=0` | `app/chats/[roomId].tsx` |
+| 메시지 전송 | `POST /api/v1/chats/rooms/{roomId}/messages` | 채팅 입력창 |
+| 읽음 처리 | `PATCH /api/v1/chats/rooms/{roomId}/read` | 채팅방 진입 시 |
+| 실시간 수신 | `/ws/chats?token={accessToken}&roomId={roomId}` | `src/hooks/chat/useChatWebSocket.ts` |
+
+스텝 공고 상세는 하단 고정 액션바에서 `채팅하기:지원하기 = 3:7` 비율로 제공한다.
+게스트하우스 상세는 하단 고정 `채팅하기` 버튼으로 채팅방을 생성/진입한다.
+채팅방에서는 내 메시지는 오른쪽 파란 말풍선, 상대 메시지는 왼쪽 프로필/이름/흰 말풍선으로 구분한다.
+Android 키보드가 입력창을 가리지 않도록 키보드 높이를 감지해 입력바를 `absolute bottom`으로 직접 올린다.
+채팅방 WebSocket 연결에는 `roomId`를 함께 전달해 BE가 상대방의 채팅방 접속 상태를 판단할 수 있게 한다.
 
 ### 이미지 업로드 패턴
 
