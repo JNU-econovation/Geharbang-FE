@@ -37,3 +37,5 @@ export function ListLinkButton({ label, onPress, icon }: ListLinkButtonProps) {
     </Pressable>
   );
 }
+
+export default ListLinkButton;
