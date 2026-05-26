@@ -4,11 +4,13 @@ import { updateStaffRecruitment } from '@/src/services/step/updateStaffRecruitme
 import { useStepRecruitmentStore } from '@/src/stores/stepRecruitment/useStepRecruitmentStore';
 import { transformStoreToApi } from '@/src/utils/stepRecruitment/transformStoreToApi';
 import { router } from 'expo-router';
+import { useState } from 'react';
 
 export const useHandleStepRecruitmentSubmit = () => {
   const storeData = useStepRecruitmentStore();
-  const { step3Data, setStep3Update, editingId, existingQuestions } = storeData;
+  const { step3Data, setStep3Update, editingId, existingQuestions, resetAllData } = storeData;
 
+  const [isUpdating, setIsUpdating] = useState(false);
   const uploadImagesMutation = useUploadRecruitmentImages();
   const createRecruitmentMutation = useCreateStaffRecruitment();
 
@@ -65,6 +67,21 @@ export const useHandleStepRecruitmentSubmit = () => {
   };
 
   const handleSubmit = async () => {
+    if (editingId) {
+      setIsUpdating(true);
+      try {
+        const { mainImageUrls, introImageUrls } = await uploadImages();
+        const requestData = createRequestData(mainImageUrls, introImageUrls);
+        await updateStaffRecruitment(editingId, requestData);
+        resetAllData();
+        router.replace('/my/stepRecruitment' as any);
+      } catch (error) {
+        console.error('공고 수정 실패:', error);
+        setIsUpdating(false);
+      }
+      return;
+    }
+
     router.replace({
       pathname: '/step/recruitment/result' as any,
       params: { status: 'pending' },
@@ -73,16 +90,10 @@ export const useHandleStepRecruitmentSubmit = () => {
     try {
       const { mainImageUrls, introImageUrls } = await uploadImages();
       const requestData = createRequestData(mainImageUrls, introImageUrls);
-
-      if (editingId) {
-        await updateStaffRecruitment(editingId, requestData);
-        router.setParams({ status: 'success', recruitmentId: editingId.toString() });
-      } else {
-        const staffRecruitmentId = await createRecruitmentMutation.mutateAsync(requestData);
-        router.setParams({ status: 'success', recruitmentId: staffRecruitmentId.toString() });
-      }
+      const staffRecruitmentId = await createRecruitmentMutation.mutateAsync(requestData);
+      router.setParams({ status: 'success', recruitmentId: staffRecruitmentId.toString() });
     } catch (error) {
-      console.error('공고 등록/수정 실패:', error);
+      console.error('공고 등록 실패:', error);
       router.setParams({ status: 'error' });
     }
   };
@@ -90,6 +101,6 @@ export const useHandleStepRecruitmentSubmit = () => {
   return {
     handleSubmit,
     isSubmitting:
-      uploadImagesMutation.isPending || createRecruitmentMutation.isPending,
+      isUpdating || uploadImagesMutation.isPending || createRecruitmentMutation.isPending,
   };
 };
