@@ -34,17 +34,19 @@ export default function GuestHouseLocation({
           <TextSize
             size={16}
             color={selectedAddress ? "#101828" : "#ADAEBC"}
-            content={selectedAddress?.roadAddress || "근무 위치를 검색하세요"}
+            content={
+              selectedAddress
+                ? (selectedAddress.roadAddress || selectedAddress.jibunAddress || "위치 선택됨")
+                : "근무 위치를 검색하세요"
+            }
           />
         </ViewContext>
       </Pressable>
 
       <Modal visible={modalVisible} animationType='slide'>
         <AddressMapDetail
-          latitude={33.499}
-          longitude={126.531}
-          latitudeDelta={0.01}
-          longitudeDelta={0.01}
+          latitude={33.5110}
+          longitude={126.4927}
           modalVisible={true}
           setModalVisible={(v) => setModalVisible(v)}
           setSelectedAddress={(address) => {

@@ -6,13 +6,11 @@ import TextSize from "./TextSize";
 interface AddressMapDetailProps {
   latitude: number;
   longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
+  initialZoom?: number;
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
   setSelectedAddress?: (address: SelectedAddressProps) => void;
   selectable?: boolean;
-  pointerEvents?: "none";
 }
 
 export default function AddressMapDetail({

@@ -14,15 +14,18 @@ import { useHandleSection } from "@/src/hooks/common/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/common/useSectionToScroll";
 import { useGuestHouseDetail } from "@/src/hooks/guestHouseDetail/useGuestHouseDetail";
 import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
-import { router, useLocalSearchParams } from "expo-router";
 import { GUESTHOUSE } from "@/src/utils/constants/pressSection";
+import { router, useLocalSearchParams } from "expo-router";
 import GuestHouseInfo from "../_components/GuestHouseInfo";
 import GuestHouseIntro from "../_components/GuestHouseIntro";
 import GuestHouseParty from "../_components/GuestHouseParty";
 import ParlorType from "../_components/ParlorType";
 
 export default function GuestHouseDetail() {
-  const { id, fromRegistration } = useLocalSearchParams<{ id: string; fromRegistration?: string }>();
+  const { id, fromRegistration } = useLocalSearchParams<{
+    id: string;
+    fromRegistration?: string;
+  }>();
 
   const {
     scrollViewRef,
@@ -36,6 +39,7 @@ export default function GuestHouseDetail() {
   });
 
   const { data, isPending, isError, refetch } = useGuestHouseDetail();
+  console.log(data);
 
   const [isWished, setIsWished] = useState(false);
 
@@ -57,7 +61,11 @@ export default function GuestHouseDetail() {
           content='게스트하우스 상세'
           shareTitle='게스트하우스 공유하기'
           shareMessage='게스트하우스를 공유해보세요!'
-          onBack={fromRegistration === 'true' ? () => router.replace('/(tabs)') : undefined}
+          onBack={
+            fromRegistration === "true"
+              ? () => router.replace("/(tabs)")
+              : undefined
+          }
           isWished={isWished}
           onWishToggle={() => toggleWish(isWished)}
         />

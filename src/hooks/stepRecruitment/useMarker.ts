@@ -1,6 +1,11 @@
 import { useCallback, useState } from "react";
-import Geocoder from "react-native-geocoding";
 
+import {
+  geocodeAddress,
+  localSearch,
+  NaverAddressResult,
+  reverseGeocode,
+} from "@/src/services/map/naverMap";
 import { SelectedAddressProps } from "@/src/types/models/stepRecruitment/Step1Data";
 
 interface UseMarkerProps {
@@ -18,78 +23,96 @@ export function useMarker({
   setSelectedAddress,
   setModalVisible,
 }: UseMarkerProps) {
-  const [markerPosition, setMarkerPosition] = useState({ latitude, longitude });
+  const [markerPosition, setMarkerPositionState] = useState({ latitude, longitude });
+  const [hasMarker, setHasMarker] = useState(false);
+  const [searchResults, setSearchResults] = useState<NaverAddressResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [selectedNaverAddress, setSelectedNaverAddress] =
+    useState<NaverAddressResult | null>(null);
 
-  const findAddressByType = (results: any[], targetTypes: string[]) => {
-    const result = results.find((item) =>
-      item.types.some((t: string) => targetTypes.includes(t))
-    );
-    return result ? result.formatted_address : "";
-  };
+  const setMarkerPosition = useCallback((pos: { latitude: number; longitude: number }) => {
+    setMarkerPositionState(pos);
+    setHasMarker(true);
+    setSelectedNaverAddress(null);
+  }, []);
+
+  const clearSearchResults = useCallback(() => {
+    setSearchResults([]);
+  }, []);
 
   const searchLocation = useCallback(async (keyword: string) => {
-    if (!keyword) return;
+    if (!keyword.trim()) return;
 
+    setIsSearching(true);
     try {
-      const geo = await Geocoder.from(`${keyword}, 대한민국`);
-
-      if (geo.results.length === 0) {
-        console.warn("검색 결과 없음");
-        return;
-      }
-
-      const location = geo.results[0]?.geometry?.location;
-
-      if (!location) return;
-
-      setMarkerPosition({
-        latitude: location.lat,
-        longitude: location.lng,
-      });
-    } catch (err) {
-      console.error("위치 검색 오류", err);
+      const [geocodeResults, placeResults] = await Promise.all([
+        geocodeAddress(keyword),
+        localSearch(keyword),
+      ]);
+      const merged = [
+        ...placeResults,
+        ...geocodeResults.filter(
+          (g) => !placeResults.some((p) => p.roadAddress && p.roadAddress === g.roadAddress),
+        ),
+      ];
+      setSearchResults(merged);
+    } finally {
+      setIsSearching(false);
     }
+  }, []);
+
+  const selectSearchResult = useCallback((result: NaverAddressResult) => {
+    setMarkerPositionState({ latitude: result.latitude, longitude: result.longitude });
+    setHasMarker(true);
+    setSelectedNaverAddress(result);
+    setSearchResults([]);
   }, []);
 
   const selectAddress = useCallback(async () => {
     if (!selectable || !setSelectedAddress || !setModalVisible) return;
 
     try {
-      const geo = await Geocoder.from(
-        markerPosition.latitude,
-        markerPosition.longitude
-      );
-
-      const results = geo.results;
-
-      const roadAddress = findAddressByType(results, [
-        "street_address",
-        "route",
-      ]);
-
-      const jibunAddress = findAddressByType(results, [
-        "premise",
-        "sublocality",
-        "political",
-      ]);
-
+      if (selectedNaverAddress) {
+        setSelectedAddress({
+          roadAddress: selectedNaverAddress.roadAddress,
+          jibunAddress: selectedNaverAddress.jibunAddress,
+          latitude: selectedNaverAddress.latitude,
+          longitude: selectedNaverAddress.longitude,
+        });
+      } else {
+        const result = await reverseGeocode(
+          markerPosition.latitude,
+          markerPosition.longitude,
+        );
+        setSelectedAddress({
+          roadAddress: result.roadAddress,
+          jibunAddress: result.jibunAddress,
+          latitude: markerPosition.latitude,
+          longitude: markerPosition.longitude,
+        });
+      }
+    } catch (e) {
+      console.error("주소 선택 오류", e);
       setSelectedAddress({
-        roadAddress,
-        jibunAddress,
+        roadAddress: "",
+        jibunAddress: "",
         latitude: markerPosition.latitude,
         longitude: markerPosition.longitude,
       });
-
+    } finally {
       setModalVisible(false);
-    } catch (err) {
-      console.error("지도 오류", err);
     }
-  }, [markerPosition, selectable, setSelectedAddress, setModalVisible]);
+  }, [markerPosition, selectable, setSelectedAddress, setModalVisible, selectedNaverAddress]);
 
   return {
     markerPosition,
+    hasMarker,
     setMarkerPosition,
-    selectAddress,
+    searchResults,
+    isSearching,
     searchLocation,
+    selectSearchResult,
+    selectAddress,
+    clearSearchResults,
   };
 }
