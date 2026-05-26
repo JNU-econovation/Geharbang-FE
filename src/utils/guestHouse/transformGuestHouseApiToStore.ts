@@ -70,12 +70,16 @@ export const transformGuestHouseApiToStore = (detail: GuestHouseDetailResponse) 
   const step1Data = {
     guestHouseName: detail.guestHouseName,
     workingRegion: detail.region,
-    location: {
-      roadAddress: detail.location.roadNameAddress,
-      jibunAddress: detail.location.lotNumberAddress,
-      longitude: detail.location.coordinates[0],
-      latitude: detail.location.coordinates[1],
-    },
+    location: (() => {
+      const c = detail.location.coordinates;
+      const isGeoJSON = c[0] > 90;
+      return {
+        roadAddress: detail.location.roadNameAddress,
+        jibunAddress: detail.location.lotNumberAddress,
+        latitude: isGeoJSON ? c[1] : c[0],
+        longitude: isGeoJSON ? c[0] : c[1],
+      };
+    })(),
   };
 
   const step2Data = {
