@@ -16,6 +16,12 @@ const plugins: ExpoConfig["plugins"] = [
         "Allow $(PRODUCT_NAME) to access your Face ID biometric data.",
     },
   ],
+  [
+    "@mj-studio/react-native-naver-map",
+    {
+      client_id: process.env.NAVER_MAP_CLIENT_ID,
+    },
+  ],
 ];
 
 if (sentryOrg && sentryProject && sentryAuthToken) {
@@ -50,9 +56,6 @@ const config: ExpoConfig = {
         },
       ],
     },
-    config: {
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    },
   },
 
   android: {
@@ -76,11 +79,6 @@ const config: ExpoConfig = {
         category: ["BROWSABLE", "DEFAULT"],
       },
     ],
-    config: {
-      googleMaps: {
-        apiKey: process.env.GOOGLE_MAPS_API_KEY,
-      },
-    },
   },
 
   web: {
@@ -99,7 +97,8 @@ const config: ExpoConfig = {
     eas: {
       projectId: "81bf359a-a232-4d2e-bf98-50c02b62485d",
     },
-    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    naverMapClientId: process.env.NAVER_MAP_CLIENT_ID,
+    naverMapClientSecret: process.env.NAVER_MAP_CLIENT_SECRET,
   },
 };
 
