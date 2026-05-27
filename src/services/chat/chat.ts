@@ -62,7 +62,7 @@ export const markChatRoomAsRead = async (roomId: number): Promise<void> => {
   await axiosPrivate.patch(`/api/v1/chats/rooms/${roomId}/read`);
 };
 
-export const getChatWebSocketUrl = async (roomId: number) => {
+export const getChatWebSocketUrl = async (roomId?: number) => {
   const token = await getAccessToken(TOKEN_KEYS.ACCESS_TOKEN);
   if (!token) {
     return null;
@@ -72,5 +72,12 @@ export const getChatWebSocketUrl = async (roomId: number) => {
     /^http/,
     "ws",
   );
-  return `${wsBaseUrl}/ws/chats?token=${encodeURIComponent(token)}&roomId=${roomId}`;
+  const query = new URLSearchParams({
+    token,
+  });
+  if (roomId) {
+    query.set("roomId", String(roomId));
+  }
+
+  return `${wsBaseUrl}/ws/chats?${query.toString()}`;
 };

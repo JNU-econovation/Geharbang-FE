@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -25,6 +25,7 @@ import {
   useSendChatMessage,
 } from "@/src/hooks/chat/useChat";
 import { useChatWebSocket } from "@/src/hooks/chat/useChatWebSocket";
+import { useAuthStore } from "@/src/stores/auth/useAuthStore";
 import { ChatMessage } from "@/src/types/models/chat/Chat";
 import { COLORS } from "@/src/utils/constants/colors";
 import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
@@ -107,6 +108,8 @@ export default function ChatRoomScreen() {
     roomId: string;
     title?: string;
   }>();
+  const isLogined = useAuthStore((state) => Boolean(state.accessToken));
+  const isAuthReady = useAuthStore((state) => state.isAuthReady);
   const parsedRoomId = Number(roomId);
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
@@ -119,7 +122,7 @@ export default function ChatRoomScreen() {
   const { mutate: sendMessage, isPending } = useSendChatMessage(parsedRoomId);
   const { mutate: markAsRead } = useMarkChatRoomAsRead();
 
-  useChatWebSocket(parsedRoomId);
+  useChatWebSocket(isLogined ? parsedRoomId : null);
 
   const messages = data?.messages ?? [];
   const currentRoom = roomsData?.chatRooms.find(
@@ -137,10 +140,16 @@ export default function ChatRoomScreen() {
   }, []);
 
   useEffect(() => {
-    if (parsedRoomId) {
+    if (isAuthReady && !isLogined) {
+      router.replace("/login" as any);
+    }
+  }, [isAuthReady, isLogined]);
+
+  useEffect(() => {
+    if (isLogined && parsedRoomId) {
       markAsRead(parsedRoomId);
     }
-  }, [markAsRead, parsedRoomId]);
+  }, [isLogined, markAsRead, parsedRoomId]);
 
   useEffect(() => {
     requestAnimationFrame(() => {
@@ -208,6 +217,9 @@ export default function ChatRoomScreen() {
                 paddingBottom: inputBarHeight + keyboardHeight + 16,
               }}
               keyboardShouldPersistTaps='handled'
+              onContentSizeChange={() => {
+                scrollRef.current?.scrollToEnd({ animated: true });
+              }}
             >
               {messages.length === 0 ? (
                 <View className='h-64 items-center justify-center'>

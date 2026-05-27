@@ -11,6 +11,8 @@ import CachedImage from "@/src/components/ui/CachedImage";
 import TextSize from "@/src/components/ui/TextSize";
 import { buildAssetUrl } from "@/src/config/url";
 import { useChatRooms } from "@/src/hooks/chat/useChat";
+import { useChatWebSocket } from "@/src/hooks/chat/useChatWebSocket";
+import { useAuthStore } from "@/src/stores/auth/useAuthStore";
 import { ChatRoom } from "@/src/types/models/chat/Chat";
 import { COLORS } from "@/src/utils/constants/colors";
 
@@ -91,8 +93,11 @@ function ChatRoomCard({ room }: { room: ChatRoom }) {
 }
 
 export default function ChatRoomsScreen() {
+  const isLogined = useAuthStore((state) => Boolean(state.accessToken));
   const { data, isLoading, isError, refetch } = useChatRooms();
   const rooms = data?.chatRooms ?? [];
+
+  useChatWebSocket(isLogined ? undefined : null);
 
   return (
     <CustomSafeAreaView pageColor='bg-[#F9FAFB]'>
@@ -100,7 +105,31 @@ export default function ChatRoomsScreen() {
         <BackArrorHeader content='채팅' />
       </View>
 
-      {isLoading ? (
+      {!isLogined ? (
+        <View className='flex-1 items-center justify-center px-6'>
+          <Ionicons
+            name='chatbubble-ellipses-outline'
+            size={44}
+            color={COLORS.GRAY.TEXT}
+          />
+          <View className='pt-4' />
+          <TextSize
+            size={16}
+            color={COLORS.GRAY.TEXT}
+            content='로그인 후 채팅을 확인할 수 있어요'
+            align='center'
+          />
+          <View className='pt-5' />
+          <Button
+            variant='primary'
+            height={44}
+            width={180}
+            content='로그인하기'
+            textColor='#FFFFFF'
+            onPress={() => router.push("/login" as any)}
+          />
+        </View>
+      ) : isLoading ? (
         <View className='h-64 items-center justify-center'>
           <ActivityIndicator size={64} color={COLORS.PRIMARY.BLUE} />
         </View>

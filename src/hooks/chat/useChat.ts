@@ -26,10 +26,12 @@ export const useChatRooms = () => {
 };
 
 export const useChatMessages = (roomId: number, pageNumber = 0) => {
+  const isLogined = useAuthStore((state) => Boolean(state.accessToken));
+
   return useQuery({
     queryKey: CHAT_QUERY_KEYS.messages(roomId, pageNumber),
     queryFn: () => getChatMessages(roomId, pageNumber),
-    enabled: Number.isFinite(roomId) && roomId > 0,
+    enabled: isLogined && Number.isFinite(roomId) && roomId > 0,
   });
 };
 
