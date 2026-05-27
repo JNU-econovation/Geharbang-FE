@@ -34,15 +34,15 @@ export default function NotificationSettingsScreen() {
 
       <View className='px-4 pt-6'>
         <SettingRow
-          label='푸시 알림'
-          description='앱 외부에서도 알림을 받습니다'
+          label='휴대폰 알림'
+          description='앱을 보고 있지 않을 때도 알림을 받습니다'
           value={data.pushEnabled}
           onToggle={(value) => mutate({ pushEnabled: value })}
         />
         <View className='border-b border-[#E5E5E5] my-2' />
         <SettingRow
-          label='채팅 알림'
-          description='알림함과 푸시에서 채팅 알림을 받습니다'
+          label='새 채팅 알림'
+          description='새 메시지 알림을 앱 안과 휴대폰에서 받습니다'
           value={data.chatPushEnabled}
           onToggle={(value) => mutate({ chatPushEnabled: value })}
         />
