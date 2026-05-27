@@ -32,7 +32,7 @@ if (sentryOrg && sentryProject && sentryAuthToken) {
 const config: ExpoConfig = {
   name: "Geharbang-FE",
   slug: "Geharbang-FE",
-  version: "1.0.0",
+  version: "1.1.0",
   orientation: "portrait",
   scheme: "geharbang",
   platforms: ["ios", "android", "web"],
@@ -57,7 +57,7 @@ const config: ExpoConfig = {
   },
 
   android: {
-    versionCode: 5,
+    versionCode: 7,
     softwareKeyboardLayoutMode: "pan",
     adaptiveIcon: {
       backgroundColor: "#ffffff",
