@@ -11,13 +11,13 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const Notifications = getExpoNotifications();
 
-// foreground에서는 배너를 숨기고 데이터를 직접 갱신한다.
+// foreground에서도 알림을 보여 테스트와 실제 수신 체감을 일관되게 맞춘다.
 Notifications?.setNotificationHandler?.({
   handleNotification: async () => ({
-    shouldPlaySound: false,
+    shouldPlaySound: true,
     shouldSetBadge: false,
-    shouldShowBanner: false,
-    shouldShowList: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
   }),
 });
 
