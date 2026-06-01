@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
+import { Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useHomeStore } from "@/src/stores/home/useHomeStore";
 
@@ -13,6 +14,10 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const showComingSoonAlert = () => {
+    Alert.alert("준비중", "곧 이용할 수 있도록 준비하고 있어요.");
+  };
+
   return (
     <Tabs
       screenOptions={{
@@ -51,21 +56,33 @@ export default function TabLayout() {
         })}
       />
       <Tabs.Screen
-        name='guestHouseEnroll'
+        name='map'
         options={{
-          title: "게하등록",
+          title: "지도",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name='home-outline' color={color} />
+            <TabBarIcon name='map-outline' color={color} />
           ),
+        }}
+        listeners={{
+          tabPress: (event) => {
+            event.preventDefault();
+            showComingSoonAlert();
+          },
         }}
       />
       <Tabs.Screen
-        name='stepRecruitment'
+        name='ai'
         options={{
-          title: "스텝모집",
+          title: "AI",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name='people-outline' color={color} />
+            <TabBarIcon name='sparkles-outline' color={color} />
           ),
+        }}
+        listeners={{
+          tabPress: (event) => {
+            event.preventDefault();
+            showComingSoonAlert();
+          },
         }}
       />
       <Tabs.Screen
@@ -82,6 +99,18 @@ export default function TabLayout() {
         options={{
           title: "내정보",
           tabBarIcon: ({ color }) => <TabBarIcon name='person' color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name='guestHouseEnroll'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='stepRecruitment'
+        options={{
+          href: null,
         }}
       />
     </Tabs>
