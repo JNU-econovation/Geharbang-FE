@@ -1,5 +1,6 @@
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
+import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 import {
   useNotificationSettings,
@@ -10,10 +11,10 @@ import React from "react";
 import { ActivityIndicator, Switch, View } from "react-native";
 
 export default function NotificationSettingsScreen() {
-  const { data, isLoading } = useNotificationSettings();
+  const { data, isLoading, isError, refetch } = useNotificationSettings();
   const { mutate } = useUpdateNotificationSettings();
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return (
       <CustomSafeAreaView pageColor='bg-white' topOnly={true}>
         <View className='px-3 pt-3 pb-4 border-b-[1px] border-[#E5E5E5]'>
@@ -21,6 +22,33 @@ export default function NotificationSettingsScreen() {
         </View>
         <View className='flex-1 items-center justify-center'>
           <ActivityIndicator size='large' color={COLORS.PRIMARY.BLUE} />
+        </View>
+      </CustomSafeAreaView>
+    );
+  }
+
+  if (isError || !data) {
+    return (
+      <CustomSafeAreaView pageColor='bg-white' topOnly={true}>
+        <View className='px-3 pt-3 pb-4 border-b-[1px] border-[#E5E5E5]'>
+          <BackArrorHeader content='알림 설정' />
+        </View>
+        <View className='flex-1 items-center justify-center px-6'>
+          <TextSize
+            color={COLORS.GRAY.TEXT}
+            size={16}
+            content='알림 설정을 불러오지 못했어요'
+            align='center'
+          />
+          <View className='pt-4' />
+          <Button
+            variant='gray'
+            height={48}
+            width={180}
+            content='다시 시도'
+            textColor='#101828'
+            onPress={() => refetch()}
+          />
         </View>
       </CustomSafeAreaView>
     );

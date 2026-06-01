@@ -27,5 +27,8 @@ export const useUpdateNotificationSettings = () => {
     onSuccess: (data) => {
       queryClient.setQueryData(SETTING_QUERY_KEY, data);
     },
+    onError: () => {
+      queryClient.invalidateQueries({ queryKey: SETTING_QUERY_KEY });
+    },
   });
 };

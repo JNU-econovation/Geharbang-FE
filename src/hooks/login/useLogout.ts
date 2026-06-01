@@ -12,7 +12,7 @@ export const useLogout = () => {
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const queryClient = useQueryClient();
 
-  const performLogout = async () => {
+  const unregisterCurrentPushToken = async () => {
     try {
       const projectId =
         Constants.expoConfig?.extra?.eas?.projectId ??
@@ -29,8 +29,15 @@ export const useLogout = () => {
           platform: Platform.OS,
         }).catch(() => undefined);
       }
+    } catch {
+      // 푸시 토큰 해제 실패가 로컬 로그아웃을 막지 않도록 무시한다.
+    }
+  };
 
-      await Promise.all([
+  const performLogout = async () => {
+    try {
+      await unregisterCurrentPushToken();
+      await Promise.allSettled([
         removeAccessToken(TOKEN_KEYS.ACCESS_TOKEN),
         removeAccessToken(TOKEN_KEYS.USER_ID),
       ]);
