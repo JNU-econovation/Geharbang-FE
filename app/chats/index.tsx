@@ -11,7 +11,6 @@ import CachedImage from "@/src/components/ui/CachedImage";
 import TextSize from "@/src/components/ui/TextSize";
 import { buildAssetUrl } from "@/src/config/url";
 import { useChatRooms } from "@/src/hooks/chat/useChat";
-import { useChatWebSocket } from "@/src/hooks/chat/useChatWebSocket";
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
 import { ChatRoom } from "@/src/types/models/chat/Chat";
 import { COLORS } from "@/src/utils/constants/colors";
@@ -96,8 +95,6 @@ export default function ChatRoomsScreen() {
   const isLogined = useAuthStore((state) => Boolean(state.accessToken));
   const { data, isLoading, isError, refetch } = useChatRooms();
   const rooms = data?.chatRooms ?? [];
-
-  useChatWebSocket(isLogined ? undefined : null);
 
   return (
     <CustomSafeAreaView pageColor='bg-[#F9FAFB]'>

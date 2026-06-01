@@ -21,6 +21,7 @@ import {
   usePushNotificationNavigation,
   useRegisterPushNotifications,
 } from "@/src/hooks/notification/usePushNotifications";
+import { useChatWebSocket } from "@/src/hooks/chat/useChatWebSocket";
 import "../global.css";
 
 export const unstable_settings = {
@@ -66,6 +67,7 @@ function RootLayoutNav() {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <AppNotificationEffects />
+        <AppChatEffects />
         <ThemeProvider value={DefaultTheme}>
           <Stack
             screenOptions={{
@@ -99,6 +101,14 @@ function AppNotificationEffects() {
   useRegisterPushNotifications();
   usePushNotificationNavigation();
   useForegroundNotificationHandler();
+
+  return null;
+}
+
+function AppChatEffects() {
+  const isLogined = useAuthStore((state) => Boolean(state.accessToken));
+
+  useChatWebSocket(isLogined ? undefined : null);
 
   return null;
 }
