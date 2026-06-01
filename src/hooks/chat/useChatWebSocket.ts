@@ -70,6 +70,7 @@ export const useChatWebSocket = (roomId?: number | null) => {
           CHAT_QUERY_KEYS.rooms,
           (current) => updateChatRoomPreview(current, message, activeRoomId),
         );
+        queryClient.invalidateQueries({ queryKey: ["notifications"] });
 
         if (!roomId || message.chatRoomId !== roomId) {
           queryClient.invalidateQueries({ queryKey: CHAT_QUERY_KEYS.rooms });

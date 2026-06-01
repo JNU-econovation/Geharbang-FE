@@ -76,6 +76,7 @@ export const useMarkChatRoomAsRead = () => {
     mutationFn: markChatRoomAsRead,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CHAT_QUERY_KEYS.rooms });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
   });
 };
