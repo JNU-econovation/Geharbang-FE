@@ -219,7 +219,7 @@ export default function ChatRoomScreen() {
     if (isLogined && parsedRoomId) {
       markAsRead(parsedRoomId);
     }
-  }, [isLogined, markAsRead, messages.length, parsedRoomId]);
+  }, [isLogined, markAsRead, parsedRoomId]);
 
   useEffect(() => {
     if (!Number.isFinite(parsedRoomId) || parsedRoomId <= 0) {
