@@ -3,7 +3,6 @@ import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Keyboard,
   KeyboardAvoidingView,
   LayoutChangeEvent,
   Platform,
@@ -18,6 +17,7 @@ import Flex from "@/src/components/layout/Flex";
 import BackArrorHeader from "@/src/components/ui/BackArrowHeader";
 import CachedImage from "@/src/components/ui/CachedImage";
 import TextSize from "@/src/components/ui/TextSize";
+import { buildAssetUrl } from "@/src/config/url";
 import {
   useChatRooms,
   useChatMessages,
@@ -32,25 +32,91 @@ import { COLORS } from "@/src/utils/constants/colors";
 import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
 import { getAccessToken } from "@/src/utils/login/secureStore";
 
-const formatTime = (value: string) => {
+const formatTime = (value?: string | null, showDate = false) => {
+  if (!value) return "";
+
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleTimeString("ko-KR", {
+
+  const time = date.toLocaleTimeString("ko-KR", {
     hour: "2-digit",
     minute: "2-digit",
   });
+
+  if (!showDate) return time;
+
+  const dateLabel = date.toLocaleDateString("ko-KR", {
+    month: "numeric",
+    day: "numeric",
+  });
+
+  return `${dateLabel} ${time}`;
 };
+
+const isSameDate = (left: Date, right: Date) =>
+  left.getFullYear() === right.getFullYear() &&
+  left.getMonth() === right.getMonth() &&
+  left.getDate() === right.getDate();
+
+const getDateKey = (value?: string | null) => {
+  if (!value) return "";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const formatDateLabel = (value?: string | null) => {
+  if (!value) return "";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
+  if (isSameDate(date, today)) return "오늘";
+  if (isSameDate(date, yesterday)) return "어제";
+
+  return date.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "short",
+  });
+};
+
+function DateSeparator({ createdAt }: { createdAt: string }) {
+  const label = formatDateLabel(createdAt);
+  if (!label) return null;
+
+  return (
+    <View className='flex-row items-center px-4 py-4 gap-3'>
+      <View className='flex-1 h-[1px] bg-[#D1D5DB]' />
+      <View className='px-3 py-1.5 rounded-full bg-[#374151]'>
+        <TextSize size={12} color='#FFFFFF' content={label} />
+      </View>
+      <View className='flex-1 h-[1px] bg-[#D1D5DB]' />
+    </View>
+  );
+}
 
 function MessageBubble({
   message,
   isMine,
   opponentName,
   opponentImageUrl,
+  showDateInTime,
 }: {
   message: ChatMessage;
   isMine: boolean;
   opponentName?: string | null;
   opponentImageUrl?: string | null;
+  showDateInTime: boolean;
 }) {
   if (isMine) {
     return (
@@ -59,7 +125,7 @@ function MessageBubble({
           <TextSize
             size={11}
             color='#6A7282'
-            content={formatTime(message.createdAt)}
+            content={formatTime(message.createdAt, showDateInTime)}
           />
           <View className='max-w-[82%] px-4 py-3 rounded-2xl rounded-br-md bg-[#0EA5E9]'>
             <TextSize size={15} color='#FFFFFF' content={message.content} />
@@ -96,7 +162,7 @@ function MessageBubble({
           <TextSize
             size={11}
             color='#6A7282'
-            content={formatTime(message.createdAt)}
+            content={formatTime(message.createdAt, showDateInTime)}
           />
         </View>
       </View>
@@ -114,7 +180,6 @@ export default function ChatRoomScreen() {
   const parsedRoomId = Number(roomId);
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [inputBarHeight, setInputBarHeight] = useState(80);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -132,6 +197,7 @@ export default function ChatRoomScreen() {
   const currentRoom = roomsData?.chatRooms.find(
     (room) => room.id === parsedRoomId,
   );
+  const opponentImageUri = buildAssetUrl(currentRoom?.opponentImageUrl);
   const roomTitle =
     title ??
     currentRoom?.opponentName ??
@@ -172,27 +238,6 @@ export default function ChatRoomScreen() {
     });
   }, [messages.length]);
 
-  useEffect(() => {
-    if (Platform.OS !== "android") {
-      return;
-    }
-
-    const showSubscription = Keyboard.addListener("keyboardDidShow", (event) => {
-      setKeyboardHeight(event.endCoordinates.height);
-      requestAnimationFrame(() => {
-        scrollRef.current?.scrollToEnd({ animated: true });
-      });
-    });
-    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardHeight(0);
-    });
-
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
-
   const handleInputBarLayout = (event: LayoutChangeEvent) => {
     setInputBarHeight(event.nativeEvent.layout.height);
   };
@@ -203,8 +248,13 @@ export default function ChatRoomScreen() {
       return;
     }
 
-    sendMessage(trimmedContent);
-    setContent("");
+    sendMessage(trimmedContent, {
+      onSuccess: () => {
+        setContent((currentContent) =>
+          currentContent.trim() === trimmedContent ? "" : currentContent,
+        );
+      },
+    });
   };
 
   return (
@@ -229,7 +279,7 @@ export default function ChatRoomScreen() {
               className='flex-1 py-3'
               contentContainerStyle={{
                 flexGrow: 1,
-                paddingBottom: inputBarHeight + keyboardHeight + 16,
+                paddingBottom: inputBarHeight + 16,
               }}
               keyboardShouldPersistTaps='handled'
               onContentSizeChange={() => {
@@ -245,22 +295,37 @@ export default function ChatRoomScreen() {
                   />
                 </View>
               ) : (
-                messages.map((message) => (
-                  <MessageBubble
-                    key={message.id}
-                    message={message}
-                    isMine={userId === message.senderId}
-                    opponentName={currentRoom?.opponentName}
-                    opponentImageUrl={currentRoom?.opponentImageUrl}
-                  />
-                ))
+                messages.map((message, index) => {
+                  const previousMessage = messages[index - 1];
+                  const messageDateKey = getDateKey(message.createdAt);
+                  const shouldShowDate =
+                    !previousMessage ||
+                    getDateKey(previousMessage.createdAt) !== messageDateKey;
+                  const showDateInTime =
+                    messageDateKey !== getDateKey(new Date().toISOString());
+
+                  return (
+                    <React.Fragment key={message.id}>
+                      {shouldShowDate && (
+                        <DateSeparator createdAt={message.createdAt} />
+                      )}
+                      <MessageBubble
+                        message={message}
+                        isMine={userId === message.senderId}
+                        opponentName={currentRoom?.opponentName}
+                        opponentImageUrl={opponentImageUri}
+                        showDateInTime={showDateInTime}
+                      />
+                    </React.Fragment>
+                  );
+                })
               )}
             </ScrollView>
           )}
 
           <View
             className='absolute left-0 right-0 px-3 py-3 bg-white border-t border-[#E5E7EB]'
-            style={{ bottom: Platform.OS === "android" ? keyboardHeight : 0 }}
+            style={{ bottom: 0 }}
             onLayout={handleInputBarLayout}
           >
             <Flex dir='row' items='center' justify='between' gap={8}>
