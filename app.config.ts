@@ -34,6 +34,7 @@ const config: ExpoConfig = {
   slug: "Geharbang-FE",
   version: "1.1.0",
   orientation: "portrait",
+  icon: "./assets/icon.png",
   scheme: "geharbang",
   platforms: ["ios", "android", "web"],
   userInterfaceStyle: "automatic",
@@ -60,7 +61,8 @@ const config: ExpoConfig = {
     versionCode: 7,
     softwareKeyboardLayoutMode: "pan",
     adaptiveIcon: {
-      backgroundColor: "#ffffff",
+      foregroundImage: "./assets/adaptive-icon.png",
+      backgroundColor: "#33A8F8",
     },
 
     // edgeToEdgeEnabled: false,
