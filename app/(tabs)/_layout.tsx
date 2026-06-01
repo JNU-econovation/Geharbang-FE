@@ -4,6 +4,8 @@ import React from "react";
 import { Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useHomeStore } from "@/src/stores/home/useHomeStore";
+import { useChatRooms } from "@/src/hooks/chat/useChat";
+import { useAuthStore } from "@/src/stores/auth/useAuthStore";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof Ionicons>["name"];
@@ -14,6 +16,14 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const isLogined = useAuthStore((state) => Boolean(state.accessToken));
+  const { data: chatRoomsData } = useChatRooms();
+  const unreadChatCount = isLogined
+    ? (chatRoomsData?.chatRooms ?? []).reduce(
+        (sum, room) => sum + room.unreadCount,
+        0,
+      )
+    : 0;
   const showComingSoonAlert = () => {
     Alert.alert("준비중", "곧 이용할 수 있도록 준비하고 있어요.");
   };
@@ -89,6 +99,19 @@ export default function TabLayout() {
         name='chats'
         options={{
           title: "채팅",
+          tabBarBadge:
+            unreadChatCount > 0
+              ? unreadChatCount > 99
+                ? "99+"
+                : unreadChatCount
+              : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: "#E7000B",
+            color: "#FFFFFF",
+            fontSize: 10,
+            minWidth: 18,
+            height: 18,
+          },
           tabBarIcon: ({ color }) => (
             <TabBarIcon name='chatbubble-ellipses-outline' color={color} />
           ),
