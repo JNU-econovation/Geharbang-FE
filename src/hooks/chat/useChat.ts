@@ -55,16 +55,17 @@ export const useSendChatMessage = (roomId: number) => {
       queryClient.setQueryData<{ messages: ChatMessage[] }>(
         CHAT_QUERY_KEYS.messages(roomId, 0),
         (current) => {
-          if (!current) {
-            return { messages: [message] };
-          }
-          if (current.messages.some((item) => item.id === message.id)) {
+          const messages = current?.messages ?? [];
+          if (messages.some((item) => item.id === message.id)) {
             return current;
           }
-          return { messages: [...current.messages, message] };
+          return { messages: [...messages, message] };
         },
       );
       queryClient.invalidateQueries({ queryKey: CHAT_QUERY_KEYS.rooms });
+    },
+    onError: () => {
+      queryClient.invalidateQueries({ queryKey: CHAT_QUERY_KEYS.messages(roomId) });
     },
   });
 };

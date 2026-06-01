@@ -26,6 +26,7 @@ const formatDate = (value: string | null) => {
 };
 
 function ChatRoomCard({ room }: { room: ChatRoom }) {
+  const hasOpponentImage = Boolean(room.opponentImageUrl?.trim());
   const imageUri = buildAssetUrl(room.opponentImageUrl);
 
   return (
@@ -42,7 +43,7 @@ function ChatRoomCard({ room }: { room: ChatRoom }) {
     >
       <View className='px-4 py-4 bg-white border-b border-[#F3F4F6]'>
         <Flex dir='row' items='center' justify='between' gap={12}>
-          {imageUri ? (
+          {hasOpponentImage && imageUri ? (
             <CachedImage uri={imageUri} className='w-12 h-12 rounded-full' />
           ) : (
             <View className='w-12 h-12 rounded-full bg-[#E5E7EB] items-center justify-center'>
