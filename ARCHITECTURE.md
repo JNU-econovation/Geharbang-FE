@@ -61,7 +61,7 @@ Geharbang FE는 **제주 게스트하우스 스텝 구인/구직 플랫폼**의 
 ```
 Geharbang-FE/
 ├── app/                      # Expo Router 페이지 (화면 파일)
-│   ├── (tabs)/               # 하단 탭 4개
+│   ├── (tabs)/               # 하단 탭 5개
 │   ├── application/          # 지원서 작성
 │   ├── guestHouse/           # 게스트하우스 목록/상세/등록
 │   ├── login/                # 로그인
@@ -84,6 +84,10 @@ Geharbang-FE/
 │   ├── fonts/                # Noto Sans KR
 │   └── svgs/                 # SVG 아이콘/일러스트
 │
+├── assets/
+│   ├── icon.png              # 기본 앱 아이콘
+│   └── adaptive-icon.png     # Android adaptive icon foreground
+│
 ├── .env                      # 환경변수 (EXPO_PUBLIC_API_URL, EXPO_PUBLIC_ASSET_URL 등)
 └── src/config/url.ts         # API/이미지/파일 URL 공통 설정
 ```
@@ -99,9 +103,13 @@ Expo Router는 **파일 경로 = URL 경로** 구조. `app/` 폴더 안에 파�
 | 파일 | 탭 이름 | 설명 |
 |------|---------|------|
 | `index.tsx` | 홈 | 게스트하우스/스텝 추천 카드 |
-| `guestHouseEnroll.tsx` | 게하등록 | 게스트하우스 등록 진입 |
-| `stepRecruitment.tsx` | 스텝모집 | 스텝 구인 공고 작성 진입 |
+| `map.tsx` | 지도 | 준비중 알림 표시 |
+| `ai.tsx` | AI | 준비중 알림 표시 |
+| `chats.tsx` | 채팅 | 채팅방 목록, 읽지 않은 메시지 배지 |
 | `profile.tsx` | 내정보 | 프로필, 지원서, 운영자 기능 |
+
+`guestHouseEnroll.tsx`, `stepRecruitment.tsx`는 탭 파일로 남아 있지만 `href: null`로 하단 nav에서는 숨긴다.
+지도와 AI 탭은 현재 실제 화면 이동 없이 `Alert.alert("준비중", ...)`만 표시한다.
 
 ### 주요 화면 경로
 
@@ -109,8 +117,11 @@ Expo Router는 **파일 경로 = URL 경로** 구조. `app/` 폴더 안에 파�
 app/
 ├── (tabs)/
 │   ├── index.tsx                        # 홈
-│   ├── guestHouseEnroll.tsx             # 게하등록 탭
-│   ├── stepRecruitment.tsx              # 스텝모집 탭
+│   ├── map.tsx                          # 지도 탭 (준비중)
+│   ├── ai.tsx                           # AI 탭 (준비중)
+│   ├── chats.tsx                        # 채팅 탭
+│   ├── guestHouseEnroll.tsx             # 숨김 탭
+│   ├── stepRecruitment.tsx              # 숨김 탭
 │   └── profile.tsx                      # 내정보 탭
 │
 ├── login/                               # 로그인
@@ -210,6 +221,15 @@ Zustand와 React Query를 역할에 따라 분리해서 사용함.
 - 근무 시간의 `Date` 값은 커스텀 storage reviver로 복원
 - `resetAllData()`로 전체 초기화
 
+#### useActiveChatRoomStore (`src/stores/chat/`)
+```typescript
+{
+  activeRoomId: number | null,
+  setActiveRoomId(roomId): void
+}
+```
+현재 사용자가 열어둔 채팅방 id를 저장한다. 전역 채팅 WebSocket이 새 메시지를 받을 때 현재 방의 메시지라면 채팅 탭의 읽지 않은 수를 올리지 않기 위해 사용한다.
+
 ---
 
 ## 7. API 통신
@@ -292,7 +312,7 @@ FE 서비스 함수는 `src/services/wish/wish.ts`에 있고, 화면에서는 `s
 | 기능 | Endpoint | FE 위치 |
 |------|----------|---------|
 | 내 알림 목록 | `GET /api/v1/notifications?pageNumber=0` | `src/services/notification/notification.ts` |
-| 읽지 않은 개수 | `GET /api/v1/notifications/unread-count` | 홈 헤더/내 정보 배지 |
+| 읽지 않은 개수 | `GET /api/v1/notifications/unread-count` | 홈 헤더 알림 배지 |
 | 단일 읽음 처리 | `PATCH /api/v1/notifications/{id}/read` | 알림 카드 클릭 |
 | 전체 읽음 처리 | `PATCH /api/v1/notifications/read-all` | 알림 화면의 `모두 읽음` |
 | 알림 설정 조회 | `GET /api/v1/notification-settings` | 내 정보 > 알림 설정 |
@@ -304,6 +324,8 @@ FE 서비스 함수는 `src/services/wish/wish.ts`에 있고, 화면에서는 `s
 푸시 권한/토큰 등록과 알림 클릭 이동은 `src/hooks/notification/usePushNotifications.ts`에서 처리한다.
 `pushEnabled`는 앱 외부 OS 푸시만 제어하고, `chatPushEnabled`는 채팅 알림 자체를 제어한다. 따라서 `chatPushEnabled=false`이면 채팅 인앱 알림도 쌓이지 않고 푸시도 발송되지 않는다.
 기존 dev client에 `expo-notifications` 네이티브 모듈이 없을 수 있으므로 `src/utils/notification/getExpoNotifications.ts`에서 optional load로 감싼다.
+알림 설정 화면의 사용자 문구는 `휴대폰 알림`, `새 채팅 알림`으로 표시한다.
+채팅 WebSocket으로 새 메시지를 받으면 `notifications` query도 invalidate 해서 홈 알림 배지와 알림 목록이 뒤늦게 갱신되지 않게 한다.
 
 ### 채팅 API
 
@@ -316,13 +338,17 @@ FE 서비스 함수는 `src/services/wish/wish.ts`에 있고, 화면에서는 `s
 | 메시지 목록 | `GET /api/v1/chats/rooms/{roomId}/messages?pageNumber=0` | `app/chats/[roomId].tsx` |
 | 메시지 전송 | `POST /api/v1/chats/rooms/{roomId}/messages` | 채팅 입력창 |
 | 읽음 처리 | `PATCH /api/v1/chats/rooms/{roomId}/read` | 채팅방 진입 시 |
-| 실시간 수신 | `/ws/chats?token={accessToken}&roomId={roomId}` | `src/hooks/chat/useChatWebSocket.ts` |
+| 실시간 수신 | `/ws/chats?token={accessToken}` | 전역 채팅 목록/탭 배지 갱신 |
+| 채팅방 실시간 수신 | `/ws/chats?token={accessToken}&roomId={roomId}` | 현재 채팅방 메시지 갱신 |
 
 스텝 공고 상세는 하단 고정 액션바에서 `채팅하기:지원하기 = 3:7` 비율로 제공한다.
 게스트하우스 상세는 하단 고정 `채팅하기` 버튼으로 채팅방을 생성/진입한다.
 채팅방에서는 내 메시지는 오른쪽 파란 말풍선, 상대 메시지는 왼쪽 프로필/이름/흰 말풍선으로 구분한다.
 Android 키보드가 입력창을 가리지 않도록 키보드 높이를 감지해 입력바를 `absolute bottom`으로 직접 올린다.
 채팅방 WebSocket 연결에는 `roomId`를 함께 전달해 BE가 상대방의 채팅방 접속 상태를 판단할 수 있게 한다.
+루트 레이아웃의 `AppChatEffects`에서 로그인 상태일 때 전역 WebSocket을 연결한다. 이 연결은 채팅 목록을 보고 있지 않아도 채팅 탭의 읽지 않은 메시지 배지를 갱신한다.
+채팅방 화면도 별도 WebSocket을 연결한다. 현재 방 id는 `useActiveChatRoomStore`에 저장해, 열어둔 방에서 온 메시지는 읽지 않은 수로 누적하지 않는다.
+채팅방 진입/새 메시지 수신 후 읽음 처리가 완료되면 `chats.rooms`와 `notifications` query를 함께 invalidate 한다.
 
 ### 이미지 업로드 패턴
 
@@ -645,6 +671,32 @@ Expo Secure Store를 감싼 래퍼. access token과 userId 저장/조회/삭제�
 
 ## 12. 환경변수 및 빌드
 
+### 앱 설정 (`app.config.ts`)
+
+앱 표시 이름과 아이콘은 `app.config.ts`에서 관리한다.
+
+```typescript
+const config: ExpoConfig = {
+  name: "게하르방",
+  icon: "./assets/icon.png",
+  android: {
+    versionCode: 7,
+    adaptiveIcon: {
+      foregroundImage: "./assets/adaptive-icon.png",
+      backgroundColor: "#33A8F8",
+    },
+  },
+  ios: {
+    bundleIdentifier: "com.econovation.geharbang",
+  },
+};
+```
+
+- `assets/icon.png`: 기본 앱 아이콘. 1024x1024 PNG를 사용한다.
+- `assets/adaptive-icon.png`: Android adaptive icon foreground. 런처 마스크에 잘리지 않도록 로고를 중앙에 작게 배치하고 주변은 투명하게 둔다.
+- Android adaptive icon의 실제 배경색은 `android.adaptiveIcon.backgroundColor`가 담당한다.
+- 이름/아이콘 변경은 JS reload만으로 반영되지 않으며, `npx expo prebuild --platform android --no-install` 후 새 네이티브 빌드를 설치해야 확인할 수 있다.
+
 ### 환경변수
 
 | 변수명 | 용도 |
@@ -671,6 +723,7 @@ Expo Secure Store를 감싼 래퍼. access token과 userId 저장/조회/삭제�
 
 ```bash
 npx tsc --noEmit
+npx expo prebuild --platform android --no-install
 npx expo-doctor
 npx expo export --platform web
 ```
