@@ -21,6 +21,8 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 |------|------|
 | 루트 레이아웃 | `app/_layout.tsx` |
 | 하단 탭 레이아웃 | `app/(tabs)/_layout.tsx` |
+| 지도/AI 준비중 탭 | `app/(tabs)/map.tsx`, `app/(tabs)/ai.tsx` |
+| 채팅 탭 | `app/(tabs)/chats.tsx`, `app/chats/index.tsx` |
 | 내 정보 탭 | `app/(tabs)/profile.tsx` |
 | 게스트하우스 상세 동적 라우트 | `app/guestHouse/guestHouseDetail/[id]/index.tsx` |
 | 스텝 공고 상세 동적 라우트 | `app/step/stepDetail/[id]/index.tsx` |
@@ -30,6 +32,10 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 ### 코드에서 확인할 포인트
 
 - `app/_layout.tsx`에서 `QueryClientProvider`, `SafeAreaProvider`, `ThemeProvider`, Sentry, 폰트 로딩, 인증 토큰 로딩을 묶는다.
+- 하단 탭은 `홈 / 지도 / AI / 채팅 / 내정보` 순서로 노출한다.
+- 지도와 AI 탭은 현재 `Alert.alert("준비중", ...)`을 띄우고 이동을 막는다.
+- `guestHouseEnroll`, `stepRecruitment`는 탭 파일로 남아 있지만 `href: null`로 숨긴다.
+- 채팅 탭은 채팅방 `unreadCount` 합산 값을 배지로 표시한다.
 - 멀티스텝 폼 라우트는 `gestureEnabled: false`로 뒤로가기 제스처를 제한한다.
 - `(tabs)` 폴더는 URL에는 직접 나타나지 않는 라우트 그룹이다.
 
@@ -134,6 +140,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 | 스텝 공고 등록 스토어 | `src/stores/stepRecruitment/useStepRecruitmentStore.ts` |
 | 스텝 공고 단계별 slice | `src/stores/stepRecruitment/slice/*` |
 | 지원서 작성 스토어 | `src/stores/application/useApplicationSlice.ts` |
+| 활성 채팅방 스토어 | `src/stores/chat/useActiveChatRoomStore.ts` |
 | 스토어 타입 | `src/types/store/*` |
 
 ### 코드에서 확인할 포인트
@@ -141,6 +148,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 - 게스트하우스 등록 스토어는 `guesthouse-enrollment-storage` key로 AsyncStorage에 저장된다.
 - 스텝 공고 등록 스토어는 `step-recruitment-storage` key를 쓰고, `Date` 필드를 복원하기 위한 custom storage reviver가 있다.
 - 등록 완료 후에는 `resetAllData()`를 호출해 이전 작성 데이터가 남지 않게 해야 한다.
+- `useActiveChatRoomStore`는 현재 열어둔 채팅방 id를 저장한다. 전역 WebSocket이 현재 방 메시지를 읽지 않은 수로 누적하지 않게 하는 용도다.
 
 ### 직접 해볼 것
 
@@ -537,7 +545,7 @@ app/notifications/
 | 기능 | Method / Endpoint | FE 처리 |
 |------|-------------------|---------|
 | 알림 목록 | `GET /api/v1/notifications?pageNumber=0` | `useNotifications` |
-| 안 읽은 개수 | `GET /api/v1/notifications/unread-count` | 탭/헤더 배지 |
+| 안 읽은 개수 | `GET /api/v1/notifications/unread-count` | 홈 헤더 알림 배지 |
 | 읽음 처리 | `PATCH /api/v1/notifications/{id}/read` | 알림 클릭 시 실행 |
 | 전체 읽음 | `PATCH /api/v1/notifications/read-all` | 전체 읽음 버튼 |
 | 알림 설정 조회 | `GET /api/v1/notification-settings` | 설정 화면 진입 시 조회 |
@@ -546,6 +554,7 @@ app/notifications/
 | 푸시 토큰 해제 | `DELETE /api/v1/push-tokens` | 로그아웃 시 자동 비활성화 |
 
 `pushEnabled`는 OS 푸시 수신 여부만 제어하고, `chatPushEnabled`는 채팅 알림 자체를 제어한다. 채팅 알림을 끄면 알림함에도 새 채팅 알림이 쌓이지 않는다.
+사용자에게 보이는 설정 문구는 `휴대폰 알림`, `새 채팅 알림`처럼 기능 중심으로 적는다.
 
 **알림 타입별 이동 예시:**
 
@@ -604,7 +613,8 @@ npx expo install expo-notifications expo-device
 - 알림 목록 query key: `['notifications']`
 - 안 읽은 개수 query key: `['notifications', 'unreadCount']`
 - 알림 읽음 처리 성공 시 두 query를 invalidate
-- foreground 알림을 받으면 unread count를 invalidate
+- foreground 알림을 받으면 알림 목록과 unread count를 invalidate
+- 채팅 WebSocket으로 새 메시지를 받아도 `notifications` query를 invalidate 해서 홈 알림 배지가 뒤늦게 갱신되지 않게 한다.
 
 ### 직접 해볼 것
 
@@ -630,6 +640,9 @@ src/services/chat/
 src/hooks/chat/
 ├── useChat.ts               # 채팅 REST query/mutation
 └── useChatWebSocket.ts      # 새 메시지 수신
+
+src/stores/chat/
+└── useActiveChatRoomStore.ts # 현재 열어둔 채팅방 id
 ```
 
 ### 진입 경로
@@ -638,7 +651,8 @@ src/hooks/chat/
 - 게스트하우스 상세: 하단 고정 `채팅하기` 버튼으로 채팅방을 생성/진입한다.
 - 탭 바의 `채팅`에서 진행 중인 채팅방 목록을 확인한다.
 - 알림/푸시의 `CHAT_MESSAGE_CREATED`를 누르면 해당 채팅방으로 이동한다.
-- 채팅방 WebSocket은 `/ws/chats?token={accessToken}&roomId={roomId}`로 연결해 BE가 채팅방 접속 상태를 판단할 수 있게 한다.
+- 루트 레이아웃의 전역 WebSocket은 `/ws/chats?token={accessToken}`로 연결해 채팅 목록과 채팅 탭 배지를 갱신한다.
+- 채팅방 WebSocket은 `/ws/chats?token={accessToken}&roomId={roomId}`로 연결해 현재 방 메시지를 즉시 반영하고, BE가 채팅방 접속 상태를 판단할 수 있게 한다.
 
 ### UI 원칙
 
@@ -646,6 +660,27 @@ src/hooks/chat/
 - 상대 메시지는 왼쪽에 프로필/이름/흰 말풍선을 함께 표시한다.
 - Android에서는 키보드가 입력창을 가리지 않도록 키보드 높이를 감지해 입력바를 직접 위로 올린다.
 - 채팅방 헤더는 route param의 `title`이 없으면 채팅방 목록의 `opponentName`으로 보완한다.
+- 현재 열어둔 방에서 온 메시지는 읽지 않은 수를 올리지 않는다.
+
+## 17. 앱 이름과 아이콘 설정
+
+앱 표시 이름과 아이콘은 `app.config.ts`에서 관리한다.
+
+### 주요 파일
+
+| 파일 | 역할 |
+|------|------|
+| `app.config.ts` | 앱 이름, 버전, 아이콘 경로, Android adaptive icon 설정 |
+| `assets/icon.png` | 기본 앱 아이콘 |
+| `assets/adaptive-icon.png` | Android adaptive icon foreground |
+
+### 확인할 포인트
+
+- 앱 표시 이름은 `name: "게하르방"`으로 관리한다.
+- 기본 아이콘은 1024x1024 PNG를 사용한다.
+- Android adaptive icon은 런처 마스크에 잘리지 않도록 foreground 이미지를 따로 둔다.
+- Android adaptive icon의 여백 색은 이미지 파일이 아니라 `android.adaptiveIcon.backgroundColor`로 관리한다.
+- 이름/아이콘 변경은 JS reload만으로 반영되지 않는다. `npx expo prebuild --platform android --no-install` 후 새 빌드를 설치해야 확인할 수 있다.
 
 ---
 
@@ -660,3 +695,5 @@ src/hooks/chat/
 7. 권한 UI 분기와 403 처리 이해
 8. BE DTO와 FE 타입을 나란히 보며 수정 API 연동 설계
 9. 알림 목록 UI를 만든 뒤 Expo push token 등록으로 확장
+10. 채팅 WebSocket과 알림/배지 동기화 흐름 이해
+11. 앱 이름/아이콘 변경 후 native prebuild와 재설치 흐름 확인
