@@ -30,7 +30,7 @@ if (sentryOrg && sentryProject && sentryAuthToken) {
 }
 
 const config: ExpoConfig = {
-  name: "Geharbang-FE",
+  name: "게하르방",
   slug: "Geharbang-FE",
   version: "1.1.0",
   orientation: "portrait",
