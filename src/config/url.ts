@@ -12,13 +12,18 @@ export const ASSET_BASE_URL =
   DEFAULT_BASE_URL;
 
 export const buildAssetUrl = (path?: string | null) => {
-  if (!path) {
+  const normalizedPath = path?.trim();
+  if (
+    !normalizedPath ||
+    normalizedPath === "null" ||
+    normalizedPath === "undefined"
+  ) {
     return null;
   }
 
-  if (/^https?:\/\//.test(path)) {
-    return path;
+  if (/^https?:\/\//.test(normalizedPath)) {
+    return normalizedPath;
   }
 
-  return `${ASSET_BASE_URL}${path}`;
+  return `${ASSET_BASE_URL}${normalizedPath}`;
 };

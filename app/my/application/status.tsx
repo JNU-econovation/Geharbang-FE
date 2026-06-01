@@ -24,6 +24,7 @@ type FilterType = "ALL" | "ACCEPTED";
 
 export default function MyApplicationStatus() {
   const [filter, setFilter] = useState<FilterType>("ALL");
+  const [activeRecordId, setActiveRecordId] = useState<number | null>(null);
 
   const { data, isLoading, isError, refetch } = useMyApplicationStatus(filter);
   const { mutate: createChatRoom, isPending: isCreatingChatRoom } =
@@ -35,6 +36,7 @@ export default function MyApplicationStatus() {
       : data?.applicationRecords;
 
   const handleChatPress = (applicationRecordId: number, title: string) => {
+    setActiveRecordId(applicationRecordId);
     createChatRoom({ applicationRecordId }, {
       onSuccess: ({ chatRoomId }) => {
         router.push({
@@ -44,6 +46,9 @@ export default function MyApplicationStatus() {
             title,
           },
         });
+      },
+      onSettled: () => {
+        setActiveRecordId(null);
       },
     });
   };
@@ -107,6 +112,7 @@ export default function MyApplicationStatus() {
       ) : (
         <ScrollView>
           {filteredApplicationStatus?.map((applicationStatus) => {
+            const hasImage = Boolean(applicationStatus.imageUrl?.trim());
             const imageUri = buildAssetUrl(applicationStatus.imageUrl);
             return (
               <View
@@ -122,7 +128,7 @@ export default function MyApplicationStatus() {
                 >
                   <View className='flex-row  gap-3'>
                     <View className='flex-row items-center gap-4'>
-                      {imageUri ? (
+                      {hasImage && imageUri ? (
                         <CachedImage
                           uri={imageUri}
                           style={{ width: 70, height: 70, borderRadius: 100 }}
@@ -175,7 +181,10 @@ export default function MyApplicationStatus() {
                     content='채팅하기'
                     textColor={COLORS.PRIMARY.BLUE}
                     className='bg-white border border-primary-blue'
-                    isPending={isCreatingChatRoom}
+                    isPending={
+                      isCreatingChatRoom &&
+                      activeRecordId === applicationStatus.id
+                    }
                     onPress={() =>
                       handleChatPress(
                         applicationStatus.id,
