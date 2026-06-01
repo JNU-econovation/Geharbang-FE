@@ -26,6 +26,7 @@ import {
 } from "@/src/hooks/chat/useChat";
 import { useChatWebSocket } from "@/src/hooks/chat/useChatWebSocket";
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
+import { useActiveChatRoomStore } from "@/src/stores/chat/useActiveChatRoomStore";
 import { ChatMessage } from "@/src/types/models/chat/Chat";
 import { COLORS } from "@/src/utils/constants/colors";
 import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
@@ -121,6 +122,9 @@ export default function ChatRoomScreen() {
   const { data: roomsData } = useChatRooms();
   const { mutate: sendMessage, isPending } = useSendChatMessage(parsedRoomId);
   const { mutate: markAsRead } = useMarkChatRoomAsRead();
+  const setActiveRoomId = useActiveChatRoomStore(
+    (state) => state.setActiveRoomId,
+  );
 
   useChatWebSocket(isLogined ? parsedRoomId : null);
 
@@ -149,7 +153,18 @@ export default function ChatRoomScreen() {
     if (isLogined && parsedRoomId) {
       markAsRead(parsedRoomId);
     }
-  }, [isLogined, markAsRead, parsedRoomId]);
+  }, [isLogined, markAsRead, messages.length, parsedRoomId]);
+
+  useEffect(() => {
+    if (!Number.isFinite(parsedRoomId) || parsedRoomId <= 0) {
+      return;
+    }
+
+    setActiveRoomId(parsedRoomId);
+    return () => {
+      setActiveRoomId(null);
+    };
+  }, [parsedRoomId, setActiveRoomId]);
 
   useEffect(() => {
     requestAnimationFrame(() => {

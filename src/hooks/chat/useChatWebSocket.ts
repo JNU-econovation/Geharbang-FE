@@ -1,5 +1,6 @@
 import { getChatWebSocketUrl } from "@/src/services/chat/chat";
 import { CHAT_QUERY_KEYS } from "@/src/hooks/chat/useChat";
+import { useActiveChatRoomStore } from "@/src/stores/chat/useActiveChatRoomStore";
 import { ChatMessage, ChatRoomsResponse } from "@/src/types/models/chat/Chat";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -7,6 +8,7 @@ import { useEffect } from "react";
 const updateChatRoomPreview = (
   current: ChatRoomsResponse | undefined,
   message: ChatMessage,
+  activeRoomId: number | null,
 ) => {
   if (!current) {
     return current;
@@ -24,7 +26,9 @@ const updateChatRoomPreview = (
     lastMessage: message.content,
     lastMessageAt: message.createdAt,
     unreadCount:
-      message.senderId === targetRoom.opponentId
+      message.chatRoomId === activeRoomId
+        ? 0
+        : message.senderId === targetRoom.opponentId
         ? targetRoom.unreadCount + 1
         : targetRoom.unreadCount,
   };
@@ -39,6 +43,7 @@ const updateChatRoomPreview = (
 
 export const useChatWebSocket = (roomId?: number | null) => {
   const queryClient = useQueryClient();
+  const activeRoomId = useActiveChatRoomStore((state) => state.activeRoomId);
 
   useEffect(() => {
     if (roomId === null) {
@@ -63,7 +68,7 @@ export const useChatWebSocket = (roomId?: number | null) => {
         const message = JSON.parse(event.data) as ChatMessage;
         queryClient.setQueryData<ChatRoomsResponse>(
           CHAT_QUERY_KEYS.rooms,
-          (current) => updateChatRoomPreview(current, message),
+          (current) => updateChatRoomPreview(current, message, activeRoomId),
         );
 
         if (!roomId || message.chatRoomId !== roomId) {
@@ -116,5 +121,5 @@ export const useChatWebSocket = (roomId?: number | null) => {
       }
       socket?.close();
     };
-  }, [queryClient, roomId]);
+  }, [activeRoomId, queryClient, roomId]);
 };
