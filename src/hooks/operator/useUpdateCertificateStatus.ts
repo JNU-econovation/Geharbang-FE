@@ -39,22 +39,14 @@ export const useUpdateCertificateStatus = () => {
         (old) => {
           if (!old) return [];
 
-          const updated = old.map((cert) =>
+          return old.map((cert) =>
             cert.id === Number(id)
               ? {
                   ...cert,
                   status: approved ? '승인_완료' : '거부됨',
-                }
+              }
               : cert,
           );
-
-          console.log('업데이트된 데이터:', updated);
-          console.log(
-            '업데이트된 항목:',
-            updated.find((c) => c.id === Number(id)),
-          );
-
-          return updated;
         },
       );
 

@@ -2,7 +2,6 @@
 # Geharbang-FE 협업 가이드라인
 
 이 문서는 새로운 팀원이 합류하거나 기존 팀원이 기능을 추가할 때 일관된 코드 스타일을 유지하기 위한 가이드라인이다.
-전체 구조와 화면 설명은 [ARCHITECTURE.md](./ARCHITECTURE.md)를 참고.
 
 ---
 
@@ -94,8 +93,11 @@ Geharbang-FE/
 │   ├── (tabs)/               # 하단 탭 네비게이션 그룹
 │   │   ├── _layout.tsx
 │   │   ├── index.tsx         # 홈
-│   │   ├── guestHouseEnroll.tsx
-│   │   ├── stepRecruitment.tsx
+│   │   ├── map.tsx           # 지도 준비중 탭
+│   │   ├── ai.tsx            # AI 준비중 탭
+│   │   ├── chats.tsx         # 채팅 목록 탭
+│   │   ├── guestHouseEnroll.tsx  # 숨김 탭
+│   │   ├── stepRecruitment.tsx   # 숨김 탭
 │   │   └── profile.tsx
 │   ├── {feature}/            # 기능별 화면
 │   │   ├── index.tsx         # 해당 기능 진입점
@@ -165,6 +167,21 @@ router.back();
 // 이동 후 히스토리 교체
 router.replace("/login");
 ```
+
+### 하단 탭 규칙
+
+- 현재 노출 탭은 `홈 / 지도 / AI / 채팅 / 내정보` 순서다.
+- `지도`, `AI` 탭은 준비중 알림만 표시하고 실제 화면 이동은 막는다.
+- 기존 `guestHouseEnroll`, `stepRecruitment` 탭 파일은 `href: null`로 숨긴다.
+- 채팅 탭은 채팅방들의 `unreadCount` 합산 값을 배지로 표시한다.
+
+### 채팅 UI 규칙
+
+- 채팅방 메시지는 시간순으로 보여준다.
+- 날짜가 바뀌는 첫 메시지 앞에는 날짜 구분선을 표시한다.
+- 날짜 비교는 UTC 문자열 절단이 아니라 로컬 날짜 기준으로 처리한다.
+- 오늘이 아닌 메시지는 말풍선 시간에도 날짜를 함께 표시해 대화가 길어져도 날짜 맥락을 확인할 수 있게 한다.
+- 내 메시지와 상대 메시지는 말풍선 위치, 색상, 프로필 표시로 명확히 구분한다.
 
 ### 레이아웃 설정 (app/_layout.tsx)
 
@@ -288,8 +305,7 @@ import { Alert } from "react-native";
 export const useCreateStaffRecruitment = () => {
   return useMutation<number, Error, StaffRecruitmentRequest>({
     mutationFn: createStaffRecruitment,  // 제네릭: <반환타입, 에러타입, 인자타입>
-    onSuccess: (id) => {
-      console.log("공고 등록 성공, ID:", id);
+    onSuccess: () => {
       // 성공 후 네비게이션, 캐시 무효화 등
     },
     onError: (err) => {
@@ -354,6 +370,7 @@ export function useItemList({ keyword, filters }: UseListParams): UseListReturn 
 - **enabled 옵션** — 조건이 충족됐을 때만 쿼리 실행
 - **onError에서 403 처리** — `axios.isAxiosError() && status === 403` 패턴 사용
 - **debounce** — 검색어처럼 빠르게 바뀌는 값은 `useDebounce(value, 300)` 사용
+- 불필요한 `console.log`는 남기지 않는다. 필요한 실패 로그는 `console.error`로 제한한다.
 
 ---
 

@@ -15,7 +15,7 @@ export default function LoginFooter() {
         <TextSize
           size={12}
           color='#9CA3AF'
-          content='© 2025 게하르방. All rights reserved.'
+          content='© 2026 게하르방. All rights reserved.'
         />
       </View>
     </View>

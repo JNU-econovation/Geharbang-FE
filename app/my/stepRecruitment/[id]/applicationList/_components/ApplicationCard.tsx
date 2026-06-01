@@ -2,6 +2,7 @@ import Flex from "@/src/components/layout/Flex";
 import Button from "@/src/components/ui/Button/Button";
 import TextSize from "@/src/components/ui/TextSize";
 import { buildAssetUrl } from "@/src/config/url";
+import { useCreateChatRoom } from "@/src/hooks/chat/useChat";
 import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -32,6 +33,22 @@ export default function ApplicationCard({
   onPass,
 }: ApplicationCardProps) {
   const imageUri = buildAssetUrl(imageUrl);
+  const { mutate: createChatRoom, isPending: isCreatingChatRoom } =
+    useCreateChatRoom();
+
+  const handleChatPress = () => {
+    createChatRoom({ applicationRecordId: applicationId }, {
+      onSuccess: ({ chatRoomId }) => {
+        router.push({
+          pathname: "/chats/[roomId]",
+          params: {
+            roomId: String(chatRoomId),
+            title: name,
+          },
+        });
+      },
+    });
+  };
 
   return (
     <View className='w-full bg-white border border-gray-border rounded-2xl p-4 gap-4'>
@@ -80,6 +97,22 @@ export default function ApplicationCard({
           }
         />
       </Flex>
+      <Button
+        variant='blue'
+        height={40}
+        content='채팅하기'
+        textColor={COLORS.PRIMARY.BLUE}
+        className='flex-1 bg-white border border-primary-blue'
+        isPending={isCreatingChatRoom}
+        icon={
+          <Ionicons
+            name='chatbubble-ellipses-outline'
+            size={18}
+            color={COLORS.PRIMARY.BLUE}
+          />
+        }
+        onPress={handleChatPress}
+      />
       {applicationStatus == "대기중" ? (
         <Button
           variant='green'

@@ -39,7 +39,6 @@ export const useApplicationPass = () => {
   return useMutation({
     mutationFn: (recordId: number) => postApplicationPass(recordId),
     onSuccess: () => {
-      console.log("합격")
       queryClient.invalidateQueries({ queryKey: ["applicationList"] });
     },
     onError: (err) => {
