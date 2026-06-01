@@ -29,6 +29,7 @@ import MyActivity from "../my/application/_components/MyActivity";
 
 export default function ProfileScreen() {
   const handleLogout = useLogout();
+  const scrollBottomPadding = 20;
 
   const isLogined = useAuthStore((state) => state.accessToken);
 
@@ -70,7 +71,10 @@ export default function ProfileScreen() {
             />
           </View>
         ) : (
-          <ScrollView className='px-4'>
+          <ScrollView
+            className='px-4'
+            contentContainerStyle={{ paddingBottom: scrollBottomPadding }}
+          >
             <View className='px-6 py-4 mt-6 bg-[#E0F2FE] rounded-lg '>
               <View className='flex-row items-center gap-5'>
                 {myApplicationExist ? (
@@ -238,7 +242,10 @@ export default function ProfileScreen() {
           </ScrollView>
         )
       ) : (
-        <ScrollView className='px-4'>
+        <ScrollView
+          className='px-4'
+          contentContainerStyle={{ paddingBottom: scrollBottomPadding }}
+        >
           <View className='px-6 py-4 mt-6 bg-[#E0F2FE] rounded-lg border border-[#0EA5E9]'>
             <View className='flex-row items-center gap-5'>
               <View className='w-12 h-12 bg-white rounded-full flex items-center justify-center'>
