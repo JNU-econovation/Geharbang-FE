@@ -33,10 +33,13 @@ export default function GuestHouseDetail() {
     sectionToScroll,
     setContainerOffset,
     setStickyHeaderHeight,
+    createSectionScrollHandler,
   } = useSectionToScroll();
-  const { selectedSection, handleSectionToScroll } = useHandleSection({
-    sectionToScroll,
-  });
+  const { selectedSection, setSelectedSection, handleSectionToScroll } =
+    useHandleSection({
+      sectionToScroll,
+    });
+  const guestHouseSectionOrder = GUESTHOUSE.map(({ section }) => section);
 
   const { data, isPending, isError, refetch } = useGuestHouseDetail();
   const { requireLogin } = useRequireLogin();
@@ -110,6 +113,11 @@ export default function GuestHouseDetail() {
             ref={scrollViewRef}
             stickyHeaderIndices={[2]}
             contentContainerStyle={{ paddingBottom: 240 }}
+            onScroll={createSectionScrollHandler(
+              guestHouseSectionOrder,
+              setSelectedSection,
+            )}
+            scrollEventThrottle={16}
           >
             <GehaImage images={data?.imageUrls} height={280} page={true} />
 

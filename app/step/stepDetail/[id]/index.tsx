@@ -38,10 +38,13 @@ export default function StepDetail() {
     sectionToScroll,
     setContainerOffset,
     setStickyHeaderHeight,
+    createSectionScrollHandler,
   } = useSectionToScroll();
-  const { selectedSection, handleSectionToScroll } = useHandleSection({
-    sectionToScroll,
-  });
+  const { selectedSection, setSelectedSection, handleSectionToScroll } =
+    useHandleSection({
+      sectionToScroll,
+    });
+  const stepDetailSectionOrder = STEP_DETAIL.map(({ section }) => section);
 
   const handleApply = () => {
     setIsVisible(false);
@@ -129,6 +132,11 @@ export default function StepDetail() {
             ref={scrollViewRef}
             stickyHeaderIndices={[2]}
             contentContainerStyle={{ paddingBottom: 240 }}
+            onScroll={createSectionScrollHandler(
+              stepDetailSectionOrder,
+              setSelectedSection,
+            )}
+            scrollEventThrottle={16}
           >
             <GehaImage
               images={data?.representativeImages}

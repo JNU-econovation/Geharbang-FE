@@ -1,4 +1,5 @@
-import Flex from "@/src/components/layout/Flex/Flex";
+import { ScrollView } from "react-native";
+
 import { PressSectionItems } from "@/src/utils/constants/pressSection";
 import PressSectionToScroll from "./PressSectionToScroll";
 
@@ -14,7 +15,14 @@ export default function PressSection({
   selectedSection,
 }: PressSectionProps) {
   return (
-    <Flex items='center' justify='between' dir='row' wrap='wrap' className='px-5'>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingHorizontal: 16,
+        gap: 8,
+      }}
+    >
       {items.map(({ section, content }) => (
         <PressSectionToScroll
           key={section}
@@ -24,6 +32,6 @@ export default function PressSection({
           isActive={selectedSection === section}
         />
       ))}
-    </Flex>
+    </ScrollView>
   );
 }
