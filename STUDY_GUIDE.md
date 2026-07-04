@@ -109,6 +109,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 - `axiosPrivate`는 요청마다 Secure Store에서 access token을 읽어 `Authorization: Bearer {token}`을 붙인다.
 - `axiosPublic`은 공개 목록 조회나 로그인처럼 토큰이 필요 없는 API에 사용한다.
 - `axiosOptionalAuth`는 토큰이 있으면 붙이고 없으면 그대로 요청한다. 비회원도 볼 수 있지만 로그인 사용자의 `isWished`가 필요한 게스트하우스/스텝 공고 목록과 상세 조회에 사용한다.
+- `axiosOptionalAuth`는 서버가 `INVALID_TOKEN`을 반환하면 로컬 토큰을 제거하고 익명 요청으로 한 번 재시도한다. 공개 화면은 토큰이 깨져도 익명 조회로 복구되어야 한다.
 - 찜 추가/삭제 API는 로그인 필수이므로 `axiosPrivate`를 사용한다.
 - `src/config/url.ts`가 API 기본 주소와 이미지/파일 URL 생성 규칙을 함께 관리한다.
 - 앱 시작 시 `useAuthStore.loadToken()`을 호출하고, `isAuthReady`가 true가 될 때까지 화면을 렌더링하지 않는다.
@@ -118,6 +119,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 - 토큰이 없는 상태에서 `axiosPrivate` API를 호출하면 서버가 어떻게 응답하는지 확인하기
 - 공개 조회 API에 `axiosPrivate`를 쓰면 어떤 문제가 생길 수 있는지 정리하기
 - `axiosOptionalAuth`를 쓰는 API에서 로그인/비로그인 응답의 `isWished` 값이 어떻게 달라지는지 비교하기
+- 만료된 토큰을 가진 상태에서 공개 상세 API가 실패하면, 토큰을 제거하고 익명 요청으로 재시도해야 하는 이유 설명하기
 
 ---
 
@@ -453,6 +455,38 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 |------|------|
 | Expo 설정 | `app.config.ts` |
 | EAS 빌드 설정 | `eas.json` |
+
+---
+
+## 14. 리뷰 UI 학습과 구현 가이드
+
+게스트하우스 상세와 스텝 공고 상세는 공통 `ReviewSection`으로 리뷰 목록, 요약, 작성, 수정, 삭제를 처리한다.
+리뷰 작성/수정은 별점, 본문, 이미지 URL 배열을 BE에 보낸다.
+
+### 이 프로젝트에서 보는 곳
+
+| 주제 | 코드 |
+|------|------|
+| 리뷰 섹션 UI | `src/components/review/ReviewSection.tsx` |
+| 리뷰 React Query hook | `src/hooks/review/useReviews.ts` |
+| 리뷰 API service | `src/services/review/review.ts` |
+| 리뷰 이미지 업로드 | `src/services/review/uploadReviewImages.ts` |
+| 게스트하우스 상세 연결 | `app/guestHouse/guestHouseDetail/[id]/index.tsx` |
+| 스텝 공고 상세 연결 | `app/step/stepDetail/[id]/index.tsx` |
+
+### 코드에서 확인할 포인트
+
+- 별점은 별의 왼쪽/오른쪽 터치 위치를 이용해 `0.5`점 단위로 선택한다.
+- 리뷰 이미지는 기존 공통 이미지 업로드 API(`/api/v1/images`)를 재사용하고, 응답의 `imageUrl` 배열을 리뷰 저장 payload에 합친다.
+- 수정 모달은 기존 `imageUrls`와 새로 선택한 `File[]`을 함께 관리한다.
+- 삭제는 내 리뷰(`isMine`)에만 버튼을 노출하고, 삭제 후 목록과 요약 query를 invalidate 한다.
+- 스텝 공고는 리뷰 요약 응답의 `canWriteReview`가 true일 때만 작성 버튼을 노출한다. 합격자가 아니면 버튼을 누른 뒤 실패시키지 않고 안내 문구를 먼저 보여준다.
+
+### 직접 해볼 것
+
+- 리뷰 작성 후 `reviews` query와 `reviewSummary` query가 모두 갱신되는지 확인하기
+- 기존 사진 2장, 새 사진 1장을 가진 수정 요청에서 최종 `imageUrls` 배열이 어떻게 만들어지는지 따라가기
+- 스텝 공고 합격자가 아닌 사용자에게 작성 버튼이 숨겨지는 흐름 설명하기
 | Metro/SVG 설정 | `metro.config.js` |
 | Babel/NativeWind 설정 | `babel.config.js` |
 | Tailwind 설정 | `tailwind.config.js` |
@@ -478,7 +512,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 
 ---
 
-## 14. 백엔드와 맞춰 읽기
+## 15. 백엔드와 맞춰 읽기
 
 ### 공부할 것
 
@@ -506,7 +540,7 @@ React Native/Expo 자체를 외우기보다, 이 프로젝트에서 실제로 �
 
 ---
 
-## 15. 알림 기능 학습과 구현 가이드
+## 16. 알림 기능 학습과 구현 가이드
 
 알림은 **인앱 알림 화면**과 **푸시 알림 권한/토큰 등록**을 분리해서 생각한다.
 앱 안에서 알림 목록이 먼저 안정적으로 동작해야, 푸시 알림이 실패해도 사용자가 나중에 알림을 확인할 수 있다.
@@ -623,7 +657,7 @@ npx expo install expo-notifications expo-device
 - `APPLICATION_ACCEPTED` 알림을 눌렀을 때 어느 화면으로 이동해야 하는지 라우트 작성하기
 - 알림 읽음 처리 후 unread count가 즉시 줄어드는지 확인하기
 
-## 16. 채팅 기능 학습과 구현 가이드
+## 17. 채팅 기능 학습과 구현 가이드
 
 채팅은 **REST 저장/조회 + WebSocket 수신 + 알림 연동**으로 구성한다.
 
@@ -671,7 +705,7 @@ src/stores/chat/
 - `toISOString()`은 UTC 기준이라 자정 근처 메시지의 날짜가 밀릴 수 있으므로 화면 날짜 비교에는 로컬 `getFullYear()`, `getMonth()`, `getDate()`를 사용한다.
 - 채팅 UI에서 날짜 라벨은 단순 장식이 아니라 대화 맥락 정보이므로, 긴 대화에서도 보이도록 구분선과 말풍선 시간 보조 표시를 함께 고려한다.
 
-## 17. 앱 이름과 아이콘 설정
+## 18. 앱 이름과 아이콘 설정
 
 앱 표시 이름과 아이콘은 `app.config.ts`에서 관리한다.
 
