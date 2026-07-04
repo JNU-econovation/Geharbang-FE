@@ -9,6 +9,7 @@ export const STEP_DETAIL: PressSectionItems[] = [
   { section: "intro", content: "게하소개" },
   { section: "feature", content: "모집정보" },
   { section: "contact", content: "연락처" },
+  { section: "review", content: "리뷰" },
 ];
 
 export const GUESTHOUSE: PressSectionItems[] = [
@@ -18,4 +19,5 @@ export const GUESTHOUSE: PressSectionItems[] = [
   { section: "info", content: "게하정보" },
   { section: "party", content: "파티" },
   { section: "contact", content: "연락처" },
+  { section: "review", content: "리뷰" },
 ];

@@ -30,3 +30,5 @@ export function GuesthouseSection({ selectedRegion, setSelectedRegion }: Guestho
     />
   );
 }
+
+export default GuesthouseSection;

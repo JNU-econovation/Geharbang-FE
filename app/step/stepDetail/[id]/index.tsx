@@ -3,15 +3,18 @@ import { ActivityIndicator, ScrollView, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import Button from "@/src/components/ui/Button/Button";
+import ReviewSection from "@/src/components/review/ReviewSection";
 import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
 import TextSize from "@/src/components/ui/TextSize";
 import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
 import { useApplicationExist } from "@/src/hooks/stepDetail/useApplicationExist";
+import { useCreateChatRoom } from "@/src/hooks/chat/useChat";
 import { useHandleSection } from "@/src/hooks/common/useHandleSection";
 import { useSectionToScroll } from "@/src/hooks/common/useSectionToScroll";
 import { useStepDetail } from "@/src/hooks/stepDetail/useStepDetail";
 
 import DetailPageBackArrow from "@/src/components/ui/DetailPageBackArrow";
+import { COLORS } from "@/src/utils/constants/colors";
 import { STEP_DETAIL } from "@/src/utils/constants/pressSection";
 import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
@@ -53,6 +56,8 @@ export default function StepDetail() {
   const { data, isPending, isError, refetch } = useStepDetail();
 
   const { isApplicationExist } = useApplicationExist();
+  const { mutate: createChatRoom, isPending: isCreatingChatRoom } =
+    useCreateChatRoom();
 
   const [isVisible, setIsVisible] = useState(false);
   const [isWished, setIsWished] = useState(false);
@@ -69,6 +74,25 @@ export default function StepDetail() {
   });
 
   const { requireLogin } = useRequireLogin();
+
+  const handleChatPress = () => {
+    requireLogin(() => {
+      createChatRoom(
+        { staffRecruitmentId: Number(id) },
+        {
+          onSuccess: ({ chatRoomId }) => {
+            router.push({
+              pathname: "/chats/[roomId]",
+              params: {
+                roomId: String(chatRoomId),
+                title: data?.guestHouseName ?? "채팅",
+              },
+            });
+          },
+        },
+      );
+    });
+  };
 
   return (
     <CustomSafeAreaView pageColor='bg-white'>
@@ -100,8 +124,12 @@ export default function StepDetail() {
           />
         </View>
       ) : (
-        <>
-          <ScrollView ref={scrollViewRef} stickyHeaderIndices={[2]}>
+        <View className='flex-1'>
+          <ScrollView
+            ref={scrollViewRef}
+            stickyHeaderIndices={[2]}
+            contentContainerStyle={{ paddingBottom: 24 }}
+          >
             <GehaImage
               images={data?.representativeImages}
               height={280}
@@ -158,15 +186,23 @@ export default function StepDetail() {
                 contact={data?.contact}
                 owerMessage={data?.ownerMessage}
               />
-              <View className='pt-10' />
 
-              <Button
-                variant='primary'
-                height={56}
-                content='지원하기'
-                textColor='#ffffff'
-                onPress={() => requireLogin(() => setIsVisible(true))}
-              />
+              <View
+                className='pt-10'
+                onLayout={(e) => {
+                  const y = e.nativeEvent.layout.y;
+                  setSectionYPositions((prev) => ({
+                    ...prev,
+                    review: y,
+                  }));
+                }}
+              >
+                <ReviewSection
+                  targetType='staffRecruitment'
+                  targetId={Number(id)}
+                />
+              </View>
+              <View className='pt-10' />
 
               <StepDetailModal
                 isVisible={isVisible}
@@ -176,7 +212,30 @@ export default function StepDetail() {
               />
             </View>
           </ScrollView>
-        </>
+
+          <View className='flex-row gap-2 px-4 pt-3 pb-3 bg-white border-t border-[#E5E7EB]'>
+            <View style={{ flex: 3 }}>
+              <Button
+                height={56}
+                content='채팅하기'
+                textColor={COLORS.PRIMARY.BLUE}
+                className='w-full bg-white border border-primary-blue'
+                isPending={isCreatingChatRoom}
+                onPress={handleChatPress}
+              />
+            </View>
+            <View style={{ flex: 7 }}>
+              <Button
+                variant='primary'
+                height={56}
+                content='지원하기'
+                textColor='#ffffff'
+                className='w-full'
+                onPress={() => requireLogin(() => setIsVisible(true))}
+              />
+            </View>
+          </View>
+        </View>
       )}
     </CustomSafeAreaView>
   );

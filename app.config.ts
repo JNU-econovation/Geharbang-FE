@@ -8,6 +8,7 @@ const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN;
 const plugins: ExpoConfig["plugins"] = [
   "expo-router",
   "expo-web-browser",
+  "expo-notifications",
   [
     "expo-secure-store",
     {
@@ -35,10 +36,11 @@ if (sentryOrg && sentryProject && sentryAuthToken) {
 }
 
 const config: ExpoConfig = {
-  name: "Geharbang-FE",
+  name: "게하르방",
   slug: "Geharbang-FE",
-  version: "1.0.0",
+  version: "1.2.1",
   orientation: "portrait",
+  icon: "./assets/icon.png",
   scheme: "geharbang",
   platforms: ["ios", "android", "web"],
   userInterfaceStyle: "automatic",
@@ -59,9 +61,11 @@ const config: ExpoConfig = {
   },
 
   android: {
-    versionCode: 5,
+    versionCode: 9,
+    softwareKeyboardLayoutMode: "resize",
     adaptiveIcon: {
-      backgroundColor: "#ffffff",
+      foregroundImage: "./assets/adaptive-icon.png",
+      backgroundColor: "#33A8F8",
     },
 
     // edgeToEdgeEnabled: false,

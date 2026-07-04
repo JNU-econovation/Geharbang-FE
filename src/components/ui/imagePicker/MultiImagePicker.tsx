@@ -35,7 +35,7 @@ export default function MultiImagePicker({
   const { pickImages, updateImages, removeImage } = useMultiImagePicker({
     selectedImageFiles,
     setSelectedImageFiles,
-    maxCount,
+    maxCount: maxCount - existingImageUrls.length,
   });
 
   const handleAdd = async () => {

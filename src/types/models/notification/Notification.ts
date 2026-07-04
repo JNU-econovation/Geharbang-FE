@@ -2,12 +2,14 @@ export type NotificationType =
   | "CERTIFICATE_APPROVED"
   | "CERTIFICATE_REJECTED"
   | "STAFF_APPLICATION_CREATED"
-  | "APPLICATION_ACCEPTED";
+  | "APPLICATION_ACCEPTED"
+  | "CHAT_MESSAGE_CREATED";
 
 export type NotificationTargetType =
   | "CERTIFICATE"
   | "STAFF_RECRUITMENT"
-  | "APPLICATION_RECORD";
+  | "APPLICATION_RECORD"
+  | "CHAT_ROOM";
 
 export interface NotificationItem {
   id: number;

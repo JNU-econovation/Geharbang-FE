@@ -1,17 +1,43 @@
 import { useAuthStore } from "@/src/stores/auth/useAuthStore";
+import { unregisterPushToken } from "@/src/services/notification/pushToken";
 import { TOKEN_KEYS } from "@/src/utils/constants/TokenKeys";
 import { removeAccessToken } from "@/src/utils/login/secureStore";
+import { getExpoNotifications } from "@/src/utils/notification/getExpoNotifications";
 import { useQueryClient } from "@tanstack/react-query";
+import Constants from "expo-constants";
 import { router } from "expo-router";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 
 export const useLogout = () => {
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const queryClient = useQueryClient();
 
+  const unregisterCurrentPushToken = async () => {
+    try {
+      const projectId =
+        Constants.expoConfig?.extra?.eas?.projectId ??
+        Constants.easConfig?.projectId;
+      const notifications = getExpoNotifications();
+      const token = projectId && notifications
+        ? await notifications.getExpoPushTokenAsync({ projectId }).catch(
+            () => null,
+          )
+        : null;
+      if (token?.data) {
+        await unregisterPushToken({
+          token: token.data,
+          platform: Platform.OS,
+        }).catch(() => undefined);
+      }
+    } catch {
+      // 푸시 토큰 해제 실패가 로컬 로그아웃을 막지 않도록 무시한다.
+    }
+  };
+
   const performLogout = async () => {
     try {
-      await Promise.all([
+      await unregisterCurrentPushToken();
+      await Promise.allSettled([
         removeAccessToken(TOKEN_KEYS.ACCESS_TOKEN),
         removeAccessToken(TOKEN_KEYS.USER_ID),
       ]);

@@ -19,6 +19,9 @@ export interface GuestHouseDetailResponse {
   };
   ownerMessage: string;
   imageUrls: string[];
+  averageRating: number;
+  reviewCount: number;
+  hasMyReview: boolean;
 }
 
 export interface PartiesInfo {

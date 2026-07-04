@@ -91,3 +91,5 @@ export function SlideSectionLayout<
     </View>
   );
 }
+
+export default SlideSectionLayout;

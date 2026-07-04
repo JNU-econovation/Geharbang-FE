@@ -31,7 +31,6 @@ export default function ApplicationList() {
   } | null>(null);
 
   const { data, isLoading, isError, refetch } = useGetApplicationList(id);
-  console.log(data);
   const { title = "", submittedApplications = [] } = data || {};
 
   const { mutate: passApplicaion } = useApplicationPass();

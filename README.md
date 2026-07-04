@@ -44,12 +44,7 @@ GOOGLE_MAPS_API_KEY=
 
 ```bash
 npx tsc --noEmit
+npx expo prebuild --platform android --no-install
 npx expo-doctor
 npx expo export --platform web
 ```
-
-## 문서
-
-- 전체 구조: [ARCHITECTURE.md](./ARCHITECTURE.md)
-- 협업 규칙: [COLLABORATION_GUIDE.md](./COLLABORATION_GUIDE.md)
-- 학습 가이드: [STUDY_GUIDE.md](./STUDY_GUIDE.md)

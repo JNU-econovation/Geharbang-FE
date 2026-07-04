@@ -30,3 +30,5 @@ export function StepRecruitmentSection({ selectedRegion, setSelectedRegion }: St
     />
   );
 }
+
+export default StepRecruitmentSection;

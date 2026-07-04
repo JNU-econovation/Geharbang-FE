@@ -72,3 +72,5 @@ export function ItemCard({ item, type }: ItemCardProps) {
     </View>
   );
 }
+
+export default ItemCard;

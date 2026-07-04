@@ -28,6 +28,7 @@ const notificationIconMap: Record<
   CERTIFICATE_REJECTED: "alert-circle-outline",
   STAFF_APPLICATION_CREATED: "document-text-outline",
   APPLICATION_ACCEPTED: "checkmark-circle-outline",
+  CHAT_MESSAGE_CREATED: "chatbubble-ellipses-outline",
 };
 
 const getRelativeDate = (value: string) => {
@@ -55,6 +56,14 @@ const getRelativeDate = (value: string) => {
 const navigateByNotification = (notification: NotificationItem) => {
   if (notification.type === "APPLICATION_ACCEPTED") {
     router.push("/my/application/status" as any);
+    return;
+  }
+
+  if (
+    notification.type === "CHAT_MESSAGE_CREATED" &&
+    notification.targetId
+  ) {
+    router.push(`/chats/${notification.targetId}` as any);
     return;
   }
 
