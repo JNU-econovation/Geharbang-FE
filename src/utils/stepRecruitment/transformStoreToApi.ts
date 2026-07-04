@@ -34,8 +34,10 @@ export const transformStoreToApi = (
   const { step1Data, step2Data, step3Data, step4Data, step5Data } = store;
 
   const location: LocationRequest = {
-    lotNumberAddress: step1Data.location?.jibunAddress || '',
-    roadNameAddress: step1Data.location?.roadAddress || '',
+    lotNumberAddress:
+      step1Data.location?.jibunAddress || step1Data.location?.roadAddress || '',
+    roadNameAddress:
+      step1Data.location?.roadAddress || step1Data.location?.jibunAddress || '',
     coordinates: [
       step1Data.location?.longitude || 0,
       step1Data.location?.latitude || 0,
