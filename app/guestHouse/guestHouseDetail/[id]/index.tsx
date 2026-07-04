@@ -5,6 +5,7 @@ import GehaImage from "@/app/step/stepDetail/_components/GehaInfo/GehaImage";
 import GehaInfo from "@/app/step/stepDetail/_components/GehaInfo/GehaInfo";
 import PressSection from "@/app/step/stepDetail/_components/PressSection/PressSection";
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
+import ReviewSection from "@/src/components/review/ReviewSection";
 import Address from "@/src/components/ui/Address/Address";
 import Button from "@/src/components/ui/Button/Button";
 import Contact from "@/src/components/ui/Contact";
@@ -170,6 +171,26 @@ export default function GuestHouseDetail() {
                 contact={data?.contact}
                 owerMessage={data?.ownerMessage}
               />
+
+              <View
+                className='pt-10'
+                onLayout={(e) => {
+                  const y = e.nativeEvent.layout.y;
+                  setSectionYPositions((prev) => ({
+                    ...prev,
+                    review: y,
+                  }));
+                }}
+              >
+                <ReviewSection
+                  targetType='guestHouse'
+                  targetId={Number(id)}
+                  averageRating={data?.averageRating}
+                  reviewCount={data?.reviewCount}
+                  hasMyReview={data?.hasMyReview}
+                  onReviewSubmitted={() => refetch()}
+                />
+              </View>
               <View className='pt-10' />
             </View>
           </ScrollView>

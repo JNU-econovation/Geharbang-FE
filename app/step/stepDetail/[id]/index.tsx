@@ -3,6 +3,7 @@ import { ActivityIndicator, ScrollView, View } from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import Button from "@/src/components/ui/Button/Button";
+import ReviewSection from "@/src/components/review/ReviewSection";
 import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
 import TextSize from "@/src/components/ui/TextSize";
 import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
@@ -185,6 +186,22 @@ export default function StepDetail() {
                 contact={data?.contact}
                 owerMessage={data?.ownerMessage}
               />
+
+              <View
+                className='pt-10'
+                onLayout={(e) => {
+                  const y = e.nativeEvent.layout.y;
+                  setSectionYPositions((prev) => ({
+                    ...prev,
+                    review: y,
+                  }));
+                }}
+              >
+                <ReviewSection
+                  targetType='staffRecruitment'
+                  targetId={Number(id)}
+                />
+              </View>
               <View className='pt-10' />
 
               <StepDetailModal

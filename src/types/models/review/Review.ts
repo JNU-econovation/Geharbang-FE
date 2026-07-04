@@ -31,4 +31,5 @@ export interface ReviewSummaryResponse {
   averageRating: number;
   reviewCount: number;
   hasMyReview: boolean;
+  canWriteReview: boolean;
 }
