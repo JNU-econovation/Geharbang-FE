@@ -16,6 +16,7 @@ export const useHandleSection = ({
 
   return {
     selectedSection,
+    setSelectedSection,
     handleSectionToScroll,
   };
 };

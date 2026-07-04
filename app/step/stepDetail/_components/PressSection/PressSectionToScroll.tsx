@@ -16,14 +16,20 @@ export default function PressSectionToScroll({
   isActive,
 }: PressSectionToScrollProps) {
   return (
-    <Pressable onPress={() => handleSectionToScroll(section)}>
+    <Pressable
+      hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
+      className='min-w-[58px] h-10 px-2 items-center justify-center'
+      onPress={() => handleSectionToScroll(section)}
+    >
       <TextSize
         content={content}
         size={14}
         color={isActive ? "#0084D1" : "#6A7282"}
       />
-      <View className='pt-3' />
-      {isActive && <View className='border border-b border-[#0084D1]' />}
+      <View
+        className='absolute bottom-0 left-2 right-2 border-b-2'
+        style={{ borderColor: isActive ? "#0084D1" : "transparent" }}
+      />
     </Pressable>
   );
 }
