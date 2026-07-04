@@ -109,7 +109,7 @@ export default function GuestHouseDetail() {
           <ScrollView
             ref={scrollViewRef}
             stickyHeaderIndices={[2]}
-            contentContainerStyle={{ paddingBottom: 24 }}
+            contentContainerStyle={{ paddingBottom: 240 }}
           >
             <GehaImage images={data?.imageUrls} height={280} page={true} />
 

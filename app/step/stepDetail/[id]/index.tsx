@@ -128,7 +128,7 @@ export default function StepDetail() {
           <ScrollView
             ref={scrollViewRef}
             stickyHeaderIndices={[2]}
-            contentContainerStyle={{ paddingBottom: 24 }}
+            contentContainerStyle={{ paddingBottom: 240 }}
           >
             <GehaImage
               images={data?.representativeImages}
