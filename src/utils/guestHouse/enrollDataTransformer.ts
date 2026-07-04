@@ -102,7 +102,7 @@ const transformLocation = (
   return {
     lotNumberAddress: location.jibunAddress || '',
     roadNameAddress: location.roadAddress || '',
-    coordinates: [location.latitude ?? 0, location.longitude ?? 0],
+    coordinates: [location.longitude ?? 0, location.latitude ?? 0],
   };
 };
 

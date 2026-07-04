@@ -10,10 +10,10 @@ interface AddressMapProps {
 export default function AddressMap({ coordinates }: AddressMapProps) {
   const [modalVisible, setModalVisible] = useState(false);
 
-  // 한국 경도는 항상 90 초과 → coordinates[0] > 90 이면 [경도,위도], 아니면 [위도,경도]
-  const isGeoJSON = (coordinates?.[0] ?? 0) > 90;
-  const lat = isGeoJSON ? (coordinates?.[1] ?? 33.499) : (coordinates?.[0] ?? 33.499);
-  const lng = isGeoJSON ? (coordinates?.[0] ?? 126.531) : (coordinates?.[1] ?? 126.531);
+  // coordinates[0] = 경도, coordinates[1] = 위도 
+  const lng = coordinates?.[0] ?? 126.531;
+  const lat = coordinates?.[1] ?? 33.499;
+
 
   return (
     <View className='h-64'>

@@ -29,16 +29,12 @@ export const transformApiToStore = (data: StepDetailResponse): StorePreloadData 
   const step1Data: Step1Data = {
     guestHouseName: data.guestHouseName,
     workingRegion: data.region,
-    location: (() => {
-      const c = data.location.coordinates;
-      const isGeoJSON = c[0] > 90;
-      return {
-        roadAddress: data.location.address,
-        jibunAddress: data.location.address,
-        latitude: isGeoJSON ? c[1] : c[0],
-        longitude: isGeoJSON ? c[0] : c[1],
-      };
-    })(),
+    location: {
+      roadAddress: data.location.address,
+      jibunAddress: data.location.address,
+      longitude: data.location.coordinates[0],
+      latitude: data.location.coordinates[1],
+    },
   };
 
   const step2Data: Step2Data = {

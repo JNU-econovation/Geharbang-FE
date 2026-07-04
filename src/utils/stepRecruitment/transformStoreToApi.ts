@@ -37,8 +37,8 @@ export const transformStoreToApi = (
     lotNumberAddress: step1Data.location?.jibunAddress || '',
     roadNameAddress: step1Data.location?.roadAddress || '',
     coordinates: [
-      step1Data.location?.latitude || 0,
       step1Data.location?.longitude || 0,
+      step1Data.location?.latitude || 0,
     ],
   };
 
