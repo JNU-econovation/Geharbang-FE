@@ -29,6 +29,8 @@ import StepDetailModal from "../_components/Modal/StepDetailModal";
 import PressSection from "../_components/PressSection/PressSection";
 import WorkInfo from "../_components/WorkInfo/WorkInfo";
 
+const stepDetailSectionOrder = STEP_DETAIL.map(({ section }) => section);
+
 export default function StepDetail() {
   const { id, fromRegistration } = useLocalSearchParams<{ id: string; fromRegistration?: string }>();
 
@@ -44,7 +46,6 @@ export default function StepDetail() {
     useHandleSection({
       sectionToScroll,
     });
-  const stepDetailSectionOrder = STEP_DETAIL.map(({ section }) => section);
 
   const handleApply = () => {
     setIsVisible(false);

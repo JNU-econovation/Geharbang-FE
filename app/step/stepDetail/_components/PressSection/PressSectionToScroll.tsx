@@ -19,7 +19,7 @@ export default function PressSectionToScroll({
     <Pressable
       hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
       className='min-w-[58px] h-10 px-2 items-center justify-center'
-      onPressIn={() => handleSectionToScroll(section)}
+      onPress={() => handleSectionToScroll(section)}
     >
       <TextSize
         content={content}

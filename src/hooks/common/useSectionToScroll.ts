@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -34,6 +34,14 @@ export const useSectionToScroll = () => {
     },
     [],
   );
+
+  useEffect(() => {
+    return () => {
+      if (programmaticScrollTimerRef.current) {
+        clearTimeout(programmaticScrollTimerRef.current);
+      }
+    };
+  }, []);
 
   const setContainerOffset = (y: number) => {
     containerOffsetRef.current = y;
@@ -72,8 +80,8 @@ export const useSectionToScroll = () => {
       onSectionChange(activeSection);
     };
 
-  const sectionToScroll = (key: string, retryCount = 0) => {
-    const localY = sectionYPositionsRef.current[key] ?? sectionYPositions[key];
+  const sectionToScroll = useCallback((key: string, retryCount = 0) => {
+    const localY = sectionYPositionsRef.current[key];
     if (localY === undefined) {
       if (retryCount < 3) {
         setTimeout(() => sectionToScroll(key, retryCount + 1), 100);
@@ -81,17 +89,17 @@ export const useSectionToScroll = () => {
       return;
     }
 
-      const absoluteY =
-        containerOffsetRef.current + localY - stickyHeaderHeightRef.current - 16;
-      isProgrammaticScrollRef.current = true;
-      if (programmaticScrollTimerRef.current) {
-        clearTimeout(programmaticScrollTimerRef.current);
-      }
-      programmaticScrollTimerRef.current = setTimeout(() => {
-        isProgrammaticScrollRef.current = false;
-      }, 450);
-      scrollViewRef.current?.scrollTo({ y: absoluteY, animated: true });
-  };
+    const absoluteY =
+      containerOffsetRef.current + localY - stickyHeaderHeightRef.current - 16;
+    isProgrammaticScrollRef.current = true;
+    if (programmaticScrollTimerRef.current) {
+      clearTimeout(programmaticScrollTimerRef.current);
+    }
+    programmaticScrollTimerRef.current = setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, 450);
+    scrollViewRef.current?.scrollTo({ y: absoluteY, animated: true });
+  }, []);
 
   return {
     scrollViewRef,

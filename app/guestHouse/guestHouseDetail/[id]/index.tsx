@@ -24,6 +24,8 @@ import GuestHouseIntro from "../_components/GuestHouseIntro";
 import GuestHouseParty from "../_components/GuestHouseParty";
 import ParlorType from "../_components/ParlorType";
 
+const guestHouseSectionOrder = GUESTHOUSE.map(({ section }) => section);
+
 export default function GuestHouseDetail() {
   const { id, fromRegistration } = useLocalSearchParams<{ id: string; fromRegistration?: string }>();
 
@@ -39,7 +41,6 @@ export default function GuestHouseDetail() {
     useHandleSection({
       sectionToScroll,
     });
-  const guestHouseSectionOrder = GUESTHOUSE.map(({ section }) => section);
 
   const { data, isPending, isError, refetch } = useGuestHouseDetail();
   const { requireLogin } = useRequireLogin();
