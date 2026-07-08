@@ -6,6 +6,7 @@ interface FormErrors {
   instagram: string;
   phone: string;
   website: string;
+  reservationUrl: string;
   ownerMessage: string;
 }
 
@@ -14,6 +15,7 @@ export function useGuestHouseStep5Validation(step5Data: Step5Data) {
     instagram: "",
     phone: "",
     website: "",
+    reservationUrl: "",
     ownerMessage: "",
   });
 
@@ -23,7 +25,7 @@ export function useGuestHouseStep5Validation(step5Data: Step5Data) {
 
   const validateField = (field: keyof FormErrors): void => {
     let errorMsg = "";
-    const { instagram, phone, website, ownerMessage } = step5Data;
+    const { instagram, phone, website, reservationUrl, ownerMessage } = step5Data;
 
     if (field === "instagram" && instagram) {
       if (instagram.trim() === "") {
@@ -49,6 +51,14 @@ export function useGuestHouseStep5Validation(step5Data: Step5Data) {
       }
     }
 
+    if (field === "reservationUrl" && reservationUrl) {
+      if (reservationUrl.trim() === "") {
+        errorMsg = "공백만 입력할 수 없습니다";
+      } else if (reservationUrl.length > 100) {
+        errorMsg = "내용을 100자 이내로 입력해주세요";
+      }
+    }
+
     if (field === "ownerMessage" && ownerMessage) {
       if (ownerMessage.trim() === "") {
         errorMsg = "공백만 입력할 수 없습니다";
@@ -66,10 +76,11 @@ export function useGuestHouseStep5Validation(step5Data: Step5Data) {
       instagram: "",
       phone: "",
       website: "",
+      reservationUrl: "",
       ownerMessage: "",
     };
 
-    const { instagram, phone, website, ownerMessage } = step5Data;
+    const { instagram, phone, website, reservationUrl, ownerMessage } = step5Data;
 
     if (instagram) {
       if (instagram.trim() === "") {
@@ -97,6 +108,16 @@ export function useGuestHouseStep5Validation(step5Data: Step5Data) {
         isValid = false;
       } else if (website.length > 100) {
         newErrors.website = "내용을 100자 이내로 입력해주세요";
+        isValid = false;
+      }
+    }
+
+    if (reservationUrl) {
+      if (reservationUrl.trim() === "") {
+        newErrors.reservationUrl = "공백만 입력할 수 없습니다";
+        isValid = false;
+      } else if (reservationUrl.length > 100) {
+        newErrors.reservationUrl = "내용을 100자 이내로 입력해주세요";
         isValid = false;
       }
     }
