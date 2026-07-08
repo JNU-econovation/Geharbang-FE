@@ -179,7 +179,6 @@ export default function GuestHouseDetail() {
                 setSectionYPositions={setSectionYPositions}
                 contact={data?.contact}
                 owerMessage={data?.ownerMessage}
-                webSiteTitle='블로그/웹사이트'
               />
 
               <View
