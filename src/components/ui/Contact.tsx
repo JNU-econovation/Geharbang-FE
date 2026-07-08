@@ -20,12 +20,14 @@ interface ContactProps extends SetSectionYPositionProps {
     reservationUrl?: string;
   };
   owerMessage?: string;
+  webSiteTitle?: string;
 }
 
 export default function Contact({
   setSectionYPositions,
   contact,
   owerMessage,
+  webSiteTitle = "웹사이트",
 }: ContactProps) {
   const hasAnyContact =
     !!contact?.email ||
@@ -92,7 +94,7 @@ export default function Contact({
           <ContactCompo
             variant='webSite'
             icon={<WebSite width={20} height={20} />}
-            title='웹사이트'
+            title={webSiteTitle}
             content={`${contact?.webSite}`}
             iconBg='#364153'
             redirect={contact?.webSite}

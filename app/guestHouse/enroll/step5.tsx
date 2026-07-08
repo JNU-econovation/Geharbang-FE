@@ -265,7 +265,7 @@ export default function GuestHouseEnrollStep5() {
 
                 <View ref={websiteRef}>
                   <FormField
-                    label='웹사이트'
+                    label='블로그/웹사이트'
                     required={false}
                     errorMessage={errors.website}
                   >
