@@ -111,6 +111,7 @@ const transformContact = (data: GuestHouseEnrollData): ContactRequest => {
     phoneNumber: data.phone || null,
     instagramId: data.instagram || null,
     webSite: data.website || null,
+    reservationUrl: data.reservationUrl || null,
   };
 };
 

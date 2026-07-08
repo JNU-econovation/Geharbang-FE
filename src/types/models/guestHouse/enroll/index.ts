@@ -53,6 +53,7 @@ export interface Step5Data {
   instagram: string;
   phone: string;
   website: string;
+  reservationUrl: string;
   ownerMessage: string;
 }
 
@@ -75,6 +76,7 @@ export interface GuestHouseEnrollData {
   instagram: string;
   phone: string;
   website: string;
+  reservationUrl: string;
   ownerMessage: string;
 }
 
@@ -99,5 +101,6 @@ export const initialGuestHouseEnrollData: GuestHouseEnrollData = {
   instagram: '',
   phone: '',
   website: '',
+  reservationUrl: '',
   ownerMessage: '',
 };

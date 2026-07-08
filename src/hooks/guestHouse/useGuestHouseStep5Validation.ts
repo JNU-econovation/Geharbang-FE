@@ -6,14 +6,19 @@ interface FormErrors {
   instagram: string;
   phone: string;
   website: string;
+  reservationUrl: string;
   ownerMessage: string;
 }
+
+const isHttpUrl = (value: string) => /^https?:\/\//.test(value.trim());
+const urlFormatMessage = "올바른 URL 형식이 아닙니다 (http:// 또는 https:// 포함)";
 
 export function useGuestHouseStep5Validation(step5Data: Step5Data) {
   const [errors, setErrors] = useState<FormErrors>({
     instagram: "",
     phone: "",
     website: "",
+    reservationUrl: "",
     ownerMessage: "",
   });
 
@@ -23,7 +28,7 @@ export function useGuestHouseStep5Validation(step5Data: Step5Data) {
 
   const validateField = (field: keyof FormErrors): void => {
     let errorMsg = "";
-    const { instagram, phone, website, ownerMessage } = step5Data;
+    const { instagram, phone, website, reservationUrl, ownerMessage } = step5Data;
 
     if (field === "instagram" && instagram) {
       if (instagram.trim() === "") {
@@ -44,7 +49,19 @@ export function useGuestHouseStep5Validation(step5Data: Step5Data) {
     if (field === "website" && website) {
       if (website.trim() === "") {
         errorMsg = "공백만 입력할 수 없습니다";
+      } else if (!isHttpUrl(website)) {
+        errorMsg = urlFormatMessage;
       } else if (website.length > 100) {
+        errorMsg = "내용을 100자 이내로 입력해주세요";
+      }
+    }
+
+    if (field === "reservationUrl" && reservationUrl) {
+      if (reservationUrl.trim() === "") {
+        errorMsg = "공백만 입력할 수 없습니다";
+      } else if (!isHttpUrl(reservationUrl)) {
+        errorMsg = urlFormatMessage;
+      } else if (reservationUrl.length > 100) {
         errorMsg = "내용을 100자 이내로 입력해주세요";
       }
     }
@@ -66,10 +83,11 @@ export function useGuestHouseStep5Validation(step5Data: Step5Data) {
       instagram: "",
       phone: "",
       website: "",
+      reservationUrl: "",
       ownerMessage: "",
     };
 
-    const { instagram, phone, website, ownerMessage } = step5Data;
+    const { instagram, phone, website, reservationUrl, ownerMessage } = step5Data;
 
     if (instagram) {
       if (instagram.trim() === "") {
@@ -95,8 +113,24 @@ export function useGuestHouseStep5Validation(step5Data: Step5Data) {
       if (website.trim() === "") {
         newErrors.website = "공백만 입력할 수 없습니다";
         isValid = false;
+      } else if (!isHttpUrl(website)) {
+        newErrors.website = urlFormatMessage;
+        isValid = false;
       } else if (website.length > 100) {
         newErrors.website = "내용을 100자 이내로 입력해주세요";
+        isValid = false;
+      }
+    }
+
+    if (reservationUrl) {
+      if (reservationUrl.trim() === "") {
+        newErrors.reservationUrl = "공백만 입력할 수 없습니다";
+        isValid = false;
+      } else if (!isHttpUrl(reservationUrl)) {
+        newErrors.reservationUrl = urlFormatMessage;
+        isValid = false;
+      } else if (reservationUrl.length > 100) {
+        newErrors.reservationUrl = "내용을 100자 이내로 입력해주세요";
         isValid = false;
       }
     }

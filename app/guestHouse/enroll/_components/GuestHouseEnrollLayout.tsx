@@ -45,6 +45,7 @@ const isFormEmpty = () => {
     !s.step5Data.instagram &&
     !s.step5Data.phone &&
     !s.step5Data.website &&
+    !s.step5Data.reservationUrl &&
     !s.step5Data.ownerMessage
   );
 };

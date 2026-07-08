@@ -35,7 +35,7 @@ export default function GuestHouseEnrollStep5() {
     setShouldScrollToError,
     editingId,
   } = useGuestHouseStore();
-  const { instagram, phone, website, ownerMessage } = step5Data;
+  const { instagram, phone, website, reservationUrl, ownerMessage } = step5Data;
 
   const { validateForm: validateStep1 } =
     useGuestHouseStep1Validation(step1Data);
@@ -45,18 +45,26 @@ export default function GuestHouseEnrollStep5() {
     useGuestHouseStep4Validation(step4Data);
 
   const { errors, clearError, validateForm, validateField } =
-    useGuestHouseStep5Validation({ instagram, phone, website, ownerMessage });
+    useGuestHouseStep5Validation({
+      instagram,
+      phone,
+      website,
+      reservationUrl,
+      ownerMessage,
+    });
 
   const scrollViewRef = useRef<ScrollView>(null);
   const instagramRef = useRef<View>(null);
   const phoneRef = useRef<View>(null);
   const websiteRef = useRef<View>(null);
+  const reservationUrlRef = useRef<View>(null);
   const ownerMessageRef = useRef<View>(null);
 
   const fieldRefMap = {
     instagram: instagramRef,
     phone: phoneRef,
     website: websiteRef,
+    reservationUrl: reservationUrlRef,
     ownerMessage: ownerMessageRef,
   } as const;
 
@@ -81,6 +89,7 @@ export default function GuestHouseEnrollStep5() {
             "instagram",
             "phone",
             "website",
+            "reservationUrl",
             "ownerMessage",
           ] as const;
           const firstErrField = fieldOrder.find((k) => !!errorsRef.current[k]);
@@ -105,6 +114,7 @@ export default function GuestHouseEnrollStep5() {
       if (d.instagram) validateFieldRef.current("instagram");
       if (d.phone) validateFieldRef.current("phone");
       if (d.website) validateFieldRef.current("website");
+      if (d.reservationUrl) validateFieldRef.current("reservationUrl");
       if (d.ownerMessage) validateFieldRef.current("ownerMessage");
     }, [shouldScrollToError]),
   );
@@ -149,6 +159,7 @@ export default function GuestHouseEnrollStep5() {
       instagram,
       phone,
       website,
+      reservationUrl,
       ownerMessage,
     };
 
@@ -254,7 +265,7 @@ export default function GuestHouseEnrollStep5() {
 
                 <View ref={websiteRef}>
                   <FormField
-                    label='웹사이트'
+                    label='블로그/웹사이트'
                     required={false}
                     errorMessage={errors.website}
                   >
@@ -270,6 +281,28 @@ export default function GuestHouseEnrollStep5() {
                       keyboardType='url'
                       error={!!errors.website}
                       maxLength={INPUT_MAX_LENGTHS.WEBSITE}
+                    />
+                  </FormField>
+                </View>
+
+                <View ref={reservationUrlRef}>
+                  <FormField
+                    label='예약 링크'
+                    required={false}
+                    errorMessage={errors.reservationUrl}
+                  >
+                    <TextInput
+                      value={reservationUrl}
+                      onChangeText={(text) => {
+                        setStep5Update("reservationUrl", text);
+                        clearError("reservationUrl");
+                      }}
+                      onBlur={() => validateField("reservationUrl")}
+                      onFocus={() => clearError("reservationUrl")}
+                      placeholder={PLACEHOLDERS.RESERVATION_URL}
+                      keyboardType='url'
+                      error={!!errors.reservationUrl}
+                      maxLength={INPUT_MAX_LENGTHS.RESERVATION_URL}
                     />
                   </FormField>
                 </View>

@@ -34,6 +34,7 @@ export const useEditGuestHouse = () => {
       setStep5Update('instagram', step5Data.instagram);
       setStep5Update('phone', step5Data.phone);
       setStep5Update('website', step5Data.website);
+      setStep5Update('reservationUrl', step5Data.reservationUrl);
       setStep5Update('ownerMessage', step5Data.ownerMessage);
       router.push('/guestHouse/enroll/step1');
     } catch (error) {
