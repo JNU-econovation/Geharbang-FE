@@ -16,6 +16,7 @@ export interface GuestHouseDetailResponse {
     phoneNumber: string;
     instagramId: string;
     webSite: string;
+    reservationUrl: string;
   };
   ownerMessage: string;
   imageUrls: string[];

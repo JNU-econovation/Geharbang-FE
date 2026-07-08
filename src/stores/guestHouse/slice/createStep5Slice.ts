@@ -6,6 +6,7 @@ export const initialStep5Data: Step5Data = {
   instagram: "",
   phone: "",
   website: "",
+  reservationUrl: "",
   ownerMessage: "",
 };
 

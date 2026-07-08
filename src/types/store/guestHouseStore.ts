@@ -28,6 +28,7 @@ export interface Step5Data {
   instagram: string;
   phone: string;
   website: string;
+  reservationUrl: string;
   ownerMessage: string;
 }
 
