@@ -97,6 +97,7 @@ export const transformGuestHouseApiToStore = (detail: GuestHouseDetailResponse) 
     instagram: detail.contact.instagramId ?? '',
     phone: detail.contact.phoneNumber ?? '',
     website: detail.contact.webSite ?? '',
+    reservationUrl: detail.contact.reservationUrl ?? '',
     ownerMessage: detail.ownerMessage ?? '',
   };
 
