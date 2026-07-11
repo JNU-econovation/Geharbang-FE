@@ -110,6 +110,7 @@ export const INPUT_MAX_LENGTHS = {
   PHONE: 13,
   EMAIL: 30,
   WEBSITE: 100,
+  RESERVATION_URL: 100,
   OWNER_MESSAGE: 50,
 } as const;
 
@@ -170,7 +171,8 @@ export const PLACEHOLDERS = {
   INSTAGRAM: '예: @jeju_guesthouse',
   PHONE: '예: 064-123-4567',
   EMAIL: '예: owner@naver.com',
-  WEBSITE: '예: https://www.jejuguesthouse.com',
+  WEBSITE: '예: https://blog.naver.com/jejuguesthouse',
+  RESERVATION_URL: '예: https://booking.naver.com/...',
   OWNER_MESSAGE: '스텝들에게 전하고 싶은 메시지를 입력해주세요',
 } as const;
 

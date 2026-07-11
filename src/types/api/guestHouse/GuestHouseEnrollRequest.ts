@@ -42,6 +42,7 @@ export interface ContactRequest {
   phoneNumber: string | null;
   instagramId: string | null;
   webSite: string | null;
+  reservationUrl: string | null;
 }
 
 // 전체 게스트하우스 등록 요청

@@ -43,3 +43,7 @@ yarn-error.*
 
 # Claude Code settings
 .claude/
+
+# Local docs
+ARCHITECTURE.md
+STUDY_GUIDE.md

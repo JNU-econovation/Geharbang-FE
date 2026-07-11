@@ -17,6 +17,7 @@ interface ContactProps extends SetSectionYPositionProps {
     instagramId?: string;
     phoneNumber?: string;
     webSite?: string;
+    reservationUrl?: string;
   };
   owerMessage?: string;
 }
@@ -31,6 +32,7 @@ export default function Contact({
     !!contact?.instagramId ||
     !!contact?.phoneNumber ||
     !!contact?.webSite ||
+    !!contact?.reservationUrl ||
     !!owerMessage;
 
   return (
@@ -90,10 +92,23 @@ export default function Contact({
           <ContactCompo
             variant='webSite'
             icon={<WebSite width={20} height={20} />}
-            title='웹사이트'
+            title='블로그/웹사이트'
             content={`${contact?.webSite}`}
             iconBg='#364153'
             redirect={contact?.webSite}
+          />
+        </View>
+      )}
+
+      {contact?.reservationUrl && (
+        <View className='pt-4'>
+          <ContactCompo
+            variant='webSite'
+            icon={<WebSite width={20} height={20} />}
+            title='예약'
+            content={`${contact?.reservationUrl}`}
+            iconBg='#0EA5E9'
+            redirect={contact?.reservationUrl}
           />
         </View>
       )}

@@ -24,6 +24,8 @@ import GuestHouseIntro from "../_components/GuestHouseIntro";
 import GuestHouseParty from "../_components/GuestHouseParty";
 import ParlorType from "../_components/ParlorType";
 
+const guestHouseSectionOrder = GUESTHOUSE.map(({ section }) => section);
+
 export default function GuestHouseDetail() {
   const { id, fromRegistration } = useLocalSearchParams<{
     id: string;
@@ -36,10 +38,12 @@ export default function GuestHouseDetail() {
     sectionToScroll,
     setContainerOffset,
     setStickyHeaderHeight,
+    createSectionScrollHandler,
   } = useSectionToScroll();
-  const { selectedSection, handleSectionToScroll } = useHandleSection({
-    sectionToScroll,
-  });
+  const { selectedSection, setSelectedSection, handleSectionToScroll } =
+    useHandleSection({
+      sectionToScroll,
+    });
 
   const { data, isPending, isError, refetch } = useGuestHouseDetail();
   const { requireLogin } = useRequireLogin();
@@ -116,7 +120,12 @@ export default function GuestHouseDetail() {
           <ScrollView
             ref={scrollViewRef}
             stickyHeaderIndices={[2]}
-            contentContainerStyle={{ paddingBottom: 24 }}
+            contentContainerStyle={{ paddingBottom: 240 }}
+            onScroll={createSectionScrollHandler(
+              guestHouseSectionOrder,
+              setSelectedSection,
+            )}
+            scrollEventThrottle={16}
           >
             <GehaImage images={data?.imageUrls} height={280} page={true} />
 

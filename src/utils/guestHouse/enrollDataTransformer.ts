@@ -100,8 +100,8 @@ const transformLocation = (
   }
 
   return {
-    lotNumberAddress: location.jibunAddress || '',
-    roadNameAddress: location.roadAddress || '',
+    lotNumberAddress: location.jibunAddress || location.roadAddress || '',
+    roadNameAddress: location.roadAddress || location.jibunAddress || '',
     coordinates: [location.longitude ?? 0, location.latitude ?? 0],
   };
 };
@@ -111,6 +111,7 @@ const transformContact = (data: GuestHouseEnrollData): ContactRequest => {
     phoneNumber: data.phone || null,
     instagramId: data.instagram || null,
     webSite: data.website || null,
+    reservationUrl: data.reservationUrl || null,
   };
 };
 

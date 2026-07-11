@@ -1,5 +1,4 @@
 import { Href, router, useFocusEffect } from "expo-router";
-import axios from "axios";
 import { useCallback, useRef } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
@@ -8,7 +7,6 @@ import Button from "@/src/components/ui/Button/Button";
 import FormField from "@/src/components/ui/Form/FormField";
 import FormSection from "@/src/components/ui/Form/FormSection";
 import TextInput from "@/src/components/ui/TextInput";
-import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
 import { useGuestHouseEnrollment } from "@/src/hooks/guestHouse/useGuestHouseEnrollment";
 import { useGuestHouseStep1Validation } from "@/src/hooks/guestHouse/useGuestHouseStep1Validation";
 import { useGuestHouseStep2Validation } from "@/src/hooks/guestHouse/useGuestHouseStep2Validation";
@@ -37,8 +35,7 @@ export default function GuestHouseEnrollStep5() {
     setShouldScrollToError,
     editingId,
   } = useGuestHouseStore();
-  const { instagram, phone, website, ownerMessage } = step5Data;
-  const { requireLogin } = useRequireLogin();
+  const { instagram, phone, website, reservationUrl, ownerMessage } = step5Data;
 
   const { validateForm: validateStep1 } =
     useGuestHouseStep1Validation(step1Data);
@@ -48,18 +45,26 @@ export default function GuestHouseEnrollStep5() {
     useGuestHouseStep4Validation(step4Data);
 
   const { errors, clearError, validateForm, validateField } =
-    useGuestHouseStep5Validation({ instagram, phone, website, ownerMessage });
+    useGuestHouseStep5Validation({
+      instagram,
+      phone,
+      website,
+      reservationUrl,
+      ownerMessage,
+    });
 
   const scrollViewRef = useRef<ScrollView>(null);
   const instagramRef = useRef<View>(null);
   const phoneRef = useRef<View>(null);
   const websiteRef = useRef<View>(null);
+  const reservationUrlRef = useRef<View>(null);
   const ownerMessageRef = useRef<View>(null);
 
   const fieldRefMap = {
     instagram: instagramRef,
     phone: phoneRef,
     website: websiteRef,
+    reservationUrl: reservationUrlRef,
     ownerMessage: ownerMessageRef,
   } as const;
 
@@ -84,6 +89,7 @@ export default function GuestHouseEnrollStep5() {
             "instagram",
             "phone",
             "website",
+            "reservationUrl",
             "ownerMessage",
           ] as const;
           const firstErrField = fieldOrder.find((k) => !!errorsRef.current[k]);
@@ -108,6 +114,7 @@ export default function GuestHouseEnrollStep5() {
       if (d.instagram) validateFieldRef.current("instagram");
       if (d.phone) validateFieldRef.current("phone");
       if (d.website) validateFieldRef.current("website");
+      if (d.reservationUrl) validateFieldRef.current("reservationUrl");
       if (d.ownerMessage) validateFieldRef.current("ownerMessage");
     }, [shouldScrollToError]),
   );
@@ -128,12 +135,6 @@ export default function GuestHouseEnrollStep5() {
   };
 
   const handleSubmit = async () => {
-    let canSubmit = false;
-    requireLogin(() => {
-      canSubmit = true;
-    });
-    if (!canSubmit) return;
-
     if (!validateStepAndNavigate(validateStep1, "/guestHouse/enroll/step1"))
       return;
     if (!validateStepAndNavigate(validateStep2, "/guestHouse/enroll/step2"))
@@ -158,6 +159,7 @@ export default function GuestHouseEnrollStep5() {
       instagram,
       phone,
       website,
+      reservationUrl,
       ownerMessage,
     };
 
@@ -180,12 +182,7 @@ export default function GuestHouseEnrollStep5() {
 
       let userFriendlyMessage = "등록 중 오류가 발생했습니다.";
 
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        userFriendlyMessage = "로그인 후 다시 등록해주세요.";
-      } else if (axios.isAxiosError(error) && error.response?.status === 403) {
-        userFriendlyMessage =
-          "게스트하우스 등록은 인증서 심사가 완료된 사장님만 가능합니다.";
-      } else if (error instanceof Error) {
+      if (error instanceof Error) {
         if (error.message.includes("이미지")) {
           userFriendlyMessage = error.message;
         } else if (error.message.includes("네트워크")) {
@@ -268,7 +265,7 @@ export default function GuestHouseEnrollStep5() {
 
                 <View ref={websiteRef}>
                   <FormField
-                    label='웹사이트'
+                    label='블로그/웹사이트'
                     required={false}
                     errorMessage={errors.website}
                   >
@@ -284,6 +281,28 @@ export default function GuestHouseEnrollStep5() {
                       keyboardType='url'
                       error={!!errors.website}
                       maxLength={INPUT_MAX_LENGTHS.WEBSITE}
+                    />
+                  </FormField>
+                </View>
+
+                <View ref={reservationUrlRef}>
+                  <FormField
+                    label='예약 링크'
+                    required={false}
+                    errorMessage={errors.reservationUrl}
+                  >
+                    <TextInput
+                      value={reservationUrl}
+                      onChangeText={(text) => {
+                        setStep5Update("reservationUrl", text);
+                        clearError("reservationUrl");
+                      }}
+                      onBlur={() => validateField("reservationUrl")}
+                      onFocus={() => clearError("reservationUrl")}
+                      placeholder={PLACEHOLDERS.RESERVATION_URL}
+                      keyboardType='url'
+                      error={!!errors.reservationUrl}
+                      maxLength={INPUT_MAX_LENGTHS.RESERVATION_URL}
                     />
                   </FormField>
                 </View>

@@ -29,6 +29,8 @@ import StepDetailModal from "../_components/Modal/StepDetailModal";
 import PressSection from "../_components/PressSection/PressSection";
 import WorkInfo from "../_components/WorkInfo/WorkInfo";
 
+const stepDetailSectionOrder = STEP_DETAIL.map(({ section }) => section);
+
 export default function StepDetail() {
   const { id, fromRegistration } = useLocalSearchParams<{ id: string; fromRegistration?: string }>();
 
@@ -38,10 +40,12 @@ export default function StepDetail() {
     sectionToScroll,
     setContainerOffset,
     setStickyHeaderHeight,
+    createSectionScrollHandler,
   } = useSectionToScroll();
-  const { selectedSection, handleSectionToScroll } = useHandleSection({
-    sectionToScroll,
-  });
+  const { selectedSection, setSelectedSection, handleSectionToScroll } =
+    useHandleSection({
+      sectionToScroll,
+    });
 
   const handleApply = () => {
     setIsVisible(false);
@@ -128,7 +132,12 @@ export default function StepDetail() {
           <ScrollView
             ref={scrollViewRef}
             stickyHeaderIndices={[2]}
-            contentContainerStyle={{ paddingBottom: 24 }}
+            contentContainerStyle={{ paddingBottom: 240 }}
+            onScroll={createSectionScrollHandler(
+              stepDetailSectionOrder,
+              setSelectedSection,
+            )}
+            scrollEventThrottle={16}
           >
             <GehaImage
               images={data?.representativeImages}
