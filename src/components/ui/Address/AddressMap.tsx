@@ -32,9 +32,9 @@ export default function AddressMap({ coordinates, markerType }: AddressMapProps)
         >
           <View collapsable={false} style={{ width: MARKER_W, height: MARKER_H }}>
             {markerType === 'guesthouse' ? (
-              <StepMarkerSvg isSelected={false} width={MARKER_W} height={MARKER_H} />
-            ) : (
               <GuestHouseMarkerSvg isSelected={false} width={MARKER_W} height={MARKER_H} />
+            ) : (
+              <StepMarkerSvg isSelected={false} width={MARKER_W} height={MARKER_H} />
             )}
           </View>
         </NaverMapMarkerOverlay>

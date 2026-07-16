@@ -123,9 +123,9 @@ export default function MapTabScreen() {
                 style={{ width: w, height: h }}
               >
                 {mapType === 'step' ? (
-                  <GuestHouseMarkerSvg isSelected={isSelected} width={w} height={h} />
-                ) : (
                   <StepMarkerSvg isSelected={isSelected} width={w} height={h} />
+                ) : (
+                  <GuestHouseMarkerSvg isSelected={isSelected} width={w} height={h} />
                 )}
               </View>
             </NaverMapMarkerOverlay>
