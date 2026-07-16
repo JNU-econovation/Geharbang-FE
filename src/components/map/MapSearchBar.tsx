@@ -123,7 +123,7 @@ export default function MapSearchBar({ items, onSelect, placeholder = '검색' }
                   {getDisplayName(item)}
                 </Text>
                 <Text style={{ fontSize: 12, color: COLORS.GRAY.TEXT, marginTop: 2 }}>
-                  {item.address}
+                  {'title' in item ? item.guestHouseName : item.address}
                 </Text>
               </Pressable>
             )}

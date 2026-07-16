@@ -45,26 +45,16 @@ export default function StepBottomSheet({ item }: StepBottomSheetProps) {
         elevation: 8,
       }}
     >
-      {/* 헤더: 이름+주소 / 액션 버튼 */}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingHorizontal: 16,
-          paddingTop: 16,
-          paddingBottom: 12,
-        }}
-      >
+      {/* 헤더 */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12 }}>
         <View style={{ flex: 1, marginRight: 12 }}>
-          <Text style={{ fontSize: 16, fontWeight: '700', color: '#101828' }} numberOfLines={2}>
+          <Text style={{ fontSize: 13, color: '#000000' }} numberOfLines={1}>
             {item.guestHouseName}
           </Text>
-          <Text style={{ fontSize: 12, color: COLORS.GRAY.TEXT, marginTop: 4 }} numberOfLines={1}>
-            {item.address}
+          <Text style={{ fontSize: 16, fontWeight: '700', color: '#101828', marginTop: 3, marginBottom: 3 }} numberOfLines={1} ellipsizeMode='tail'>
+            {item.title}
           </Text>
         </View>
-
-        {/* 액션 버튼: 전화 / 인스타 / 사이트 / 하트 */}
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
           {item.phoneNumber && (
             <Pressable
@@ -77,8 +67,7 @@ export default function StepBottomSheet({ item }: StepBottomSheetProps) {
               <Ionicons name='call-outline' size={22} color='#22c55e' />
             </Pressable>
           )}
-
-          {item.instagramId && (
+          {item.instagramId ? (
             <Pressable
               onPress={(e) => {
                 e.stopPropagation();
@@ -88,9 +77,7 @@ export default function StepBottomSheet({ item }: StepBottomSheetProps) {
             >
               <Ionicons name='logo-instagram' size={22} color='#E1306C' />
             </Pressable>
-          )}
-
-          {item.webSite && (
+          ) : item.webSite ? (
             <Pressable
               onPress={(e) => {
                 e.stopPropagation();
@@ -98,10 +85,15 @@ export default function StepBottomSheet({ item }: StepBottomSheetProps) {
               }}
               hitSlop={8}
             >
-              <Ionicons name='globe-outline' size={22} color={COLORS.PRIMARY.BLUE} />
+              {item.webSite.includes('blog') ? (
+                <Text style={{ fontSize: 18, fontWeight: '700', color: '#3CCF4E', letterSpacing: -0.5 }}>
+                  bl
+                </Text>
+              ) : (
+                <Ionicons name='globe-outline' size={22} color={COLORS.PRIMARY.BLUE} />
+              )}
             </Pressable>
-          )}
-
+          ) : null}
           <Pressable
             onPress={(e) => {
               e.stopPropagation();
