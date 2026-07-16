@@ -41,14 +41,24 @@ export async function localSearch(query: string): Promise<NaverAddressResult[]> 
     console.log("[NaverMap] localSearch 결과:", JSON.stringify(data.items?.slice(0, 2)));
     if (!data.items || data.items.length === 0) return [];
 
-    return data.items
-      .map((item: any) => ({
-        roadAddress: item.roadAddress ?? "",
-        jibunAddress: item.address ?? "",
-        latitude: parseInt(item.mapy) / 1e7,
-        longitude: parseInt(item.mapx) / 1e7,
-      }))
-      .filter((r: NaverAddressResult) => r.latitude !== 0 && r.longitude !== 0);
+    const results = await Promise.all(
+      data.items.map(async (item: any) => {
+        const address = item.roadAddress || item.address || "";
+        if (!address) return null;
+
+        const geocoded = await geocodeAddress(address);
+        if (geocoded.length === 0) return null;
+
+        return {
+          roadAddress: item.roadAddress ?? "",
+          jibunAddress: item.address ?? "",
+          latitude: geocoded[0].latitude,
+          longitude: geocoded[0].longitude,
+        } as NaverAddressResult;
+      }),
+    );
+
+    return results.filter((r): r is NaverAddressResult => r !== null);
   } catch (e) {
     console.warn("[NaverMap] localSearch 오류:", e);
     return [];
