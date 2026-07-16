@@ -4,7 +4,7 @@ import {
   deleteGuestHouseWish,
   deleteStaffRecruitmentWish,
 } from "@/src/services/wish/wish";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type WishTargetType = "stepRecruitment" | "guestHouse";
 
@@ -21,6 +21,7 @@ export function useToggleWish({
   onOptimisticUpdate,
   onError,
 }: UseToggleWishParams) {
+  const queryClient = useQueryClient();
   return useMutation<void, Error, boolean>({
     mutationFn: async (isCurrentlyWished: boolean) => {
       if (type === "stepRecruitment") {
@@ -39,6 +40,13 @@ export function useToggleWish({
     },
     onMutate: (isCurrentlyWished) => {
       onOptimisticUpdate(!isCurrentlyWished);
+    },
+    onSuccess: () => {
+      if (type === "guestHouse") {
+        queryClient.invalidateQueries({ queryKey: ["guestHouseMap"] });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["stepMap"] });
+      }
     },
     onError: () => {
       onError();
