@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import { ActivityIndicator, Linking, ScrollView, View } from "react-native";
 
 import GehaImage from "@/app/step/stepDetail/_components/GehaInfo/GehaImage";
 import GehaInfo from "@/app/step/stepDetail/_components/GehaInfo/GehaInfo";
@@ -17,6 +17,7 @@ import { useSectionToScroll } from "@/src/hooks/common/useSectionToScroll";
 import { useCreateChatRoom } from "@/src/hooks/chat/useChat";
 import { useGuestHouseDetail } from "@/src/hooks/guestHouseDetail/useGuestHouseDetail";
 import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
+import { COLORS } from "@/src/utils/constants/colors";
 import { GUESTHOUSE } from "@/src/utils/constants/pressSection";
 import { router, useLocalSearchParams } from "expo-router";
 import GuestHouseInfo from "../_components/GuestHouseInfo";
@@ -154,6 +155,7 @@ export default function GuestHouseDetail() {
               <Address
                 setSectionYPositions={setSectionYPositions}
                 location={data?.location}
+                markerType='guesthouse'
               />
 
               <View className='pt-10' />
@@ -211,15 +213,29 @@ export default function GuestHouseDetail() {
             </View>
           </ScrollView>
 
-          <View className='px-4 pt-3 pb-3 bg-white border-t border-[#E5E7EB]'>
-            <Button
-              variant='primary'
-              height={56}
-              content='채팅하기'
-              textColor='#ffffff'
-              isPending={isCreatingChatRoom}
-              onPress={handleChatPress}
-            />
+          <View className='flex-row gap-2 px-4 pt-3 pb-3 bg-white border-t border-[#E5E7EB]'>
+            <View style={{ flex: data?.contact?.reservationUrl ? 3 : 1 }}>
+              <Button
+                height={56}
+                content='채팅하기'
+                textColor={COLORS.PRIMARY.BLUE}
+                className='w-full bg-white border border-primary-blue'
+                isPending={isCreatingChatRoom}
+                onPress={handleChatPress}
+              />
+            </View>
+            {data?.contact?.reservationUrl ? (
+              <View style={{ flex: 7 }}>
+                <Button
+                  variant='primary'
+                  height={56}
+                  content='예약하러가기'
+                  textColor='#ffffff'
+                  className='w-full'
+                  onPress={() => Linking.openURL(data.contact!.reservationUrl)}
+                />
+              </View>
+            ) : null}
           </View>
         </View>
       )}

@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { View } from "react-native";
 
 import Email from "@/public/svgs/StepDetail/contactIcon/email.svg";
@@ -104,7 +105,7 @@ export default function Contact({
         <View className='pt-4'>
           <ContactCompo
             variant='webSite'
-            icon={<WebSite width={20} height={20} />}
+            icon={<Ionicons name='calendar-clear-outline' size={20} color='white' />}
             title='예약'
             content={`${contact?.reservationUrl}`}
             iconBg='#0EA5E9'

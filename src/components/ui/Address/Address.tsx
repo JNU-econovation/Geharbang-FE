@@ -13,11 +13,13 @@ interface AddressProps extends SetSectionYPositionProps {
     roadNameAddress?: string;
     coordinates: number[];
   };
+  markerType?: 'guesthouse' | 'step';
 }
 
 export default function Address({
   setSectionYPositions,
   location,
+  markerType,
 }: AddressProps) {
   return (
     <SectionYPosition
@@ -26,7 +28,7 @@ export default function Address({
       setSectionYPositions={setSectionYPositions}
     >
       <View className='pt-6' />
-      <AddressMap coordinates={location?.coordinates} />
+      <AddressMap coordinates={location?.coordinates} markerType={markerType} />
 
       <View className='pt-4' />
       {location?.address ? (
