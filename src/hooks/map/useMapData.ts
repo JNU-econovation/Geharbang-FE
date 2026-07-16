@@ -19,7 +19,7 @@ return raw.map((item): StepMapItem => ({
         instagramId: item.instagramId || undefined,
         webSite: item.webSite || undefined,
         phoneNumber: item.phoneNumber || undefined,
-        isWished: false,
+        isWished: item.isWished,
       }));
     },
   });

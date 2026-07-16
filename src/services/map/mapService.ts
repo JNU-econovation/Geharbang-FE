@@ -25,6 +25,7 @@ export interface StepMapResponse {
   webSite: string;
   instagramId: string;
   phoneNumber: string;
+  isWished: boolean;
 }
 
 export const getGuestHouseMap = async (): Promise<GuestHouseMapResponse[]> => {
