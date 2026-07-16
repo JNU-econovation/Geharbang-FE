@@ -17,9 +17,9 @@ export default function ModalBtn({
       onPress={onPress}
       className={`absolute ${
         selectable
-          ? "top-[105px] right-5"
+          ? "top-[113px] right-5"
           : modalVisible
-          ? "top-14 right-5"
+          ? "top-16 right-5"
           : "top-3 right-3"
       } h-10 w-10 bg-white rounded-full flex items-center justify-center mt-1`}
     >

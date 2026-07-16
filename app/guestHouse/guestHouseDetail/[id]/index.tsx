@@ -17,8 +17,10 @@ import { useSectionToScroll } from "@/src/hooks/common/useSectionToScroll";
 import { useCreateChatRoom } from "@/src/hooks/chat/useChat";
 import { useGuestHouseDetail } from "@/src/hooks/guestHouseDetail/useGuestHouseDetail";
 import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
-import { router, useLocalSearchParams } from "expo-router";
+import { COLORS } from "@/src/utils/constants/colors";
 import { GUESTHOUSE } from "@/src/utils/constants/pressSection";
+import { handleOpenURL } from "@/src/utils/stepDetail/openURL";
+import { router, useLocalSearchParams } from "expo-router";
 import GuestHouseInfo from "../_components/GuestHouseInfo";
 import GuestHouseIntro from "../_components/GuestHouseIntro";
 import GuestHouseParty from "../_components/GuestHouseParty";
@@ -27,7 +29,10 @@ import ParlorType from "../_components/ParlorType";
 const guestHouseSectionOrder = GUESTHOUSE.map(({ section }) => section);
 
 export default function GuestHouseDetail() {
-  const { id, fromRegistration } = useLocalSearchParams<{ id: string; fromRegistration?: string }>();
+  const { id, fromRegistration } = useLocalSearchParams<{
+    id: string;
+    fromRegistration?: string;
+  }>();
 
   const {
     scrollViewRef,
@@ -86,7 +91,11 @@ export default function GuestHouseDetail() {
           content='게스트하우스 상세'
           shareTitle='게스트하우스 공유하기'
           shareMessage='게스트하우스를 공유해보세요!'
-          onBack={fromRegistration === 'true' ? () => router.replace('/(tabs)') : undefined}
+          onBack={
+            fromRegistration === "true"
+              ? () => router.replace("/(tabs)")
+              : undefined
+          }
           isWished={isWished}
           onWishToggle={() => toggleWish(isWished)}
         />
@@ -147,6 +156,7 @@ export default function GuestHouseDetail() {
               <Address
                 setSectionYPositions={setSectionYPositions}
                 location={data?.location}
+                markerType='guesthouse'
               />
 
               <View className='pt-10' />
@@ -204,15 +214,29 @@ export default function GuestHouseDetail() {
             </View>
           </ScrollView>
 
-          <View className='px-4 pt-3 pb-3 bg-white border-t border-[#E5E7EB]'>
-            <Button
-              variant='primary'
-              height={56}
-              content='채팅하기'
-              textColor='#ffffff'
-              isPending={isCreatingChatRoom}
-              onPress={handleChatPress}
-            />
+          <View className='flex-row gap-2 px-4 pt-3 pb-3 bg-white border-t border-[#E5E7EB]'>
+            <View style={{ flex: data?.contact?.reservationUrl ? 3 : 1 }}>
+              <Button
+                height={56}
+                content='채팅하기'
+                textColor={COLORS.PRIMARY.BLUE}
+                className='w-full bg-white border border-primary-blue'
+                isPending={isCreatingChatRoom}
+                onPress={handleChatPress}
+              />
+            </View>
+            {data?.contact?.reservationUrl ? (
+              <View style={{ flex: 7 }}>
+                <Button
+                  variant='primary'
+                  height={56}
+                  content='예약하러가기'
+                  textColor='#ffffff'
+                  className='w-full'
+                  onPress={() => handleOpenURL({ redirect: data.contact!.reservationUrl })}
+                />
+              </View>
+            ) : null}
           </View>
         </View>
       )}

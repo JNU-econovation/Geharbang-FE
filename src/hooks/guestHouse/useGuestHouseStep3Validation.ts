@@ -107,8 +107,6 @@ export function useGuestHouseStep3Validation(_step3Data: Step3Data) {
         const priceNumber = parseInt(party.guestFee.replace(/[^0-9]/g, ""), 10);
         if (isNaN(priceNumber)) {
           errorMsg = "유효한 가격을 입력해주세요";
-        } else if (priceNumber <= 0) {
-          errorMsg = "가격은 0원보다 커야 합니다";
         } else if (priceNumber > 10000000) {
           errorMsg = "가격이 너무 높습니다 (최대 10,000,000원)";
         }

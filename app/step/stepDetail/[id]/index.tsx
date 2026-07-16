@@ -169,6 +169,7 @@ export default function StepDetail() {
               <Address
                 setSectionYPositions={setSectionYPositions}
                 location={data?.location}
+                markerType='step'
               />
 
               <View className='pt-10' />

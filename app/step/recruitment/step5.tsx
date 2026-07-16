@@ -69,7 +69,7 @@ export default function RecruitmentStep5() {
   const questionsRef = useRef(questions);
   questionsRef.current = questions;
 
-  const { handleSubmit: submitRecruitment } = useHandleStepRecruitmentSubmit();
+  const { handleSubmit: submitRecruitment, isSubmitting } = useHandleStepRecruitmentSubmit();
 
   const addQuestion = () => {
     if (questions.length >= 5) {
@@ -197,8 +197,9 @@ export default function RecruitmentStep5() {
                 variant='primary'
                 height={50}
                 textColor='white'
-                content={editingId ? '공고 수정하기' : '공고 등록하기'}
+                content={isSubmitting ? (editingId ? '수정 중...' : '등록 중...') : (editingId ? '공고 수정하기' : '공고 등록하기')}
                 onPress={handleSubmit}
+                disabled={isSubmitting}
                 className='flex-1'
               />
             </View>
