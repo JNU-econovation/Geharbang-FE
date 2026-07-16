@@ -1,11 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Image, Linking, Pressable, ScrollView, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useToggleWish } from '@/src/hooks/wish/useToggleWish';
 import { GuestHouseMapItem } from '@/src/types/models/map';
 import { COLORS } from '@/src/utils/constants/colors';
+import { handleOpenURL } from '@/src/utils/stepDetail/openURL';
 
 interface GuestHouseBottomSheetProps {
   item: GuestHouseMapItem;
@@ -13,7 +13,6 @@ interface GuestHouseBottomSheetProps {
 
 export default function GuestHouseBottomSheet({ item }: GuestHouseBottomSheetProps) {
   const router = useRouter();
-  const queryClient = useQueryClient();
   const [isWished, setIsWished] = useState(item.isWished);
 
   useEffect(() => {
@@ -71,7 +70,7 @@ export default function GuestHouseBottomSheet({ item }: GuestHouseBottomSheetPro
             <Pressable
               onPress={(e) => {
                 e.stopPropagation();
-                Linking.openURL(`tel:${item.phoneNumber}`);
+                handleOpenURL({ redirect: `tel:${item.phoneNumber}` });
               }}
               hitSlop={8}
             >
@@ -83,7 +82,7 @@ export default function GuestHouseBottomSheet({ item }: GuestHouseBottomSheetPro
             <Pressable
               onPress={(e) => {
                 e.stopPropagation();
-                Linking.openURL(`https://instagram.com/${item.instagramId}`);
+                handleOpenURL({ redirect: `https://instagram.com/${item.instagramId}` });
               }}
               hitSlop={8}
             >
@@ -93,7 +92,7 @@ export default function GuestHouseBottomSheet({ item }: GuestHouseBottomSheetPro
             <Pressable
               onPress={(e) => {
                 e.stopPropagation();
-                Linking.openURL(item.webSite!);
+                handleOpenURL({ redirect: item.webSite });
               }}
               hitSlop={8}
             >
@@ -110,15 +109,7 @@ export default function GuestHouseBottomSheet({ item }: GuestHouseBottomSheetPro
           <Pressable
             onPress={(e) => {
               e.stopPropagation();
-              toggleWish(isWished, {
-                onSuccess: () => {
-                  queryClient.setQueryData(
-                    ['guestHouseMap'],
-                    (old: GuestHouseMapItem[] | undefined) =>
-                      old?.map((g) => g.id === item.id ? { ...g, isWished: !isWished } : g) ?? [],
-                  );
-                },
-              });
+              toggleWish(isWished);
             }}
             hitSlop={8}
           >

@@ -1,15 +1,16 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Image, Linking, Pressable, View } from "react-native";
+import { Image, Pressable, View } from "react-native";
 
-import Flex from "@/src/components/layout//Flex/Flex";
+import Flex from "@/src/components/layout/Flex/Flex";
 import TextSize from "@/src/components/ui/TextSize";
+import { handleOpenURL } from "@/src/utils/stepDetail/openURL";
 const coffee = require("../../../public/images/coffee.png");
 
 export default function AdBanner() {
   return (
     <Pressable
-      onPress={() => Linking.openURL("https://naver.me/GsBTzCLE")}
+      onPress={() => handleOpenURL({ redirect: "https://naver.me/GsBTzCLE" })}
       style={{ width: "90%", alignSelf: "center" }}
     >
     <LinearGradient

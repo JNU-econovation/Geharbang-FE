@@ -1,10 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Image, Linking, Pressable, ScrollView, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useToggleWish } from '@/src/hooks/wish/useToggleWish';
 import { StepMapItem } from '@/src/types/models/map';
 import { COLORS } from '@/src/utils/constants/colors';
+import { handleOpenURL } from '@/src/utils/stepDetail/openURL';
 
 interface StepBottomSheetProps {
   item: StepMapItem;
@@ -69,7 +70,7 @@ export default function StepBottomSheet({ item }: StepBottomSheetProps) {
             <Pressable
               onPress={(e) => {
                 e.stopPropagation();
-                Linking.openURL(`tel:${item.phoneNumber}`);
+                handleOpenURL({ redirect: `tel:${item.phoneNumber}` });
               }}
               hitSlop={8}
             >
@@ -81,7 +82,7 @@ export default function StepBottomSheet({ item }: StepBottomSheetProps) {
             <Pressable
               onPress={(e) => {
                 e.stopPropagation();
-                Linking.openURL(`https://instagram.com/${item.instagramId}`);
+                handleOpenURL({ redirect: `https://instagram.com/${item.instagramId}` });
               }}
               hitSlop={8}
             >
@@ -93,7 +94,7 @@ export default function StepBottomSheet({ item }: StepBottomSheetProps) {
             <Pressable
               onPress={(e) => {
                 e.stopPropagation();
-                Linking.openURL(item.webSite!);
+                handleOpenURL({ redirect: item.webSite });
               }}
               hitSlop={8}
             >

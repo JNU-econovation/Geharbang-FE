@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Linking, ScrollView, View } from "react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 
 import GehaImage from "@/app/step/stepDetail/_components/GehaInfo/GehaImage";
 import GehaInfo from "@/app/step/stepDetail/_components/GehaInfo/GehaInfo";
@@ -19,6 +19,7 @@ import { useGuestHouseDetail } from "@/src/hooks/guestHouseDetail/useGuestHouseD
 import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
 import { COLORS } from "@/src/utils/constants/colors";
 import { GUESTHOUSE } from "@/src/utils/constants/pressSection";
+import { handleOpenURL } from "@/src/utils/stepDetail/openURL";
 import { router, useLocalSearchParams } from "expo-router";
 import GuestHouseInfo from "../_components/GuestHouseInfo";
 import GuestHouseIntro from "../_components/GuestHouseIntro";
@@ -232,7 +233,7 @@ export default function GuestHouseDetail() {
                   content='예약하러가기'
                   textColor='#ffffff'
                   className='w-full'
-                  onPress={() => Linking.openURL(data.contact!.reservationUrl)}
+                  onPress={() => handleOpenURL({ redirect: data.contact!.reservationUrl })}
                 />
               </View>
             ) : null}
