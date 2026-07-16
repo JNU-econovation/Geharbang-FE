@@ -6,7 +6,7 @@ import { COLORS } from '@/src/utils/constants/colors';
 
 type MapItem = StepMapItem | GuestHouseMapItem;
 
-const getDisplayName = (item: MapItem) => item.guestHouseName;
+const getDisplayName = (item: MapItem) => 'title' in item ? item.title : item.guestHouseName;
 
 interface MapSearchBarProps {
   items: MapItem[];

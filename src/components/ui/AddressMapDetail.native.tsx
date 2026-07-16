@@ -74,7 +74,11 @@ export default function AddressMapDetail({
   );
 
   useEffect(() => {
-    if (searchKeyword.length < 2) return;
+    if (searchKeyword.length < 2) {
+      clearSearchResults();
+      setHasSearched(false);
+      return;
+    }
     if (justSelected.current) {
       justSelected.current = false;
       return;
@@ -87,7 +91,7 @@ export default function AddressMapDetail({
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
-  }, [searchKeyword, searchLocation]);
+  }, [searchKeyword, searchLocation, clearSearchResults]);
 
   const handleTapMap = useCallback(
     (event: { latitude: number; longitude: number }) => {
@@ -138,13 +142,7 @@ export default function AddressMapDetail({
             <TextInput
               placeholder='게스트하우스 이름, 주소 검색'
               value={searchKeyword}
-              onChangeText={(text) => {
-                setSearchKeyword(text);
-                if (text.length === 0) {
-                  clearSearchResults();
-                  setHasSearched(false);
-                }
-              }}
+              onChangeText={setSearchKeyword}
               onSubmitEditing={() => handleSearch(searchKeyword)}
               className='flex-1 text-[15px]'
               returnKeyType='search'
