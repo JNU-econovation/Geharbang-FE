@@ -14,6 +14,18 @@ interface ParlorTypeProps extends SetSectionYPositionProps {
   parlorType?: RoomsInfo[];
 }
 
+const renderRoomTypeIcon = (type: string) => {
+  if (type === "남성전용") {
+    return <Man width={12} height={12} />;
+  }
+
+  if (type === "여성전용") {
+    return <Girl width={12} height={12} />;
+  }
+
+  return <View className='w-3 h-3 rounded-full bg-[#99a1af]' />;
+};
+
 export default function ParlorType({
   setSectionYPositions,
   parlorType,
@@ -35,16 +47,12 @@ export default function ParlorType({
             height={200}
             type={true}
             page={true}
-            headCountType={room.headCountType}
+            headCount={room.headCount}
           />
 
           <View className='p-4 gap-2'>
             <View className='flex-row items-center gap-3'>
-              {room.type === "남성전용" ? (
-                <Man width={12} height={12} />
-              ) : (
-                <Girl width={12} height={12} />
-              )}
+              {renderRoomTypeIcon(room.type)}
               <TextSize
                 content={`${room.type} ${room.name}`}
                 color='#101828'

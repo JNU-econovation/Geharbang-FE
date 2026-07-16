@@ -90,8 +90,20 @@ export function useGuestHouseStep4Validation(step4Data: Step4Data) {
     }
 
     if (!room.occupancy) {
-      newErrors.occupancy = "객실 인원을 선택해주세요";
+      newErrors.occupancy = "객실 인원을 입력해주세요";
       isValid = false;
+    } else {
+      const occupancyNumber = parseInt(room.occupancy.replace(/[^0-9]/g, ""), 10);
+      if (isNaN(occupancyNumber)) {
+        newErrors.occupancy = "유효한 객실 인원을 입력해주세요";
+        isValid = false;
+      } else if (occupancyNumber <= 0) {
+        newErrors.occupancy = "객실 인원은 1명 이상이어야 합니다";
+        isValid = false;
+      } else if (occupancyNumber > 99) {
+        newErrors.occupancy = "객실 인원이 너무 많습니다";
+        isValid = false;
+      }
     }
 
     if (!room.checkInTime) {

@@ -8,7 +8,6 @@ import { File } from "@/src/types/File";
 import {
   BUTTON_LABELS,
   FORM_DESCRIPTIONS,
-  OCCUPANCY_OPTIONS,
   PLACEHOLDERS,
   ROOM_TYPE_COLORS,
   ROOM_TYPES,
@@ -41,8 +40,10 @@ const FormLabel = ({
   </View>
 );
 
-type RoomType = "여성 전용 도미토리" | "남성 전용 도미토리";
-type Occupancy = "1인실" | "2인실" | "3인이상";
+type RoomType = "여성 전용 도미토리" | "남성 전용 도미토리" | "기타";
+
+const normalizeOccupancyInput = (value: string) =>
+  value.replace(/[^0-9]/g, "");
 
 const SelectButton = ({
   label,
@@ -111,7 +112,7 @@ export default function AddRoomForm() {
 
   const [roomName, setRoomName] = useState("");
   const [roomType, setRoomType] = useState<RoomType | null>(null);
-  const [occupancy, setOccupancy] = useState<Occupancy | null>(null);
+  const [occupancy, setOccupancy] = useState("");
   const [checkInTime, setCheckInTime] = useState(getDefaultCheckInTime());
   const [checkOutTime, setCheckOutTime] = useState(getDefaultCheckOutTime());
   const [price, setPrice] = useState("");
@@ -123,7 +124,7 @@ export default function AddRoomForm() {
       if (existingRoom) {
         setRoomName(existingRoom.name);
         setRoomType(existingRoom.type);
-        setOccupancy(existingRoom.occupancy);
+        setOccupancy(normalizeOccupancyInput(existingRoom.occupancy));
         setCheckInTime(existingRoom.checkInTime);
         setCheckOutTime(existingRoom.checkOutTime);
         setPrice(existingRoom.price);
@@ -136,7 +137,7 @@ export default function AddRoomForm() {
     id: "",
     name: roomName,
     type: roomType || ("여성 전용 도미토리" as RoomType),
-    occupancy: occupancy || ("1인실" as Occupancy),
+    occupancy: occupancy || "1",
     checkInTime,
     checkOutTime,
     price,
@@ -180,7 +181,7 @@ export default function AddRoomForm() {
     const validationData = {
       ...roomData,
       type: roomType,
-      occupancy: occupancy,
+      occupancy,
     };
 
     const isValid = validateRoomForm(validationData as any);
@@ -206,7 +207,7 @@ export default function AddRoomForm() {
   const resetForm = () => {
     setRoomName("");
     setRoomType(null);
-    setOccupancy(null);
+    setOccupancy("");
     setCheckInTime(getDefaultCheckInTime());
     setCheckOutTime(getDefaultCheckOutTime());
     setPrice("");
@@ -296,32 +297,20 @@ export default function AddRoomForm() {
             {/* 객실 인원 */}
             <View ref={fieldRefs.occupancy}>
               <FormLabel text='객실 인원' required />
-              <View className='flex-row gap-2 mt-2'>
-                {OCCUPANCY_OPTIONS.map((label) => (
-                  <TouchableOpacity
-                    key={label}
-                    onPress={() => {
-                      setOccupancy(label);
-                      clearRoomError("occupancy");
-                    }}
-                    className={`flex-1 h-11 rounded-lg border justify-center items-center ${
-                      occupancy === label
-                        ? "bg-sky-50 border-sky-500"
-                        : "bg-white border-gray-200"
-                    }`}
-                  >
-                    <Text
-                      className={`text-sm ${
-                        occupancy === label
-                          ? "text-sky-500 font-medium"
-                          : "text-[#364153]"
-                      }`}
-                    >
-                      {label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+              <TextInput
+                className={`w-full h-12 px-4 rounded-lg border text-sm mt-2 ${
+                  roomErrors.occupancy ? "border-red-500" : "border-gray-200"
+                }`}
+                placeholder='예: 4'
+                placeholderTextColor={ROOM_TYPE_COLORS.PLACEHOLDER}
+                value={occupancy}
+                keyboardType='number-pad'
+                onChangeText={(text) => {
+                  setOccupancy(normalizeOccupancyInput(text));
+                  clearRoomError("occupancy");
+                }}
+                onFocus={() => clearRoomError("occupancy")}
+              />
               {roomErrors.occupancy && (
                 <Text className='text-red-500 text-xs mt-1'>
                   {roomErrors.occupancy}

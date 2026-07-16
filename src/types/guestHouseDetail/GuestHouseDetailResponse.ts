@@ -42,7 +42,7 @@ export interface PartiesInfo {
 export interface RoomsInfo {
   name: string;
   type: string;
-  headCountType: string;
+  headCount: number;
   checkInTime: string;
   checkOutTime: string;
   pricePerNight: number;
