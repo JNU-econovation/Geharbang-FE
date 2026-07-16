@@ -73,12 +73,6 @@ export default function TabLayout() {
             <TabBarIcon name='map-outline' color={color} />
           ),
         }}
-        listeners={{
-          tabPress: (event) => {
-            event.preventDefault();
-            showComingSoonAlert();
-          },
-        }}
       />
       <Tabs.Screen
         name='ai'
