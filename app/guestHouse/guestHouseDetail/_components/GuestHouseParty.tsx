@@ -9,6 +9,7 @@ import WideParty from "@/public/svgs/GuestHouse/wideparty.svg";
 import GehaImage from "@/app/step/stepDetail/_components/GehaInfo/GehaImage";
 import SectionYPosition from "@/app/step/stepDetail/_components/SectionYPosition";
 import TextSize from "@/src/components/ui/TextSize";
+import { formatMoodLabel } from "@/src/utils/mood";
 import { PartiesInfo } from "@/src/types/guestHouseDetail/GuestHouseDetailResponse";
 import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
 import { PARTY_TYPE_LABEL } from "@/src/utils/constants/partyData";
@@ -88,7 +89,7 @@ export default function GuestHouseParty({
               <View className='flex-row items-center gap-3'>
                 <WideParty width={14} height={14} color='#99A1AF' />
                 <TextSize
-                  content={`파티 분위기: ${party.moods.join(" , ")}`}
+                  content={`파티 분위기: ${party.moods.map(formatMoodLabel).join(" , ")}`}
                   color='#101828'
                   size={14}
                 />

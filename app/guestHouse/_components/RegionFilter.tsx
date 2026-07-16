@@ -16,11 +16,11 @@ export default function RegionFilter({
   return (
     <View className='flex-row flex-wrap gap-2'>
       {REGION_OPTIONS.map((region) => {
-        const isSelected = selectedRegions.includes(region);
+        const isSelected = selectedRegions.includes(region.value);
         return (
           <Pressable
-            key={region}
-            onPress={() => onToggle("region", region)}
+            key={region.value}
+            onPress={() => onToggle("region", region.value)}
             className={`flex-row items-center gap-2 p-3 rounded-lg border ${
               isSelected
                 ? "border-primary-blue bg-blue-50"
@@ -29,7 +29,7 @@ export default function RegionFilter({
             style={{ width: "48%" }}
           >
             <Checkbox checked={isSelected} size='md' />
-            <TextSize size={14} content={region} />
+            <TextSize size={14} content={region.label} />
           </Pressable>
         );
       })}

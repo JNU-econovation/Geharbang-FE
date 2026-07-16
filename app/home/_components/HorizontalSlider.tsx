@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { ScrollView } from "react-native";
 
 interface HorizontalSliderProps<T> {
-  data: T[];
+  data: readonly T[];
   renderItem: (item: T) => ReactNode;
   renderMoreCard?: ReactNode;
 }

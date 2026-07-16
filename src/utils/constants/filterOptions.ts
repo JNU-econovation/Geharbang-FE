@@ -1,11 +1,11 @@
 // 공통
 export const REGION_OPTIONS = [
-  "제주시",
-  "서귀포시",
-  "서부권",
-  "동부권",
-  "도서지역",
-  "중문_대정",
+  { value: "제주시", label: "제주시" },
+  { value: "서귀포시", label: "서귀포시" },
+  { value: "중문", label: "중문" },
+  { value: "성산_구좌", label: "성산/구좌" },
+  { value: "애월_협재", label: "애월/협재" },
+  { value: "우도_기타", label: "우도/기타" },
 ] as const;
 
 export const SORT_OPTIONS = [
@@ -38,14 +38,17 @@ export const GENDER_OPTIONS = ["무관", "남", "여"] as const;
 
 // 게하 목록
 export const MOOD_OPTIONS = [
+  { label: "#바닷가", value: "바닷가" },
+  { label: "#동물", value: "동물" },
+  { label: "#자연∙숲", value: "자연_숲" },
+  { label: "#대규모파티", value: "대규모파티" },
+  { label: "#소규모파티", value: "소규모파티" },
   { label: "#조용한", value: "조용한" },
-  { label: "#사교적", value: "사교적" },
-  { label: "#힐링", value: "힐링" },
-  { label: "#사색", value: "사색" },
   { label: "#활발한", value: "활발한" },
-  { label: "#잔잔한", value: "잔잔한" },
-  { label: "#감성", value: "감성" },
-  { label: "#휴식", value: "휴식" },
+  { label: "#감성∙느좋", value: "감성_느좋" },
+  { label: "#파티 X", value: "파티_X" },
+  { label: "#솔로", value: "솔로" },
+  { label: "#한달살이", value: "한달살이" },
 ];
 
 export const ROOM_PRICE_OPTIONS = [
@@ -65,6 +68,7 @@ export const PARTY_TYPE_OPTIONS = [
 export const ROOM_TYPE_OPTIONS = [
   { label: "여성전용 도미토리", value: "여성전용" },
   { label: "남성전용 도미토리", value: "남성전용" },
+  { label: "기타", value: "기타" },
 ];
 
 export const HEAD_COUNT_TYPE_OPTIONS = [

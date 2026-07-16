@@ -18,6 +18,7 @@ import { buildAssetUrl } from "@/src/config/url";
 import { useMyApplicationStatus } from "@/src/hooks/application/myApplication/useMyApplicationStatus";
 import { useCreateChatRoom } from "@/src/hooks/chat/useChat";
 import { COLORS } from "@/src/utils/constants/colors";
+import { formatRegionLabel } from "@/src/utils/region";
 import { router } from "expo-router";
 
 type FilterType = "ALL" | "ACCEPTED";
@@ -148,7 +149,7 @@ export default function MyApplicationStatus() {
                           <TextSize
                             color='#6A7282'
                             size={13}
-                            content={applicationStatus.region}
+                            content={formatRegionLabel(applicationStatus.region)}
                           />
                         </View>
                       </View>

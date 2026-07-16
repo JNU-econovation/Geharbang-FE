@@ -51,10 +51,10 @@ export function SlideSectionLayout<
         data={regions}
         renderItem={(region) => (
           <RegionTab
-            key={region}
-            label={region}
-            selected={selectedRegion === region}
-            onPress={() => setSelectedRegion(region)}
+            key={region.value}
+            label={region.label}
+            selected={selectedRegion === region.value}
+            onPress={() => setSelectedRegion(region.value)}
           />
         )}
       />

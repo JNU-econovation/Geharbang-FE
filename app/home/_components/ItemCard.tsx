@@ -11,6 +11,7 @@ import {
 } from "@/src/types/models/home/GuestHouseCard";
 import { COLORS } from "@/src/utils/constants/colors";
 import { buildAssetUrl } from "@/src/config/url";
+import { formatMoodLabel } from "@/src/utils/mood";
 
 interface ItemCardProps {
   item: StepRecommendationCard | guestHouseRecommendationCard;
@@ -60,7 +61,7 @@ export function ItemCard({ item, type }: ItemCardProps) {
             {item.tags.map((tag, index) => (
               <Tag
                 key={index}
-                label={tag}
+                label={isGuestHouse ? formatMoodLabel(tag) : tag}
                 variant='info'
                 size='md'
                 prefix='#'

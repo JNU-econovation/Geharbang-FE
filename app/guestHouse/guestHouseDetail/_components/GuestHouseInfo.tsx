@@ -5,6 +5,7 @@ import CheckMark from "@/public/svgs/GuestHouse/checkMark.svg";
 import Coffee from "@/public/svgs/GuestHouse/coffee.svg";
 import Wind from "@/public/svgs/GuestHouse/wind.svg";
 import TextSize from "@/src/components/ui/TextSize";
+import { formatMoodLabel } from "@/src/utils/mood";
 import { SetSectionYPositionProps } from "@/src/types/models/stepDetail/SetSectionYPosition";
 import { COLORS } from "@/src/utils/constants/colors";
 
@@ -56,7 +57,7 @@ export default function GuestHouseInfo({
               <TextSize
                 color={`${COLORS.PRIMARY.BLUE}`}
                 size={14}
-                content={`#${mood}`}
+                content={`#${formatMoodLabel(mood)}`}
               />
             </View>
           ))}
