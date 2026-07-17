@@ -136,8 +136,8 @@ export default function AddRoomForm() {
   const roomData = {
     id: "",
     name: roomName,
-    type: roomType || ("여성 전용 도미토리" as RoomType),
-    occupancy: occupancy || "1",
+    type: roomType,
+    occupancy,
     checkInTime,
     checkOutTime,
     price,
@@ -178,13 +178,7 @@ export default function AddRoomForm() {
   };
 
   const handleAddRoom = () => {
-    const validationData = {
-      ...roomData,
-      type: roomType,
-      occupancy,
-    };
-
-    const isValid = validateRoomForm(validationData as any);
+    const isValid = validateRoomForm(roomData);
     if (!isValid) {
       scrollToFirstError(roomErrors);
       return;
@@ -192,6 +186,7 @@ export default function AddRoomForm() {
 
     const roomPayload = {
       ...roomData,
+      type: roomType as RoomType,
       id: isEditMode ? editId : Date.now().toString(),
     };
 

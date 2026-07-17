@@ -1,6 +1,10 @@
 import { Room, Step4Data } from "@/src/types/models/guestHouse/enroll";
 import { useState } from "react";
 
+type ValidatableRoom = Omit<Room, "type"> & {
+  type: Room["type"] | null;
+};
+
 interface FormErrors {
   rooms: string;
 }
@@ -25,7 +29,9 @@ const initialRoomErrors: RoomAllErrors = {
   images: "",
 };
 
-export function useGuestHouseStep4Validation(step4Data: Step4Data) {
+export function useGuestHouseStep4Validation(
+  step4Data: { rooms: ValidatableRoom[] } | Step4Data
+) {
   const [errors, setErrors] = useState<FormErrors>({
     rooms: "",
   });
@@ -42,7 +48,10 @@ export function useGuestHouseStep4Validation(step4Data: Step4Data) {
   };
 
   //개별 필드 검사
-  const validateRoomField = (room: Room, field: "name" | "price"): void => {
+  const validateRoomField = (
+    room: ValidatableRoom,
+    field: "name" | "price"
+  ): void => {
     let errorMsg = "";
 
     if (field === "name") {
@@ -72,7 +81,7 @@ export function useGuestHouseStep4Validation(step4Data: Step4Data) {
   };
 
   // 저장 버튼용: 모든 필드 검사
-  const validateRoomForm = (room: Room): boolean => {
+  const validateRoomForm = (room: ValidatableRoom): boolean => {
     let isValid = true;
     const newErrors: RoomAllErrors = { ...initialRoomErrors };
 
