@@ -1,4 +1,7 @@
 {
+  "cli": {
+    "appVersionSource": "local"
+  },
   "build": {
     "development": {
       "developmentClient": true,
@@ -25,6 +28,15 @@
       },
       "android": {
         "buildType": "app-bundle"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "everland0714@gmail.com",
+        "ascAppId": "6762007816",
+        "appleTeamId": "C3559RZ2AV"
       }
     }
   }
