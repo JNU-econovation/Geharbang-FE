@@ -14,7 +14,7 @@ export async function localSearch(query: string): Promise<NaverAddressResult[]> 
     const response = await axiosPublic.get<NaverAddressResult[]>("/api/v1/maps/local-search", {
       params: { query },
     });
-    return response.data;
+    return response.data ?? [];
   } catch (e) {
     console.warn("[NaverMap] localSearch 오류:", e);
     return [];
@@ -28,7 +28,7 @@ export async function geocodeAddress(query: string): Promise<NaverAddressResult[
     const response = await axiosPublic.get<NaverAddressResult[]>("/api/v1/maps/geocode", {
       params: { query },
     });
-    return response.data;
+    return response.data ?? [];
   } catch (e) {
     console.warn("[NaverMap] geocode 오류:", e);
     return [];
@@ -46,7 +46,7 @@ export async function reverseGeocode(
         params: { lat, lng },
       },
     );
-    return response.data;
+    return response.data ?? { roadAddress: "", jibunAddress: "" };
   } catch (e) {
     console.warn("[NaverMap] reverseGeocode 오류:", e);
     return { roadAddress: "", jibunAddress: "" };
