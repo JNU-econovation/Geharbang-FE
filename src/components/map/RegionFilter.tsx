@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, Text } from 'react-native';
-import { regions } from '@/src/utils/constants/regions';
+import { REGION_OPTIONS } from '@/src/utils/constants/filterOptions';
 import { COLORS } from '@/src/utils/constants/colors';
 
 interface RegionFilterProps {
@@ -7,15 +7,7 @@ interface RegionFilterProps {
   onSelect: (region: string | null) => void;
 }
 
-const REGION_LABELS: Record<string, string> = {
-  제주시: '제주시',
-  서귀포시: '서귀포시',
-  서부권: '서부권',
-  동부권: '동부권',
-  중문_대정: '중문·대정',
-};
-
-const MAP_REGIONS = regions.filter((r) => r !== '도서지역');
+const MAP_REGIONS = REGION_OPTIONS;
 
 export default function RegionFilter({ selectedRegion, onSelect }: RegionFilterProps) {
   return (
@@ -26,11 +18,11 @@ export default function RegionFilter({ selectedRegion, onSelect }: RegionFilterP
       style={{ marginTop: 8 }}
     >
       {MAP_REGIONS.map((region) => {
-        const isSelected = selectedRegion === region;
+        const isSelected = selectedRegion === region.value;
         return (
           <Pressable
-            key={region}
-            onPress={() => onSelect(isSelected ? null : region)}
+            key={region.value}
+            onPress={() => onSelect(isSelected ? null : region.value)}
             style={{
               paddingHorizontal: 14,
               paddingVertical: 7,
@@ -47,7 +39,7 @@ export default function RegionFilter({ selectedRegion, onSelect }: RegionFilterP
                 color: isSelected ? 'white' : COLORS.GRAY.TEXT,
               }}
             >
-              {REGION_LABELS[region] ?? region}
+              {region.label}
             </Text>
           </Pressable>
         );

@@ -24,9 +24,10 @@ const JEJU_CENTER = { latitude: 33.3617, longitude: 126.5292, zoom: 9 };
 const REGION_CAMERAS: Record<string, { latitude: number; longitude: number; zoom: number }> = {
   제주시: { latitude: 33.4996, longitude: 126.5312, zoom: 12 },
   서귀포시: { latitude: 33.2541, longitude: 126.5600, zoom: 12 },
-  서부권: { latitude: 33.4139, longitude: 126.2663, zoom: 11 },
-  동부권: { latitude: 33.4440, longitude: 126.9229, zoom: 11 },
-  중문_대정: { latitude: 33.2510, longitude: 126.4130, zoom: 11 },
+  중문: { latitude: 33.2510, longitude: 126.4130, zoom: 11 },
+  성산_구좌: { latitude: 33.4440, longitude: 126.9229, zoom: 11 },
+  애월_협재: { latitude: 33.4139, longitude: 126.2663, zoom: 11 },
+  우도_기타: { latitude: 33.5054, longitude: 126.9559, zoom: 12 },
 };
 
 const NORMAL_W = 36;
