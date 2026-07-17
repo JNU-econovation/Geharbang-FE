@@ -38,7 +38,7 @@ if (sentryOrg && sentryProject && sentryAuthToken) {
 const config: ExpoConfig = {
   name: "게하르방",
   slug: "Geharbang-FE",
-  version: "1.2.2",
+  version: "1.2.3",
   orientation: "portrait",
   icon: "./assets/icon.png",
   scheme: "geharbang",
@@ -49,6 +49,7 @@ const config: ExpoConfig = {
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.econovation.geharbang",
+    buildNumber: "11",
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
 
@@ -61,7 +62,7 @@ const config: ExpoConfig = {
   },
 
   android: {
-    versionCode: 10,
+    versionCode: 11,
     softwareKeyboardLayoutMode: "resize",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
