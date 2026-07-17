@@ -47,9 +47,9 @@ const config: ExpoConfig = {
   newArchEnabled: true,
 
   ios: {
-    supportsTablet: true,
+    supportsTablet: false,
     bundleIdentifier: "com.econovation.geharbang",
-    buildNumber: "11",
+    buildNumber: "12",
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
 
@@ -62,7 +62,7 @@ const config: ExpoConfig = {
   },
 
   android: {
-    versionCode: 11,
+    versionCode: 12,
     softwareKeyboardLayoutMode: "resize",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
