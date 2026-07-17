@@ -102,7 +102,6 @@ const config: ExpoConfig = {
       projectId: "81bf359a-a232-4d2e-bf98-50c02b62485d",
     },
     naverMapClientId: process.env.NAVER_MAP_CLIENT_ID,
-    naverMapClientSecret: process.env.NAVER_MAP_CLIENT_SECRET,
   },
 };
 
