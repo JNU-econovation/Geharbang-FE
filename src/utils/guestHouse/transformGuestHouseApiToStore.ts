@@ -30,7 +30,7 @@ const reverseRoomType = (type: string): '여성 전용 도미토리' | '남성 �
   return '남성 전용 도미토리';
 };
 
-const reverseOccupancy = (headCount?: number): string => String(headCount ?? 1);
+const reverseOccupancy = (headCount?: number): string => String(headCount || 1);
 
 const reverseAmenity = (amenity: string): string => amenity.replace(/_/g, ' ');
 

@@ -44,7 +44,7 @@ export default function GehaImage({
         <View className='absolute top-3 right-3 z-10'>
           <View className='rounded-xl py-2 px-3 bg-black/70 flex-row gap-1'>
             <Bed width={16} height={16} />
-            <TextSize color='#ffffff' size={14} content={`${headCount ?? 1}인`} />
+            <TextSize color='#ffffff' size={14} content={`${headCount || 1}인`} />
           </View>
         </View>
       )}
