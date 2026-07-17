@@ -3,6 +3,8 @@ import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
 import { GuestHousePost } from "@/src/types/models/guestHouse/types";
 import { StaffRecruitmentPost } from "@/src/types/models/step/types";
 import { buildAssetUrl } from "@/src/config/url";
+import { formatMoodLabel } from "@/src/utils/mood";
+import { formatRegionLabel } from "@/src/utils/region";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -75,13 +77,13 @@ export default function GuestHouseCard({
             {displayTitle}
           </Text>
           <Text className='text-[#495565] text-xs font-normal leading-[18px]'>
-            {item.region}
+            {formatRegionLabel(item.region)}
           </Text>
           <View className='mt-1.5 flex-row gap-1'>
             {item.tags.map((tag, index) => (
               <Tag
                 key={index}
-                label={tag}
+                label={isStepRecruitment ? tag : formatMoodLabel(tag)}
                 variant='info'
                 size='sm'
                 prefix='#'

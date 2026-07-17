@@ -2,6 +2,7 @@ import { Gender } from "@/src/types/Gender";
 import { PerWorkingDay } from "@/src/types/models/stepRecruitment/PerWorkingDay";
 
 import { Option } from "@/src/types/Option";
+import { REGION_OPTIONS } from "./filterOptions";
 
 export const STYLE_OPTIONS: Option[] = [
   { value: "친근한", label: "#친근한" },
@@ -33,14 +34,7 @@ export const DAYS_OF_WEEK: Option[] = [
   { value: "일", label: "일" },
 ];
 
-export const REGION_OPTION: Option[] = [
-  { value: "제주시", label: "제주시" },
-  { value: "서귀포시", label: "서귀포시" },
-  { value: "서부권", label: "서부권" },
-  { value: "동부권", label: "동부권" },
-  { value: "중문_대정", label: "중문_대정" },
-  { value: "도서지역", label: "도서지역" },
-];
+export const REGION_OPTION: Option[] = [...REGION_OPTIONS];
 
 export const WORKING_PERIOD = [
   { value: "단기", label: "단기", content: "4주 이하" },

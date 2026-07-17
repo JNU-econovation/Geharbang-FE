@@ -20,8 +20,8 @@ export interface Party {
 export interface Room {
   id: string;
   name: string;
-  type: '여성 전용 도미토리' | '남성 전용 도미토리';
-  occupancy: '1인실' | '2인실' | '3인이상';
+  type: '여성 전용 도미토리' | '남성 전용 도미토리' | '기타';
+  occupancy: string;
   checkInTime: Date;
   checkOutTime: Date;
   price: string;

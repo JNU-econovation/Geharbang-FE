@@ -1,6 +1,7 @@
 import { View } from "react-native";
 
 import TextSize from "@/src/components/ui/TextSize";
+import { formatRegionLabel } from "@/src/utils/region";
 
 import GehaLocation from "@/public/svgs/StepDetail/gehaLocation.svg";
 import GehaName from "@/public/svgs/StepDetail/gehaName.svg";
@@ -34,7 +35,7 @@ export default function GehaInfo({
 
       <GehaDetailInfo
         icon={<GehaLocation width={14} height={14} />}
-        content={region}
+        content={formatRegionLabel(region)}
       />
     </>
   );

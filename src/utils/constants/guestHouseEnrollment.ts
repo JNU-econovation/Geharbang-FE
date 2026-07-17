@@ -1,3 +1,5 @@
+import { MOOD_OPTIONS } from './filterOptions';
+
 /**
  * 게스트하우스 등록 관련 상수
  */
@@ -20,16 +22,7 @@ export const FACILITY_OPTIONS = [
 /**
  * 분위기 옵션
  */
-export const ATMOSPHERE_OPTIONS = [
-  '감성',
-  '조용한',
-  '휴식',
-  '활발한',
-  '사교적',
-  '힐링',
-  '사색',
-  '잔잔한',
-] as const;
+export const ATMOSPHERE_OPTIONS = MOOD_OPTIONS;
 
 /**
  * 파티 타입 옵션
@@ -70,12 +63,12 @@ export const ROOM_TYPES = [
     value: '남성 전용 도미토리',
     color: '#3b82f6',
   },
+  {
+    label: '기타',
+    value: '기타',
+    color: '#99a1af',
+  },
 ] as const;
-
-/**
- * 객실 인원 옵션
- */
-export const OCCUPANCY_OPTIONS = ['1인실', '2인실', '3인이상'] as const;
 
 // ========================================
 // 업로드 제한
@@ -234,6 +227,7 @@ export const FORM_DESCRIPTIONS = {
 export const ROOM_TYPE_COLORS = {
   FEMALE: '#fa2b36',
   MALE: '#3b82f6',
+  ETC: '#99a1af',
   PLACEHOLDER: '#99a1af',
 } as const;
 
@@ -245,4 +239,3 @@ export type FacilityOption = (typeof FACILITY_OPTIONS)[number];
 export type AtmosphereOption = (typeof ATMOSPHERE_OPTIONS)[number];
 export type PartyType = (typeof PARTY_TYPES)[number];
 export type DayOfWeek = (typeof DAYS_OF_WEEK_SIMPLE)[number];
-export type OccupancyOption = (typeof OCCUPANCY_OPTIONS)[number];

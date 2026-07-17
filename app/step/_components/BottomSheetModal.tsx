@@ -78,17 +78,17 @@ export default function BottomSheetModal({
           <View className='flex-row flex-wrap gap-2'>
             {REGION_OPTIONS.map((region) => (
               <TouchableOpacity
-                key={region}
-                onPress={() => toggleRegion(region)}
+                key={region.value}
+                onPress={() => toggleRegion(region.value)}
                 className={`flex-row items-center gap-2 p-3 rounded-lg border ${
-                  filters.region.includes(region)
+                  filters.region.includes(region.value)
                     ? "border-primary-blue bg-blue-50"
                     : "border-gray-200"
                 }`}
                 style={{ width: "48%" }}
               >
-                <Checkbox checked={filters.region.includes(region)} size='md' />
-                <TextSize size={14} content={region} />
+                <Checkbox checked={filters.region.includes(region.value)} size='md' />
+                <TextSize size={14} content={region.label} />
               </TouchableOpacity>
             ))}
           </View>

@@ -47,13 +47,13 @@ const AtmosphereSelector = ({
       <View className="bg-white rounded-xl border border-gray-200 p-4">
         <View className="flex-row flex-wrap">
           {ATMOSPHERE_OPTIONS.map((atmosphereOption) => {
-            const isSelected = step2Data.atmosphere.includes(atmosphereOption);
+            const isSelected = step2Data.atmosphere.includes(atmosphereOption.value);
             return (
               <SelectableTag
-                key={atmosphereOption}
-                label={`#${atmosphereOption}`}
+                key={atmosphereOption.value}
+                label={atmosphereOption.label}
                 selected={isSelected}
-                onPress={() => toggleAtmosphere(atmosphereOption)}
+                onPress={() => toggleAtmosphere(atmosphereOption.value)}
               />
             );
           })}

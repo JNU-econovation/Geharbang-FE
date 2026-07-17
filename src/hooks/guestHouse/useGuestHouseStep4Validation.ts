@@ -1,6 +1,10 @@
 import { Room, Step4Data } from "@/src/types/models/guestHouse/enroll";
 import { useState } from "react";
 
+type ValidatableRoom = Omit<Room, "type"> & {
+  type: Room["type"] | null;
+};
+
 interface FormErrors {
   rooms: string;
 }
@@ -25,7 +29,9 @@ const initialRoomErrors: RoomAllErrors = {
   images: "",
 };
 
-export function useGuestHouseStep4Validation(step4Data: Step4Data) {
+export function useGuestHouseStep4Validation(
+  step4Data: { rooms: ValidatableRoom[] } | Step4Data
+) {
   const [errors, setErrors] = useState<FormErrors>({
     rooms: "",
   });
@@ -42,7 +48,10 @@ export function useGuestHouseStep4Validation(step4Data: Step4Data) {
   };
 
   //개별 필드 검사
-  const validateRoomField = (room: Room, field: "name" | "price"): void => {
+  const validateRoomField = (
+    room: ValidatableRoom,
+    field: "name" | "price"
+  ): void => {
     let errorMsg = "";
 
     if (field === "name") {
@@ -72,7 +81,7 @@ export function useGuestHouseStep4Validation(step4Data: Step4Data) {
   };
 
   // 저장 버튼용: 모든 필드 검사
-  const validateRoomForm = (room: Room): boolean => {
+  const validateRoomForm = (room: ValidatableRoom): boolean => {
     let isValid = true;
     const newErrors: RoomAllErrors = { ...initialRoomErrors };
 
@@ -90,8 +99,20 @@ export function useGuestHouseStep4Validation(step4Data: Step4Data) {
     }
 
     if (!room.occupancy) {
-      newErrors.occupancy = "객실 인원을 선택해주세요";
+      newErrors.occupancy = "객실 인원을 입력해주세요";
       isValid = false;
+    } else {
+      const occupancyNumber = parseInt(room.occupancy.replace(/[^0-9]/g, ""), 10);
+      if (isNaN(occupancyNumber)) {
+        newErrors.occupancy = "유효한 객실 인원을 입력해주세요";
+        isValid = false;
+      } else if (occupancyNumber <= 0) {
+        newErrors.occupancy = "객실 인원은 1명 이상이어야 합니다";
+        isValid = false;
+      } else if (occupancyNumber > 99) {
+        newErrors.occupancy = "객실 인원이 너무 많습니다";
+        isValid = false;
+      }
     }
 
     if (!room.checkInTime) {

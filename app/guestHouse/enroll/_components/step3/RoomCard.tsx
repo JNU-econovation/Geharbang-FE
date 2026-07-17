@@ -4,12 +4,29 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import { formatTime } from '@/src/utils/common/dateFormatter';
 
+const getRoomTypeColor = (type: string) => {
+  if (type === '여성 전용 도미토리') {
+    return '#fa2b36';
+  }
+
+  if (type === '남성 전용 도미토리') {
+    return '#3b82f6';
+  }
+
+  return '#99a1af';
+};
+
+const formatOccupancyLabel = (occupancy: string) => {
+  const count = occupancy.replace(/[^0-9]/g, '');
+  return count ? `${count}인` : occupancy;
+};
+
 interface RoomCardProps {
   room: {
     id: string;
     name: string;
-    type: '여성 전용 도미토리' | '남성 전용 도미토리';
-    occupancy: '1인실' | '2인실' | '3인이상';
+    type: '여성 전용 도미토리' | '남성 전용 도미토리' | '기타';
+    occupancy: string;
     checkInTime: Date;
     checkOutTime: Date;
     price: string;
@@ -75,12 +92,11 @@ const RoomCard = ({
             <View
               className="w-2 h-2 rounded-full"
               style={{
-                backgroundColor:
-                  room.type === '여성 전용 도미토리' ? '#fa2b36' : '#3b82f6',
+                backgroundColor: getRoomTypeColor(room.type),
               }}
             />
             <Text className="text-[#6a7282] text-xs">
-              {room.type} · {room.occupancy}
+              {room.type} · {formatOccupancyLabel(room.occupancy)}
             </Text>
           </View>
         </View>

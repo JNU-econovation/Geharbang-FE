@@ -24,19 +24,13 @@ const reversePartyType = (type: string): string => {
   return map[type] ?? type;
 };
 
-const reverseRoomType = (type: string): '여성 전용 도미토리' | '남성 전용 도미토리' => {
+const reverseRoomType = (type: string): '여성 전용 도미토리' | '남성 전용 도미토리' | '기타' => {
   if (type === '여성전용') return '여성 전용 도미토리';
+  if (type === '기타') return '기타';
   return '남성 전용 도미토리';
 };
 
-const reverseOccupancy = (headCountType: string): '1인실' | '2인실' | '3인이상' => {
-  const map: Record<string, '1인실' | '2인실' | '3인이상'> = {
-    '_1인실': '1인실',
-    '_2인실': '2인실',
-    '_3인이상': '3인이상',
-  };
-  return map[headCountType] ?? '1인실';
-};
+const reverseOccupancy = (headCount?: number): string => String(headCount || 1);
 
 const reverseAmenity = (amenity: string): string => amenity.replace(/_/g, ' ');
 
@@ -59,7 +53,7 @@ const transformRoom = (room: RoomsInfo, index: number): Room => ({
   id: `${Date.now()}_${index}`,
   name: room.name,
   type: reverseRoomType(room.type),
-  occupancy: reverseOccupancy(room.headCountType),
+  occupancy: reverseOccupancy(room.headCount),
   checkInTime: parseTimeString(room.checkInTime),
   checkOutTime: parseTimeString(room.checkOutTime),
   price: String(room.pricePerNight),

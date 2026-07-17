@@ -30,7 +30,7 @@ export interface PartyRequest {
 export interface RoomRequest {
   name: string;
   type: string;
-  headCountType: string;
+  headCount: number;
   checkInTime: string;
   checkOutTime: string;
   pricePerNight: number;

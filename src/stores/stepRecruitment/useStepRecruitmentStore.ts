@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import { StepRecruitmentStore } from '@/src/types/store/stepRecruitmentStore';
+import { migrateLegacyRegionValue } from '@/src/utils/region';
 import { createStep1Slice, initialStep1Data } from './slice/createStep1Slice';
 import { createStep2Slice, initialStep2Data } from './slice/createStep2Slice';
 import { createStep3Slice, initialStep3Data } from './slice/createStep3Slice';
@@ -59,6 +60,16 @@ export const useStepRecruitmentStore = create<StepRecruitmentStore>()(
     {
       name: 'step-recruitment-storage',
       storage: asyncStorageWithDateReviver,
+      version: 1,
+      migrate: (persistedState) => {
+        const state = persistedState as { step1Data?: { workingRegion?: string } };
+        if (state?.step1Data?.workingRegion) {
+          state.step1Data.workingRegion = migrateLegacyRegionValue(
+            state.step1Data.workingRegion
+          );
+        }
+        return state;
+      },
     }
   )
 );

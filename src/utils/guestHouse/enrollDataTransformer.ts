@@ -27,12 +27,14 @@ const transformRoomType = (type: string): string => {
   const typeMap: Record<string, string> = {
     '여성 전용 도미토리': '여성전용',
     '남성 전용 도미토리': '남성전용',
+    기타: '기타',
   };
   return typeMap[type] || type;
 };
 
-const transformOccupancy = (occupancy: string): string => {
-  return `_${occupancy}`;
+const transformOccupancy = (occupancy: string): number => {
+  const occupancyNumber = parseInt(occupancy.replace(/[^0-9]/g, ''), 10);
+  return Number.isNaN(occupancyNumber) ? 1 : occupancyNumber;
 };
 
 const transformAmenity = (amenity: string): string => {
@@ -84,7 +86,7 @@ const transformRoom = (room: Room): RoomRequest => {
   return {
     name: room.name,
     type: transformRoomType(room.type),
-    headCountType: transformOccupancy(room.occupancy),
+    headCount: transformOccupancy(room.occupancy),
     checkInTime: formatTime(room.checkInTime),
     checkOutTime: formatTime(room.checkOutTime),
     pricePerNight: transformPrice(room.price, '1박 가격'),

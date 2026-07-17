@@ -6,6 +6,7 @@ import Tag from "@/src/components/ui/Tag/Tag";
 import TextSize from "@/src/components/ui/TextSize";
 import { COLORS } from "@/src/utils/constants/colors";
 import { buildAssetUrl } from "@/src/config/url";
+import { formatRegionLabel } from "@/src/utils/region";
 
 interface TargetPostingInfoProps {
   imageUrl: string;
@@ -33,7 +34,11 @@ export default function TargetPostingInfo({
         <Flex justify='center' items='start' gap={6}>
           <TextSize size={17} content={guestHouseName} />
           {region && (
-            <TextSize size={12} color={COLORS.GRAY.TEXT} content={region} />
+            <TextSize
+              size={12}
+              color={COLORS.GRAY.TEXT}
+              content={formatRegionLabel(region)}
+            />
           )}
           <Flex justify='start' items='center' dir='row' gap={3} wrap='wrap'>
             {tags.map((tag, index) => (

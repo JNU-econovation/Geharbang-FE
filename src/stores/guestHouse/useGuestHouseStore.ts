@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GuestHouseStore } from "@/src/types/store/guestHouseStore";
+import { migrateLegacyMoodValues } from "@/src/utils/mood";
+import { migrateLegacyRegionValue } from "@/src/utils/region";
 import {
   createStep1Slice,
   initialStep1Data,
@@ -53,6 +55,24 @@ export const useGuestHouseStore = create<GuestHouseStore>()(
     {
       name: "guesthouse-enrollment-storage",
       storage: createJSONStorage(() => AsyncStorage),
+      version: 1,
+      migrate: (persistedState) => {
+        const state = persistedState as {
+          step1Data?: { workingRegion?: string };
+          step2Data?: { atmosphere?: string[] };
+        };
+        if (state?.step1Data?.workingRegion) {
+          state.step1Data.workingRegion = migrateLegacyRegionValue(
+            state.step1Data.workingRegion
+          );
+        }
+        if (state?.step2Data?.atmosphere) {
+          state.step2Data.atmosphere = migrateLegacyMoodValues(
+            state.step2Data.atmosphere
+          );
+        }
+        return state;
+      },
     }
   )
 );
