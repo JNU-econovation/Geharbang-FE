@@ -7,6 +7,7 @@ const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN;
 
 const plugins: ExpoConfig["plugins"] = [
   "expo-router",
+  "./plugins/withNaverMapRepository",
   "expo-web-browser",
   "expo-notifications",
   [
