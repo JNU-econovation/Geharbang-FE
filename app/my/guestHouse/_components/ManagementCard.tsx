@@ -22,6 +22,7 @@ interface ManagementCardProps {
   onDelete: () => void;
   onToggleActive: () => void;
   onEdit?: () => void;
+  onReviewReport?: () => void;
 }
 
 export default function ManagementCard({
@@ -34,6 +35,7 @@ export default function ManagementCard({
   onDelete,
   onToggleActive,
   onEdit,
+  onReviewReport,
 }: ManagementCardProps) {
   const imageUri = buildAssetUrl(imageUrl);
 
@@ -118,6 +120,17 @@ export default function ManagementCard({
               onPress={() =>
                 router.push(`/my/stepRecruitment/${id}/applicationList`)
               }
+            />
+          )}
+
+          {type === "guestHouse" && onReviewReport && (
+            <Button
+              variant='blue'
+              height={40}
+              content='리뷰 리포트'
+              textColor={COLORS.PRIMARY.BLUE}
+              className='flex-1'
+              onPress={onReviewReport}
             />
           )}
         </Flex>

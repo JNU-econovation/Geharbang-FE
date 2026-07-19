@@ -1,7 +1,14 @@
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import Flex from "@/src/components/layout/Flex";
@@ -20,6 +27,7 @@ import {
   useGetMyGuestHouse,
   usePatchMyGuestHouseStatus,
 } from "@/src/hooks/myGuestHouse/useMyGuestHouse";
+import { useReviewReport } from "@/src/hooks/review/useReviews";
 import { COLORS } from "@/src/utils/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import ManagementCard from "./_components/ManagementCard";
@@ -32,6 +40,10 @@ export default function MyGuestHouse() {
     id: number;
     name: string;
   } | null>(null);
+  const [selectedReportPost, setSelectedReportPost] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
 
   const {
     data: myGuestHouseData,
@@ -41,6 +53,12 @@ export default function MyGuestHouse() {
   } = useGetMyGuestHouse();
   const { mutate: deletePost } = useDeleteMyGuestHouse();
   const { mutate: updateStatus } = usePatchMyGuestHouseStatus();
+  const {
+    data: reviewReport,
+    isLoading: isReviewReportLoading,
+    isError: isReviewReportError,
+    refetch: refetchReviewReport,
+  } = useReviewReport(selectedReportPost?.id ?? 0, !!selectedReportPost);
 
   useEffect(() => {
     if (myGuestHouseData) {
@@ -129,6 +147,12 @@ export default function MyGuestHouse() {
                     handleToggleStatus(post.id, post.isClosed)
                   }
                   onEdit={() => handleEditPress(post.id)}
+                  onReviewReport={() =>
+                    setSelectedReportPost({
+                      id: post.id,
+                      name: post.guestHouseName,
+                    })
+                  }
                 />
               ))}
             </Flex>
@@ -150,6 +174,75 @@ export default function MyGuestHouse() {
         description={`"${selectedPost?.name}"`}
         warningText='이 작업은 되돌릴 수 없습니다.'
       />
+
+      <Modal visible={!!selectedReportPost} transparent animationType='fade'>
+        <View className='flex-1 justify-end bg-black/40'>
+          <View className='max-h-[82%] bg-white rounded-t-2xl'>
+            <ScrollView contentContainerClassName='px-4 pt-5 pb-8'>
+              <View className='flex-row items-center justify-between'>
+                <View className='flex-1 pr-4'>
+                  <TextSize
+                    size={18}
+                    color='#101828'
+                    weight='700'
+                    content='리뷰 리포트'
+                  />
+                  <View className='pt-1' />
+                  <TextSize
+                    size={13}
+                    color={COLORS.GRAY.TEXT}
+                    content={selectedReportPost?.name ?? ""}
+                  />
+                </View>
+                <Pressable
+                  onPress={() => setSelectedReportPost(null)}
+                  hitSlop={8}
+                >
+                  <TextSize size={24} color={COLORS.GRAY.TEXT} content='×' />
+                </Pressable>
+              </View>
+
+              <View className='pt-5'>
+                {isReviewReportLoading ? (
+                  <View className='py-8 items-center'>
+                    <ActivityIndicator color={COLORS.PRIMARY.BLUE} />
+                  </View>
+                ) : isReviewReportError ? (
+                  <View className='py-6 items-center gap-3'>
+                    <TextSize
+                      size={14}
+                      color={COLORS.GRAY.TEXT}
+                      content='리포트를 불러오지 못했어요.'
+                    />
+                    <Pressable onPress={() => refetchReviewReport()}>
+                      <TextSize
+                        size={14}
+                        color={COLORS.PRIMARY.BLUE}
+                        content='다시 시도'
+                      />
+                    </Pressable>
+                  </View>
+                ) : (
+                  <View className='gap-3'>
+                    <View className='p-4 bg-gray-50 rounded-xl'>
+                      <TextSize
+                        size={13}
+                        color={COLORS.GRAY.TEXT}
+                        content={`분석 리뷰 수: ${reviewReport?.reviewCount ?? 0}개`}
+                      />
+                    </View>
+                    <Text
+                      className='text-[14px] leading-6 text-[#364153]'
+                    >
+                      {reviewReport?.report ?? "아직 생성된 리포트가 없어요."}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </CustomSafeAreaView>
   );
 }
