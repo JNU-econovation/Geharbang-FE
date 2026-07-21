@@ -1,6 +1,5 @@
 import React from "react";
 
-import Step from "@/public/svgs/Home/step.svg";
 import { useStepRecommendation } from "@/src/hooks/home/useStepRecommendation ";
 import { SlideSectionLayout } from "./SlideSectionLayout";
 
@@ -19,8 +18,8 @@ export function StepRecruitmentSection({ selectedRegion, setSelectedRegion }: St
   return (
     <SlideSectionLayout
       itemType='stepNotice'
-      title='스텝 공고 찾기'
-      icon={<Step />}
+      titleLine1='게스트하우스 스텝에'
+      titleLine2='지금 지원해보세요'
       data={data}
       linkPath='/step'
       selectedRegion={selectedRegion}

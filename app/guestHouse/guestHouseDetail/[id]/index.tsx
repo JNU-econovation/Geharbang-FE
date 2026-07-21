@@ -97,7 +97,7 @@ export default function GuestHouseDetail() {
               : undefined
           }
           isWished={isWished}
-          onWishToggle={() => toggleWish(isWished)}
+          onWishToggle={() => requireLogin(() => toggleWish(isWished))}
         />
       </View>
       {isPending ? (
@@ -131,7 +131,7 @@ export default function GuestHouseDetail() {
           >
             <GehaImage images={data?.imageUrls} height={280} page={true} />
 
-            <View className='px-4 pt-4 pb-8'>
+            <View className='px-4 pt-4 pb-4'>
               <GehaInfo title={data?.guestHouseName} region={data?.region} />
             </View>
 
@@ -152,7 +152,7 @@ export default function GuestHouseDetail() {
               className='px-4'
               onLayout={(e) => setContainerOffset(e.nativeEvent.layout.y)}
             >
-              <View className='pt-10' />
+              <View className='pt-8' />
               <Address
                 setSectionYPositions={setSectionYPositions}
                 location={data?.location}

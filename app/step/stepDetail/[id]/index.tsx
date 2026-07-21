@@ -107,7 +107,7 @@ export default function StepDetail() {
           shareMessage='스텝공고를 공유해보세요!'
           onBack={fromRegistration === 'true' ? () => router.replace('/(tabs)') : undefined}
           isWished={isWished}
-          onWishToggle={() => toggleWish(isWished)}
+          onWishToggle={() => requireLogin(() => toggleWish(isWished))}
         />
       </View>
       {isPending ? (
@@ -145,7 +145,7 @@ export default function StepDetail() {
               page={true}
             />
 
-            <View className='px-4 pt-4 pb-8'>
+            <View className='px-4 pt-4 pb-5'>
               <GehaInfo
                 title={data?.title}
                 guestHouseName={data?.guestHouseName}
@@ -154,7 +154,7 @@ export default function StepDetail() {
             </View>
 
             <View
-              className='bg-white border-b border-gray-100 py-3'
+              className='bg-white border-b border-gray-100'
               onLayout={(e) => setStickyHeaderHeight(e.nativeEvent.layout.height)}
             >
               <PressSection
@@ -165,7 +165,7 @@ export default function StepDetail() {
             </View>
 
             <View className='px-4' onLayout={(e) => setContainerOffset(e.nativeEvent.layout.y)}>
-              <View className='pt-10' />
+              <View className='pt-8' />
               <Address
                 setSectionYPositions={setSectionYPositions}
                 location={data?.location}
