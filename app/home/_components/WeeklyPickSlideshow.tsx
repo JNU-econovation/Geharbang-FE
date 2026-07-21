@@ -64,8 +64,8 @@ const WEEKLY_PICK = [
   },
 ];
 
-const EXTENDED_PICK = [...WEEKLY_PICK, WEEKLY_PICK[0]];
 const TOTAL = WEEKLY_PICK.length;
+const EXTENDED_PICK = [WEEKLY_PICK[TOTAL - 1], ...WEEKLY_PICK, WEEKLY_PICK[0]];
 
 function getWeekLabel(date: Date): string {
   const month = date.getMonth() + 1;
@@ -77,7 +77,7 @@ export default function WeeklyPickSlideshow() {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
-  const indexRef = useRef(0);
+  const indexRef = useRef(1);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const isLogined = useAuthStore((state) => Boolean(state.accessToken));
@@ -95,15 +95,15 @@ export default function WeeklyPickSlideshow() {
       indexRef.current = next;
       scrollRef.current?.scrollTo({ x: next * SCREEN_WIDTH, animated: true });
 
-      if (next >= TOTAL) {
-        setCurrentIndex(next);
+      if (next >= TOTAL + 1) {
+        setCurrentIndex(next - 1);
         setTimeout(() => {
-          scrollRef.current?.scrollTo({ x: 0, animated: false });
-          indexRef.current = 0;
+          scrollRef.current?.scrollTo({ x: SCREEN_WIDTH, animated: false });
+          indexRef.current = 1;
           setCurrentIndex(0);
         }, 400);
       } else {
-        setCurrentIndex(next);
+        setCurrentIndex(next - 1);
       }
     }, SLIDE_INTERVAL);
   }, [SCREEN_WIDTH]);
@@ -116,14 +116,18 @@ export default function WeeklyPickSlideshow() {
   }, [startTimer]);
 
   const handleMomentumScrollEnd = (e: any) => {
-    const newIndex = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
-    if (newIndex >= TOTAL) {
-      scrollRef.current?.scrollTo({ x: 0, animated: false });
-      indexRef.current = 0;
+    const pos = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+    if (pos <= 0) {
+      scrollRef.current?.scrollTo({ x: TOTAL * SCREEN_WIDTH, animated: false });
+      indexRef.current = TOTAL;
+      setCurrentIndex(TOTAL - 1);
+    } else if (pos >= TOTAL + 1) {
+      scrollRef.current?.scrollTo({ x: SCREEN_WIDTH, animated: false });
+      indexRef.current = 1;
       setCurrentIndex(0);
     } else {
-      indexRef.current = newIndex;
-      setCurrentIndex(newIndex);
+      indexRef.current = pos;
+      setCurrentIndex(pos - 1);
     }
     startTimer();
   };
@@ -136,6 +140,7 @@ export default function WeeklyPickSlideshow() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         style={{ width: SCREEN_WIDTH, height: SLIDE_HEIGHT }}
+        contentOffset={{ x: SCREEN_WIDTH, y: 0 }}
         onScrollBeginDrag={() => {
           if (timerRef.current) clearInterval(timerRef.current);
         }}
