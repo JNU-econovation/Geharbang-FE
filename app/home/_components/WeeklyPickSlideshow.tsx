@@ -1,7 +1,8 @@
 import { LinearGradient } from "expo-linear-gradient";
+import { BlurView } from "expo-blur";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Image,
   Pressable,
@@ -77,6 +78,7 @@ export default function WeeklyPickSlideshow() {
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
   const indexRef = useRef(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const isLogined = useAuthStore((state) => Boolean(state.accessToken));
   const { data: notifData } = useUnreadNotificationCount();
@@ -86,8 +88,9 @@ export default function WeeklyPickSlideshow() {
   const displayIndex = currentIndex % TOTAL;
   const current = WEEKLY_PICK[displayIndex];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
+  const startTimer = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
       const next = indexRef.current + 1;
       indexRef.current = next;
       scrollRef.current?.scrollTo({ x: next * SCREEN_WIDTH, animated: true });
@@ -102,19 +105,37 @@ export default function WeeklyPickSlideshow() {
         setCurrentIndex(next);
       }
     }, SLIDE_INTERVAL);
-    return () => clearInterval(timer);
   }, [SCREEN_WIDTH]);
+
+  useEffect(() => {
+    startTimer();
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [startTimer]);
+
+  const handleMomentumScrollEnd = (e: any) => {
+    const newIndex = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+    if (newIndex >= TOTAL) {
+      scrollRef.current?.scrollTo({ x: 0, animated: false });
+      indexRef.current = 0;
+      setCurrentIndex(0);
+    } else {
+      indexRef.current = newIndex;
+      setCurrentIndex(newIndex);
+    }
+    startTimer();
+  };
 
   return (
     <View style={{ height: SLIDE_HEIGHT, width: SCREEN_WIDTH }}>
-      
       <ScrollView
         ref={scrollRef}
         horizontal
         pagingEnabled
-        scrollEnabled={false}
         showsHorizontalScrollIndicator={false}
         style={{ width: SCREEN_WIDTH, height: SLIDE_HEIGHT }}
+        onMomentumScrollEnd={handleMomentumScrollEnd}
       >
         {EXTENDED_PICK.map((gh, index) => (
           <Pressable
@@ -137,9 +158,10 @@ export default function WeeklyPickSlideshow() {
         pointerEvents='box-none'
         style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
       >
-        <View
-          pointerEvents='box-none'
-          style={{ backgroundColor: "rgba(0,0,0,0.38)", paddingTop: insets.top, paddingHorizontal: 24, paddingBottom: 16 }}
+        <BlurView
+          intensity={15}
+          tint="dark"
+          style={{ paddingTop: insets.top, paddingHorizontal: 24, paddingBottom: 16 }}
         >
           <View
             pointerEvents='box-none'
@@ -193,7 +215,7 @@ export default function WeeklyPickSlideshow() {
               </Pressable>
             </View>
           </View>
-        </View>
+        </BlurView>
 
         <Text
           pointerEvents='none'
@@ -222,7 +244,7 @@ export default function WeeklyPickSlideshow() {
           </Text>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <Text
-              style={{ color: "white", fontSize: 16, flex: 1, fontWeight: "600",marginRight: 12 }}
+              style={{ color: "white", fontSize: 16, flex: 1, fontWeight: "600", marginRight: 12 }}
               numberOfLines={1}
               ellipsizeMode='tail'
             >
