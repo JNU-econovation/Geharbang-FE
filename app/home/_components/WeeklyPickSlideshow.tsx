@@ -84,7 +84,7 @@ export default function WeeklyPickSlideshow() {
   const { data: notifData } = useUnreadNotificationCount();
   const unreadCount = notifData?.unreadCount ?? 0;
 
-  const weekLabel = getWeekLabel(new Date());
+  const weekLabel = React.useMemo(() => getWeekLabel(new Date()), []);
   const displayIndex = currentIndex % TOTAL;
   const current = WEEKLY_PICK[displayIndex];
 
@@ -96,6 +96,7 @@ export default function WeeklyPickSlideshow() {
       scrollRef.current?.scrollTo({ x: next * SCREEN_WIDTH, animated: true });
 
       if (next >= TOTAL) {
+        setCurrentIndex(next);
         setTimeout(() => {
           scrollRef.current?.scrollTo({ x: 0, animated: false });
           indexRef.current = 0;
@@ -135,6 +136,9 @@ export default function WeeklyPickSlideshow() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         style={{ width: SCREEN_WIDTH, height: SLIDE_HEIGHT }}
+        onScrollBeginDrag={() => {
+          if (timerRef.current) clearInterval(timerRef.current);
+        }}
         onMomentumScrollEnd={handleMomentumScrollEnd}
       >
         {EXTENDED_PICK.map((gh, index) => (
@@ -161,7 +165,7 @@ export default function WeeklyPickSlideshow() {
         <BlurView
           intensity={15}
           tint="dark"
-          style={{ paddingTop: insets.top, paddingHorizontal: 24, paddingBottom: 16 }}
+          style={{ paddingTop: insets?.top ?? 0, paddingHorizontal: 24, paddingBottom: 16 }}
         >
           <View
             pointerEvents='box-none'
@@ -174,18 +178,20 @@ export default function WeeklyPickSlideshow() {
               pointerEvents='box-none'
               style={{ flexDirection: "row", alignItems: "center", gap: 12 }}
             >
-              <Pressable
-                style={{
-                  borderWidth: 1,
-                  borderColor: "white",
-                  borderRadius: 14,
-                  paddingHorizontal: 8,
-                  paddingVertical: 4,
-                }}
-                onPress={() => router.push("/login" as any)}
-              >
-                <Text style={{ color: "white", fontSize: 12 }}>로그인</Text>
-              </Pressable>
+              {!isLogined && (
+                <Pressable
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "white",
+                    borderRadius: 14,
+                    paddingHorizontal: 8,
+                    paddingVertical: 4,
+                  }}
+                  onPress={() => router.push("/login" as any)}
+                >
+                  <Text style={{ color: "white", fontSize: 12 }}>로그인</Text>
+                </Pressable>
+              )}
               <Pressable
                 onPress={() =>
                   router.push((isLogined ? "/notifications" : "/login") as any)

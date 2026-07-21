@@ -88,7 +88,7 @@ export default function HomeScreen() {
       >
         <WeeklyPickSlideshow />
 
-        <View style={{ paddingBottom: insets.bottom + 16, gap: 8, backgroundColor: "white" }}>
+        <View style={{ paddingBottom: (insets?.bottom ?? 0) + 16, gap: 8, backgroundColor: "white" }}>
           <GuesthouseSection
             selectedRegion={ghRegion}
             setSelectedRegion={setGhRegion}
