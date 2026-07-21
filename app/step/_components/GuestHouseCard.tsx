@@ -1,5 +1,6 @@
 import Tag from "@/src/components/ui/Tag/Tag";
 import { useToggleWish } from "@/src/hooks/wish/useToggleWish";
+import { useRequireLogin } from "@/src/hooks/common/useRequireLogin";
 import { GuestHousePost } from "@/src/types/models/guestHouse/types";
 import { StaffRecruitmentPost } from "@/src/types/models/step/types";
 import { buildAssetUrl } from "@/src/config/url";
@@ -23,6 +24,7 @@ export default function GuestHouseCard({
   onPress,
 }: GuestHouseCardProps) {
   const isStepRecruitment = type === "stepRecruitment";
+  const { requireLogin } = useRequireLogin();
   const [isWished, setIsWished] = useState(item.isWished);
   const imageUri = buildAssetUrl(item.imageUrl);
 
@@ -94,7 +96,7 @@ export default function GuestHouseCard({
 
         <TouchableOpacity
           className='w-6 h-6 items-center justify-center'
-          onPress={() => toggleWish(isWished)}
+          onPress={() => requireLogin(() => toggleWish(isWished))}
         >
           <Ionicons
             name={isWished ? "heart" : "heart-outline"}

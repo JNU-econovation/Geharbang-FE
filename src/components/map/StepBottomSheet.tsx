@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useToggleWish } from '@/src/hooks/wish/useToggleWish';
+import { useRequireLogin } from '@/src/hooks/common/useRequireLogin';
 import { StepMapItem } from '@/src/types/models/map';
 import { COLORS } from '@/src/utils/constants/colors';
 import { handleOpenURL } from '@/src/utils/stepDetail/openURL';
@@ -13,6 +14,7 @@ interface StepBottomSheetProps {
 
 export default function StepBottomSheet({ item }: StepBottomSheetProps) {
   const router = useRouter();
+  const { requireLogin } = useRequireLogin();
   const [isWished, setIsWished] = useState(item.isWished);
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export default function StepBottomSheet({ item }: StepBottomSheetProps) {
           <Pressable
             onPress={(e) => {
               e.stopPropagation();
-              toggleWish(isWished);
+              requireLogin(() => toggleWish(isWished));
             }}
             hitSlop={8}
           >
