@@ -2,9 +2,9 @@
 export const REGION_OPTIONS = [
   { value: "제주시", label: "제주시" },
   { value: "서귀포시", label: "서귀포시" },
+  { value: "애월_협재", label: "애월/협재" },
   { value: "중문", label: "중문" },
   { value: "성산_구좌", label: "성산/구좌" },
-  { value: "애월_협재", label: "애월/협재" },
   { value: "우도_기타", label: "우도/기타" },
 ] as const;
 
