@@ -2,18 +2,19 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { BackHandler, RefreshControl, ScrollView, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import CustomSafeAreaView from "@/src/components/layout/CustomSafeAreaView";
 import { useHomeStore } from "@/src/stores/home/useHomeStore";
-import AdBanner from "../home/_components/AdBanner";
 import { GuesthouseSection } from "../home/_components/GuesthouseSection";
-import HomeHeader from "../home/_components/HomeHeader";
 import { StepRecruitmentSection } from "../home/_components/StepRecruitmentSection";
+import WeeklyPickSlideshow from "../home/_components/WeeklyPickSlideshow";
 
 const DEFAULT_REGION = "제주시";
 
 export default function HomeScreen() {
   const queryClient = useQueryClient();
+  const insets = useSafeAreaInsets();
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollYRef = useRef(0);
   const [refreshing, setRefreshing] = useState(false);
@@ -65,13 +66,14 @@ export default function HomeScreen() {
   );
 
   return (
-    <CustomSafeAreaView pageColor='bg-white' topOnly={true}>
-      <HomeHeader />
-
+    <View style={{ flex: 1, backgroundColor: "black" }}>
+      <StatusBar style='light' translucent />
       <ScrollView
         ref={scrollViewRef}
-        className='py-4 flex-1'
+        contentInsetAdjustmentBehavior='never'
         scrollEventThrottle={16}
+        bounces={false}
+        style={{ backgroundColor: "white" }}
         onScroll={(e) => {
           scrollYRef.current = e.nativeEvent.contentOffset.y;
         }}
@@ -84,21 +86,20 @@ export default function HomeScreen() {
           />
         }
       >
-         <AdBanner />
-        <View className='w-full items-center gap-9 mt-5 mb-8'>
-         
-         
+        <WeeklyPickSlideshow />
+
+        <View style={{ paddingBottom: (insets?.bottom ?? 0) + 16, gap: 8, backgroundColor: "white" }}>
           <GuesthouseSection
             selectedRegion={ghRegion}
             setSelectedRegion={setGhRegion}
           />
-      
+          <View style={{ height: 15, backgroundColor: "#F3F4F6" }} />
           <StepRecruitmentSection
             selectedRegion={stepRegion}
             setSelectedRegion={setStepRegion}
           />
         </View>
       </ScrollView>
-    </CustomSafeAreaView>
+    </View>
   );
 }

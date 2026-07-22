@@ -1,5 +1,3 @@
-import Flex from "@/src/components/layout//Flex/Flex";
-import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable } from "react-native";
 
@@ -12,30 +10,24 @@ interface RegionTabProps {
   onPress: () => void;
 }
 
-export default function RegionTab({
-  label,
-  selected,
-  onPress,
-}: RegionTabProps) {
+export default function RegionTab({ label, selected, onPress }: RegionTabProps) {
   return (
     <Pressable
       onPress={onPress}
-      className={`px-4 py-2.5 rounded-xl ${
-        selected ? "bg-primary-blue" : "border border-gray-border"
-      }`}
+      style={{
+        paddingHorizontal: 7.5,
+        paddingVertical: 4,
+        borderRadius: 20,
+        borderWidth: 0.5,
+        borderColor: selected ? "transparent" : "#0F0F0F",
+        backgroundColor: selected ? COLORS.PRIMARY.BLUE : "transparent",
+      }}
     >
-      <Flex justify="between" items="center" dir="row" gap={4}>
-        <Ionicons
-          name="location-outline"
-          size={16}
-          color={selected ? "white" : COLORS.GRAY.TEXT}
-        />
-        <TextSize
-          size={14}
-          color={selected ? "white" : COLORS.GRAY.TEXT}
-          content={label}
-        />
-      </Flex>
+      <TextSize
+        size={12}
+        color={selected ? "white" : "#0F0F0F"}
+        content={label}
+      />
     </Pressable>
   );
 }
