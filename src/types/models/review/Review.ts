@@ -33,3 +33,26 @@ export interface ReviewSummaryResponse {
   hasMyReview: boolean;
   canWriteReview: boolean;
 }
+
+export interface ReviewCategoryGroup {
+  category: string;
+  reviewIds: number[];
+}
+
+export interface ReviewKeywordGroup {
+  keyword: string;
+  score: number;
+  reviewIds: number[];
+}
+
+export interface ReviewInsightsResponse {
+  categories: ReviewCategoryGroup[];
+  keywords: ReviewKeywordGroup[];
+}
+
+export interface ReviewReportResponse {
+  guestHousePostId: number;
+  guestHouseName: string;
+  reviewCount: number;
+  report: string;
+}

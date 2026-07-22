@@ -4,8 +4,10 @@ import {
   createReview,
   createStaffRecruitmentReview,
   deleteReview,
+  getAllReviews,
+  getReviewInsights,
+  getReviewReport,
   getReviewSummary,
-  getReviews,
   getStaffRecruitmentReviewSummary,
   getStaffRecruitmentReviews,
   updateReview,
@@ -26,6 +28,17 @@ const reviewSummaryKey = (targetType: ReviewTargetType, targetId: number) => [
   targetId,
 ];
 
+const reviewInsightsKey = (targetType: ReviewTargetType, targetId: number) => [
+  "reviewInsights",
+  targetType,
+  targetId,
+];
+
+const reviewReportKey = (guestHousePostId: number) => [
+  "reviewReport",
+  guestHousePostId,
+];
+
 export const useReviews = (
   targetType: ReviewTargetType,
   targetId: number,
@@ -35,7 +48,7 @@ export const useReviews = (
     queryKey: reviewListKey(targetType, targetId),
     queryFn: () =>
       targetType === "guestHouse"
-        ? getReviews(targetId)
+        ? getAllReviews(targetId)
         : getStaffRecruitmentReviews(targetId),
     enabled: enabled && Number.isFinite(targetId),
   });
@@ -53,6 +66,29 @@ export const useReviewSummary = (
         ? getReviewSummary(targetId)
         : getStaffRecruitmentReviewSummary(targetId),
     enabled: enabled && Number.isFinite(targetId),
+  });
+};
+
+export const useReviewInsights = (
+  targetType: ReviewTargetType,
+  targetId: number,
+  enabled = true,
+) => {
+  return useQuery({
+    queryKey: reviewInsightsKey(targetType, targetId),
+    queryFn: () => getReviewInsights(targetId),
+    enabled: enabled && targetType === "guestHouse" && Number.isFinite(targetId),
+  });
+};
+
+export const useReviewReport = (
+  guestHousePostId: number,
+  enabled = true,
+) => {
+  return useQuery({
+    queryKey: reviewReportKey(guestHousePostId),
+    queryFn: () => getReviewReport(guestHousePostId),
+    enabled: enabled && Number.isFinite(guestHousePostId) && guestHousePostId > 0,
   });
 };
 
@@ -75,6 +111,12 @@ export const useCreateReview = (
         }),
         queryClient.invalidateQueries({
           queryKey: reviewSummaryKey(targetType, targetId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: reviewInsightsKey(targetType, targetId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: reviewReportKey(targetId),
         }),
       ]);
       onSuccess?.();
@@ -100,6 +142,12 @@ export const useUpdateReview = (
         queryClient.invalidateQueries({
           queryKey: reviewSummaryKey(targetType, targetId),
         }),
+        queryClient.invalidateQueries({
+          queryKey: reviewInsightsKey(targetType, targetId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: reviewReportKey(targetId),
+        }),
       ]);
       onSuccess?.();
     },
@@ -122,6 +170,12 @@ export const useDeleteReview = (
         }),
         queryClient.invalidateQueries({
           queryKey: reviewSummaryKey(targetType, targetId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: reviewInsightsKey(targetType, targetId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: reviewReportKey(targetId),
         }),
       ]);
       onSuccess?.();

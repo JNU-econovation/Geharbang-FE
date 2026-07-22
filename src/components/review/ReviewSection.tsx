@@ -6,6 +6,7 @@ import {
   Modal,
   Pressable,
   ScrollView,
+  Text,
   TextInput,
   View,
 } from "react-native";
@@ -21,6 +22,7 @@ import {
   ReviewTargetType,
   useCreateReview,
   useDeleteReview,
+  useReviewInsights,
   useReviewSummary,
   useReviews,
   useUpdateReview,
@@ -41,6 +43,42 @@ interface ReviewSectionProps {
 
 const MAX_REVIEW_IMAGE_COUNT = 5;
 
+type ReviewFilter = {
+  label: string;
+  type: "category" | "keyword";
+  reviewIds: number[];
+};
+
+const CATEGORY_HIGHLIGHT_TERMS: Record<string, string[]> = {
+  만족도: ["만족", "좋", "추천", "다음"],
+  서비스: ["친절", "안내", "직원", "사장님"],
+  분위기: ["분위기", "조용", "시끄럽", "파티", "활발"],
+  청결도: ["청결", "깨끗", "청소", "화장실"],
+  위치: ["위치", "가까", "주변"],
+  전망: ["전망", "바다", "뷰"],
+  "음식/조식": ["음식", "조식", "바베큐", "주방"],
+  가격: ["가격", "가성비", "비용"],
+  비품: ["비품", "침대", "침구", "매트리스"],
+  편의시설: ["편의", "시설", "공용", "주방"],
+  주차공간: ["주차"],
+};
+
+const getVisibleReviewFilters = (
+  filters: ReviewFilter[],
+  reviews: Review[],
+): ReviewFilter[] => {
+  const visibleReviewIds = new Set(reviews.map((review) => review.id));
+
+  return filters
+    .map((filter) => ({
+      ...filter,
+      reviewIds: filter.reviewIds.filter((reviewId) =>
+        visibleReviewIds.has(reviewId),
+      ),
+    }))
+    .filter((filter) => filter.reviewIds.length > 0);
+};
+
 const formatDate = (date: string) => {
   const parsed = new Date(date);
   if (Number.isNaN(parsed.getTime())) {
@@ -59,6 +97,21 @@ const getReviewErrorMessage = (targetType: ReviewTargetType) => {
   }
 
   return "리뷰를 저장할 수 없어요. 잠시 후 다시 시도해주세요.";
+};
+
+const escapeRegExp = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const getReviewHighlightTerms = (filter: ReviewFilter | null) => {
+  if (!filter) {
+    return [];
+  }
+
+  if (filter.type === "keyword") {
+    return [filter.label];
+  }
+
+  return CATEGORY_HIGHLIGHT_TERMS[filter.label] ?? [filter.label];
 };
 
 function RatingStars({
@@ -138,16 +191,72 @@ function ReviewImages({ imageUrls }: { imageUrls: string[] }) {
   );
 }
 
+function HighlightedReviewContent({
+  content,
+  highlightTerms,
+}: {
+  content: string;
+  highlightTerms: string[];
+}) {
+  const validTerms = highlightTerms
+    .map((term) => term.trim())
+    .filter((term) => term.length > 0);
+
+  if (validTerms.length === 0) {
+    return <TextSize size={14} color='#364153' content={content} />;
+  }
+
+  const pattern = new RegExp(`(${validTerms.map(escapeRegExp).join("|")})`, "gi");
+  const parts = content.split(pattern).filter((part) => part.length > 0);
+
+  return (
+    <Text
+      allowFontScaling={false}
+      style={{
+        fontSize: 14,
+        color: "#364153",
+        lineHeight: 22,
+        flexShrink: 1,
+      }}
+    >
+      {parts.map((part, index) => {
+        const isHighlighted = validTerms.some(
+          (term) => part.toLowerCase() === term.toLowerCase(),
+        );
+
+        return (
+          <Text
+            key={`${part}-${index}`}
+            allowFontScaling={false}
+            style={
+              isHighlighted
+                ? {
+                    color: COLORS.PRIMARY.BLUE,
+                    fontWeight: "700",
+                  }
+                : undefined
+            }
+          >
+            {part}
+          </Text>
+        );
+      })}
+    </Text>
+  );
+}
+
 function ReviewItem({
   review,
   onEdit,
   onDelete,
   isDeleting,
+  highlightTerms,
 }: {
   review: Review;
   onEdit: (review: Review) => void;
   onDelete: (reviewId: number) => void;
   isDeleting: boolean;
+  highlightTerms: string[];
 }) {
   return (
     <View className='py-4 border-b border-gray-100'>
@@ -185,9 +294,72 @@ function ReviewItem({
         )}
       </View>
       <View className='pt-3' />
-      <TextSize size={14} color='#364153' content={review.content} />
+      <HighlightedReviewContent
+        content={review.content}
+        highlightTerms={highlightTerms}
+      />
       <View className='pt-3' />
       <ReviewImages imageUrls={review.imageUrls} />
+    </View>
+  );
+}
+
+function ReviewInsightChips({
+  filters,
+  selectedFilter,
+  onSelect,
+}: {
+  filters: ReviewFilter[];
+  selectedFilter?: ReviewFilter | null;
+  onSelect: (filter: ReviewFilter) => void;
+}) {
+  if (filters.length === 0) {
+    return null;
+  }
+
+  const rows = filters.reduce<ReviewFilter[][]>(
+    (acc, filter, index) => {
+      acc[index % 2].push(filter);
+      return acc;
+    },
+    [[], []],
+  );
+
+  return (
+    <View className='pt-3'>
+      <View className='gap-2'>
+        {rows.map((row, rowIndex) => (
+          <ScrollView
+            key={`review-insight-row-${rowIndex}`}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerClassName='gap-2 pr-4'
+          >
+            {row.map((filter) => {
+              const isSelected =
+                selectedFilter?.type === filter.type &&
+                selectedFilter?.label === filter.label;
+              return (
+                <Pressable
+                  key={`${filter.type}-${filter.label}`}
+                  onPress={() => onSelect(filter)}
+                  className={`px-3 py-2 rounded-full border ${
+                    isSelected
+                      ? "bg-primary-blue border-primary-blue"
+                      : "bg-white border-gray-200"
+                  }`}
+                >
+                  <TextSize
+                    size={13}
+                    color={isSelected ? "#ffffff" : "#364153"}
+                    content={`${filter.label} ${filter.reviewIds.length}`}
+                  />
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        ))}
+      </View>
     </View>
   );
 }
@@ -208,6 +380,7 @@ export default function ReviewSection({
   const [selectedImageFiles, setSelectedImageFiles] = useState<File[]>([]);
   const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
   const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState<ReviewFilter | null>(null);
 
   const { data, isPending, isError, refetch } = useReviews(
     targetType,
@@ -215,6 +388,11 @@ export default function ReviewSection({
     targetId > 0,
   );
   const { data: summary } = useReviewSummary(targetType, targetId, targetId > 0);
+  const { data: insights } = useReviewInsights(
+    targetType,
+    targetId,
+    targetId > 0,
+  );
   const createReviewMutation = useCreateReview(targetType, targetId, () => {
     closeModal();
     onReviewSubmitted?.();
@@ -233,6 +411,54 @@ export default function ReviewSection({
   });
 
   const reviews = data?.reviews ?? [];
+  const allCategoryFilters = useMemo<ReviewFilter[]>(
+    () =>
+      insights?.categories?.map((group) => ({
+        label: group.category,
+        type: "category" as const,
+        reviewIds: group.reviewIds,
+      })) ?? [],
+    [insights?.categories],
+  );
+  const allKeywordFilters = useMemo<ReviewFilter[]>(
+    () =>
+      insights?.keywords?.map((group) => ({
+        label: group.keyword,
+        type: "keyword" as const,
+        reviewIds: group.reviewIds,
+      })) ?? [],
+    [insights?.keywords],
+  );
+  const categoryFilters = useMemo(
+    () => getVisibleReviewFilters(allCategoryFilters, reviews),
+    [allCategoryFilters, reviews],
+  );
+  const keywordFilters = useMemo(
+    () => getVisibleReviewFilters(allKeywordFilters, reviews),
+    [allKeywordFilters, reviews],
+  );
+  const visibleReviews = useMemo(() => {
+    if (!selectedFilter) {
+      return reviews;
+    }
+
+    const selectedReviewIds = new Set(selectedFilter.reviewIds);
+    return reviews.filter((review) => selectedReviewIds.has(review.id));
+  }, [reviews, selectedFilter]);
+  const insightFilters = useMemo(
+    () =>
+      [...categoryFilters, ...keywordFilters]
+        .sort((a, b) => b.reviewIds.length - a.reviewIds.length)
+        .slice(0, 12),
+    [categoryFilters, keywordFilters],
+  );
+  const selectedFilterLabel = selectedFilter
+    ? selectedFilter.label
+    : "";
+  const reviewHighlightTerms = useMemo(
+    () => getReviewHighlightTerms(selectedFilter),
+    [selectedFilter],
+  );
   const currentAverageRating = summary?.averageRating ?? averageRating;
   const currentReviewCount = summary?.reviewCount ?? reviewCount;
   const currentHasMyReview = summary?.hasMyReview ?? hasMyReview;
@@ -248,6 +474,14 @@ export default function ReviewSection({
     isUploadingImages ||
     createReviewMutation.isPending ||
     updateReviewMutation.isPending;
+
+  const handleSelectFilter = (filter: ReviewFilter) => {
+    setSelectedFilter((current) =>
+      current?.type === filter.type && current?.label === filter.label
+        ? null
+        : filter,
+    );
+  };
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -382,7 +616,59 @@ export default function ReviewSection({
         </View>
       </View>
 
+      {targetType === "guestHouse" && (
+        <View className='mt-4 p-4 border border-gray-200 rounded-lg bg-white'>
+          <View className='flex-row items-center justify-between'>
+            <TextSize
+              size={15}
+              color='#101828'
+              weight='600'
+              content='리뷰에서 자주 언급된 내용'
+            />
+            {selectedFilter && (
+              <Pressable onPress={() => setSelectedFilter(null)} hitSlop={8}>
+                <TextSize
+                  size={13}
+                  color={COLORS.PRIMARY.BLUE}
+                  content='전체보기'
+                />
+              </Pressable>
+            )}
+          </View>
+          <View className='pt-2'>
+            <TextSize
+              size={13}
+              color={COLORS.GRAY.TEXT}
+              content='많이 나온 주제를 눌러 관련 리뷰만 모아볼 수 있어요.'
+            />
+          </View>
+          <ReviewInsightChips
+            filters={insightFilters}
+            selectedFilter={selectedFilter}
+            onSelect={handleSelectFilter}
+          />
+          {insightFilters.length === 0 && (
+            <View className='pt-3'>
+              <TextSize
+                size={13}
+                color={COLORS.GRAY.TEXT}
+                content='분석할 리뷰가 조금 더 쌓이면 키워드를 보여드릴게요.'
+              />
+            </View>
+          )}
+        </View>
+      )}
+
       <View className='pt-2'>
+        {selectedFilter && reviews.length > 0 && (
+          <View className='pt-2 pb-1'>
+            <TextSize
+              size={13}
+              color={COLORS.GRAY.TEXT}
+              content={`${selectedFilterLabel} 관련 리뷰 ${visibleReviews.length}개`}
+            />
+          </View>
+        )}
         {isPending ? (
           <View className='py-8 items-center'>
             <ActivityIndicator color={COLORS.PRIMARY.BLUE} />
@@ -410,14 +696,23 @@ export default function ReviewSection({
               content='아직 작성된 리뷰가 없어요.'
             />
           </View>
+        ) : visibleReviews.length === 0 ? (
+          <View className='py-8 items-center'>
+            <TextSize
+              size={14}
+              color={COLORS.GRAY.TEXT}
+              content='선택한 조건에 해당하는 리뷰가 현재 목록에 없어요.'
+            />
+          </View>
         ) : (
-          reviews.map((review) => (
+          visibleReviews.map((review) => (
             <ReviewItem
               key={review.id}
               review={review}
               onEdit={handleOpenEditModal}
               onDelete={handleDelete}
               isDeleting={deleteReviewMutation.isPending}
+              highlightTerms={reviewHighlightTerms}
             />
           ))
         )}

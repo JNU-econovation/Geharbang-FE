@@ -1,6 +1,5 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import { Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useHomeStore } from "@/src/stores/home/useHomeStore";
 import { useChatRooms } from "@/src/hooks/chat/useChat";
@@ -27,10 +26,6 @@ export default function TabLayout() {
         0,
       )
     : 0;
-  const showComingSoonAlert = () => {
-    Alert.alert("준비중", "곧 이용할 수 있도록 준비하고 있어요.");
-  };
-
   return (
     <Tabs
       screenOptions={{
@@ -91,16 +86,11 @@ export default function TabLayout() {
         name='ai'
         options={{
           title: "AI",
+          tabBarStyle: { display: "none" },
           tabBarIcon: ({ focused }) =>
             focused
               ? <AiSelectedIcon width={24} height={24} />
               : <AiIcon width={24} height={24} />,
-        }}
-        listeners={{
-          tabPress: (event) => {
-            event.preventDefault();
-            showComingSoonAlert();
-          },
         }}
       />
       <Tabs.Screen

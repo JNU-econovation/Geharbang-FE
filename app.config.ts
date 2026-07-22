@@ -7,8 +7,15 @@ const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN;
 
 const plugins: ExpoConfig["plugins"] = [
   "expo-router",
+  "./plugins/withNaverMapRepository",
   "expo-web-browser",
   "expo-notifications",
+  [
+    "expo-image-picker",
+    {
+      photosPermission: "AI 챗봇에 사진을 첨부하려면 사진 접근 권한이 필요합니다.",
+    },
+  ],
   [
     "expo-secure-store",
     {
@@ -47,9 +54,9 @@ const config: ExpoConfig = {
   newArchEnabled: true,
 
   ios: {
-    supportsTablet: true,
+    supportsTablet: false,
     bundleIdentifier: "com.econovation.geharbang",
-    buildNumber: "11",
+    buildNumber: "12",
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
 
@@ -62,7 +69,7 @@ const config: ExpoConfig = {
   },
 
   android: {
-    versionCode: 11,
+    versionCode: 12,
     softwareKeyboardLayoutMode: "resize",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",

@@ -53,6 +53,12 @@ export default function GuestHouseDetail() {
     useCreateChatRoom();
 
   const [isWished, setIsWished] = useState(false);
+  const contactWithoutReservation = data?.contact
+    ? {
+        ...data.contact,
+        reservationUrl: undefined,
+      }
+    : undefined;
 
   useEffect(() => {
     if (data?.isWished !== undefined) setIsWished(data.isWished);
@@ -187,7 +193,7 @@ export default function GuestHouseDetail() {
               <View className='pt-6' />
               <Contact
                 setSectionYPositions={setSectionYPositions}
-                contact={data?.contact}
+                contact={contactWithoutReservation}
                 owerMessage={data?.ownerMessage}
               />
 
