@@ -20,10 +20,8 @@ export default function GehaInfo({
   region,
 }: GehaInfpProps) {
   return (
-    <>
+    <View className='gap-2'>
       <TextSize size={20} color='#101828' content={title} />
-
-      <View className='pt-6' />
 
       {guestHouseName && (
         <GehaDetailInfo
@@ -31,12 +29,11 @@ export default function GehaInfo({
           content={guestHouseName}
         />
       )}
-      <View className='pt-2' />
 
       <GehaDetailInfo
         icon={<GehaLocation width={14} height={14} />}
         content={formatRegionLabel(region)}
       />
-    </>
+    </View>
   );
 }

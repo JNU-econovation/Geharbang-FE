@@ -11,6 +11,12 @@ const plugins: ExpoConfig["plugins"] = [
   "expo-web-browser",
   "expo-notifications",
   [
+    "expo-image-picker",
+    {
+      photosPermission: "AI 챗봇에 사진을 첨부하려면 사진 접근 권한이 필요합니다.",
+    },
+  ],
+  [
     "expo-secure-store",
     {
       configureAndroidBackup: true,

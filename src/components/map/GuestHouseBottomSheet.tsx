@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useToggleWish } from '@/src/hooks/wish/useToggleWish';
+import { useRequireLogin } from '@/src/hooks/common/useRequireLogin';
 import { GuestHouseMapItem } from '@/src/types/models/map';
 import { COLORS } from '@/src/utils/constants/colors';
 import { handleOpenURL } from '@/src/utils/stepDetail/openURL';
@@ -13,6 +14,7 @@ interface GuestHouseBottomSheetProps {
 
 export default function GuestHouseBottomSheet({ item }: GuestHouseBottomSheetProps) {
   const router = useRouter();
+  const { requireLogin } = useRequireLogin();
   const [isWished, setIsWished] = useState(item.isWished);
 
   useEffect(() => {
@@ -109,7 +111,7 @@ export default function GuestHouseBottomSheet({ item }: GuestHouseBottomSheetPro
           <Pressable
             onPress={(e) => {
               e.stopPropagation();
-              toggleWish(isWished);
+              requireLogin(() => toggleWish(isWished));
             }}
             hitSlop={8}
           >

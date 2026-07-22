@@ -15,7 +15,7 @@ export default function RegionFilter({ selectedRegion, onSelect }: RegionFilterP
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}
-      style={{ marginTop: 8 }}
+      style={{ marginTop: 6 }}
     >
       {MAP_REGIONS.map((region) => {
         const isSelected = selectedRegion === region.value;
@@ -24,7 +24,7 @@ export default function RegionFilter({ selectedRegion, onSelect }: RegionFilterP
             key={region.value}
             onPress={() => onSelect(isSelected ? null : region.value)}
             style={{
-              paddingHorizontal: 14,
+              paddingHorizontal: 10,
               paddingVertical: 7,
               borderRadius: 10,
               backgroundColor: isSelected ? COLORS.PRIMARY.BLUE : 'white',
