@@ -73,6 +73,7 @@ export default function TabLayout() {
         name='ai'
         options={{
           title: "AI",
+          tabBarStyle: { display: "none" },
           tabBarIcon: ({ color }) => (
             <TabBarIcon name='sparkles-outline' color={color} />
           ),
